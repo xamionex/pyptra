@@ -127,7 +127,7 @@ class InfoUtils():
         if len(user.roles) > 1:
             role_string = ' '.join([r.mention for r in user.roles][1:])
             e.add_field(name="Roles [{}]".format(len(user.roles)-1), value=role_string, inline=False)
-        perm_string = ', '.join([str(p[0]).replace("_", " ").title() for p in user.guild_permissions if p[1]])
+        #perm_string = ', '.join([str(p[0]).replace("_", " ").title() for p in user.guild_permissions if p[1]])
         #e.add_field(name="Guild permissions", value=perm_string, inline=False) # way too big for my liking tbh
         e.set_footer(text='ID: ' + str(user.id))
         return e
