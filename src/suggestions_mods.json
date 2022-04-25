@@ -1,0 +1,1069 @@
+{
+    "latestId": 132,
+    "suggestions": [
+        {
+            "user": 941423832613417021,
+            "suggestion": "test",
+            "sid": 0,
+            "message": 952276865329012816,
+            "status": "approved",
+            "note": "test"
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "model for droz as cloak pilot, and kane with his helmet",
+            "sid": 1,
+            "message": 952637071695179816,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 748572112410640435,
+            "suggestion": "Ability to save up to three Titan loadouts, for each Titan",
+            "sid": 2,
+            "message": 952640385199509535,
+            "status": "approved",
+            "note": ""
+        },
+        {
+            "user": 275215231918276608,
+            "suggestion": "test123",
+            "sid": 3,
+            "message": 952736159719628880,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 676832666213154818,
+            "suggestion": "make a mod that turns stim into lean (real)",
+            "sid": 4,
+            "message": 952832816746463272,
+            "status": "denied",
+            "note": "no - <@!275215231918276608>"
+        },
+        {
+            "user": 139095725110722560,
+            "suggestion": "test",
+            "sid": 5,
+            "message": 952934970375163924,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 375616010402922498,
+            "suggestion": "Make the Thermite from T-203 launcher not freely pierce through awall, kinda sucks to be on the receiving end of that wall, particle wall blocks of thermite splash unlike awall",
+            "sid": 6,
+            "message": 952947728072204428,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "allows us to play campaign with the various other mods installed (at least lets us play campaign on Northstar)",
+            "sid": 7,
+            "message": 953034615206072320,
+            "status": "approved",
+            "note": "being made in <#930995358832668705>, no ETA - <@139095725110722560>"
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "allows first person spectating",
+            "sid": 8,
+            "message": 953077595484872754,
+            "status": "approved",
+            "note": "Coming soon \u2122\ufe0f - <@!275215231918276608>"
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "anotha mod suggestion, when spawning in as titan or in titan brawl or titan tdm, do first person titanfall animation from campaign",
+            "sid": 9,
+            "message": 953111626163306548,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 244521107204472832,
+            "suggestion": "switchable noHUD pls",
+            "sid": 10,
+            "message": 953413908549501039,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "allows you to create party's and have people join and then have the leader join the server together",
+            "sid": 11,
+            "message": 953418437634457680,
+            "status": "approved",
+            "note": "Gonna be working on this exact feature after im done with tests ^^ - <@!275215231918276608>"
+        },
+        {
+            "user": 336075182181449728,
+            "suggestion": "SURF maps with LeaderBoard?<:pwease:845232874751787018>",
+            "sid": 12,
+            "message": 953420462673756200,
+            "status": "approved",
+            "note": ""
+        },
+        {
+            "user": 336075182181449728,
+            "suggestion": "Create New Speedrun Sys(Adding Multiplayer Tracked Runs and a race version, Run maps).",
+            "sid": 13,
+            "message": 953421047275847731,
+            "status": "approved",
+            "note": ""
+        },
+        {
+            "user": 780277023401705502,
+            "suggestion": "sights on the wingman elite / wingman b3 / mozambique",
+            "sid": 14,
+            "message": 953681020694179901,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Fanatic Energy Pistol that rapidly fires a hitscan energy attack that takes six shots to kill, slows down Pilots and it can be charged to fire a fast moving projectile that instakills Pilots and stun Titans. 12 shots before overheating and firing the charged shot instantly overheats the weapon",
+            "sid": 15,
+            "message": 953697083955757066,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 564416588632031242,
+            "suggestion": "Smart (Aimbot) Spitfire",
+            "sid": 16,
+            "message": 953796433054666812,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "david and/or droz model",
+            "sid": 17,
+            "message": 953814719892951090,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 780277023401705502,
+            "suggestion": "a mod that lets you equip the PeaceKraber with a console command / replaces the R-101 with PeaceKraber",
+            "sid": 18,
+            "message": 953833028931710996,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "One-shot per-clip (break-action) grenade launcher that shoots an explosive projectile at 300 meters per second and any direct hits with it is an instakill against Pilots and deals 1125 damage against Titans",
+            "sid": 19,
+            "message": 953952927255519262,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 436979190290448397,
+            "suggestion": "hemlok only pvp server with no option to leave",
+            "sid": 20,
+            "message": 954043553280036914,
+            "status": "open",
+            "note": "*why* - <@139095725110722560>"
+        },
+        {
+            "user": 375723361491353601,
+            "suggestion": "I anyone knows how, a way to mod player outline and health bar color would be cool",
+            "sid": 21,
+            "message": 954082827929002024,
+            "status": "approved",
+            "note": ""
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "apex predator models (with helmets if possible)",
+            "sid": 22,
+            "message": 954102626251845702,
+            "status": "open",
+            "note": "This will eventually be added to Northstar - <@275215231918276608>"
+        },
+        {
+            "user": 549383493621252116,
+            "suggestion": "give the female human pilots jiggle physics B)",
+            "sid": 23,
+            "message": 954234252801749032,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 703637781246771202,
+            "suggestion": "Ability to play Multiplayer Campaign",
+            "sid": 24,
+            "message": 954327321798660117,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 703637781246771202,
+            "suggestion": "Custom Titan Loadouts",
+            "sid": 25,
+            "message": 954327439750869012,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 703637781246771202,
+            "suggestion": "better first person animation - What j am mean like you know how looking the cocpit view panels ? j am sure yes so j want the animation like in titanfall 1 so you basicly doing the execution and you see that execution by this view panels and normal embarks (currently the hatch animations looks like you drunk when entering titan)",
+            "sid": 26,
+            "message": 954328626772475924,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 495590559621054495,
+            "suggestion": "idk about this but I think that maybe I'll make a mod that showcases more detailed info about weapons in the loadout menu? e.g. info about RPM, ability cooldown, damage, spread, recoil",
+            "sid": 27,
+            "message": 954401527815086160,
+            "status": "approved",
+            "note": ""
+        },
+        {
+            "user": 606085438699995152,
+            "suggestion": "A COUNTERSTRIKE GAMEMODE, PLEASE",
+            "sid": 28,
+            "message": 954481312096473199,
+            "status": "open",
+            "note": "was being worked on until it wasn't being worked on - <@!201553786974502912>"
+        },
+        {
+            "user": 476886180512923651,
+            "suggestion": "maybe a cod zombies like gamemode",
+            "sid": 29,
+            "message": 954576291783397377,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Electroshock Ball that bounces and deals damage over time to enemies nearby within 10 meters, direct hits with it stuns the enemy including Titans for a second and generates a chain lightning that damages enemies. The ball explodes after being at rest, dealing further damage and slows down anyone within the explosion radius of 2 meters",
+            "sid": 30,
+            "message": 954614352726614106,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 259752688743481344,
+            "suggestion": "CSS Quake and/or Unreal Tournament announcers",
+            "sid": 31,
+            "message": 954821667866165279,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Linear Accelerator Rifle that shoots a continuous beam with DPS of 160 at close-range and 100 at mid to long range. Firerate is 1800 RPM and it overheat after 150 shots (5 seconds)",
+            "sid": 32,
+            "message": 955119596434776104,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 949269806824181770,
+            "suggestion": "A mod that makes the cool down for abilities and grenades twice as fast, and now you can hold two of each grenade.",
+            "sid": 33,
+            "message": 955913578576220240,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Ricochet mod for Mastiff shotgun",
+            "sid": 34,
+            "message": 955926709142683718,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 238186466692300802,
+            "suggestion": "BT-7274 and FS-1041 skins for Monarch",
+            "sid": 35,
+            "message": 955997126872141925,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Unstable Concoction rounds for L-STAR. Reduced damage to six shot kill and fire rate to 450 RPM, but it gains the ability to prime targets for detonation when killed after three consecutive shots. These rounds also slightly weakens the target especially Titans just after one shot, making it vulnerable to attacks from other weapons. The gun overheat faster after 24 shots instead of usual 35",
+            "sid": 36,
+            "message": 956101473278767154,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Weapons from Titanfall III fanon (https://titanfallfanon.fandom.com/wiki/Category:Weapons)",
+            "sid": 37,
+            "message": 956266219332321350,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Battle Hardened kit reduces damage from Arc Grenades, Firestars (and other thermite weapons) and Electric Smokes, and also give a some sort of protection from environmental hazards but not completely immune",
+            "sid": 38,
+            "message": 956501180173914152,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Tendril Barrage Devastator that releases a mass of very sharp Flood tentacles out of Pilot's body, killing everything and destroying Titans instantly within a line of sight",
+            "sid": 39,
+            "message": 956588353627779083,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "MOAB Glue that shoots a continuous stream of adhesive that traps Pilots and Titans, deals very little damage and can paint any surfaces with a MOAB Glue's subatance",
+            "sid": 40,
+            "message": 956596265918034000,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 537098103120068618,
+            "suggestion": "make the IMS malta a pvp map",
+            "sid": 41,
+            "message": 956653612107460659,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 829694789833457684,
+            "suggestion": "Raid/boss Battle mode: max team of 6 players in the base mode vs 1 boss, in the mode settings people can use titans with aegis cores or not, and all of them have only 1 Life, the goal Is to defeat the boss/player, Maps that could be used could be the campaign ones or even some of the FD Maps, would also be cool if It was a campaign boss with buffa like more DMG and more hp that comes to search you when Ur the only One Alive or even letting player control the boss, even Better having It players vs titan player and all of them have infinite anti titan ammos (if this gets added cant wait for 23v1 raids B)  )",
+            "sid": 42,
+            "message": 956659335486922864,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 576887540930576425,
+            "suggestion": "vs kuben blisk,\nIf you've ever played vs Saxton Hale in Teamfortress 2 that's pretty much the idea, everyone fights a super buff titan without AT weapons, basically a whole server vs one juggernaut with a super titan, just like in vs Saxton Hale there would be different options for which character you can pick to play as the juggernaut which in this case would just be titans.",
+            "sid": 43,
+            "message": 956664769320992788,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 949269806824181770,
+            "suggestion": "Add a big sexy mrvn grenade that will give free high fives, and hugs.",
+            "sid": 44,
+            "message": 956673112290770995,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 576887540930576425,
+            "suggestion": "x10\nOn the topic of Teamfortress 2 custom modes how about x10 mode, an unbalanced mess of a mode where every stat, good or bad is multiplied by 10, hidden compartment for example, 20 power shot charges but each do 250% less damage, is it stupid? Yes, absolutely, is it unbalanced you bet it is! Will it be fun as all hell, maybe or maybe not. Just to make it actually playable, modifying weapon damage and firerate probably isn't a good idea.",
+            "sid": 45,
+            "message": 956677086649675826,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 949269806824181770,
+            "suggestion": "replace the painting on the one map with mrvn.... Now! \ud83d\ude1f\ud83d\udd2b",
+            "sid": 46,
+            "message": 956870925977014342,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 483995186117083155,
+            "suggestion": "crashes game when car is equiped client side obviously",
+            "sid": 47,
+            "message": 956914908061139015,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Frontier Defense but the enemy is the Flood instead of IMC forces",
+            "sid": 48,
+            "message": 956929874738708512,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 676832666213154818,
+            "suggestion": "a dmg counter similar to apexes",
+            "sid": 49,
+            "message": 957031299099557898,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 676832666213154818,
+            "suggestion": "maybe make functional pilot ai? like with wall running and shit",
+            "sid": 50,
+            "message": 957037246618423346,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 537098103120068618,
+            "suggestion": "add the prowler maybe as a hemlock reskin as they are both burst",
+            "sid": 51,
+            "message": 957151151453773824,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 676832666213154818,
+            "suggestion": "add a mode with prowlers",
+            "sid": 52,
+            "message": 957218950561824818,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Remove bullet drop on Kraber",
+            "sid": 53,
+            "message": 957259171252817922,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 573840178255364097,
+            "suggestion": "A mod where in the drop ship you can actually high five the mrvn. PLEASE",
+            "sid": 54,
+            "message": 957289118285594694,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 889410403820519424,
+            "suggestion": "Make the remnant fleet a playable faction... HEAR ME OUT I think it would be cool to see spyglass again",
+            "sid": 55,
+            "message": 957367002098462740,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 676832666213154818,
+            "suggestion": "amogus skin for reaper",
+            "sid": 56,
+            "message": 957417604329377822,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Sniper scope on Volt SMG",
+            "sid": 57,
+            "message": 957492124943781948,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Titan weapon idea: Burst Accelerator Cannon that shoots a continuous beam that last for half of second, which equals to 15 rounds burst, one burst kill against Pilots (8 rounds out of 15-round burst is needed to kill). Clip size is 30 rounds, which equals to two bursts and rate of fire is 1800 RPM",
+            "sid": 58,
+            "message": 957534519567720470,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 422369274947043328,
+            "suggestion": "Sans OS for titans, literally just makes the sounds his voice does in undertale because useful OS's are for nerds",
+            "sid": 59,
+            "message": 957556975447732286,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 485927254677913605,
+            "suggestion": "Add BT animation when pilot get in/out titan in multiplayer",
+            "sid": 60,
+            "message": 957642094544031784,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 829694789833457684,
+            "suggestion": "might be too much to ask, but make melee not remove all of your momentum when It Locks and Kills someone? Or make It like the in air Flight kit that gives you a bit of momentum and Speed After you stop ADS, would be cool",
+            "sid": 61,
+            "message": 957666190191366214,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 106243269796564992,
+            "suggestion": "ability to use titan OSs from TF1. I miss Sid",
+            "sid": 62,
+            "message": 957908328011423814,
+            "status": "approved",
+            "note": "there's like 3 of them in client mods - <@!201553786974502912>"
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Suppressors on primary weapons including Spitfire LMG",
+            "sid": 63,
+            "message": 957912795427512350,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 889410403820519424,
+            "suggestion": "Swappable titan weapons, I need my Scorch with a Ronin shotgun",
+            "sid": 64,
+            "message": 957953017645264967,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 576887540930576425,
+            "suggestion": "Dome shield boost that spawns a dome shield around the player temporarily, last as long as a full dome shield (from when the shield first appears to when the titan becomes an auto titan)",
+            "sid": 65,
+            "message": 958001868829769748,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Ability to select between two firemodes on some weapons. Semi-automatic fire-mode for R-201, Hemlok and V-47 Flatline and two-round burst for G2A5 and EVA-8",
+            "sid": 66,
+            "message": 958049705475047525,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 483995186117083155,
+            "suggestion": "deeznuta",
+            "sid": 67,
+            "message": 958295543107448872,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 186210035947274240,
+            "suggestion": "Change the balancing system in Titan Brawl to spawn extra players on a team without their titans instead of outright killing them",
+            "sid": 68,
+            "message": 958444470540595200,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 949269806824181770,
+            "suggestion": "Replace A-wall with giant pp.",
+            "sid": 69,
+            "message": 958488262467526676,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 267137913613975553,
+            "suggestion": "From a friend, after telling him the 1.6.0 update: \"But does it have a cheat code I can enter in the menu to turn the background music to the Ewok Celebration theme from Return of the Jedi?\"",
+            "sid": 70,
+            "message": 958512834780741723,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 625796609804075070,
+            "suggestion": "Add the air dog fights",
+            "sid": 71,
+            "message": 958866249696305173,
+            "status": "approved",
+            "note": "Already being worked on in <#943462639634382908> - <@!201553786974502912>"
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Heatseeking plasma rounds for Mastiff shotgun and L-STAR EMG. Slow moving projectiles that weakly tracks targets in the general direction",
+            "sid": 72,
+            "message": 959111965219913828,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 520690410536960039,
+            "suggestion": "Slug rounds for Mastiff cuz <:trol:935813734335676446>",
+            "sid": 73,
+            "message": 959115251104755733,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 223192012109643776,
+            "suggestion": "A mod that allows server hosts to selectively disable specific Aegis upgrades (Ex: Ronin's Broad Sword Damage increase), instead of all or nothing",
+            "sid": 74,
+            "message": 959125454223200386,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 949269806824181770,
+            "suggestion": "make every weapon shoot the lasers from the monarch energy drain thingy.",
+            "sid": 75,
+            "message": 959131527881576498,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Binary Rifle (Forerunner weapon) capable of instakilling and wallbanging Pilots within 10 cm thickness, can damage and slow down Titans by 37.5%. When hipfired, the Binary Rifle acts like a shotgun that kills Pilots within 69 meters and are incapable of penetrating walls but it still slows down Titans, and when ADS, the Binary Rifle acts like an anti-materiel rifle that kills Pilots regardless of range. Bullet velocity is hitscan and the weapon has a very strong scope glint. Clip size is two and rate of fire is 65 RPM",
+            "sid": 76,
+            "message": 959399622730719252,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "I think this is being worked on but if not then BT OS for monarch",
+            "sid": 77,
+            "message": 959530758693863484,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 755499635833045132,
+            "suggestion": "make <@!271698083685990401> s northstar spinner come built in w/ northstar",
+            "sid": 78,
+            "message": 959606651336396870,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 332232432956735491,
+            "suggestion": "Smart pistol only mode, disables lock on notification for maximum pain",
+            "sid": 79,
+            "message": 959842516075704350,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 301037871362473986,
+            "suggestion": "Change the voicelines of grunts to those from old star wars battlefront 2, perhaps Militia grunts could be clones and IMC stormtroopers",
+            "sid": 80,
+            "message": 959844573251797043,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "when bounty hunt gets released make it play major bag alert if u win",
+            "sid": 81,
+            "message": 959897505053675550,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Frontier Defense but the enemy is the Blacklight Virus. Also adds Forerunner/Promethean weapons because it is extremely effective against the Blacklight Virus",
+            "sid": 82,
+            "message": 959905397425184820,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 332232432956735491,
+            "suggestion": "Add the classic Halo shotgun as a reskin/modification to the EVA-8 shotgun or Mastiff",
+            "sid": 83,
+            "message": 959910339015770134,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 676832666213154818,
+            "suggestion": "a mod that instead of allowing you to cook grenades, makes them sticky",
+            "sid": 84,
+            "message": 959964172198739978,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 949269806824181770,
+            "suggestion": "Make a server mod that randomly resizes things between a maximum of two numbers. Sounds hilarious to me. <:trol:935813734335676446>",
+            "sid": 85,
+            "message": 959993330584915978,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 231123391820726282,
+            "suggestion": "mario kart wii lobby music",
+            "sid": 86,
+            "message": 960157878327586827,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 877966975786172456,
+            "suggestion": "a mod that replaces the drop ship faction intro with frontier defence (droz and davis) intro",
+            "sid": 87,
+            "message": 960185428516954142,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Concussive Shot ability for Titans. Shoots a thermobaric missile that stuns Titans for a split second and can instantly destroy particle walls. Damage against Titans is 0.75x the Archer Heavy Rocket",
+            "sid": 88,
+            "message": 960227735916122143,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 172781195329798144,
+            "suggestion": "Import the Bocek (bow) weapon for Apex Legends \ud83c\udff9 <:chad:944168960633491476>",
+            "sid": 89,
+            "message": 960325042074423326,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 172781195329798144,
+            "suggestion": "Rebind or disable mantle/vaulting (may exist already?)",
+            "sid": 90,
+            "message": 960326477965058088,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 172781195329798144,
+            "suggestion": "Hear me out: **Overclocked Warpfall**. Instant(ish) titan falling at the cost of your titan being instantly distroyed. Good for a pilot-only playstyle, while still being able to handle enemy titans somewhat. Maybe make it both possible by holding F for overclocked warpfall and press F for regular warpfall.",
+            "sid": 91,
+            "message": 960327823225126972,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 478212283701526529,
+            "suggestion": "Cranked game mode like in CoD where you need to get kills. If the timer runs out before you get a kill, you explode. The timer only activates after the first kill you get though.",
+            "sid": 92,
+            "message": 960355116307853352,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "MOAB Glue's suit for Pilots with Battle Hardened perk or something like that",
+            "sid": 93,
+            "message": 960633615815946350,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Primary/secondary/anti-Titan weapons can now be placed in either primary, secondary, tertiary slots, allowing use of two or three primary/secondary/AT weapons. Also, sidearms can be dual wielded with slight accuracy penalty",
+            "sid": 94,
+            "message": 960699807226290288,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 378566455056138251,
+            "suggestion": "A racing gamemode. No teams, a map like drydocks or homestead (big area, circular path that goes around the map) and an order of markers you have to hit along that path to score a point. First person to X amount of points wins.",
+            "sid": 95,
+            "message": 960749170199781446,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Incendiary, chemical and arc weapons can disintegrate enemies in similar way to Forerunner/Promethean weapons",
+            "sid": 96,
+            "message": 960857066673680465,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 829694789833457684,
+            "suggestion": "Changes to the Sticks and Stone gamemode to make It more fare and Better for new people while still making It competitive enogh, an idea discussed in #coo<#922663037196963861> was to make so that if player Is under X amount of Points, they wont go in bankrupt, and After that amount, the more you get the more you Will loose when you get killed by pulse Blade, to discuss It more theres the thread",
+            "sid": 97,
+            "message": 960998134824206356,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 700043367350010014,
+            "suggestion": "Allow players to use the faction 'The Last Resort' from Frontier Defence.",
+            "sid": 98,
+            "message": 961348763451007046,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "Jack cooper model preferably for cloak cus thats what he was",
+            "sid": 99,
+            "message": 961391411981353010,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 949269806824181770,
+            "suggestion": "Add the nessie gun from apex to titanfall 2!",
+            "sid": 100,
+            "message": 961748905677176942,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 298830565329600513,
+            "suggestion": "make the ai better via diversifying the weapons of grunts, upping the difficulty to the equivalent of hardcore in the campaign, and add missing units such as the shield captain, drones and simulacrum.",
+            "sid": 101,
+            "message": 962087010087080006,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 298830565329600513,
+            "suggestion": "bring back specter rodeos from titanfall 1",
+            "sid": 102,
+            "message": 962087164231970947,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Shattercaps rounds for R-97 SMG and Hemlok BF-R, bullet splits into multiple metal shaving projectiles once exit the barrel, improving the close-range performance at the expense of range",
+            "sid": 103,
+            "message": 962126287223283733,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 763779065983008789,
+            "suggestion": "A damage counter mod where it shows how much damage you have done while shooting at him like in Apex.",
+            "sid": 104,
+            "message": 962308707272785931,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "always first person embark but only embarks not executions or terminations (because they just don't really work fp)",
+            "sid": 105,
+            "message": 962418630782509116,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "add a random favorate option for executions like u can with apex skins, I can pick a select few to be randomly chosen when I execute someone",
+            "sid": 106,
+            "message": 962422673168793680,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Repulsive Rifle, an alien weapon that repulses enemies, deals little damage and can affect projectile trajectory, meaning if timed well, the weapon can deflect Kraber bullets. Rate of fire is 210 RPM and it has a bottomless magazine but it overheats after five consecutive rapid-fire shots. It can be charged to fire a powerful shot capable of stunning Titans for a second, repulses enemies and projectiles with a much greater force, and are two shot kill",
+            "sid": 107,
+            "message": 962437972546973776,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 755499635833045132,
+            "suggestion": "put n* on steam as a workshop thing so people will get it reccomended",
+            "sid": 108,
+            "message": 962485644284817498,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "since coms jam is a ass boost how abt making it actually jam the coms, 2 things here that could be different mods, 1. (no effect to gameplay) whenever u get com jammed and ur faction guy says something have it staticed out like the coms r being jammed 2. (effects gameplay) since ur calling in ur titan u actually calling it so u can't titanfall because u can't comunicate with the people dropping it",
+            "sid": 109,
+            "message": 962519813148790845,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 259752688743481344,
+            "suggestion": "adding this https://youtu.be/-LTtripsg5U to smart pistol boost use",
+            "sid": 110,
+            "message": 962625278738305026,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Drones can now be deployed by players",
+            "sid": 111,
+            "message": 963028645474107413,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 523909047921934336,
+            "suggestion": "multiplayer campaign, dont know how but it would be interesting",
+            "sid": 112,
+            "message": 963198797532528691,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 422369274947043328,
+            "suggestion": "Mod that makes grunts look like TF1 grunts, because why not",
+            "sid": 113,
+            "message": 963254614843604992,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 422369274947043328,
+            "suggestion": "Mod that replaces female phase pilots with Ash, i know its theoretically possible but ive never seen it done",
+            "sid": 114,
+            "message": 963375408429023232,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Omnidirectional Plasma Drones that has four individual turrets, each turret targets independently with diffey target priorities, sorted from top to bottom; The first and second turret targets strongest and weakest targets respectively while third and fourth one targets closest and farthest targets respectively. Can be deployed by players and as enemies on higher waves in Frontier Defense",
+            "sid": 115,
+            "message": 963469467004850277,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 320837928928411649,
+            "suggestion": "Camera Shake Modifier, The Games Camera shake when you shoot at higher fov values looks incredibly odd and makes it hard to see, it would help greatly for my poor eyesight as a lot of the game gets blurry when the camera shake becomes too intense.",
+            "sid": 116,
+            "message": 963526375380230174,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "Single-player campaign focusing on IMC/Militia fighting the Blacklight Virus, based on https://www.reddit.com/r/titanfall/comments/tusnby/titanfall_vs_blacklight_virus/",
+            "sid": 117,
+            "message": 963785261353951295,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 780277023401705502,
+            "suggestion": "server-side mod that replaces the B3 Wingman with the old sidearm Wingman Elite",
+            "sid": 118,
+            "message": 964623653125906442,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 293948527589982210,
+            "suggestion": "replacing the sound of sword core activation with one of the tracks from Metal Gear Rising, IE Rules of Nature, Red Sun, The Only Thing I Know For Real",
+            "sid": 119,
+            "message": 964658712453206076,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 485927254677913605,
+            "suggestion": "Server-Side Mod that auto kick players that have high ping. 150+ default. Customizable ofc.\nPeople finally play on servers in their region and people occupy more servers in one time, then just waiting for free slot on one server where they have 300+ping",
+            "sid": 120,
+            "message": 965193828975902730,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 171813598031511552,
+            "suggestion": "gamemode where everyone gets a random different weapon and killing someone gives you the weapon they got. you have to kill someone with their own weapon to eliminate them. last man standing wins",
+            "sid": 121,
+            "message": 965858797627269190,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 655988053357101067,
+            "suggestion": "adding something that tracks your stats. Not sure if it already exists but I noticed that on basic northstar, things like time played, kills, deaths, and such aren\u2019t tracked. If there\u2019s a mod that already does that just let me know",
+            "sid": 122,
+            "message": 966010067654688828,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 829694789833457684,
+            "suggestion": "improve the search server tags by adding some riffs research, example:\n\nGamemode: Gun game\nSpecial Riffs 1: The floor Is lava\nSpecial Riffs 2: First Person Camera mode",
+            "sid": 123,
+            "message": 966122966180053023,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 422369274947043328,
+            "suggestion": "northstar flight core has no salvo but allows for temporary noclip-style flight",
+            "sid": 124,
+            "message": 966325403084005446,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "droz, david helmet, literally anybody not in multiplayer and just the helmets so animations don\u2019t go goofy",
+            "sid": 125,
+            "message": 966474765604884530,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 267106006926884864,
+            "suggestion": "Titanfall 2 surf or something like it. Just a gamemode that allows community made maps to be played so people can fuck around with the titanfall 2 movement systems. Take a look at CSGO surf for an example i guess. Id pay $500 if someone can get this made and working",
+            "sid": 126,
+            "message": 966553281272897536,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "whenever your in a titan and take a hit from a big weapon like a charged plasma rail gun or tones rockets etc. have the panels flicker on and off temporarily unless doomed(where they would just normally flicker)(panels flickering would just look like you were doomed but they would stop flickering after a second or 2)",
+            "sid": 127,
+            "message": 966826820701917184,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 852684066293022772,
+            "suggestion": "make prowlers petable.",
+            "sid": 128,
+            "message": 967609951788867654,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 620104730320044043,
+            "suggestion": "search and destroy",
+            "sid": 129,
+            "message": 967925965273591858,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 713893988377165985,
+            "suggestion": "Replace Monarch with BT or give Monarch BT's animations",
+            "sid": 130,
+            "message": 967933820697444362,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 396375745502380045,
+            "suggestion": "Replace Ronin sword with Guts' dragon slayer",
+            "sid": 131,
+            "message": 967969051097858118,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 731724400617062490,
+            "suggestion": "make a mod that allows you to play with your mp pilot in campaign",
+            "sid": 132,
+            "message": 967985750786318358,
+            "status": "open",
+            "note": ""
+        }
+    ]
+}

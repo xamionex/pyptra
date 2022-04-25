@@ -1,0 +1,213 @@
+{
+    "latestId": 25,
+    "suggestions": [
+        {
+            "user": 275215231918276608,
+            "suggestion": "bot testing",
+            "sid": 0,
+            "message": 952635939442794496,
+            "status": "approved",
+            "note": ""
+        },
+        {
+            "user": 829694789833457684,
+            "suggestion": "make It possible for players to see what riffs or mods the server had while inside the game, for example making It so when pressing Tab you can see server name, riffs like air acc: 500 and mods Active like HoloShift.",
+            "sid": 1,
+            "message": 952694374544855180,
+            "status": "approved",
+            "note": ""
+        },
+        {
+            "user": 226211469279100928,
+            "suggestion": "[Feature Request] for server owners / hosts:  ability to spectate for moderation purposes, inspect gameplay of suspected hackers",
+            "sid": 2,
+            "message": 953179111180890114,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 226211469279100928,
+            "suggestion": "[Feature Request] for server owners / hosts: ability to spectate for moderation purposes, inspect gameplay of suspected hackers --- make spectate available for anyone who wants to, not just server admins (so they can record proof too and submit to server hosts)",
+            "sid": 3,
+            "message": 953180578503618560,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "allows you to rodeo your own titan when auto titans work and while rodeoing you look somewhere and press the button to switch between guard mode and follow mode and it will go there, you can also go straight to embark from that too",
+            "sid": 4,
+            "message": 953659550299484220,
+            "status": "denied",
+            "note": "This is a mod suggestion - <@!275215231918276608>"
+        },
+        {
+            "user": 354531192508252160,
+            "suggestion": "add niko role",
+            "sid": 5,
+            "message": 953668936870797343,
+            "status": "denied",
+            "note": "PLEASE STOP ASKING ME FOR NIKO ROLE - <@139095725110722560>"
+        },
+        {
+            "user": 529344396957581314,
+            "suggestion": "allow killtracker to save without the current weird rules for it to actually save so I can have my 100 kills in 24/7 skirmish count without waiting 3hours for the game to end",
+            "sid": 6,
+            "message": 953798802345697300,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 580742833665998869,
+            "suggestion": "refresh double jump when riding a zipline",
+            "sid": 7,
+            "message": 953982136111751250,
+            "status": "denied",
+            "note": "mod suggestion in wrong channel - <@!267636371299106817>"
+        },
+        {
+            "user": 244413639761723402,
+            "suggestion": "make a separate channel for \"games that are currently free to get\" instead of flooding <#935685344010047519> with it",
+            "sid": 8,
+            "message": 954366182004248646,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 354531192508252160,
+            "suggestion": "niko role 2: electric boogaloo",
+            "sid": 9,
+            "message": 954389666394701824,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 676832666213154818,
+            "suggestion": "make a separate skins server for weird ass porn shit so it doesn't end up here <:trol:935813734335676446> https://discord.com/channels/920776187884732556/936307131462844446/954434510018207804 need i say more",
+            "sid": 10,
+            "message": 954440078942404638,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 378626415651848194,
+            "suggestion": "Ban me from the server.",
+            "sid": 11,
+            "message": 954794157640155187,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 549383493621252116,
+            "suggestion": "I'm not sure if it exists currently or not but a bug report channel would be nice instead of just tickets and asking for help",
+            "sid": 12,
+            "message": 955005941982564432,
+            "status": "denied",
+            "note": "last time we had this channel, people just filled it with common issues that can be easily found on wiki - <@!201553786974502912>"
+        },
+        {
+            "user": 755499635833045132,
+            "suggestion": "add a suggestion area for suggestions for the next Northstar client update (suggestion I'd put in there: a way for us modders to test server sided mods in private matches without hosting our own server)",
+            "sid": 13,
+            "message": 955287001450573854,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 780277023401705502,
+            "suggestion": "remove the chad emote because people only use it on themselves after saying the dumbest shit known to man",
+            "sid": 14,
+            "message": 955323315138986014,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 676832666213154818,
+            "suggestion": "make the ,status autoresponse mention how they will likely be pinged when the master server is actually safe and available for people to play",
+            "sid": 15,
+            "message": 955362919334412339,
+            "status": "approved",
+            "note": "Added - <@139095725110722560>"
+        },
+        {
+            "user": 625796609804075070,
+            "suggestion": "Add sp maps to the bot (.maps)",
+            "sid": 16,
+            "message": 964622225149919275,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183718882182168576,
+            "suggestion": "A bot to share weekly \"What's up at Respawn Entertainment and Gravity Well Games?\" posts by u/TF3RDL on Reddit in <#946379088757669948>",
+            "sid": 17,
+            "message": 964785247743000577,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 755499635833045132,
+            "suggestion": "add \"did you read faq\" along with the wiki and announcements when opening tickets",
+            "sid": 18,
+            "message": 964965820394508328,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 755499635833045132,
+            "suggestion": "add a bot command that lists the the things respawn has edited about the source engine that we havent cracked open yet, (it would be funi) so we could watch it shrink over time",
+            "sid": 19,
+            "message": 965796097412960338,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 486714853944459295,
+            "suggestion": "add an optional queue system (I don\u2019t know how it\u2019d work) (could also be a mod if possible(I don\u2019t know the capabilities of northstar))",
+            "sid": 20,
+            "message": 965850039878582272,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 780277023401705502,
+            "suggestion": "bot that automatically reacts to any of boio's messages with the eyebrow raised emote because it's tiring for me to do by myself",
+            "sid": 21,
+            "message": 966486454006079538,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 755499635833045132,
+            "suggestion": "bob dosent have the kroks embed role. remedy that",
+            "sid": 22,
+            "message": 966744767734112296,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 353485809694801923,
+            "suggestion": "Have the FAQ (i.e !FAQ) video tied to a bot command, rather than posting the discord vid (Accidently posted it in <#951255789568409600> , ignore it)",
+            "sid": 23,
+            "message": 967196028195463190,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 139095725110722560,
+            "suggestion": "Remove the moderators, who needs them anyway? <:clueless:924176159720230982>",
+            "sid": 24,
+            "message": 967606749068673074,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 139095725110722560,
+            "suggestion": "global banlist for users that say \"genshin\", \"NFT\" or \"touhou\"",
+            "sid": 25,
+            "message": 967899993182703636,
+            "status": "open",
+            "note": ""
+        }
+    ]
+}
