@@ -36,6 +36,9 @@ async def on_member_join(member):
 
 @bot.event
 async def on_message(message):
+    if message.mention_everyone:
+        bot.reply("Please don't try this again.")
+        return
     await other.OtherUtils.afkcheck(message)
     await bot.process_commands(message)
 
