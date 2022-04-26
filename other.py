@@ -79,13 +79,13 @@ class OtherCommands(commands.Cog):
     @commands.command(name="gn", description="Go to bed! >:C")
     async def gn1(self, ctx):
         await ctx.message.add_reaction('💤')
-        rply = await OtherUtils.afk(self, ctx, "Sleeping 💤")
-        await ctx.reply(rply, delete_after=10.0, mention_author=False)
+        e = await OtherUtils.gn(self, ctx, "Sleeping 💤")
+        await ctx.reply(embed=e, delete_after=10.0, mention_author=False)
 
     @commands.slash_command(name="gn", description="Go to bed! >:C")
     async def gn2(self, ctx):
-        rply = await OtherUtils.afk(self, ctx, "Sleeping 💤")
-        await ctx.respond(rply, ephemeral=True)
+        e = await OtherUtils.gn(self, ctx, "Sleeping 💤")
+        await ctx.respond(embed=e, ephemeral=True)
 
 class OtherUtils():
     async def afk(self, ctx, reason):
@@ -106,6 +106,12 @@ class OtherUtils():
         except:
             print(f'I wasnt able to edit [{ctx.author} / {ctx.author.id}].')
         return rply
+
+    async def gn(self, ctx, reason):
+        await OtherUtils.afk(self, ctx, reason)
+        e = discord.Embed(title=f"Goodnight {ctx.author.display_name}")
+        e.set_image(url="https://c.tenor.com/nPYfVs6FsBQAAAAS/kitty-kitten.gif")
+        return e
 
     async def update_data(afk, user):
         if not f'{user.id}' in afk:
