@@ -36,6 +36,8 @@ async def on_application_command_error(ctx: discord.ApplicationContext, error):
 
 @bot.event
 async def on_message(message):
+    if (message.author.bot):
+        return
     if message.mention_everyone or message.content == "@everyone":
         await message.channel.send("Please don't try this again.", reference=message, delete_after=10)
         return
