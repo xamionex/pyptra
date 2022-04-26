@@ -1,5 +1,5 @@
 import discord
-import utils
+import cogs.utils as utils
 from discord.ext import commands
 
 installation_options = [

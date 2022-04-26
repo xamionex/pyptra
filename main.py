@@ -1,11 +1,12 @@
 import discord
 from discord.ext import commands
 
-import suggestions
-import other
 import secrets
-import block
-import info
+import cogs.suggestions as suggestions
+import cogs.other as other
+import cogs.block as block
+import cogs.info as info
+import cogs.fun as fun
 
 intents = discord.Intents.default()
 intents.members = True
@@ -48,5 +49,6 @@ bot.add_cog(suggestions.SuggestionCommands(bot))
 bot.add_cog(other.OtherCommands(bot))
 bot.add_cog(info.InfoCommands(bot))
 bot.add_cog(block.BlockCommands(bot))
+bot.add_cog(fun.FunCommands(bot))
 
 bot.run(secrets.secret)

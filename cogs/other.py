@@ -1,5 +1,4 @@
 import datetime
-import dbm
 import json
 import os
 import sys
@@ -7,12 +6,10 @@ import time
 import humanize
 import discord
 from discord.ext import commands
-import utils
 
 class OtherCommands(commands.Cog):
     def __init__(self, ctx):
         self.ctx = ctx
-        utils.ctx = ctx
 
     @commands.command(name="reload")
     @commands.has_permissions(administrator=True)

@@ -1,7 +1,6 @@
 import json
 import discord
 from discord.ext import commands
-import utils
 
 class BlockUtils():
     async def open_blacklisted(user):
@@ -43,7 +42,6 @@ class BlockUtils():
 class BlockCommands(commands.Cog):
     def __init__(self, ctx):
         self.ctx = ctx
-        utils.ctx = ctx
 
     @commands.command(name="block")
     @commands.has_permissions(administrator=True)
