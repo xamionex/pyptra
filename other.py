@@ -64,18 +64,18 @@ class OtherCommands(commands.Cog):
         await user.send(message)
         await ctx.message.delete()
 
-    @commands.command(name="afk")
+    @commands.command(name="afk", description="Set an AFK so people know if you will respond after being pinged")
     async def afk1(self, ctx, *, reason=None):
         rply = await OtherUtils.afk(self, ctx, reason)
         await ctx.message.add_reaction('👋')
         await ctx.reply(rply, delete_after=10.0, mention_author=False)
 
-    @commands.slash_command(name="afk")
+    @commands.slash_command(name="afk", description="Set an AFK so people know if you will respond after being pinged")
     async def afk2(self, ctx, reason: discord.Option(str, "What do you want to set your AFK to?")):
         rply = await OtherUtils.afk(self, ctx, reason)
         await ctx.respond(rply, ephemeral=True)
 
-    @commands.command(name="gn")
+    @commands.command(name="gn", description="Go to bed! >:C")
     async def gn1(self, ctx, *, option=None):
         if option == "2":
             await ctx.message.add_reaction('😈')
@@ -84,7 +84,7 @@ class OtherCommands(commands.Cog):
         rply = await OtherUtils.gn(self, ctx, option)
         await ctx.reply(rply, delete_after=10.0, mention_author=False)
 
-    @commands.slash_command(name="gn")
+    @commands.slash_command(name="gn", description="Go to bed! >:C")
     async def gn2(self, ctx, option: discord.Option(str, "What do you want to set your AFK to?", choices=gn_options)):
         rply = await OtherUtils.gn(self, ctx, option)
         await ctx.respond(rply, ephemeral=True)
