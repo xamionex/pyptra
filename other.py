@@ -9,12 +9,6 @@ import discord
 from discord.ext import commands
 import utils
 
-
-gn_options = [
-    discord.OptionChoice(name="Goodnight", value="1"),
-    discord.OptionChoice(name="I hope no-one looks at my plans", value="2")
-]
-
 class OtherCommands(commands.Cog):
     def __init__(self, ctx):
         self.ctx = ctx
@@ -64,6 +58,13 @@ class OtherCommands(commands.Cog):
         await user.send(message)
         await ctx.message.delete()
 
+    @commands.command(name="nick")
+    @commands.has_permissions(administrator=True)
+    async def nick(self, ctx, member: discord.Member, *, nick=None):
+        nick = nick or "Cringe"
+        await member.edit(nick=nick)
+        await ctx.message.delete()
+
     @commands.command(name="afk", description="Set an AFK so people know if you will respond after being pinged")
     async def afk1(self, ctx, *, reason=None):
         rply = await OtherUtils.afk(self, ctx, reason)
@@ -76,26 +77,17 @@ class OtherCommands(commands.Cog):
         await ctx.respond(rply, ephemeral=True)
 
     @commands.command(name="gn", description="Go to bed! >:C")
-    async def gn1(self, ctx, *, option=None):
-        if option == "2":
-            await ctx.message.add_reaction('😈')
-        else:
-            await ctx.message.add_reaction('💤')
-        rply = await OtherUtils.gn(self, ctx, option)
+    async def gn1(self, ctx):
+        await ctx.message.add_reaction('💤')
+        rply = await OtherUtils.afk(self, ctx, "Sleeping 💤")
         await ctx.reply(rply, delete_after=10.0, mention_author=False)
 
     @commands.slash_command(name="gn", description="Go to bed! >:C")
-    async def gn2(self, ctx, option: discord.Option(str, "What do you want to set your AFK to?", choices=gn_options)):
-        rply = await OtherUtils.gn(self, ctx, option)
+    async def gn2(self, ctx):
+        rply = await OtherUtils.afk(self, ctx, "Sleeping 💤")
         await ctx.respond(rply, ephemeral=True)
 
 class OtherUtils():
-    async def gn(self, ctx, option):
-        rply = await OtherUtils.afk(self, ctx, "Sleeping 💤")
-        if option == "2":
-            rply = await OtherUtils.afk(self, ctx, "https://cdn.discordapp.com/attachments/920776187884732559/961666631073947709/I_hope_no_one_looks_at_my_plans.mp4")
-        return rply
-
     async def afk(self, ctx, reason):
         with open('./src/afk.json', 'r') as f:
             afk = json.load(f)
@@ -106,11 +98,11 @@ class OtherUtils():
         afk[f'{ctx.author.id}']['reason'] = f'{reason}'
         afk[f'{ctx.author.id}']['time'] = int(time.time())
         afk[f'{ctx.author.id}']['mentions'] = 0
-        rply = f"I've set your AFK to \"{reason}\""
+        rply = f"I've set your AFK to `{reason}`"
         with open('./src/afk.json', 'w') as f:
             json.dump(afk, f)
         try:
-            await ctx.author.edit(nick=f'[AFK]{ctx.author.display_name}')
+            await ctx.author.edit(nick=f'[AFK] {ctx.author.display_name}')
         except:
             print(f'I wasnt able to edit [{ctx.author} / {ctx.author.id}].')
         return rply
@@ -138,7 +130,7 @@ class OtherUtils():
                 reason = afk[f'{member.id}']['reason']
                 timeafk = int(time.time()) - int(afk[f'{member.id}']['time'])
                 afktime = humanize.naturaltime(datetime.datetime.now() - datetime.timedelta(seconds=timeafk))
-                await message.reply(f"{member.display_name} is afk: {reason} - {afktime}", delete_after=10.0, mention_author=False)
+                await message.reply(f"`{member.display_name}` is afk: `{reason}` - {afktime}", delete_after=10.0, mention_author=False)
                 timementioned = int(afk[f'{member.id}']['mentions']) + 1
                 afk[f'{member.id}']['mentions'] = timementioned
                 with open('./src/afk.json', 'w') as f:
@@ -149,7 +141,7 @@ class OtherUtils():
                 timeafk = int(time.time()) - int(afk[f'{message.author.id}']['time'])
                 afktime = OtherUtils.period(datetime.timedelta(seconds=round(timeafk)), "{d}d {h}h {m}m {s}s")
                 mentionz = afk[f'{message.author.id}']['mentions']
-                await message.reply(f"Welcome back {message.author.display_name}!\nYou've been afk for {afktime}\nYou got mentioned {mentionz} times", delete_after=10.0, mention_author=False)
+                await message.reply(f"Welcome back `{message.author.display_name}`!\nYou've been afk for {afktime}\nYou got mentioned {mentionz} times", delete_after=10.0, mention_author=False)
                 afk[f'{message.author.id}']['AFK'] = 'False'
                 afk[f'{message.author.id}']['reason'] = 'None'
                 afk[f'{message.author.id}']['time'] = '0'
@@ -157,7 +149,7 @@ class OtherUtils():
                 with open('./src/afk.json', 'w') as f:
                     json.dump(afk, f)
                 try:
-                    await message.author.edit(nick=f'{message.author.display_name[5:]}')
+                    await message.author.edit(nick=f'{message.author.display_name[6:]}')
                 except:
                     print(f'I wasnt able to edit [{message.author} / {message.author.id}].')
         with open('./src/afk.json', 'w') as f:
