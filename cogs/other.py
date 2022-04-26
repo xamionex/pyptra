@@ -66,12 +66,12 @@ class OtherCommands(commands.Cog):
     async def afk1(self, ctx, *, reason=None):
         rply = await OtherUtils.afk(self, ctx, reason)
         await ctx.message.add_reaction('👋')
-        await ctx.reply(rply, delete_after=10.0, mention_author=False)
+        await ctx.reply(embed=rply, delete_after=10.0, mention_author=False)
 
     @commands.slash_command(name="afk", description="Set an AFK so people know if you will respond after being pinged")
     async def afk2(self, ctx, reason: discord.Option(str, "What do you want to set your AFK to?")):
         rply = await OtherUtils.afk(self, ctx, reason)
-        await ctx.respond(rply, ephemeral=True)
+        await ctx.respond(embed=rply, ephemeral=True)
 
     @commands.command(name="gn", description="Go to bed! >:C")
     async def gn1(self, ctx):
@@ -95,7 +95,7 @@ class OtherUtils():
         afk[f'{ctx.author.id}']['reason'] = f'{reason}'
         afk[f'{ctx.author.id}']['time'] = int(time.time())
         afk[f'{ctx.author.id}']['mentions'] = 0
-        rply = f"I've set your AFK to `{reason}`"
+        rply = discord.Embed(description=f"I've set your AFK to `{reason}`")
         with open('./src/afk.json', 'w') as f:
             json.dump(afk, f, indent=4, sort_keys=True)
         try:
@@ -106,7 +106,7 @@ class OtherUtils():
 
     async def gn(self, ctx, reason):
         await OtherUtils.afk(self, ctx, reason)
-        e = discord.Embed(title=f"Goodnight {ctx.author.display_name}")
+        e = discord.Embed(description=f"Goodnight {ctx.author.display_name}")
         e.set_image(url="https://c.tenor.com/nPYfVs6FsBQAAAAS/kitty-kitten.gif")
         return e
 
@@ -133,7 +133,8 @@ class OtherUtils():
                 reason = afk[f'{member.id}']['reason']
                 timeafk = int(time.time()) - int(afk[f'{member.id}']['time'])
                 afktime = humanize.naturaltime(datetime.datetime.now() - datetime.timedelta(seconds=timeafk))
-                await message.reply(f"`{member.display_name}` is afk: `{reason}` - {afktime}", delete_after=10.0, mention_author=False)
+                isafk = discord.Embed(description=f"{member.display_name} is afk: {reason} - {afktime}")
+                await message.reply(embed=isafk, delete_after=10.0, mention_author=False)
                 timementioned = int(afk[f'{member.id}']['mentions']) + 1
                 afk[f'{member.id}']['mentions'] = timementioned
                 with open('./src/afk.json', 'w') as f:
@@ -144,7 +145,10 @@ class OtherUtils():
                 timeafk = int(time.time()) - int(afk[f'{message.author.id}']['time'])
                 afktime = OtherUtils.period(datetime.timedelta(seconds=round(timeafk)), "{d}d {h}h {m}m {s}s")
                 mentionz = afk[f'{message.author.id}']['mentions']
-                await message.reply(f"Welcome back `{message.author.display_name}`!\nYou've been afk for {afktime}\nYou got mentioned {mentionz} times", delete_after=10.0, mention_author=False)
+                back = discord.Embed(title=f"Welcome back {message.author.display_name}!")
+                back.add_field(name="Afk for", value=afktime, inline=True)
+                back.add_field(name="Mentioned", value=f"{mentionz} time(s)", inline=True)
+                await message.reply(embed=back, delete_after=10.0, mention_author=False)
                 afk[f'{message.author.id}']['AFK'] = 'False'
                 afk[f'{message.author.id}']['reason'] = 'None'
                 afk[f'{message.author.id}']['time'] = '0'
