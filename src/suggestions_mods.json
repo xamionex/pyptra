@@ -1,5 +1,5 @@
 {
-    "latestId": 132,
+    "latestId": 133,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1062,6 +1062,14 @@
             "suggestion": "make a mod that allows you to play with your mp pilot in campaign",
             "sid": 132,
             "message": 967985750786318358,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 576887540930576425,
+            "suggestion": "not sure if this fits in <#951255789568409600>  but a templar / space marine skin for Scorch, got this from some guy on Reddit and thought it'd fit Scorch.",
+            "sid": 133,
+            "message": 968576048591671347,
             "status": "open",
             "note": ""
         }
