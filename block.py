@@ -48,6 +48,7 @@ class BlockCommands(commands.Cog):
     @commands.command(name="block")
     @commands.has_permissions(administrator=True)
     async def blacklist(self, ctx, user: discord.Member, *, reason=None):
+        await ctx.message.delete()
         if await BlockUtils.get_blacklist(user) == 0:
             await BlockUtils.add_blacklist(user)
             blacklist = discord.Embed(description=f"{ctx.author.mention} has blacklisted {user.mention} for: {reason}", color=0xed4245)
@@ -58,6 +59,7 @@ class BlockCommands(commands.Cog):
     @commands.command(name="unblock")
     @commands.has_permissions(administrator=True)
     async def unblacklist(self, ctx, user: discord.Member):
+        await ctx.message.delete()
         if await BlockUtils.get_blacklist(user) != 0:
             await BlockUtils.remove_blacklist(user)
             unblacklist = discord.Embed(

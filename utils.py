@@ -100,10 +100,6 @@ async def suggestion_internal(ctx: discord.ApplicationContext, suggestion: disco
         print("Target channel was 0")
 
 async def approve1(ctx: discord.ApplicationContext, domain: str, sid: str):
-    try:
-        await ctx.message.delete()
-    except discord.Forbidden:
-        pass
     if setSuggestionState(ctx, int(sid), "approved", domain):
         datasets[domain]["suggestions"][int(sid)]["status"] = "approved"
         data = datasets[domain]["suggestions"][int(sid)]
@@ -116,10 +112,6 @@ async def approve1(ctx: discord.ApplicationContext, domain: str, sid: str):
 
 
 async def deny1(ctx: discord.ApplicationContext, domain: str, sid: str):
-    try:
-        await ctx.message.delete()
-    except discord.Forbidden:
-        pass
     if setSuggestionState(ctx, int(sid), "denied", domain):
         datasets[domain]["suggestions"][int(sid)]["status"] = "denied"
         data = datasets[domain]["suggestions"][int(sid)]
@@ -131,10 +123,6 @@ async def deny1(ctx: discord.ApplicationContext, domain: str, sid: str):
         await ctx.send("That ID does not exist")
 
 async def addnote(ctx: discord.ApplicationContext, domain: str, sid: str, note: str):
-    try:
-        await ctx.message.delete()
-    except discord.Forbidden:
-        pass
     if ctx.author.guild_permissions.administrator:
         datasets[domain]["suggestions"][int(sid)]["note"] = f"{note} - {ctx.author.mention}"
         data = datasets[domain]["suggestions"][int(sid)]
