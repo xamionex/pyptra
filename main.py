@@ -30,9 +30,9 @@ async def on_application_command_error(ctx: discord.ApplicationContext, error):
     else:
         raise error
 
-@bot.event
-async def on_member_join(member):
-    await other.OtherUtils.afkjoin(member)
+#@bot.event
+#async def on_member_join(member):
+#    await other.OtherUtils.afkjoin(member)
 
 @bot.event
 async def on_message(message):
