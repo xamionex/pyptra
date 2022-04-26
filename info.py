@@ -135,14 +135,16 @@ class InfoUtils():
     async def helpuser(self, ctx):
         e = discord.Embed(title="Help for PTRA bot", description="", color=0x69FFFF)
         e.add_field(name="/help", value="Shows you this help page", inline=False)
+        e.add_field(name="/installation", value="Shows you guides on how to install Northstar", inline=False)
         e.add_field(name="/suggest", value="used for making suggestions in <#951255789568409600> and <#952007443842469928>", inline=False)
         e.add_field(name="/ping", value="used for checking the bot's ping", inline=False)
         e.add_field(name="/userinfo", value="Shows you info about a user", inline=False)
+        e.add_field(name="/afk or -afk", value="Sets an AFK for you, anyone pinging you will get a message saying you're AFK", inline=False)
+        e.add_field(name="/gn or -gn", value="Same as AFK but it's goodnight \o/", inline=False)
         return e
 
     async def helpadmin(self, ctx):
-        e = discord.Embed(title="Moderator only commands for MRVN bot", description="Commands that can only be used by moderators", color=0xFF6969)
-        e.add_field(name="-userinfo", value="Shows you info about a user", inline=False)
+        e = discord.Embed(title="Moderator only commands for MRVN bot", description="Commands that can only be used by moderators\nNote that Moderators have all slash commands as normal commands as well.", color=0xFF6969)
         e.add_field(name="-approve domain sID", value="Approves suggestion, making it green and saying Approved", inline=False)
         e.add_field(name="-deny domain sID", value="Denies suggestion, making it red and saying Denied", inline=False)
         e.add_field(name="-note domain sID text", value="Adding a comment to a suggestion", inline=False)
