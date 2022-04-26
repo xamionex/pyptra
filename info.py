@@ -24,13 +24,14 @@ class InfoCommands(commands.Cog):
             await ctx.respond(embed=e2, ephemeral=True)
 
     @commands.command(name="help", description="Check PTRA's help page")
-    @commands.has_permissions(administrator=True)
+    @commands.cooldown(1, 20, commands.BucketType.user)
     async def help2(self, ctx):
         e = await InfoUtils.helpuser(self, ctx)
-        await ctx.send(embed=e)
+        await ctx.message.delete(delay=20.0)
+        await ctx.reply(embed=e, delete_after=20.0, mention_author=False)
         if ctx.author.guild_permissions.administrator:
             e2 = await InfoUtils.helpadmin(self, ctx)
-            await ctx.send(embed=e2)
+            await ctx.reply(embed=e2, delete_after=20.0, mention_author=False)
 
     @commands.slash_command(name="userinfo", description="Finds info about users.")
     @commands.cooldown(1, 10, commands.BucketType.user)
@@ -39,17 +40,18 @@ class InfoCommands(commands.Cog):
         await ctx.respond(embed=e, ephemeral=True)
 
     @commands.command(name="userinfo", description="Finds info about users.")
-    @commands.has_permissions(administrator=True)
+    @commands.cooldown(1, 10, commands.BucketType.user)
     async def userinfo2(self, ctx, user: discord.Member):
         e = await InfoUtils.info(self, ctx, user)
-        await ctx.send(embed=e)
+        await ctx.message.delete(delay=10.0)
+        await ctx.reply(embed=e, delete_after=10.0, mention_author=False)
 
     @commands.command(name="ping", description="Tells you the bot's ping.")
-    @commands.has_permissions(administrator=True)
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def ping1(self, ctx):
         e = await utils.ping(ctx)
-        await ctx.send(embed=e)
+        await ctx.message.delete(delay=10.0)
+        await ctx.reply(embed=e, delete_after=10.0, mention_author=False)
 
     @commands.slash_command(name="ping", description="Tells you the bot's ping.")
     @commands.cooldown(1, 10, commands.BucketType.user)
@@ -58,11 +60,12 @@ class InfoCommands(commands.Cog):
         await ctx.respond(embed=e, ephemeral=True)
 
     @commands.command(name="installation", description="Sends the installation embeds.")
-    @commands.has_permissions(administrator=True)
+    @commands.cooldown(1, 120, commands.BucketType.user)
     async def installation1(self, ctx, option=None):
         e1 = await InfoUtils.helpinstallembed(self, ctx)
         e2 = await InfoUtils.manualinstallembed(self, ctx)
         e3 = await InfoUtils.automaticinstallembed(self, ctx)
+        await ctx.message.delete(delay=120.0)
         if ctx.author.guild_permissions.administrator and option == "channel":
             await ctx.message.delete()
             channel = ctx.guild.get_channel(922662496588943430)
@@ -76,18 +79,18 @@ class InfoCommands(commands.Cog):
             #await ctx.send(embed=e2)
             #await ctx.send(embed=e3)
         if option == "help":
-            await ctx.reply(embed=e1)
+            await ctx.reply(embed=e1, delete_after=120.0, mention_author=False)
         if option == "manual":
-            await ctx.reply(embed=e2)
+            await ctx.reply(embed=e2, delete_after=120.0, mention_author=False)
         if option == "automatic":
-            await ctx.reply(embed=e3)
+            await ctx.reply(embed=e3, delete_after=120.0, mention_author=False)
         if option == "both":
-            await ctx.reply(embed=e1)
-            await ctx.reply(embed=e2)
+            await ctx.reply(embed=e1, delete_after=120.0, mention_author=False)
+            await ctx.reply(embed=e2, delete_after=120.0, mention_author=False)
         if option == "all":
-            await ctx.reply(embed=e1)
-            await ctx.reply(embed=e2)
-            await ctx.reply(embed=e3)
+            await ctx.reply(embed=e1, delete_after=120.0, mention_author=False)
+            await ctx.reply(embed=e2, delete_after=120.0, mention_author=False)
+            await ctx.reply(embed=e3, delete_after=120.0, mention_author=False)
         if option != "channel" and option != "all" and option != "both" and option != "automatic" and option != "manual":
             await ctx.reply("Specify manual, automatic or both")
 
@@ -134,17 +137,17 @@ class InfoUtils():
 
     async def helpuser(self, ctx):
         e = discord.Embed(title="Help for PTRA bot", description="", color=0x69FFFF)
-        e.add_field(name="/help", value="Shows you this help page", inline=False)
-        e.add_field(name="/installation", value="Shows you guides on how to install Northstar", inline=False)
+        e.add_field(name="/help or -help", value="Shows you this help page", inline=False)
+        e.add_field(name="/installation or -installation", value="Shows you guides on how to install Northstar", inline=False)
         e.add_field(name="/suggest", value="used for making suggestions in <#951255789568409600> and <#952007443842469928>", inline=False)
-        e.add_field(name="/ping", value="used for checking the bot's ping", inline=False)
-        e.add_field(name="/userinfo", value="Shows you info about a user", inline=False)
+        e.add_field(name="/ping or -ping", value="used for checking the bot's ping", inline=False)
+        e.add_field(name="/userinfo or -userinfo", value="Shows you info about a user", inline=False)
         e.add_field(name="/afk or -afk", value="Sets an AFK for you, anyone pinging you will get a message saying you're AFK", inline=False)
         e.add_field(name="/gn or -gn", value="Same as AFK but it's goodnight \o/", inline=False)
         return e
 
     async def helpadmin(self, ctx):
-        e = discord.Embed(title="Moderator only commands for MRVN bot", description="Commands that can only be used by moderators\nNote that Moderators have all slash commands as normal commands as well.", color=0xFF6969)
+        e = discord.Embed(title="Moderator only commands for MRVN bot", description="Commands that can only be used by moderators", color=0xFF6969)
         e.add_field(name="-approve domain sID", value="Approves suggestion, making it green and saying Approved", inline=False)
         e.add_field(name="-deny domain sID", value="Denies suggestion, making it red and saying Denied", inline=False)
         e.add_field(name="-note domain sID text", value="Adding a comment to a suggestion", inline=False)
