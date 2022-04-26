@@ -16,7 +16,7 @@ class FunCommands(commands.Cog):
 class FunUtils():
     async def pet(ctx, image):
         if type(image) == discord.PartialEmoji:
-            image = await image.with_format('png').read() # retrieve the image bytes
+            image = await image.read() # retrieve the image bytes
             what = "an emoji"
         elif type(image) == discord.member.Member:
             what = image.mention
@@ -31,6 +31,6 @@ class FunUtils():
         dest.seek(0) # set the file pointer back to the beginning so it doesn't upload a blank file.
         filename = f"{image[0]}-petpet.gif"
         file = discord.File(dest, filename=filename)
-        e = discord.Embed(description=f"{ctx.author.mention} pet {what}")
+        e = discord.Embed(description=f"{ctx.author.mention} has pet {what}")
         e.set_image(url=f"attachment://{filename}")
         return e, file
