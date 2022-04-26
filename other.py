@@ -100,7 +100,7 @@ class OtherUtils():
         afk[f'{ctx.author.id}']['mentions'] = 0
         rply = f"I've set your AFK to `{reason}`"
         with open('./src/afk.json', 'w') as f:
-            json.dump(afk, f)
+            json.dump(afk, f, indent=4, sort_keys=True)
         try:
             await ctx.author.edit(nick=f'[AFK] {ctx.author.display_name}')
         except:
@@ -118,7 +118,7 @@ class OtherUtils():
             afk = json.load(f)
         await OtherUtils.update_data(afk, member)
         with open('./src/afk.json', 'w') as f:
-            json.dump(afk, f)
+            json.dump(afk, f, indent=4, sort_keys=True)
 
     async def afkcheck(message):
         with open('./src/afk.json', 'r') as f:
@@ -134,7 +134,7 @@ class OtherUtils():
                 timementioned = int(afk[f'{member.id}']['mentions']) + 1
                 afk[f'{member.id}']['mentions'] = timementioned
                 with open('./src/afk.json', 'w') as f:
-                    json.dump(afk, f)
+                    json.dump(afk, f, indent=4, sort_keys=True)
         if not message.author.bot:
             await OtherUtils.update_data(afk, message.author)
             if afk[f'{message.author.id}']['AFK'] == 'True':
@@ -147,13 +147,13 @@ class OtherUtils():
                 afk[f'{message.author.id}']['time'] = '0'
                 afk[f'{message.author.id}']['mentions'] = 0
                 with open('./src/afk.json', 'w') as f:
-                    json.dump(afk, f)
+                    json.dump(afk, f, indent=4, sort_keys=True)
                 try:
                     await message.author.edit(nick=f'{message.author.display_name[6:]}')
                 except:
                     print(f'I wasnt able to edit [{message.author} / {message.author.id}].')
         with open('./src/afk.json', 'w') as f:
-            json.dump(afk, f)
+            json.dump(afk, f, indent=4, sort_keys=True)
 
     def period(delta, pattern):
         d = {'d': delta.days}

@@ -12,7 +12,7 @@ class BlockUtils():
             users[str(user.id)] = {}
             users[str(user.id)]["blacklist"] = 0
             with open("./src/blacklisted.json", "w") as f:
-                json.dump(users, f)
+                json.dump(users, f, indent=4, sort_keys=True)
                 return True
 
     async def get_blacklist(user):
@@ -31,14 +31,14 @@ class BlockUtils():
         users = await BlockUtils.get_blacklisted_data()
         users[str(user.id)]['blacklist'] += 1
         with open("./src/blacklisted.json", "w") as f:
-            json.dump(users, f)
+            json.dump(users, f, indent=4, sort_keys=True)
 
     async def remove_blacklist(user):
         await BlockUtils.open_blacklisted(user)
         users = await BlockUtils.get_blacklisted_data()
         users[str(user.id)]['blacklist'] -= 1
         with open("./src/blacklisted.json", "w") as f:
-            json.dump(users, f)
+            json.dump(users, f, indent=4, sort_keys=True)
 
 class BlockCommands(commands.Cog):
     def __init__(self, ctx):
