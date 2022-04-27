@@ -162,6 +162,8 @@ class InfoUtils():
             return e
         if option == "automatic":
             e = await InfoUtils.automaticinstallembed(self, ctx)
+        if option == "help":
+            e = await InfoUtils.helpinstallembed(self, ctx)
             return e
 
     async def helpinstallembed(self, ctx):
