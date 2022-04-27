@@ -2,4 +2,4 @@
 /venv
 /__pycache__
 /cogs/__pycache__
-/src
+/src/*.json
