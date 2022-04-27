@@ -1,3 +1,4 @@
+from typing import Optional
 import discord
 import cogs.utils as utils
 from discord.ext import commands
@@ -35,13 +36,15 @@ class InfoCommands(commands.Cog):
 
     @commands.slash_command(name="userinfo", description="Finds info about users.")
     @commands.cooldown(1, 10, commands.BucketType.user)
-    async def userinfo1(self, ctx, user: discord.Member):
+    async def userinfo1(self, ctx, user: Optional[discord.Member]):
+        user = user or ctx.author
         e = await InfoUtils.info(self, ctx, user)
         await ctx.respond(embed=e, ephemeral=True)
 
     @commands.command(name="userinfo", description="Finds info about users.")
     @commands.cooldown(1, 10, commands.BucketType.user)
-    async def userinfo2(self, ctx, user: discord.Member):
+    async def userinfo2(self, ctx, user: Optional[discord.Member]):
+        user = user or ctx.author
         e = await InfoUtils.info(self, ctx, user)
         await ctx.message.delete(delay=10.0)
         await ctx.reply(embed=e, delete_after=10.0, mention_author=False)
@@ -113,8 +116,6 @@ class InfoCommands(commands.Cog):
 
 class InfoUtils():
     async def info(self, ctx, user: discord.Member):
-        if user == None:
-            user = ctx.author
         date_format = "%a, %d %b %Y %I:%M %p"
         e = discord.Embed(color=0xdfa3ff, description=user.mention)
         e.set_author(name=str(user), icon_url=user.avatar.url)

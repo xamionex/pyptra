@@ -10,6 +10,7 @@ class FunCommands(commands.Cog):
 
     @commands.command(name="pet", description="Pet someone :D")
     async def pet1(self, ctx, image: Optional[Union[discord.PartialEmoji, discord.member.Member]]):
+        image = image or ctx.author
         e = await FunUtils.pet(ctx, image)
         await ctx.reply(embed=e[0], file=e[1], mention_author=False)
 
