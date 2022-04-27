@@ -40,7 +40,7 @@ async def on_command_error(ctx, error):
     #if isinstance(error, commands.CommandNotFound):
         #await ctx.reply(f'{ctx.author.mention} This command doesn\'t exist')
     if isinstance(error, commands.CommandError):
-        await ctx.reply(embed=discord.Embed(description=error))
+        await ctx.reply(embed=discord.Embed(description=error), delete_after=20, mention_author=False)
 
 @bot.event
 async def on_member_join(member):
