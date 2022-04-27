@@ -23,13 +23,11 @@ async def on_ready():
 @bot.event
 async def on_application_command_error(ctx: discord.ApplicationContext, error):
     if isinstance(error, commands.CommandOnCooldown):
-        e = discord.Embed(description=f'{ctx.author.mention} You\'re on cooldown for {round(error.retry_after, 2)}s')
-        await ctx.send(embed=e)
+        await ctx.send(f'{ctx.author.mention} You\'re on cooldown for {round(error.retry_after, 2)}s')
     else:
         raise error
     if isinstance(error, commands.MissingPermissions):
-        e = discord.Embed(description=f'{ctx.author.mention} You\'re missing permissions for this command')
-        await ctx.send(embed=e)
+        await ctx.send(f'{ctx.author.mention} You\'re missing permissions for this command')
     else:
         raise error
 
@@ -39,10 +37,12 @@ async def on_application_command_error(ctx: discord.ApplicationContext, error):
 
 @bot.event
 async def on_message(message):
+    disable = {'`': '', '\\': '', '@everyone': ''}
+    for key, value in disable.items():
+        message.content = message.content.replace(key, value)
     if (message.author.bot):
         return
-    if message.mention_everyone or message.content == "@everyone":
-        await message.channel.send("Please don't try this again.", reference=message, delete_after=10)
+    if message.mention_everyone:
         return
     await other.OtherUtils.afkcheck(message)
     await bot.process_commands(message)
