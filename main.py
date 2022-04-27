@@ -24,10 +24,10 @@ async def on_ready():
 async def on_application_command_error(ctx: discord.ApplicationContext, error):
     #if isinstance(error, commands.CommandOnCooldown):
         #await ctx.respond(f'{ctx.author.mention} You\'re on cooldown for {round(error.retry_after, 2)}s', ephemeral=True)
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.respond(f'{ctx.author.mention} You\'re missing permissions for this command', ephemeral=True)
-    if isinstance(error, commands.CommandNotFound):
-        await ctx.respond(f'{ctx.author.mention} This command doesn\'t exist', ephemeral=True)
+    #if isinstance(error, commands.MissingPermissions):
+        #await ctx.respond(f'{ctx.author.mention} You\'re missing permissions for this command', ephemeral=True)
+    #if isinstance(error, commands.CommandNotFound):
+        #await ctx.respond(f'{ctx.author.mention} This command doesn\'t exist', ephemeral=True)
     if isinstance(error, commands.CommandError):
         await ctx.respond(embed=discord.Embed(description=error), ephemeral=True)
 
@@ -35,10 +35,10 @@ async def on_application_command_error(ctx: discord.ApplicationContext, error):
 async def on_command_error(ctx, error):
     #if isinstance(error, commands.CommandOnCooldown):
         #await ctx.reply(f'{ctx.author.mention} You\'re on cooldown for {round(error.retry_after, 2)}s')
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.reply(f'{ctx.author.mention} You\'re missing permissions for this command')
-    if isinstance(error, commands.CommandNotFound):
-        await ctx.reply(f'{ctx.author.mention} This command doesn\'t exist')
+    #if isinstance(error, commands.MissingPermissions):
+        #await ctx.reply(f'{ctx.author.mention} You\'re missing permissions for this command')
+    #if isinstance(error, commands.CommandNotFound):
+        #await ctx.reply(f'{ctx.author.mention} This command doesn\'t exist')
     if isinstance(error, commands.CommandError):
         await ctx.reply(embed=discord.Embed(description=error))
 
@@ -56,8 +56,8 @@ async def on_message(message):
     disable = {'`': '', '\\': '', '@everyone': ''}
     for key, value in disable.items():
         message.content = message.content.replace(key, value)
-    if message.author.bot:
-        return
+    #if message.author.bot:
+        #return
     if message.mention_everyone:
         return
     await other.OtherUtils.afkcheck(message)
