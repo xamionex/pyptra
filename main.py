@@ -26,9 +26,9 @@ async def on_application_command_error(ctx: discord.ApplicationContext, error):
         #await ctx.respond(f'{ctx.author.mention} You\'re on cooldown for {round(error.retry_after, 2)}s', ephemeral=True)
     #if isinstance(error, commands.MissingPermissions):
         #await ctx.respond(f'{ctx.author.mention} You\'re missing permissions for this command', ephemeral=True)
-    #if isinstance(error, commands.CommandNotFound):
-        #await ctx.respond(f'{ctx.author.mention} This command doesn\'t exist', ephemeral=True)
-    if isinstance(error, commands.CommandError):
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.respond(f'{ctx.author.mention} This command doesn\'t exist', ephemeral=True)
+    elif isinstance(error, commands.CommandError):
         await ctx.respond(embed=discord.Embed(description=error), ephemeral=True)
 
 @bot.event
@@ -37,9 +37,9 @@ async def on_command_error(ctx, error):
         #await ctx.reply(f'{ctx.author.mention} You\'re on cooldown for {round(error.retry_after, 2)}s')
     #if isinstance(error, commands.MissingPermissions):
         #await ctx.reply(f'{ctx.author.mention} You\'re missing permissions for this command')
-    #if isinstance(error, commands.CommandNotFound):
-        #await ctx.reply(f'{ctx.author.mention} This command doesn\'t exist')
-    if isinstance(error, commands.CommandError):
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.message.add_reaction('❌')
+    elif isinstance(error, commands.CommandError):
         await ctx.reply(embed=discord.Embed(description=error), delete_after=20, mention_author=False)
 
 @bot.event
@@ -49,7 +49,7 @@ async def on_member_join(member):
 @bot.before_invoke
 async def on_command(ctx):
     if await block.BlockUtils.get_blacklist(ctx.author) != 0:
-        raise discord.ext.commands.CommandError(f"{ctx.author.mention}, You were **blocked** from using this bot, direct message <@139095725110722560> if you feel this is unfair")
+        raise commands.CommandError(f"{ctx.author.mention}, You were **blocked** from using this bot, direct message <@139095725110722560> if you feel this is unfair")
 
 @bot.event
 async def on_message(message):
