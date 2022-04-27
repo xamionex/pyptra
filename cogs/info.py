@@ -162,6 +162,7 @@ class InfoUtils():
             return e
         if option == "automatic":
             e = await InfoUtils.automaticinstallembed(self, ctx)
+            return e
         if option == "help":
             e = await InfoUtils.helpinstallembed(self, ctx)
             return e
