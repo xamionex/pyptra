@@ -95,7 +95,7 @@ class OtherUtils():
         afk[f'{ctx.author.id}']['reason'] = f'{reason}'
         afk[f'{ctx.author.id}']['time'] = int(time.time())
         afk[f'{ctx.author.id}']['mentions'] = 0
-        rply = discord.Embed(description=f"I've set your AFK to `{reason}`")
+        rply = discord.Embed(description=f"I've set your AFK to \"{reason}\"")
         with open('./data/afk.json', 'w') as f:
             json.dump(afk, f, indent=4, sort_keys=True)
         try:
