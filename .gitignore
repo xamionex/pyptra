@@ -2,4 +2,6 @@
 /venv
 /__pycache__
 /cogs/__pycache__
+/src/*
 src/*
+src/afk.json
