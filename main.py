@@ -1,3 +1,4 @@
+import re
 import discord
 from discord.ext import commands
 
@@ -37,10 +38,12 @@ async def on_application_command_error(ctx: discord.ApplicationContext, error):
 
 @bot.event
 async def on_message(message):
+    disable = {'`': '', '\\': '', '@everyone': ''}
+    for key, value in disable.items():
+        message.content = message.content.replace(key, value)
     if (message.author.bot):
         return
-    if message.mention_everyone or message.content == "@everyone":
-        await message.channel.send("Please don't try this again.", reference=message, delete_after=10)
+    if message.mention_everyone:
         return
     await other.OtherUtils.afkcheck(message)
     await bot.process_commands(message)
