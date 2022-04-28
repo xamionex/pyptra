@@ -61,7 +61,10 @@ async def on_message(message):
     if message.mention_everyone:
         return
     await other.OtherUtils.afkcheck(message)
-    await bot.process_commands(message)
+    if message.author.bot == False and bot.user.mentioned_in(message) and len(message.content) == len(bot.user.mention):
+        await message.reply(f'My prefix is `-` or {bot.user.mention}, you can also use slash commands\nFor more info use the /help command!')
+    else:
+        await bot.process_commands(message)
 
 bot.add_cog(suggestions.SuggestionCommands(bot))
 bot.add_cog(other.OtherCommands(bot))
