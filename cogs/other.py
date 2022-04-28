@@ -127,6 +127,8 @@ class OtherUtils():
         with open('./data/afk.json', 'r') as f:
             afk = json.load(f)
         for member in message.mentions:
+            if member.bot:
+                return
             if afk[f'{member.id}']['AFK'] == 'True':
                 if message.author.bot:
                     return
