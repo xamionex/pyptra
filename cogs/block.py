@@ -20,19 +20,13 @@ class BlockUtils():
         await BlockUtils.open_member_perms(user)
         users = await BlockUtils.get_member_data()
         wallet_amt = users[str(user.id)]['blacklist']
-        if wallet_amt == "True":
-            return True
-        else:
-            return False
+        return wallet_amt
 
     async def get_weird(user):
         await BlockUtils.open_member_perms(user)
         users = await BlockUtils.get_member_data()
         wallet_amt = users[str(user.id)]['weird']
-        if wallet_amt == "True":
-            return True
-        else:
-            return False
+        return wallet_amt
 
     async def get_member_data():
         with open("./data/perms.json") as f:
@@ -103,7 +97,7 @@ class BlockCommands(commands.Cog):
         if await BlockUtils.get_weird(user) == 0:
             await BlockUtils.add_weird(user)
             e = discord.Embed(
-                description=f"{ctx.author.mention} has weirded {user.mention}", color=0xed4245)
+                description=f"{ctx.author.mention} has made {user.mention} weird", color=0xed4245)
             await ctx.send(embed=e)
         else:
             await ctx.send("The person is already weird.")
