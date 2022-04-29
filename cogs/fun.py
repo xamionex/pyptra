@@ -42,13 +42,12 @@ class FunCommands(commands.Cog):
         self.ctx = ctx
 
     async def checkweird(self, ctx):
-        if await BlockUtils.get_weird(ctx.author):
+        if await BlockUtils.get_weird(ctx.author) or ctx.author.guild_permissions.administrator:
             return
         else:
             raise commands.CommandError(
                 f"{ctx.author.mention}, You aren\'t weird enough to use this.. (dm <@139095725110722560>)")
 
-    @commands.before_invoke(checkweird)
     @commands.command(name="pet", description="Pet someone :D")
     async def pet1(self, ctx, image: Optional[Union[discord.PartialEmoji, discord.member.Member]]):
         image = image or ctx.author
@@ -65,7 +64,7 @@ class FunCommands(commands.Cog):
             e = discord.Embed(
                 description=f"{ctx.author.mention} {(random.choice(hug_words))} {member.mention}", color=0x0690FF)
         e.set_image(url=(random.choice(hug_gifs)))
-        await ctx.reply(embed=e)
+        await ctx.reply(embed=e, mention_author=False)
 
     @commands.before_invoke(checkweird)
     @commands.command(name="kiss", description="Kiss someone :O")
@@ -77,7 +76,49 @@ class FunCommands(commands.Cog):
             e = discord.Embed(
                 description=f"{ctx.author.mention} {(random.choice(kiss_words))} {member.mention}", color=0x0690FF)
         e.set_image(url=(random.choice(kiss_gifs)))
-        await ctx.reply(embed=e)
+        await ctx.reply(embed=e, mention_author=False)
+
+    @commands.before_invoke(checkweird)
+    @commands.command(name="fall", description="Make someone fall >:)")
+    async def fall(self, ctx, *, member: Optional[discord.Member]):
+        if member == None:
+            e = discord.Embed(
+                description=f"{ctx.author.mention} you fell", color=0xFF6969)
+        else:
+            e = discord.Embed(
+                description=f"{ctx.author.mention} made {member.mention} fall!", color=0xFF6969)
+        e.set_thumbnail(url=(
+            "https://media.discordapp.net/attachments/854984817862508565/883437876493307924/image0-2.gif"))
+        await ctx.reply(embed=e, mention_author=False)
+
+    @commands.before_invoke(checkweird)
+    @commands.command(name="promote", description="Promote someone :D")
+    async def promote(self, ctx, member: Optional[discord.Member] = None, *, message=None):
+        if member == None:
+            e = discord.Embed(
+                description=f"{ctx.author.mention} promoted themselves to {message}", color=0xFF6969)
+        else:
+            e = discord.Embed(
+                description=f"{ctx.author.mention} promoted {member.mention} to {message}", color=0xFF6969)
+        await ctx.reply(embed=e, mention_author=False)
+
+    @commands.command(name="noclip", description="Go rogue..")
+    @commands.has_permissions(administrator=True)
+    async def noclip(self, ctx):
+        e = discord.Embed(
+            description=f"{ctx.author.mention} is going rogue..", color=0xff0000)
+        e.set_image(
+            url=("https://c.tenor.com/xnQ97QtwQGkAAAAC/mm2roblox-fly-and-use-noclip.gif"))
+        await ctx.reply(embed=e, mention_author=False)
+
+    @commands.command(name="abuse", description="Adbmind abuse!!")
+    @commands.has_permissions(administrator=True)
+    async def abuse(self, ctx):
+        e = discord.Embed(
+            description=f"{ctx.author.mention} is to admin abuse 😈", color=0xff0000)
+        e.set_image(
+            url=("https://i.pinimg.com/originals/e3/15/55/e31555da640e9f8afe59239ee1c2fc37.gif"))
+        await ctx.reply(embed=e, mention_author=False)
 
 
 class FunUtils():
@@ -90,7 +131,7 @@ class FunUtils():
             # retrieve the image bytes
             image = await image.avatar.with_format('png').read()
         else:
-            await ctx.reply('Please use a custom emoji or tag a member to petpet their avatar.')
+            await ctx.reply('Please use a custom emoji or tag a member to petpet their avatar.', mention_author=False)
             return
         # file-like container to hold the emoji in memory
         source = BytesIO(image)
