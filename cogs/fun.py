@@ -1,10 +1,10 @@
 import random
 from petpetgif import petpet
 import discord
+from cogs import block, info
 from discord.ext import commands
 from io import BytesIO
 from typing import Union, Optional
-from cogs.block import BlockUtils
 
 hug_gifs = ["https://media1.tenor.com/images/7e30687977c5db417e8424979c0dfa99/tenor.gif",
             "https://media1.tenor.com/images/4d89d7f963b41a416ec8a55230dab31b/tenor.gif",
@@ -37,12 +37,19 @@ kiss_words = ['kissed', 'smooched', 'embraced']
 kiss_words_bot = ['kiss', 'smooch', 'embrace']
 
 
+# @discord.Bot.event
+# async def on_message(message):
+# for member in message.mentions:
+# if info.InfoUtils.get_ping(member):
+# return
+
+
 class FunCommands(commands.Cog):
     def __init__(self, ctx):
         self.ctx = ctx
 
     async def checkweird(self, ctx):
-        if await BlockUtils.get_weird(ctx.author) or ctx.author.guild_permissions.administrator:
+        if await block.BlockUtils.get_weird(ctx.author) or ctx.author.guild_permissions.administrator:
             return
         else:
             raise commands.CommandError(
