@@ -88,69 +88,71 @@ class BlockCommands(commands.Cog):
     @commands.command(name="block")
     @commands.has_permissions(administrator=True)
     async def blacklist(self, ctx, user: discord.Member, *, reason=None):
-        await ctx.message.delete()
-        if await BlockUtils.get_blacklist(user):
-            await ctx.send("The person is already blacklisted.")
+        await ctx.message.delete(delay=10)
+        if await BlockUtils.get_blacklist(user) == True:
+            await ctx.reply("The person is already blacklisted.")
         else:
             await BlockUtils.add_blacklist(user)
-            blacklist = discord.Embed(
+            e = discord.Embed(
                 description=f"{ctx.author.mention} has blacklisted {user.mention} for: {reason}", color=0xed4245)
-            await ctx.send(embed=blacklist)
+            await ctx.reply(embed=e, mention_author=False, delete_after=10)
 
     @commands.command(name="unblock")
     @commands.has_permissions(administrator=True)
     async def unblacklist(self, ctx, user: discord.Member):
-        await ctx.message.delete()
-        if await BlockUtils.get_blacklist(user):
-            await ctx.send("The person is already unblacklisted.")
+        await ctx.message.delete(delay=10)
+        if await BlockUtils.get_blacklist(user) == False:
+            await ctx.reply("The person is already unblacklisted.")
         else:
             await BlockUtils.remove_blacklist(user)
-            unblacklist = discord.Embed(
+            e = discord.Embed(
                 description=f"{ctx.author.mention} has unblacklisted {user.mention}", color=0x3ba55d)
-            await ctx.send(embed=unblacklist)
+            await ctx.reply(embed=e, mention_author=False, delete_after=10)
 
     @commands.command(name="introvert")
     async def introvert(self, ctx):
-        await ctx.message.delete()
-        if await BlockUtils.get_ping(ctx.author):
-            await ctx.send("I'm already not letting people use my commands with you.")
+        await ctx.message.delete(delay=10)
+        if await BlockUtils.get_ping(ctx.author) == True:
+            raise commands.CommandError(
+                f"I'm already not letting people use my commands with you.")
         else:
-            await BlockUtils.remove_ping(ctx.author)
+            await BlockUtils.add_ping(ctx.author)
             e = discord.Embed(
-                description=f"{ctx.author.mention} I wont let people use my commands with you", color=0xed4245)
-            await ctx.send(embed=e)
+                description=f"I wont let people use my commands with you", color=0xed4245)
+            await ctx.reply(embed=e, mention_author=False, delete_after=10)
 
     @commands.command(name="extrovert")
     async def extrovert(self, ctx):
-        await ctx.message.delete()
-        if await BlockUtils.get_ping(ctx.author):
-            await ctx.send("I'm already letting people use my commands with you.")
+        await ctx.message.delete(delay=10)
+        if await BlockUtils.get_ping(ctx.author) == False:
+            raise commands.CommandError(
+                f"I'm already letting people use my commands with you.")
         else:
             await BlockUtils.remove_ping(ctx.author)
             e = discord.Embed(
-                description=f"{ctx.author.mention} I'll let people use my commands with you", color=0x3ba55d)
-            await ctx.send(embed=e)
+                description=f"I'll let people use my commands with you", color=0x3ba55d)
+            await ctx.reply(embed=e, mention_author=False, delete_after=10)
 
     @commands.command(name="weird")
     @commands.has_permissions(administrator=True)
     async def weird(self, ctx, user: discord.Member):
-        await ctx.message.delete()
-        if await BlockUtils.get_weird(user):
+        await ctx.message.delete(delay=10)
+        if await BlockUtils.get_weird(user) == True:
+            raise commands.CommandError(f"That person is already weird.")
+        else:
             await BlockUtils.add_weird(user)
             e = discord.Embed(
-                description=f"{ctx.author.mention} has made {user.mention} weird", color=0xed4245)
-            await ctx.send(embed=e)
-        else:
-            await ctx.send("The person is already weird.")
+                description=f"Made {user.mention} weird", color=0xed4245)
+            await ctx.reply(embed=e, mention_author=False, delete_after=10)
 
     @commands.command(name="unweird")
     @commands.has_permissions(administrator=True)
     async def unweird(self, ctx, user: discord.Member):
-        await ctx.message.delete()
-        if await BlockUtils.get_weird(user):
-            await ctx.send("The person is already normal.")
+        await ctx.message.delete(delay=10)
+        if await BlockUtils.get_weird(user) == False:
+            raise commands.CommandError(f"That person is already normal.")
         else:
             await BlockUtils.remove_weird(user)
             e = discord.Embed(
-                description=f"{ctx.author.mention} has normalized {user.mention}", color=0x3ba55d)
-            await ctx.send(embed=e)
+                description=f"Normalized {user.mention}", color=0x3ba55d)
+            await ctx.reply(embed=e, mention_author=False, delete_after=10)
