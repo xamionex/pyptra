@@ -1,0 +1,286 @@
+{
+    "106444118577676288": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "139095725110722560": {
+        "blacklist": false,
+        "ping": false,
+        "weird": true
+    },
+    "171813598031511552": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "183718882182168576": {
+        "blacklist": true,
+        "ping": false,
+        "weird": false
+    },
+    "200647491631316993": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "201553786974502912": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "216341908954284045": {
+        "blacklist": false,
+        "weird": false
+    },
+    "231892869143592960": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "267106006926884864": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "267636371299106817": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "268494575780233216": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "275215231918276608": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "278073569177632769": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "282970673255809024": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "288835361977925632": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "293811410532827137": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "296358394355253258": {
+        "blacklist": false,
+        "ping": false,
+        "weird": true
+    },
+    "326355636101316609": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "329709085807345675": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "334806124496683038": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "353485809694801923": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "354531192508252160": {
+        "blacklist": false,
+        "ping": false,
+        "weird": true
+    },
+    "375671695240855553": {
+        "blacklist": false,
+        "ping": false,
+        "weird": true
+    },
+    "396375745502380045": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "422369274947043328": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "435938038997057546": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "457360894100242452": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "475771415170252830": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "485927254677913605": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "486714853944459295": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "495590559621054495": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "523909047921934336": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "554848063735332864": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "558690387620003861": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "576887540930576425": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "620104730320044043": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "625796609804075070": {
+        "blacklist": false,
+        "ping": false,
+        "weird": true
+    },
+    "639488429868187668": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "653598071153885215": {
+        "blacklist": false,
+        "ping": false,
+        "weird": true
+    },
+    "655988053357101067": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "667720301462945803": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "685981406672715833": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "705011815138197504": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "708094727588937799": {
+        "blacklist": false,
+        "ping": false,
+        "weird": true
+    },
+    "713893988377165985": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "731724400617062490": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "755499635833045132": {
+        "blacklist": false,
+        "ping": false,
+        "weird": true
+    },
+    "780277023401705502": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "827766664870625281": {
+        "blacklist": false,
+        "ping": false,
+        "weird": true
+    },
+    "829694789833457684": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "852684066293022772": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "877966975786172456": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "917022071933005854": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "922274710207737940": {
+        "blacklist": false,
+        "ping": false,
+        "weird": true
+    },
+    "937382709557354517": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "949269806824181770": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "959359781460643840": {
+        "blacklist": false,
+        "ping": false,
+        "weird": true
+    }
+}
