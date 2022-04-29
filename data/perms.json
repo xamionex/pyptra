@@ -108,6 +108,11 @@
         "ping": false,
         "weird": true
     },
+    "375616010402922498": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
     "375671695240855553": {
         "blacklist": false,
         "ping": false,
@@ -133,7 +138,22 @@
         "ping": false,
         "weird": false
     },
+    "465458221369393163": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "469257805904478241": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
     "475771415170252830": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "483995186117083155": {
         "blacklist": false,
         "ping": false,
         "weird": false
@@ -162,6 +182,11 @@
         "blacklist": false,
         "ping": false,
         "weird": true
+    },
+    "556757542492045312": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
     },
     "558690387620003861": {
         "blacklist": false,
@@ -200,10 +225,15 @@
     },
     "667720301462945803": {
         "blacklist": false,
-        "ping": false,
+        "ping": true,
         "weird": true
     },
     "685981406672715833": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "685996161429274682": {
         "blacklist": false,
         "ping": false,
         "weird": false
@@ -243,6 +273,11 @@
         "ping": false,
         "weird": false
     },
+    "803242439262470173": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
     "827766664870625281": {
         "blacklist": false,
         "ping": false,
@@ -273,6 +308,11 @@
         "ping": false,
         "weird": true
     },
+    "936846938458951712": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
     "937382709557354517": {
         "blacklist": false,
         "ping": false,
@@ -281,7 +321,7 @@
     "949269806824181770": {
         "blacklist": false,
         "ping": false,
-        "weird": false
+        "weird": true
     },
     "959359781460643840": {
         "blacklist": false,

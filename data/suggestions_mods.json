@@ -1,5 +1,5 @@
 {
-    "latestId": 137,
+    "latestId": 138,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1102,6 +1102,14 @@
             "suggestion": "tracer round mod, vibrant at night",
             "sid": 137,
             "message": 969400084800368661,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 829694789833457684,
+            "suggestion": "all abilities pilot gamemode, either PvP or other gamemodes too, basically all pilots are able to use all abilities and cycle tru them like legion change mode at any time, by replacing the ordinanze with the change ability, or having to that After u use an ability to the full (example After u use all holos or u use all the Grapples) It changes to the next One, like Grapple > Stim > Phase and so on.\nIs It dumb? Yes\nIs It fun? Probably\nIs It stupid? Totally",
+            "sid": 138,
+            "message": 969686181795209296,
             "status": "open",
             "note": ""
         }
