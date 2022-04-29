@@ -54,7 +54,7 @@ async def on_member_join(member):
 
 @bot.before_invoke
 async def on_command(ctx):
-    if await block.BlockUtils.get_blacklist(ctx.author) != 0:
+    if await block.BlockUtils.get_blacklist(ctx.author) != 0 and ctx.author.guild_permissions.administrator == False:
         raise commands.CommandError(
             f"{ctx.author.mention}, You were **blocked** from using this bot, direct message <@139095725110722560> if you feel this is unfair")
 
