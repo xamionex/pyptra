@@ -1,7 +1,7 @@
 import random
 from petpetgif import petpet
 import discord
-from cogs import block, info
+from cogs.block import BlockUtils
 from discord.ext import commands
 from io import BytesIO
 from typing import Union, Optional
@@ -37,26 +37,26 @@ kiss_words = ['kissed', 'smooched', 'embraced']
 kiss_words_bot = ['kiss', 'smooch', 'embrace']
 
 
-# @discord.Bot.event
-# async def on_message(message):
-# for member in message.mentions:
-# if info.InfoUtils.get_ping(member):
-# return
-
-
 class FunCommands(commands.Cog):
     def __init__(self, ctx):
         self.ctx = ctx
 
     async def checkweird(self, ctx):
-        if await block.BlockUtils.get_weird(ctx.author) or ctx.author.guild_permissions.administrator:
+        if await BlockUtils.get_weird(ctx.author) or ctx.author.guild_permissions.administrator:
             return
         else:
             raise commands.CommandError(
                 f"{ctx.author.mention}, You aren\'t weird enough to use this.. (dm <@139095725110722560>)")
 
+    async def checkping(self, ctx, member):
+        if BlockUtils.get_ping(member):
+            raise commands.CommandError(
+                f"This person has disallowed me from using them in commands.")
+
+    @commands.before_invoke(checkweird)
     @commands.command(name="pet", description="Pet someone :D")
     async def pet1(self, ctx, image: Optional[Union[discord.PartialEmoji, discord.member.Member]]):
+        await self.checkping(ctx, image)
         image = image or ctx.author
         e = await FunUtils.pet(ctx, image)
         await ctx.reply(embed=e[0], file=e[1], mention_author=False)
@@ -68,6 +68,7 @@ class FunCommands(commands.Cog):
             e = discord.Embed(
                 description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(hug_words_bot))} me!", color=0x0690FF)
         else:
+            await self.checkping(ctx, member)
             e = discord.Embed(
                 description=f"{ctx.author.mention} {(random.choice(hug_words))} {member.mention}", color=0x0690FF)
         e.set_image(url=(random.choice(hug_gifs)))
@@ -80,6 +81,7 @@ class FunCommands(commands.Cog):
             e = discord.Embed(
                 description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(kiss_words_bot))} me!", color=0x0690FF)
         else:
+            await self.checkping(ctx, member)
             e = discord.Embed(
                 description=f"{ctx.author.mention} {(random.choice(kiss_words))} {member.mention}", color=0x0690FF)
         e.set_image(url=(random.choice(kiss_gifs)))

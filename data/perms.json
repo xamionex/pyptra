@@ -6,7 +6,7 @@
     },
     "139095725110722560": {
         "blacklist": false,
-        "ping": false,
+        "ping": true,
         "weird": true
     },
     "171813598031511552": {
