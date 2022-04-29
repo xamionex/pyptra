@@ -153,8 +153,6 @@ class InfoUtils():
                     value="Same as AFK but it's goodnight \o/", inline=True)
         e.add_field(name="/help or -help",
                     value="Shows you this help page", inline=True)
-        e.add_field(
-            name="-pet", value="Mention an user or emoji to pet them! ^^", inline=True)
         return e
 
     async def helpadmin(self, ctx):
@@ -170,6 +168,10 @@ class InfoUtils():
                     value="Block a user to deny them from using the bot", inline=True)
         e.add_field(name="-unblock mention",
                     value="Unblock a user to allow them to use the bot", inline=True)
+        e.add_field(name="-weird mention",
+                    value="Allow a user to use kiss, hug, pet, etc. commands", inline=True)
+        e.add_field(name="-unweird mention",
+                    value="Disallow a user to use kiss, hug, pet, etc. com", inline=True)
         e.add_field(name="-reply text",
                     value="Reply to someone's message with this command, it'll reply with the bot", inline=True)
         e.add_field(name="-dm user text",
