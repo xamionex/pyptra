@@ -55,6 +55,7 @@ class FunCommands(commands.Cog):
 
     @commands.before_invoke(checkweird)
     @commands.command(name="pet", description="Pet someone :D")
+    @commands.cooldown(1, 60, commands.BucketType.user)
     async def pet1(self, ctx, image: Optional[Union[discord.PartialEmoji, discord.member.Member]]):
         if image != None:
             await self.checkping(ctx, image)
@@ -64,6 +65,7 @@ class FunCommands(commands.Cog):
 
     @commands.before_invoke(checkweird)
     @commands.command(name="hug", description="Hug someone :O")
+    @commands.cooldown(1, 60, commands.BucketType.user)
     async def hug(self, ctx, *, member: Optional[discord.Member]):
         if member == None:
             e = discord.Embed(
@@ -77,6 +79,7 @@ class FunCommands(commands.Cog):
 
     @commands.before_invoke(checkweird)
     @commands.command(name="kiss", description="Kiss someone :O")
+    @commands.cooldown(1, 60, commands.BucketType.user)
     async def kiss(self, ctx, *, member: Optional[discord.Member]):
         if member == None:
             e = discord.Embed(
