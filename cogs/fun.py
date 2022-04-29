@@ -43,10 +43,10 @@ class FunCommands(commands.Cog):
 
     async def checkweird(self, ctx):
         if await BlockUtils.get_weird(ctx.author):
+            return
+        else:
             raise commands.CommandError(
                 f"{ctx.author.mention}, You aren\'t weird enough to use this.. (dm <@139095725110722560>)")
-        else:
-            return
 
     @commands.before_invoke(checkweird)
     @commands.command(name="pet", description="Pet someone :D")
@@ -64,7 +64,7 @@ class FunCommands(commands.Cog):
         else:
             e = discord.Embed(
                 description=f"{ctx.author.mention} {(random.choice(hug_words))} {member.mention}", color=0x0690FF)
-        e.set_thumbnail(url=(random.choice(hug_gifs)))
+        e.set_image(url=(random.choice(hug_gifs)))
         await ctx.reply(embed=e)
 
     @commands.before_invoke(checkweird)
@@ -76,7 +76,7 @@ class FunCommands(commands.Cog):
         else:
             e = discord.Embed(
                 description=f"{ctx.author.mention} {(random.choice(kiss_words))} {member.mention}", color=0x0690FF)
-        e.set_thumbnail(url=(random.choice(kiss_gifs)))
+        e.set_image(url=(random.choice(kiss_gifs)))
         await ctx.reply(embed=e)
 
 
