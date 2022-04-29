@@ -43,6 +43,8 @@ async def on_command_error(ctx, error):
     # await ctx.reply(f'{ctx.author.mention} You\'re missing permissions for this command')
     if isinstance(error, commands.CommandNotFound):
         await ctx.message.add_reaction('❌')
+    elif isinstance(error, commands.BotMissingPermissions):
+        raise error
     elif isinstance(error, commands.CommandError):
         await ctx.reply(embed=discord.Embed(description=error), delete_after=20, mention_author=False)
 
