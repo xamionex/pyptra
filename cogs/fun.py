@@ -93,8 +93,8 @@ class FunCommands(commands.Cog):
 
     @commands.before_invoke(checkweird)
     @commands.command(name="promote", description="Promote someone :D")
-    async def promote(self, ctx, member: Optional[discord.Member] = None, *, message=None):
-        if member == None:
+    async def promote(self, ctx, member: discord.Member, *, message=None):
+        if member == ctx.author:
             e = discord.Embed(
                 description=f"{ctx.author.mention} promoted themselves to {message}", color=0xFF6969)
         else:
