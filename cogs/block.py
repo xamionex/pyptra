@@ -2,6 +2,7 @@ import json
 import discord
 from discord.ext import commands
 
+
 class BlockUtils():
     async def open_blacklisted(user):
         users = await BlockUtils.get_blacklisted_data()
@@ -39,6 +40,7 @@ class BlockUtils():
         with open("./data/blacklisted.json", "w") as f:
             json.dump(users, f, indent=4, sort_keys=True)
 
+
 class BlockCommands(commands.Cog):
     def __init__(self, ctx):
         self.ctx = ctx
@@ -49,7 +51,8 @@ class BlockCommands(commands.Cog):
         await ctx.message.delete()
         if await BlockUtils.get_blacklist(user) == 0:
             await BlockUtils.add_blacklist(user)
-            blacklist = discord.Embed(description=f"{ctx.author.mention} has blacklisted {user.mention} for: {reason}", color=0xed4245)
+            blacklist = discord.Embed(
+                description=f"{ctx.author.mention} has blacklisted {user.mention} for: {reason}", color=0xed4245)
             await ctx.send(embed=blacklist)
         else:
             await ctx.send("The person is already blacklisted.")

@@ -7,6 +7,7 @@ import humanize
 import discord
 from discord.ext import commands
 
+
 class OtherCommands(commands.Cog):
     def __init__(self, ctx):
         self.ctx = ctx
@@ -27,9 +28,11 @@ class OtherCommands(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def Say(self, ctx, *, message=None):
         await ctx.message.delete()
-        embed = discord.Embed(color=ctx.author.color,timestamp=ctx.message.created_at)
+        embed = discord.Embed(color=ctx.author.color,
+                              timestamp=ctx.message.created_at)
         embed.set_author(name="Announcement!", icon_url=ctx.author.avatar.url)
-        embed.add_field(name=f"Sent by {ctx.message.author}", value=str(message))
+        embed.add_field(
+            name=f"Sent by {ctx.message.author}", value=str(message))
         await ctx.send(embed=embed)
 
     @commands.command(name="reply")
@@ -84,6 +87,7 @@ class OtherCommands(commands.Cog):
         e = await OtherUtils.gn(self, ctx, "Sleeping 💤")
         await ctx.respond(embed=e, ephemeral=True)
 
+
 class OtherUtils():
     async def afk(self, ctx, reason):
         with open('./data/afk.json', 'r') as f:
@@ -134,8 +138,10 @@ class OtherUtils():
                     return
                 reason = afk[f'{member.id}']['reason']
                 timeafk = int(time.time()) - int(afk[f'{member.id}']['time'])
-                afktime = humanize.naturaltime(datetime.datetime.now() - datetime.timedelta(seconds=timeafk))
-                isafk = discord.Embed(description=f"{member.display_name} is afk: {reason} - {afktime}")
+                afktime = humanize.naturaltime(
+                    datetime.datetime.now() - datetime.timedelta(seconds=timeafk))
+                isafk = discord.Embed(
+                    description=f"{member.display_name} is afk: {reason} - {afktime}")
                 await message.reply(embed=isafk, delete_after=10.0, mention_author=False)
                 timementioned = int(afk[f'{member.id}']['mentions']) + 1
                 afk[f'{member.id}']['mentions'] = timementioned
@@ -144,12 +150,16 @@ class OtherUtils():
         if not message.author.bot:
             await OtherUtils.update_data(afk, message.author)
             if afk[f'{message.author.id}']['AFK'] == 'True':
-                timeafk = int(time.time()) - int(afk[f'{message.author.id}']['time'])
-                afktime = OtherUtils.period(datetime.timedelta(seconds=round(timeafk)), "{d}d {h}h {m}m {s}s")
+                timeafk = int(time.time()) - \
+                    int(afk[f'{message.author.id}']['time'])
+                afktime = OtherUtils.period(datetime.timedelta(
+                    seconds=round(timeafk)), "{d}d {h}h {m}m {s}s")
                 mentionz = afk[f'{message.author.id}']['mentions']
-                back = discord.Embed(title=f"Welcome back {message.author.display_name}!")
+                back = discord.Embed(
+                    title=f"Welcome back {message.author.display_name}!")
                 back.add_field(name="Afk for", value=afktime, inline=True)
-                back.add_field(name="Mentioned", value=f"{mentionz} time(s)", inline=True)
+                back.add_field(name="Mentioned",
+                               value=f"{mentionz} time(s)", inline=True)
                 await message.reply(embed=back, delete_after=10.0, mention_author=False)
                 afk[f'{message.author.id}']['AFK'] = 'False'
                 afk[f'{message.author.id}']['reason'] = 'None'
@@ -160,7 +170,8 @@ class OtherUtils():
                 try:
                     await message.author.edit(nick=f'{message.author.display_name[6:]}')
                 except:
-                    print(f'I wasnt able to edit [{message.author} / {message.author.id}].')
+                    print(
+                        f'I wasnt able to edit [{message.author} / {message.author.id}].')
         with open('./data/afk.json', 'w') as f:
             json.dump(afk, f, indent=4, sort_keys=True)
 
