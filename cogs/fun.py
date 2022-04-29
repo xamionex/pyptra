@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands
 from io import BytesIO
 from typing import Union, Optional
+from cogs.block import BlockUtils
 
 hug_gifs = ["https://media1.tenor.com/images/7e30687977c5db417e8424979c0dfa99/tenor.gif",
             "https://media1.tenor.com/images/4d89d7f963b41a416ec8a55230dab31b/tenor.gif",
@@ -40,12 +41,21 @@ class FunCommands(commands.Cog):
     def __init__(self, ctx):
         self.ctx = ctx
 
+    async def checkweird(self, ctx):
+        if await BlockUtils.get_weird(ctx.author):
+            raise commands.CommandError(
+                f"{ctx.author.mention}, You aren\'t weird enough to use this.. (dm <@139095725110722560>)")
+        else:
+            return
+
+    @commands.before_invoke(checkweird)
     @commands.command(name="pet", description="Pet someone :D")
     async def pet1(self, ctx, image: Optional[Union[discord.PartialEmoji, discord.member.Member]]):
         image = image or ctx.author
         e = await FunUtils.pet(ctx, image)
         await ctx.reply(embed=e[0], file=e[1], mention_author=False)
 
+    @commands.before_invoke(checkweird)
     @commands.command(name="hug", description="Hug someone :O")
     async def hug(self, ctx, *, member: Optional[discord.Member]):
         if member == None:
@@ -57,6 +67,7 @@ class FunCommands(commands.Cog):
         e.set_thumbnail(url=(random.choice(hug_gifs)))
         await ctx.reply(embed=e)
 
+    @commands.before_invoke(checkweird)
     @commands.command(name="kiss", description="Kiss someone :O")
     async def kiss(self, ctx, *, member: Optional[discord.Member]):
         if member == None:
