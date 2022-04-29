@@ -67,9 +67,12 @@ class OtherCommands(commands.Cog):
 
     @commands.command(name="afk", description="Set an AFK so people know if you will respond after being pinged")
     async def afk1(self, ctx, *, reason=None):
-        rply = await OtherUtils.afk(self, ctx, reason)
-        await ctx.message.add_reaction('👋')
-        await ctx.reply(embed=rply, delete_after=10.0, mention_author=False)
+        if len(reason) > 50:
+            raise commands.CommandError("You went over the 50 character limit")
+        else:
+            rply = await OtherUtils.afk(self, ctx, reason)
+            await ctx.message.add_reaction('👋')
+            await ctx.reply(embed=rply, delete_after=10.0, mention_author=False)
 
     @commands.slash_command(name="afk", description="Set an AFK so people know if you will respond after being pinged")
     async def afk2(self, ctx, reason: discord.Option(str, "What do you want to set your AFK to?")):
