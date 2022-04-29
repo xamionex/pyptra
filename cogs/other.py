@@ -86,7 +86,7 @@ class OtherCommands(commands.Cog):
 
 class OtherUtils():
     async def afk(self, ctx, reason):
-        with open('./src/afk.json', 'r') as f:
+        with open('./data/afk.json', 'r') as f:
             afk = json.load(f)
         if not reason:
             reason = 'AFK'
@@ -95,8 +95,8 @@ class OtherUtils():
         afk[f'{ctx.author.id}']['reason'] = f'{reason}'
         afk[f'{ctx.author.id}']['time'] = int(time.time())
         afk[f'{ctx.author.id}']['mentions'] = 0
-        rply = discord.Embed(description=f"I've set your AFK to `{reason}`")
-        with open('./src/afk.json', 'w') as f:
+        rply = discord.Embed(description=f"I've set your AFK to \"{reason}\"")
+        with open('./data/afk.json', 'w') as f:
             json.dump(afk, f, indent=4, sort_keys=True)
         try:
             await ctx.author.edit(nick=f'[AFK] {ctx.author.display_name}')
@@ -117,16 +117,18 @@ class OtherUtils():
 
     async def afkjoin(member):
         print(f'{member} has joined the server!')
-        with open('./src/afk.json', 'r') as f:
+        with open('./data/afk.json', 'r') as f:
             afk = json.load(f)
         await OtherUtils.update_data(afk, member)
-        with open('./src/afk.json', 'w') as f:
+        with open('./data/afk.json', 'w') as f:
             json.dump(afk, f, indent=4, sort_keys=True)
 
     async def afkcheck(message):
-        with open('./src/afk.json', 'r') as f:
+        with open('./data/afk.json', 'r') as f:
             afk = json.load(f)
         for member in message.mentions:
+            if member.bot:
+                return
             if afk[f'{member.id}']['AFK'] == 'True':
                 if message.author.bot:
                     return
@@ -137,7 +139,7 @@ class OtherUtils():
                 await message.reply(embed=isafk, delete_after=10.0, mention_author=False)
                 timementioned = int(afk[f'{member.id}']['mentions']) + 1
                 afk[f'{member.id}']['mentions'] = timementioned
-                with open('./src/afk.json', 'w') as f:
+                with open('./data/afk.json', 'w') as f:
                     json.dump(afk, f, indent=4, sort_keys=True)
         if not message.author.bot:
             await OtherUtils.update_data(afk, message.author)
@@ -153,13 +155,13 @@ class OtherUtils():
                 afk[f'{message.author.id}']['reason'] = 'None'
                 afk[f'{message.author.id}']['time'] = '0'
                 afk[f'{message.author.id}']['mentions'] = 0
-                with open('./src/afk.json', 'w') as f:
+                with open('./data/afk.json', 'w') as f:
                     json.dump(afk, f, indent=4, sort_keys=True)
                 try:
                     await message.author.edit(nick=f'{message.author.display_name[6:]}')
                 except:
                     print(f'I wasnt able to edit [{message.author} / {message.author.id}].')
-        with open('./src/afk.json', 'w') as f:
+        with open('./data/afk.json', 'w') as f:
             json.dump(afk, f, indent=4, sort_keys=True)
 
     def period(delta, pattern):

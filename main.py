@@ -22,30 +22,52 @@ async def on_ready():
 
 @bot.event
 async def on_application_command_error(ctx: discord.ApplicationContext, error):
-    if isinstance(error, commands.CommandOnCooldown):
-        await ctx.send(f'{ctx.author.mention} You\'re on cooldown for {round(error.retry_after, 2)}s')
-    else:
-        raise error
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} You\'re missing permissions for this command')
-    else:
-        raise error
+    #if isinstance(error, commands.CommandOnCooldown):
+        #await ctx.respond(f'{ctx.author.mention} You\'re on cooldown for {round(error.retry_after, 2)}s', ephemeral=True)
+    #if isinstance(error, commands.MissingPermissions):
+        #await ctx.respond(f'{ctx.author.mention} You\'re missing permissions for this command', ephemeral=True)
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.respond(f'{ctx.author.mention} This command doesn\'t exist', ephemeral=True)
+    elif isinstance(error, commands.CommandError):
+        await ctx.respond(embed=discord.Embed(description=error), ephemeral=True)
 
-#@bot.event
-#async def on_member_join(member):
-#    await other.OtherUtils.afkjoin(member)
+@bot.event
+async def on_command_error(ctx, error):
+    #if isinstance(error, commands.CommandOnCooldown):
+        #await ctx.reply(f'{ctx.author.mention} You\'re on cooldown for {round(error.retry_after, 2)}s')
+    #if isinstance(error, commands.MissingPermissions):
+        #await ctx.reply(f'{ctx.author.mention} You\'re missing permissions for this command')
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.message.add_reaction('❌')
+    elif isinstance(error, commands.CommandError):
+        await ctx.reply(embed=discord.Embed(description=error), delete_after=20, mention_author=False)
+
+@bot.event
+async def on_member_join(member):
+    await other.OtherUtils.afkjoin(member)
+
+@bot.before_invoke
+async def on_command(ctx):
+    if await block.BlockUtils.get_blacklist(ctx.author) != 0:
+        raise commands.CommandError(f"{ctx.author.mention}, You were **blocked** from using this bot, direct message <@139095725110722560> if you feel this is unfair")
 
 @bot.event
 async def on_message(message):
     disable = {'`': '', '\\': '', '@everyone': ''}
     for key, value in disable.items():
         message.content = message.content.replace(key, value)
-    if (message.author.bot):
-        return
+    #if message.author.bot:
+        #return
     if message.mention_everyone:
         return
-    await other.OtherUtils.afkcheck(message)
-    await bot.process_commands(message)
+    for member in message.mentions:
+        if member.bot:
+            return
+    if message.author.bot == False and bot.user.mentioned_in(message) and len(message.content) == len(bot.user.mention):
+        await message.reply(f'My prefix is `-` or {bot.user.mention}, you can also use slash commands\nFor more info use the /help command!')
+    else:
+        await other.OtherUtils.afkcheck(message)
+        await bot.process_commands(message)
 
 bot.add_cog(suggestions.SuggestionCommands(bot))
 bot.add_cog(other.OtherCommands(bot))

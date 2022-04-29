@@ -25,9 +25,9 @@ datasets = {
     "mods": {},
     "server": {}
 }
-with open("./src/suggestions_mods.json", "r") as f:
+with open("./data/suggestions_mods.json", "r") as f:
     datasets["mods"] = json.load(f)
-with open("./src/suggestions_server.json", "r") as f:
+with open("./data/suggestions_server.json", "r") as f:
     datasets["server"] = json.load(f)
 
 #TODO: should probably use classes or smth for this mess
@@ -65,9 +65,9 @@ def addSuggestion(userid: int, suggestion: str, domain: str):
     return datasets[domain]["suggestions"][datasets[domain]["latestId"]]
 
 def saveData():
-    with open("./src/suggestions_mods.json", "w") as f1:
+    with open("./data/suggestions_mods.json", "w") as f1:
         json.dump(datasets["mods"], f1, indent=4)
-    with open("./src/suggestions_server.json", "w") as f2:
+    with open("./data/suggestions_server.json", "w") as f2:
         json.dump(datasets["server"], f2, indent=4)
 
 def setSuggestionState(ctx: discord.ApplicationContext, sid: int, state: str, domain: str):
