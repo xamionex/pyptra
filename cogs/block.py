@@ -4,40 +4,67 @@ from discord.ext import commands
 
 
 class BlockUtils():
-    async def open_blacklisted(user):
-        users = await BlockUtils.get_blacklisted_data()
+    async def open_member_perms(user):
+        users = await BlockUtils.get_member_data()
         if str(user.id) in users:
             return False
         else:
             users[str(user.id)] = {}
-            users[str(user.id)]["blacklist"] = 0
-            with open("./data/blacklisted.json", "w") as f:
+            users[str(user.id)]["blacklist"] = False
+            users[str(user.id)]["weird"] = False
+            with open("./data/perms.json", "w") as f:
                 json.dump(users, f, indent=4, sort_keys=True)
                 return True
 
     async def get_blacklist(user):
-        await BlockUtils.open_blacklisted(user)
-        users = await BlockUtils.get_blacklisted_data()
+        await BlockUtils.open_member_perms(user)
+        users = await BlockUtils.get_member_data()
         wallet_amt = users[str(user.id)]['blacklist']
-        return wallet_amt
+        if wallet_amt == "True":
+            return True
+        else:
+            return False
 
-    async def get_blacklisted_data():
-        with open("./data/blacklisted.json") as f:
+    async def get_weird(user):
+        await BlockUtils.open_member_perms(user)
+        users = await BlockUtils.get_member_data()
+        wallet_amt = users[str(user.id)]['weird']
+        if wallet_amt == "True":
+            return True
+        else:
+            return False
+
+    async def get_member_data():
+        with open("./data/perms.json") as f:
             users = json.load(f)
             return users
 
     async def add_blacklist(user):
-        await BlockUtils.open_blacklisted(user)
-        users = await BlockUtils.get_blacklisted_data()
-        users[str(user.id)]['blacklist'] += 1
-        with open("./data/blacklisted.json", "w") as f:
-            json.dump(users, f, indent=4, sort_keys=True)
+        await BlockUtils.open_member_perms(user)
+        users = await BlockUtils.get_member_data()
+        users[str(user.id)]['blacklist'] = True
+        await BlockUtils.dump(users)
+
+    async def add_weird(user):
+        await BlockUtils.open_member_perms(user)
+        users = await BlockUtils.get_member_data()
+        users[str(user.id)]['weird'] = True
+        await BlockUtils.dump(users)
 
     async def remove_blacklist(user):
-        await BlockUtils.open_blacklisted(user)
-        users = await BlockUtils.get_blacklisted_data()
-        users[str(user.id)]['blacklist'] -= 1
-        with open("./data/blacklisted.json", "w") as f:
+        await BlockUtils.open_member_perms(user)
+        users = await BlockUtils.get_member_data()
+        users[str(user.id)]['blacklist'] = False
+        await BlockUtils.dump(users)
+
+    async def remove_weird(user):
+        await BlockUtils.open_member_perms(user)
+        users = await BlockUtils.get_member_data()
+        users[str(user.id)]['weird'] = False
+        await BlockUtils.dump(users)
+
+    async def dump(users):
+        with open("./data/perms.json", "w") as f:
             json.dump(users, f, indent=4, sort_keys=True)
 
 
@@ -68,3 +95,27 @@ class BlockCommands(commands.Cog):
             await ctx.send(embed=unblacklist)
         else:
             await ctx.send("The person is already unblacklisted.")
+
+    @commands.command(name="weird")
+    @commands.has_permissions(administrator=True)
+    async def weird(self, ctx, user: discord.Member):
+        await ctx.message.delete()
+        if await BlockUtils.get_weird(user) == 0:
+            await BlockUtils.add_weird(user)
+            e = discord.Embed(
+                description=f"{ctx.author.mention} has weirded {user.mention}", color=0xed4245)
+            await ctx.send(embed=e)
+        else:
+            await ctx.send("The person is already weird.")
+
+    @commands.command(name="unweird")
+    @commands.has_permissions(administrator=True)
+    async def unweird(self, ctx, user: discord.Member):
+        await ctx.message.delete()
+        if await BlockUtils.get_weird(user) != 0:
+            await BlockUtils.remove_weird(user)
+            e = discord.Embed(
+                description=f"{ctx.author.mention} has normalized {user.mention}", color=0x3ba55d)
+            await ctx.send(embed=e)
+        else:
+            await ctx.send("The person is already normal.")
