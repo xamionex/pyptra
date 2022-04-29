@@ -49,14 +49,15 @@ class FunCommands(commands.Cog):
                 f"{ctx.author.mention}, You aren\'t weird enough to use this.. (dm <@139095725110722560>)")
 
     async def checkping(self, ctx, member):
-        if BlockUtils.get_ping(member):
+        if await BlockUtils.get_ping(member):
             raise commands.CommandError(
                 f"This person has disallowed me from using them in commands.")
 
     @commands.before_invoke(checkweird)
     @commands.command(name="pet", description="Pet someone :D")
     async def pet1(self, ctx, image: Optional[Union[discord.PartialEmoji, discord.member.Member]]):
-        await self.checkping(ctx, image)
+        if image != None:
+            await self.checkping(ctx, image)
         image = image or ctx.author
         e = await FunUtils.pet(ctx, image)
         await ctx.reply(embed=e[0], file=e[1], mention_author=False)
