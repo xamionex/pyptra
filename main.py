@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands, bridge
 
 import secrets
+import cogs.utils as utils
 import cogs.suggestions as suggestions
 import cogs.other as other
 import cogs.block as block
@@ -29,10 +30,11 @@ async def on_application_command_error(ctx: discord.ApplicationContext, error):
     # await ctx.respond(f'{ctx.author.mention} You\'re on cooldown for {round(error.retry_after, 2)}s', ephemeral=True)
     # if isinstance(error, commands.MissingPermissions):
     # await ctx.respond(f'{ctx.author.mention} You\'re missing permissions for this command', ephemeral=True)
-    if isinstance(error, commands.CommandNotFound):
-        await ctx.respond(f'{ctx.author.mention} This command doesn\'t exist', ephemeral=True)
-    elif isinstance(error, commands.CommandError):
+    if isinstance(error, commands.BotMissingPermissions):
+        raise error
+    elif isinstance(error, discord.errors.ApplicationCommandInvokeError):
         await ctx.respond(embed=discord.Embed(description=error), ephemeral=True)
+    raise error
 
 
 @bot.event
