@@ -20,23 +20,23 @@ class InfoCommands(commands.Cog):
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def help1(self, ctx):
         e = await InfoUtils.helpuser(self, ctx)
-        await utils.sendembed(ctx, e, False, 3, 30)
+        await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=30)
         if ctx.author.guild_permissions.administrator:
             e2 = await InfoUtils.helpadmin(self, ctx)
-            await utils.sendembed(ctx, e2, False, 3, 30)
+            await utils.sendembed(ctx, e2, show_all=False, delete=3, delete_speed=30)
 
     @bridge.bridge_command(name="userinfo", description="Finds info about users.")
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def userinfo1(self, ctx, user: Optional[discord.Member]):
         user = user or ctx.author
         e = await InfoUtils.info(self, ctx, user)
-        await utils.sendembed(ctx, e, False, 3, 20)
+        await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
 
     @bridge.bridge_command(name="ping", description="Tells you the bot's ping.")
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def ping1(self, ctx):
         e = await utils.ping(ctx)
-        await utils.sendembed(ctx, e, False, 3)
+        await utils.sendembed(ctx, e, show_all=False, delete=3)
 
     @commands.command(name="installation", description="Sends the installation embeds.")
     @commands.cooldown(1, 120, commands.BucketType.user)
