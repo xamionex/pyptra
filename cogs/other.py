@@ -45,16 +45,16 @@ class OtherCommands(commands.Cog):
         await reference.resolved.reply(message)
         await ctx.message.delete()
 
-    @commands.command(name="dm")
+    @commands.command(name="namedm")
     @commands.has_permissions(administrator=True)
-    async def dm(self, ctx, user: discord.User, *, message=None):
+    async def namedm(self, ctx, user: discord.User, *, message=None):
         message = f"From {ctx.author.mention}: {message}" or f"{ctx.author.mention} sent you a message but it was empty"
         await user.send(message)
         await ctx.message.delete()
 
-    @commands.command(name="anondm")
+    @commands.command(name="dm")
     @commands.has_permissions(administrator=True)
-    async def anondm(self, ctx, user: discord.User, *, message=None):
+    async def dm(self, ctx, user: discord.User, *, message=None):
         message = message or "Someone sent you a message but it was empty"
         await user.send(message)
         await ctx.message.delete()
@@ -69,16 +69,14 @@ class OtherCommands(commands.Cog):
     @bridge.bridge_command(name="afk", description="Set an AFK so people know if you will respond after being pinged")
     async def afk(self, ctx, *, reason=None):
         e = await OtherUtils.setafk(self, ctx, reason)
-        msg = await ctx.respond(embed=e)
+        await ctx.respond(embed=e)
 
     @bridge.bridge_command(name="gn", description="Go to bed! >:C")
     async def gn(self, ctx):
-        if await utils.CheckInstance(ctx):
-            print("true")
         await OtherUtils.setafk(self, ctx, "Sleeping 💤")
         e = discord.Embed(description=f"Goodnight {ctx.author.mention}")
         e.set_image(url="https://c.tenor.com/nPYfVs6FsBQAAAAS/kitty-kitten.gif")
-        msg = await ctx.respond(embed=e)
+        await ctx.respond(embed=e)
 
 
 class OtherUtils():
