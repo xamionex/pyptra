@@ -1,5 +1,6 @@
 import discord
 import json
+from discord.ext import bridge
 
 bot: discord.Bot = None
 
@@ -148,3 +149,10 @@ async def ping(ctx):
     e = discord.Embed(title=f"Pong! `{round(bot.latency * 1000)}ms`")
     e.set_image(url="https://c.tenor.com/LqNPvLVdzHoAAAAC/cat-ping.gif")
     return e
+
+
+async def CheckInstance(ctx):
+    if isinstance(ctx, bridge.BridgeExtContext):
+        return True  # prefix returns true
+    elif isinstance(ctx, bridge.BridgeApplicationContext):
+        return False  # slash returns false
