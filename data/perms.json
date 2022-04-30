@@ -382,5 +382,10 @@
         "blacklist": false,
         "ping": false,
         "weird": true
+    },
+    "967602886609633360": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
     }
 }

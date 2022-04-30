@@ -32,7 +32,7 @@ async def on_application_command_error(ctx: discord.ApplicationContext, error):
     # await ctx.respond(f'{ctx.author.mention} You\'re missing permissions for this command', ephemeral=True)
     if isinstance(error, commands.BotMissingPermissions):
         raise error
-    elif isinstance(error, commands.CommandError):
+    elif isinstance(error, discord.ApplicationCommandError):
         e = discord.Embed(description=error)
         await utils.sendembed(ctx, e, show_all=False)
     raise error
@@ -45,7 +45,7 @@ async def on_command_error(ctx, error):
     # if isinstance(error, commands.MissingPermissions):
     # await ctx.reply(f'{ctx.author.mention} You\'re missing permissions for this command')
     if isinstance(error, commands.CommandNotFound):
-        await ctx.message.add_reaction('❌')
+        raise error
     elif isinstance(error, commands.BotMissingPermissions):
         raise error
     elif isinstance(error, commands.CommandError):
@@ -57,6 +57,11 @@ async def on_command_error(ctx, error):
 @bot.event
 async def on_member_join(member):
     await other.OtherUtils.afkjoin(member)
+
+
+@bot.check
+async def globally_block_dms(ctx):
+    return ctx.guild is not None
 
 
 @bot.before_invoke
