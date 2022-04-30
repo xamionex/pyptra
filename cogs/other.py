@@ -1,6 +1,7 @@
 import json
 import discord
 from discord.ext import commands, bridge
+from cogs import utils
 # afk command data
 import datetime
 import humanize
@@ -70,14 +71,14 @@ class OtherCommands(commands.Cog):
     @bridge.bridge_command(name="afk", description="Set an AFK so people know if you will respond after being pinged")
     async def afk(self, ctx, *, reason=None):
         e = await OtherUtils.setafk(self, ctx, reason)
-        await ctx.respond(embed=e)
+        await utils.sendembed(ctx, e)
 
     @bridge.bridge_command(name="gn", description="Go to bed! >:C")
     async def gn(self, ctx):
         await OtherUtils.setafk(self, ctx, "Sleeping 💤")
         e = discord.Embed(description=f"Goodnight {ctx.author.mention}")
         e.set_image(url="https://c.tenor.com/nPYfVs6FsBQAAAAS/kitty-kitten.gif")
-        await ctx.respond(embed=e)
+        await utils.sendembed(ctx, e)
 
 
 class OtherUtils():
