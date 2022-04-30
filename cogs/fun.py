@@ -53,99 +53,22 @@ class FunCommands(commands.Cog):
             raise commands.CommandError(
                 f"This person has disallowed me from using them in commands.")
 
-    @commands.before_invoke(checkweird)
     @commands.command(name="pet", description="Pet someone :D")
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def pet1(self, ctx, image: Optional[Union[discord.PartialEmoji, discord.member.Member]]):
-        if image != None:
-            await self.checkping(ctx, image)
+        await ctx.message.delete(delay=5)
         image = image or ctx.author
-        e = await FunUtils.pet(ctx, image)
-        await ctx.reply(embed=e[0], file=e[1], mention_author=False)
-
-    @commands.before_invoke(checkweird)
-    @commands.command(name="hug", description="Hug someone :O")
-    @commands.cooldown(1, 60, commands.BucketType.user)
-    async def hug(self, ctx, *, member: Optional[discord.Member]):
-        if member == None:
-            e = discord.Embed(
-                description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(hug_words_bot))} me!", color=0x0690FF)
-        else:
-            await self.checkping(ctx, member)
-            e = discord.Embed(
-                description=f"{ctx.author.mention} {(random.choice(hug_words))} {member.mention}", color=0x0690FF)
-        e.set_image(url=(random.choice(hug_gifs)))
-        await ctx.reply(embed=e, mention_author=False)
-
-    @commands.before_invoke(checkweird)
-    @commands.command(name="kiss", description="Kiss someone :O")
-    @commands.cooldown(1, 60, commands.BucketType.user)
-    async def kiss(self, ctx, *, member: Optional[discord.Member]):
-        if member == None:
-            e = discord.Embed(
-                description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(kiss_words_bot))} me!", color=0x0690FF)
-        else:
-            await self.checkping(ctx, member)
-            e = discord.Embed(
-                description=f"{ctx.author.mention} {(random.choice(kiss_words))} {member.mention}", color=0x0690FF)
-        e.set_image(url=(random.choice(kiss_gifs)))
-        await ctx.reply(embed=e, mention_author=False)
-
-    @commands.before_invoke(checkweird)
-    @commands.command(name="fall", description="Make someone fall >:)")
-    async def fall(self, ctx, *, member: Optional[discord.Member]):
-        if member == None:
-            e = discord.Embed(
-                description=f"{ctx.author.mention} you fell", color=0xFF6969)
-        else:
-            e = discord.Embed(
-                description=f"{ctx.author.mention} made {member.mention} fall!", color=0xFF6969)
-        e.set_thumbnail(url=(
-            "https://media.discordapp.net/attachments/854984817862508565/883437876493307924/image0-2.gif"))
-        await ctx.reply(embed=e, mention_author=False)
-
-    @commands.before_invoke(checkweird)
-    @commands.command(name="promote", description="Promote someone :D")
-    async def promote(self, ctx, member: discord.Member, *, message=None):
-        if member == ctx.author:
-            e = discord.Embed(
-                description=f"{ctx.author.mention} promoted themselves to {message}", color=0xFF6969)
-        else:
-            e = discord.Embed(
-                description=f"{ctx.author.mention} promoted {member.mention} to {message}", color=0xFF6969)
-        await ctx.reply(embed=e, mention_author=False)
-
-    @commands.command(name="noclip", description="Go rogue..")
-    @commands.has_permissions(administrator=True)
-    async def noclip(self, ctx):
-        e = discord.Embed(
-            description=f"{ctx.author.mention} is going rogue..", color=0xff0000)
-        e.set_image(
-            url=("https://c.tenor.com/xnQ97QtwQGkAAAAC/mm2roblox-fly-and-use-noclip.gif"))
-        await ctx.reply(embed=e, mention_author=False)
-
-    @commands.command(name="abuse", description="Adbmind abuse!!")
-    @commands.has_permissions(administrator=True)
-    async def abuse(self, ctx):
-        e = discord.Embed(
-            description=f"{ctx.author.mention} is to admin abuse 😈", color=0xff0000)
-        e.set_image(
-            url=("https://i.pinimg.com/originals/e3/15/55/e31555da640e9f8afe59239ee1c2fc37.gif"))
-        await ctx.reply(embed=e, mention_author=False)
-
-
-class FunUtils():
-    async def pet(ctx, image):
         if type(image) == discord.PartialEmoji:
-            image = await image.read()  # retrieve the image bytes
             what = "an emoji"
+            image = await image.read()
         elif type(image) == discord.member.Member:
+            await self.checkping(ctx, image)
             what = image.mention
-            # retrieve the image bytes
             image = await image.avatar.with_format('png').read()
         else:
-            await ctx.reply('Please use a custom emoji or tag a member to petpet their avatar.', mention_author=False)
-            return
+            raise commands.CommandError(
+                'Please use a custom emoji or tag a member to petpet their avatar.')
+        # retrieve the image bytes above
         # file-like container to hold the emoji in memory
         source = BytesIO(image)
         dest = BytesIO()  # container to store the petpet gif in memory
@@ -156,4 +79,84 @@ class FunUtils():
         file = discord.File(dest, filename=filename)
         e = discord.Embed(description=f"{ctx.author.mention} has pet {what}")
         e.set_image(url=f"attachment://{filename}")
-        return e, file
+        await ctx.send(embed=e, file=file)
+
+    @commands.before_invoke(checkweird)
+    @commands.command(name="hug", description="Hug someone :O")
+    @commands.cooldown(1, 60, commands.BucketType.user)
+    async def hug(self, ctx, *, member: Optional[discord.Member]):
+        await ctx.message.delete(delay=5)
+        if member == None:
+            e = discord.Embed(
+                description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(hug_words_bot))} me!", color=0x0690FF)
+        else:
+            await self.checkping(ctx, member)
+            e = discord.Embed(
+                description=f"{ctx.author.mention} {(random.choice(hug_words))} {member.mention}", color=0x0690FF)
+        e.set_image(url=(random.choice(hug_gifs)))
+        await ctx.send(embed=e)
+
+    @commands.before_invoke(checkweird)
+    @commands.command(name="kiss", description="Kiss someone :O")
+    @commands.cooldown(1, 60, commands.BucketType.user)
+    async def kiss(self, ctx, *, member: Optional[discord.Member]):
+        await ctx.message.delete(delay=5)
+        if member == None:
+            e = discord.Embed(
+                description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(kiss_words_bot))} me!", color=0x0690FF)
+        else:
+            await self.checkping(ctx, member)
+            e = discord.Embed(
+                description=f"{ctx.author.mention} {(random.choice(kiss_words))} {member.mention}", color=0x0690FF)
+        e.set_image(url=(random.choice(kiss_gifs)))
+        await ctx.send(embed=e)
+
+    @commands.before_invoke(checkweird)
+    @commands.command(name="fall", description="Make someone fall >:)")
+    async def fall(self, ctx, *, member: Optional[discord.Member]):
+        await ctx.message.delete(delay=5)
+        if member == None:
+            e = discord.Embed(
+                description=f"{ctx.author.mention} you fell", color=0xFF6969)
+        else:
+            e = discord.Embed(
+                description=f"{ctx.author.mention} made {member.mention} fall!", color=0xFF6969)
+        e.set_thumbnail(url=(
+            "https://media.discordapp.net/attachments/854984817862508565/883437876493307924/image0-2.gif"))
+        await ctx.send(embed=e)
+
+    @commands.before_invoke(checkweird)
+    @commands.command(name="promote", description="Promote someone :D")
+    async def promote(self, ctx, member: discord.Member, *, message=None):
+        await ctx.message.delete(delay=5)
+        if member == ctx.author:
+            e = discord.Embed(
+                description=f"{ctx.author.mention} promoted themselves to {message}", color=0xFF6969)
+        else:
+            e = discord.Embed(
+                description=f"{ctx.author.mention} promoted {member.mention} to {message}", color=0xFF6969)
+        await ctx.send(embed=e)
+
+    @commands.command(name="noclip", description="Go rogue..")
+    @commands.has_permissions(administrator=True)
+    async def noclip(self, ctx):
+        await ctx.message.delete(delay=5)
+        e = discord.Embed(
+            description=f"{ctx.author.mention} is going rogue..", color=0xff0000)
+        e.set_image(
+            url=("https://c.tenor.com/xnQ97QtwQGkAAAAC/mm2roblox-fly-and-use-noclip.gif"))
+        await ctx.send(embed=e)
+
+    @commands.command(name="abuse", description="Adbmind abuse!!")
+    @commands.has_permissions(administrator=True)
+    async def abuse(self, ctx, *, member: Optional[discord.Member]):
+        await ctx.message.delete(delay=5)
+        if member == None:
+            e = discord.Embed(
+                description=f"{ctx.author.mention} is going to abuse 😈", color=0xff0000)
+        else:
+            e = discord.Embed(
+                description=f"{ctx.author.mention} is going to abuse {member.mention} 😈", color=0xff0000)
+        e.set_image(
+            url=("https://i.pinimg.com/originals/e3/15/55/e31555da640e9f8afe59239ee1c2fc37.gif"))
+        await ctx.send(embed=e)
