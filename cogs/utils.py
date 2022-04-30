@@ -158,20 +158,20 @@ async def CheckInstance(ctx):
         return False  # slash returns false
 
 
-async def sendembed(ctx, e, show_all=True, delete=True, delete_speed=20):
-    if await CheckInstance(ctx):  # checks command instance
-        if delete:
+async def sendembed(ctx, e, show_all=True, delete=1, delete_speed=5):
+    if await CheckInstance(ctx):  # checks if command is slash or not
+        if delete == 1:
+            await ctx.respond(embed=e, mention_author=False)
+        elif delete == 2:
             await ctx.message.delete(delay=delete_speed)
-            await ctx.respond(embed=e, delete_after=delete_speed, mention_author=False)
-            # if prefix and delete=true sends embed and deletes after a bit
+            await ctx.respond(embed=e, mention_author=False)
         else:
             await ctx.message.delete(delay=delete_speed)
             await ctx.respond(embed=e, delete_after=delete_speed, mention_author=False)
-            # if prefix and delete=false sends embed
+            # 1 doesnt delete, 2 deletes only cause, 3 deletes all
     else:
         if show_all:
             await ctx.respond(embed=e)
-            # if slash only and shows=true shows to all
         else:
             await ctx.respond(embed=e, ephemeral=True)
-            # if slash only and shows=false only shows to user
+        # true shows in chat, false shows to user only
