@@ -32,8 +32,9 @@ async def on_application_command_error(ctx: discord.ApplicationContext, error):
     # await ctx.respond(f'{ctx.author.mention} You\'re missing permissions for this command', ephemeral=True)
     if isinstance(error, commands.BotMissingPermissions):
         raise error
-    elif isinstance(error, discord.errors.ApplicationCommandInvokeError):
-        await ctx.respond(embed=discord.Embed(description=error), ephemeral=True)
+    elif isinstance(error, commands.CommandError):
+        e = discord.Embed(description=error)
+        await utils.sendembed(ctx, e, show_all=False)
     raise error
 
 
@@ -48,7 +49,8 @@ async def on_command_error(ctx, error):
     elif isinstance(error, commands.BotMissingPermissions):
         raise error
     elif isinstance(error, commands.CommandError):
-        await ctx.reply(embed=discord.Embed(description=error), delete_after=20, mention_author=False)
+        e = discord.Embed(description=error)
+        await utils.sendembed(ctx, e, delete=3)
     raise error
 
 
