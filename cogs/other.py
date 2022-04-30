@@ -5,7 +5,7 @@ import sys
 import time
 import humanize
 import discord
-from discord.ext import commands
+from discord.ext import commands, bridge
 
 
 class OtherCommands(commands.Cog):
@@ -67,28 +67,22 @@ class OtherCommands(commands.Cog):
 
     @commands.command(name="afk", description="Set an AFK so people know if you will respond after being pinged")
     async def afk1(self, ctx, *, reason=None):
-        if len(reason) > 50:
-            raise commands.CommandError("You went over the 50 character limit")
-        else:
-            rply = await OtherUtils.afk(self, ctx, reason)
-            await ctx.message.add_reaction('👋')
-            await ctx.reply(embed=rply, delete_after=10.0, mention_author=False)
+        rply = await OtherUtils.afk(self, ctx, reason)
+        await ctx.message.add_reaction('👋')
+        await ctx.reply(embed=rply, delete_after=10.0, mention_author=False)
 
     @commands.slash_command(name="afk", description="Set an AFK so people know if you will respond after being pinged")
     async def afk2(self, ctx, reason: discord.Option(str, "What do you want to set your AFK to?")):
         rply = await OtherUtils.afk(self, ctx, reason)
         await ctx.respond(embed=rply, ephemeral=True)
 
-    @commands.command(name="gn", description="Go to bed! >:C")
-    async def gn1(self, ctx):
+    @bridge.bridge_command(name="gn", description="Go to bed! >:C")
+    async def gn(self, ctx):
         await ctx.message.add_reaction('💤')
-        e = await OtherUtils.gn(self, ctx, "Sleeping 💤")
-        await ctx.reply(embed=e, delete_after=10.0, mention_author=False)
-
-    @commands.slash_command(name="gn", description="Go to bed! >:C")
-    async def gn2(self, ctx):
-        e = await OtherUtils.gn(self, ctx, "Sleeping 💤")
-        await ctx.respond(embed=e, ephemeral=True)
+        await OtherUtils.afk(self, ctx, "Sleeping 💤")
+        e = discord.Embed(description=f"Goodnight {ctx.author.mention}")
+        e.set_image(url="https://c.tenor.com/nPYfVs6FsBQAAAAS/kitty-kitten.gif")
+        await ctx.send(embed=e, delete_after=5)
 
 
 class OtherUtils():
@@ -97,6 +91,9 @@ class OtherUtils():
             afk = json.load(f)
         if not reason:
             reason = 'AFK'
+        elif reason and len(reason) > 50:
+            raise commands.CommandError(
+                "You went over the 50 character limit")
         await OtherUtils.update_data(afk, ctx.author)
         afk[f'{ctx.author.id}']['AFK'] = 'True'
         afk[f'{ctx.author.id}']['reason'] = f'{reason}'
@@ -110,12 +107,6 @@ class OtherUtils():
         except:
             print(f'I wasnt able to edit [{ctx.author} / {ctx.author.id}].')
         return rply
-
-    async def gn(self, ctx, reason):
-        await OtherUtils.afk(self, ctx, reason)
-        e = discord.Embed(description=f"Goodnight {ctx.author.display_name}")
-        e.set_image(url="https://c.tenor.com/nPYfVs6FsBQAAAAS/kitty-kitten.gif")
-        return e
 
     async def update_data(afk, user):
         if not f'{user.id}' in afk:
@@ -144,7 +135,7 @@ class OtherUtils():
                 afktime = humanize.naturaltime(
                     datetime.datetime.now() - datetime.timedelta(seconds=timeafk))
                 isafk = discord.Embed(
-                    description=f"{member.display_name} is afk: {reason} - {afktime}")
+                    description=f"{member.mention} is afk: {reason} - {afktime}")
                 await message.reply(embed=isafk, delete_after=10.0, mention_author=False)
                 timementioned = int(afk[f'{member.id}']['mentions']) + 1
                 afk[f'{member.id}']['mentions'] = timementioned
@@ -158,12 +149,12 @@ class OtherUtils():
                 afktime = OtherUtils.period(datetime.timedelta(
                     seconds=round(timeafk)), "{d}d {h}h {m}m {s}s")
                 mentionz = afk[f'{message.author.id}']['mentions']
-                back = discord.Embed(
-                    title=f"Welcome back {message.author.display_name}!")
-                back.add_field(name="Afk for", value=afktime, inline=True)
-                back.add_field(name="Mentioned",
-                               value=f"{mentionz} time(s)", inline=True)
-                await message.reply(embed=back, delete_after=10.0, mention_author=False)
+                e = discord.Embed(
+                    description=f"**Welcome back {message.author.mention}!**")
+                e.add_field(name="Afk for", value=afktime, inline=True)
+                e.add_field(name="Mentioned",
+                            value=f"{mentionz} time(s)", inline=True)
+                await message.reply(embed=e, delete_after=10.0, mention_author=False)
                 afk[f'{message.author.id}']['AFK'] = 'False'
                 afk[f'{message.author.id}']['reason'] = 'None'
                 afk[f'{message.author.id}']['time'] = '0'
