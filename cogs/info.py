@@ -1,7 +1,7 @@
 from typing import Optional
 import discord
 import cogs.utils as utils
-from discord.ext import commands
+from discord.ext import commands, bridge
 
 installation_options = [
     discord.OptionChoice(name="help", value="help"),
@@ -16,52 +16,27 @@ class InfoCommands(commands.Cog):
     def __init__(self, ctx):
         self.ctx = ctx
 
-    @commands.slash_command(name="help", description="Check PTRA's help page")
+    @bridge.bridge_command(name="help", description="Check PTRA's help page")
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def help1(self, ctx):
         e = await InfoUtils.helpuser(self, ctx)
-        await ctx.respond(embed=e, ephemeral=True)
+        await utils.sendembed(self, ctx, e, show_all=False)
         if ctx.author.guild_permissions.administrator:
             e2 = await InfoUtils.helpadmin(self, ctx)
-            await ctx.respond(embed=e2, ephemeral=True)
+            await utils.sendembed(self, ctx, e2, show_all=False)
 
-    @commands.command(name="help", description="Check PTRA's help page")
-    @commands.cooldown(1, 20, commands.BucketType.user)
-    async def help2(self, ctx):
-        e = await InfoUtils.helpuser(self, ctx)
-        await ctx.message.delete(delay=20.0)
-        await ctx.reply(embed=e, delete_after=20.0, mention_author=False)
-        if ctx.author.guild_permissions.administrator:
-            e2 = await InfoUtils.helpadmin(self, ctx)
-            await ctx.reply(embed=e2, delete_after=20.0, mention_author=False)
-
-    @commands.slash_command(name="userinfo", description="Finds info about users.")
+    @bridge.bridge_command(name="userinfo", description="Finds info about users.")
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def userinfo1(self, ctx, user: Optional[discord.Member]):
         user = user or ctx.author
         e = await InfoUtils.info(self, ctx, user)
-        await ctx.respond(embed=e, ephemeral=True)
+        await utils.sendembed(self, ctx, e, show_all=False)
 
-    @commands.command(name="userinfo", description="Finds info about users.")
-    @commands.cooldown(1, 10, commands.BucketType.user)
-    async def userinfo2(self, ctx, user: Optional[discord.Member]):
-        user = user or ctx.author
-        e = await InfoUtils.info(self, ctx, user)
-        await ctx.message.delete(delay=10.0)
-        await ctx.reply(embed=e, delete_after=10.0, mention_author=False)
-
-    @commands.command(name="ping", description="Tells you the bot's ping.")
+    @bridge.bridge_command(name="ping", description="Tells you the bot's ping.")
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def ping1(self, ctx):
         e = await utils.ping(ctx)
-        await ctx.message.delete(delay=10.0)
-        await ctx.reply(embed=e, delete_after=10.0, mention_author=False)
-
-    @commands.slash_command(name="ping", description="Tells you the bot's ping.")
-    @commands.cooldown(1, 10, commands.BucketType.user)
-    async def ping2(self, ctx):
-        e = await utils.ping(ctx)
-        await ctx.respond(embed=e, ephemeral=True)
+        await utils.sendembed(self, ctx, e, show_all=False)
 
     @commands.command(name="installation", description="Sends the installation embeds.")
     @commands.cooldown(1, 120, commands.BucketType.user)

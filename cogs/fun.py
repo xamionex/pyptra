@@ -1,10 +1,10 @@
 import random
 from petpetgif import petpet
 import discord
-from cogs.block import BlockUtils
-from discord.ext import commands
+from cogs import block, utils
+from discord.ext import commands, bridge
 from io import BytesIO
-from typing import Union, Optional
+from typing import Optional
 
 hug_gifs = ["https://media1.tenor.com/images/7e30687977c5db417e8424979c0dfa99/tenor.gif",
             "https://media1.tenor.com/images/4d89d7f963b41a416ec8a55230dab31b/tenor.gif",
@@ -42,22 +42,21 @@ class FunCommands(commands.Cog):
         self.ctx = ctx
 
     async def checkweird(self, ctx):
-        if await BlockUtils.get_weird(ctx.author) or ctx.author.guild_permissions.administrator:
+        if await block.BlockUtils.get_weird(ctx.author) or ctx.author.guild_permissions.administrator:
             return
         else:
             raise commands.CommandError(
                 f"{ctx.author.mention}, You aren\'t weird enough to use this.. (dm <@139095725110722560>)")
 
     async def checkping(self, ctx, member):
-        if await BlockUtils.get_ping(member):
+        if await block.BlockUtils.get_ping(member):
             raise commands.CommandError(
                 f"This person has disallowed me from using them in commands.")
 
-    @commands.command(name="pet", description="Pet someone :D")
+    @bridge.bridge_command(name="pet", description="Pet someone :D")
     @commands.cooldown(1, 60, commands.BucketType.user)
-    async def pet1(self, ctx, image: Optional[Union[discord.PartialEmoji, discord.member.Member]]):
-        await ctx.message.delete(delay=5)
-        image = image or ctx.author
+    async def pet(self, ctx, member: Optional[discord.member.Member], emoji: Optional[discord.PartialEmoji]):
+        image = member or emoji
         if type(image) == discord.PartialEmoji:
             what = "an emoji"
             image = await image.read()
@@ -79,13 +78,15 @@ class FunCommands(commands.Cog):
         file = discord.File(dest, filename=filename)
         e = discord.Embed(description=f"{ctx.author.mention} has pet {what}")
         e.set_image(url=f"attachment://{filename}")
-        await ctx.send(embed=e, file=file)
+        if await utils.CheckInstance(ctx):
+            await ctx.respond(embed=e, file=file, mention_author=False)
+        else:
+            await ctx.respond(embed=e, file=file)
 
     @commands.before_invoke(checkweird)
-    @commands.command(name="hug", description="Hug someone :O")
+    @bridge.bridge_command(name="hug", description="Hug someone :O")
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def hug(self, ctx, *, member: Optional[discord.Member]):
-        await ctx.message.delete(delay=5)
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(hug_words_bot))} me!", color=0x0690FF)
@@ -94,13 +95,12 @@ class FunCommands(commands.Cog):
             e = discord.Embed(
                 description=f"{ctx.author.mention} {(random.choice(hug_words))} {member.mention}", color=0x0690FF)
         e.set_image(url=(random.choice(hug_gifs)))
-        await ctx.send(embed=e)
+        await ctx.respond(embed=e)
 
     @commands.before_invoke(checkweird)
-    @commands.command(name="kiss", description="Kiss someone :O")
+    @bridge.bridge_command(name="kiss", description="Kiss someone :O")
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def kiss(self, ctx, *, member: Optional[discord.Member]):
-        await ctx.message.delete(delay=5)
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(kiss_words_bot))} me!", color=0x0690FF)
@@ -109,10 +109,11 @@ class FunCommands(commands.Cog):
             e = discord.Embed(
                 description=f"{ctx.author.mention} {(random.choice(kiss_words))} {member.mention}", color=0x0690FF)
         e.set_image(url=(random.choice(kiss_gifs)))
-        await ctx.send(embed=e)
+        await ctx.respond(embed=e)
 
     @commands.before_invoke(checkweird)
-    @commands.command(name="fall", description="Make someone fall >:)")
+    @bridge.bridge_command(name="fall", description="Make someone fall >:)")
+    @commands.cooldown(1, 60, commands.BucketType.user)
     async def fall(self, ctx, *, member: Optional[discord.Member]):
         await ctx.message.delete(delay=5)
         if member == None:
@@ -127,6 +128,7 @@ class FunCommands(commands.Cog):
 
     @commands.before_invoke(checkweird)
     @commands.command(name="promote", description="Promote someone :D")
+    @commands.has_permissions(administrator=True)
     async def promote(self, ctx, member: discord.Member, *, message=None):
         await ctx.message.delete(delay=5)
         if member == ctx.author:
