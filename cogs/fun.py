@@ -96,7 +96,7 @@ class FunCommands(commands.Cog):
             e = discord.Embed(
                 description=f"{ctx.author.mention} {(random.choice(hug_words))} {member.mention}", color=0x0690FF)
         e.set_image(url=(random.choice(hug_gifs)))
-        await utils.sendembed(self, ctx, e, True, False)
+        await utils.sendembed(ctx, e, True)
 
     @commands.before_invoke(checkweird)
     @bridge.bridge_command(name="kiss", description="Kiss someone :O")
@@ -110,7 +110,7 @@ class FunCommands(commands.Cog):
             e = discord.Embed(
                 description=f"{ctx.author.mention} {(random.choice(kiss_words))} {member.mention}", color=0x0690FF)
         e.set_image(url=(random.choice(kiss_gifs)))
-        await utils.sendembed(self, ctx, e, True, False)
+        await utils.sendembed(ctx, e, True)
 
     @commands.before_invoke(checkweird)
     @bridge.bridge_command(name="fall", description="Make someone fall >:)")
@@ -124,7 +124,7 @@ class FunCommands(commands.Cog):
                 description=f"{ctx.author.mention} made {member.mention} fall!", color=0xFF6969)
         e.set_thumbnail(url=(
             "https://media.discordapp.net/attachments/854984817862508565/883437876493307924/image0-2.gif"))
-        await utils.sendembed(self, ctx, e, True, False)
+        await utils.sendembed(ctx, e, True)
 
     @commands.before_invoke(checkweird)
     @commands.command(name="promote", description="Promote someone :D")
@@ -136,7 +136,7 @@ class FunCommands(commands.Cog):
         else:
             e = discord.Embed(
                 description=f"{ctx.author.mention} promoted {member.mention} to {message}", color=0xFF6969)
-        await utils.sendembed(self, ctx, e, True, False)
+        await utils.sendembed(ctx, e, True)
 
     @commands.command(name="noclip", description="Go rogue..")
     @commands.has_permissions(administrator=True)
@@ -145,7 +145,7 @@ class FunCommands(commands.Cog):
             description=f"{ctx.author.mention} is going rogue..", color=0xff0000)
         e.set_image(
             url=("https://c.tenor.com/xnQ97QtwQGkAAAAC/mm2roblox-fly-and-use-noclip.gif"))
-        await utils.sendembed(self, ctx, e, True, False)
+        await utils.sendembed(ctx, e, True)
 
     @commands.command(name="abuse", description="Adbmind abuse!!")
     @commands.has_permissions(administrator=True)
@@ -158,4 +158,4 @@ class FunCommands(commands.Cog):
                 description=f"{ctx.author.mention} is going to abuse {member.mention} 😈", color=0xff0000)
         e.set_image(
             url=("https://i.pinimg.com/originals/e3/15/55/e31555da640e9f8afe59239ee1c2fc37.gif"))
-        await utils.sendembed(self, ctx, e, True, False)
+        await utils.sendembed(ctx, e, True)
