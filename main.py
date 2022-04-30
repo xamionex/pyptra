@@ -1,5 +1,5 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, bridge
 
 import secrets
 import cogs.suggestions as suggestions
@@ -13,7 +13,7 @@ intents.members = True
 intents.message_content = True
 intents.guilds = True
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or(
+bot = bridge.Bot(command_prefix=commands.when_mentioned_or(
     "-"), intents=intents, help_command=None)
 
 
@@ -47,6 +47,7 @@ async def on_command_error(ctx, error):
         raise error
     elif isinstance(error, commands.CommandError):
         await ctx.reply(embed=discord.Embed(description=error), delete_after=20, mention_author=False)
+    raise error
 
 
 @bot.event
@@ -78,6 +79,7 @@ async def on_message(message):
         await message.reply(f'My prefix is `-` or {bot.user.mention}, you can also use slash commands\nFor more info use the /help command!')
     else:
         await bot.process_commands(message)
+
 
 bot.add_cog(suggestions.SuggestionCommands(bot))
 bot.add_cog(other.OtherCommands(bot))
