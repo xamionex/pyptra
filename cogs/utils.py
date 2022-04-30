@@ -1,6 +1,5 @@
 import discord
 import json
-import cogs.utils as utils
 from discord.ext import bridge
 
 bot: discord.Bot = None
@@ -160,7 +159,7 @@ async def CheckInstance(ctx):
 
 
 async def sendembed(ctx, e, show_all):
-    if await utils.CheckInstance(ctx):  # checks command instance
+    if await CheckInstance(ctx):  # checks command instance
         await ctx.message.delete(delay=20.0)
         await ctx.respond(embed=e, delete_after=20.0, mention_author=False)
         # if prefix deletes command and embed after a bit
