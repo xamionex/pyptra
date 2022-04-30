@@ -1,7 +1,7 @@
 from typing import Optional
 import discord
-import cogs.utils as utils
 from discord.ext import commands, bridge
+from cogs import utils
 
 installation_options = [
     discord.OptionChoice(name="help", value="help"),

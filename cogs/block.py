@@ -1,7 +1,7 @@
 import json
 import discord
-import cogs.utils as utils
 from discord.ext import commands, bridge
+from cogs import utils
 
 
 class BlockUtils():

@@ -1,11 +1,13 @@
-import datetime
 import json
-import os
-import sys
-import time
-import humanize
 import discord
 from discord.ext import commands, bridge
+# afk command data
+import datetime
+import humanize
+import time
+# restart command
+import sys
+import os
 
 
 class OtherCommands(commands.Cog):

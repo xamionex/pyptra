@@ -1,5 +1,5 @@
-import discord
 import json
+import discord
 from discord.ext import bridge
 
 bot: discord.Bot = None
@@ -158,11 +158,16 @@ async def CheckInstance(ctx):
         return False  # slash returns false
 
 
-async def sendembed(ctx, e, show_all):
+async def sendembed(ctx, e, show_all=True, delete=True, delete_speed=20):
     if await CheckInstance(ctx):  # checks command instance
-        await ctx.message.delete(delay=20.0)
-        await ctx.respond(embed=e, delete_after=20.0, mention_author=False)
-        # if prefix deletes command and embed after a bit
+        if delete:
+            await ctx.message.delete(delay=delete_speed)
+            await ctx.respond(embed=e, delete_after=delete_speed, mention_author=False)
+            # if prefix and delete=true sends embed and deletes after a bit
+        else:
+            await ctx.message.delete(delay=delete_speed)
+            await ctx.respond(embed=e, delete_after=delete_speed, mention_author=False)
+            # if prefix and delete=false sends embed
     else:
         if show_all:
             await ctx.respond(embed=e)
