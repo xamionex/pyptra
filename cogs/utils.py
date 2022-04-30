@@ -1,5 +1,6 @@
 import discord
 import json
+import cogs.utils as utils
 from discord.ext import bridge
 
 bot: discord.Bot = None
@@ -156,3 +157,17 @@ async def CheckInstance(ctx):
         return True  # prefix returns true
     elif isinstance(ctx, bridge.BridgeApplicationContext):
         return False  # slash returns false
+
+
+async def sendembed(ctx, e, show_all):
+    if await utils.CheckInstance(ctx):  # checks command instance
+        await ctx.message.delete(delay=20.0)
+        await ctx.respond(embed=e, delete_after=20.0, mention_author=False)
+        # if prefix deletes command and embed after a bit
+    else:
+        if show_all:
+            await ctx.respond(embed=e)
+            # if slash only and shows=true shows to all
+        else:
+            await ctx.respond(embed=e, ephemeral=True)
+            # if slash only and shows=false only shows to user
