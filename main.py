@@ -1,7 +1,8 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, bridge
 
 import secrets
+import cogs.utils as utils
 import cogs.suggestions as suggestions
 import cogs.other as other
 import cogs.block as block
@@ -13,7 +14,7 @@ intents.members = True
 intents.message_content = True
 intents.guilds = True
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or(
+bot = bridge.Bot(command_prefix=commands.when_mentioned_or(
     "-"), intents=intents, help_command=None)
 
 
@@ -29,10 +30,12 @@ async def on_application_command_error(ctx: discord.ApplicationContext, error):
     # await ctx.respond(f'{ctx.author.mention} You\'re on cooldown for {round(error.retry_after, 2)}s', ephemeral=True)
     # if isinstance(error, commands.MissingPermissions):
     # await ctx.respond(f'{ctx.author.mention} You\'re missing permissions for this command', ephemeral=True)
-    if isinstance(error, commands.CommandNotFound):
-        await ctx.respond(f'{ctx.author.mention} This command doesn\'t exist', ephemeral=True)
+    if isinstance(error, commands.BotMissingPermissions):
+        raise error
     elif isinstance(error, commands.CommandError):
-        await ctx.respond(embed=discord.Embed(description=error), ephemeral=True)
+        e = discord.Embed(description=error)
+        await utils.sendembed(ctx, e, show_all=False)
+    raise error
 
 
 @bot.event
@@ -46,7 +49,9 @@ async def on_command_error(ctx, error):
     elif isinstance(error, commands.BotMissingPermissions):
         raise error
     elif isinstance(error, commands.CommandError):
-        await ctx.reply(embed=discord.Embed(description=error), delete_after=20, mention_author=False)
+        e = discord.Embed(description=error)
+        await utils.sendembed(ctx, e, delete=3)
+    raise error
 
 
 @bot.event
@@ -78,6 +83,7 @@ async def on_message(message):
         await message.reply(f'My prefix is `-` or {bot.user.mention}, you can also use slash commands\nFor more info use the /help command!')
     else:
         await bot.process_commands(message)
+
 
 bot.add_cog(suggestions.SuggestionCommands(bot))
 bot.add_cog(other.OtherCommands(bot))

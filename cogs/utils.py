@@ -1,5 +1,6 @@
-import discord
 import json
+import discord
+from discord.ext import bridge
 
 bot: discord.Bot = None
 
@@ -148,3 +149,29 @@ async def ping(ctx):
     e = discord.Embed(title=f"Pong! `{round(bot.latency * 1000)}ms`")
     e.set_image(url="https://c.tenor.com/LqNPvLVdzHoAAAAC/cat-ping.gif")
     return e
+
+
+async def CheckInstance(ctx):
+    if isinstance(ctx, bridge.BridgeExtContext):
+        return True  # prefix returns true
+    elif isinstance(ctx, bridge.BridgeApplicationContext):
+        return False  # slash returns false
+
+
+async def sendembed(ctx, e, show_all=True, delete=1, delete_speed=5):
+    if await CheckInstance(ctx):  # checks if command is slash or not
+        if delete == 1:
+            await ctx.respond(embed=e, mention_author=False)
+        elif delete == 2:
+            await ctx.message.delete(delay=delete_speed)
+            await ctx.respond(embed=e, mention_author=False)
+        else:
+            await ctx.message.delete(delay=delete_speed)
+            await ctx.respond(embed=e, delete_after=delete_speed, mention_author=False)
+            # 1 doesnt delete, 2 deletes only cause, 3 deletes all
+    else:
+        if show_all:
+            await ctx.respond(embed=e)
+        else:
+            await ctx.respond(embed=e, ephemeral=True)
+        # true shows in chat, false shows to user only
