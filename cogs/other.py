@@ -5,7 +5,6 @@ import sys
 import time
 import humanize
 import discord
-import cogs.utils as utils
 from discord.ext import commands, bridge
 
 
