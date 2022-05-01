@@ -1,5 +1,5 @@
 {
-    "latestId": 30,
+    "latestId": 32,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -246,6 +246,22 @@
             "suggestion": "Add a way to view current players on Northstar Client/Servers in the discord if possible",
             "sid": 30,
             "message": 970024023314550824,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 226211469279100928,
+            "suggestion": "Northstar official support for Custom Map rotation without need for casting magic spells, making mods or other special fuckary :)",
+            "sid": 31,
+            "message": 970283248754262047,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 829694789833457684,
+            "suggestion": "since i saw many people talk about how Northstar has no basic servers how stuff Is too complicated and mixed, It maybe would be helpfull to have something like a \"Verified Vanilla server\", i know that if you search for Vanilla you get some servers, but some of them some times have stuff like max player count modified or black listed weapons etc. This would basically be like a check near the name of the server, and you can search by \"Verified servers\" in the search bar, the way to have the Verified Vanilla server May Be something like the server owners ask for It and they talk with the mods and stuff like that, not really sure if this Is possible, but if It Is It might help",
+            "sid": 32,
+            "message": 970290210367762463,
             "status": "open",
             "note": ""
         }

@@ -1,5 +1,5 @@
 {
-    "latestId": 140,
+    "latestId": 141,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1126,6 +1126,14 @@
             "suggestion": "Have the first few seconds (0:07 - 0:017) of \u201cLink to Pilot\u201d play whenever you call your Titan (dome shielded, because warp fall might be too short)",
             "sid": 140,
             "message": 970142504987013192,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 576887540930576425,
+            "suggestion": "A server mod that can be used to time out people's chat for  a set amount of time which stops them from using both voice and texte chat for however long the owner sees fit. This is really because they're are alot of people who say some dumb shit in chat and get reported who end up getting banned and I find that personally that punishment might be too hash.",
+            "sid": 141,
+            "message": 970304852745932820,
             "status": "open",
             "note": ""
         }
