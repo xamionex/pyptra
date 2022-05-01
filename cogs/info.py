@@ -1,6 +1,6 @@
 from typing import Optional
 import discord
-from discord.ext import commands, bridge
+from discord.ext import commands, pages, bridge
 from cogs import utils
 
 installation_options = [
@@ -18,12 +18,30 @@ class InfoCommands(commands.Cog):
 
     @bridge.bridge_command(name="help", description="Check PTRA's help page")
     @commands.cooldown(1, 10, commands.BucketType.user)
-    async def help1(self, ctx):
-        e = await InfoUtils.helpuser(self, ctx)
-        await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=30)
+    async def help(self, ctx):
+        paginator = pages.Paginator(pages=InfoUtils.get_pages())
         if ctx.author.guild_permissions.administrator:
-            e2 = await InfoUtils.helpadmin(self, ctx)
-            await utils.sendembed(ctx, e2, show_all=False, delete=3, delete_speed=30)
+            page_groups = [
+                pages.PageGroup(
+                    pages=InfoUtils.get_pages(),
+                    label="Main Page Group",
+                    description="Main Pages for Main Things",
+                ),
+                pages.PageGroup(
+                    pages=InfoUtils.get_pages(),
+                    label="Second Page Group",
+                    description="Secondary Pages for Secondary Things",
+                ),
+            ]
+            paginator = pages.Paginator(pages=page_groups, show_menu=True)
+        if await utils.CheckInstance(ctx):
+            try:
+                await paginator.send(ctx, target=ctx.author)
+                await ctx.reply("Check your DMs!", mention_author=False)
+            except:
+                utils.senderror("I couldn't DM you!")
+        else:
+            await paginator.respond(ctx.interaction, ephemeral=True)
 
     @bridge.bridge_command(name="userinfo", description="Finds info about users.")
     @commands.cooldown(1, 10, commands.BucketType.user)
@@ -92,6 +110,50 @@ class InfoCommands(commands.Cog):
 
 
 class InfoUtils():
+    def get_pages():
+        pages = [
+            discord.Embed(title="Help for PTRA bot",
+                          description="", color=0x69FFFF),
+            discord.Embed(title="Moderator only commands for MRVN bot",
+                          description="Commands that can only be used by moderators", color=0xFF6969)
+        ]
+        pages[0].add_field(name="/installation or -installation",
+                           value="Shows you guides on how to install Northstar", inline=True)
+        pages[0].add_field(
+            name="/suggest", value="Make a suggestion in\n<#951255789568409600>\nOr <#952007443842469928>", inline=True)
+        pages[0].add_field(name="/ping or -ping",
+                           value="used for checking the bot's ping", inline=True)
+        pages[0].add_field(name="/userinfo or -userinfo",
+                           value="Shows you info about a user", inline=True)
+        pages[0].add_field(name="/afk or -afk",
+                           value="Alerts users that mention you that you're AFK", inline=True)
+        pages[0].add_field(name="/gn or -gn",
+                           value="Same as AFK but it's goodnight \o/", inline=True)
+        pages[0].add_field(name="/help or -help",
+                           value="Shows you this help page", inline=True)
+        pages[1].add_field(name="-approve domain sID",
+                           value="Approves suggestion, making it green and saying Approved", inline=True)
+        pages[1].add_field(name="-deny domain sID",
+                           value="Denies suggestion, making it red and saying Denied", inline=True)
+        pages[1].add_field(name="-note domain sID text",
+                           value="Adding a comment to a suggestion", inline=True)
+        pages[1].add_field(name="-block mention",
+                           value="Block a user to deny them from using the bot", inline=True)
+        pages[1].add_field(name="-unblock mention",
+                           value="Unblock a user to allow them to use the bot", inline=True)
+        pages[1].add_field(name="-weird mention",
+                           value="Allow a user to use kiss, hug, pet, etc. commands", inline=True)
+        pages[1].add_field(name="-unweird mention",
+                           value="Disallow a user to use kiss, hug, pet, etc. com", inline=True)
+        pages[1].add_field(name="-reply text",
+                           value="Reply to someone's message with this command, it'll reply with the bot", inline=True)
+        pages[1].add_field(name="-dm user text",
+                           value="DM someone with the message saying your name", inline=True)
+        pages[1].add_field(name="-anondm user text",
+                           value="DM someone with the message not saying your name", inline=True)
+        pages[1].add_field(name="-reload", value="Restarts bot", inline=True)
+        return pages
+
     async def info(self, ctx, user: discord.Member):
         date_format = "%a, %d %b %Y %I:%M %p"
         e = discord.Embed(color=0xdfa3ff, description=user.mention)
@@ -106,54 +168,9 @@ class InfoUtils():
             role_string = ' '.join([r.mention for r in user.roles][1:])
             e.add_field(name="Roles [{}]".format(
                 len(user.roles)-1), value=role_string, inline=False)
-        #perm_string = ', '.join([str(p[0]).replace("_", " ").title() for p in user.guild_permissions if p[1]])
+        # perm_string = ', '.join([str(p[0]).replace("_", " ").title() for p in user.guild_permissions if p[1]])
         # e.add_field(name="Guild permissions", value=perm_string, inline=False) # way too big for my liking tbh
         e.set_footer(text='ID: ' + str(user.id))
-        return e
-
-    async def helpuser(self, ctx):
-        e = discord.Embed(title="Help for PTRA bot",
-                          description="", color=0x69FFFF)
-        e.add_field(name="/installation or -installation",
-                    value="Shows you guides on how to install Northstar", inline=True)
-        e.add_field(
-            name="/suggest", value="Make a suggestion in\n<#951255789568409600>\nOr <#952007443842469928>", inline=True)
-        e.add_field(name="/ping or -ping",
-                    value="used for checking the bot's ping", inline=True)
-        e.add_field(name="/userinfo or -userinfo",
-                    value="Shows you info about a user", inline=True)
-        e.add_field(name="/afk or -afk",
-                    value="Alerts users that mention you that you're AFK", inline=True)
-        e.add_field(name="/gn or -gn",
-                    value="Same as AFK but it's goodnight \o/", inline=True)
-        e.add_field(name="/help or -help",
-                    value="Shows you this help page", inline=True)
-        return e
-
-    async def helpadmin(self, ctx):
-        e = discord.Embed(title="Moderator only commands for MRVN bot",
-                          description="Commands that can only be used by moderators", color=0xFF6969)
-        e.add_field(name="-approve domain sID",
-                    value="Approves suggestion, making it green and saying Approved", inline=True)
-        e.add_field(name="-deny domain sID",
-                    value="Denies suggestion, making it red and saying Denied", inline=True)
-        e.add_field(name="-note domain sID text",
-                    value="Adding a comment to a suggestion", inline=True)
-        e.add_field(name="-block mention",
-                    value="Block a user to deny them from using the bot", inline=True)
-        e.add_field(name="-unblock mention",
-                    value="Unblock a user to allow them to use the bot", inline=True)
-        e.add_field(name="-weird mention",
-                    value="Allow a user to use kiss, hug, pet, etc. commands", inline=True)
-        e.add_field(name="-unweird mention",
-                    value="Disallow a user to use kiss, hug, pet, etc. com", inline=True)
-        e.add_field(name="-reply text",
-                    value="Reply to someone's message with this command, it'll reply with the bot", inline=True)
-        e.add_field(name="-dm user text",
-                    value="DM someone with the message saying your name", inline=True)
-        e.add_field(name="-anondm user text",
-                    value="DM someone with the message not saying your name", inline=True)
-        e.add_field(name="-reload", value="Restarts bot", inline=True)
         return e
 
     async def EmbedOption(self, ctx, option):
