@@ -34,58 +34,6 @@ class InfoCommands(commands.Cog):
         e = await utils.ping(ctx)
         await utils.sendembed(ctx, e, show_all=False, delete=3)
 
-    @commands.command(name="installation", description="Shows you guides on how to install Northstar.")
-    @commands.cooldown(1, 120, commands.BucketType.user)
-    async def installation1(self, ctx, option=None):
-        await ctx.message.delete(delay=120.0)
-        help = await InfoUtils.helpinstallembed(self, ctx)
-        manual = await InfoUtils.manualinstallembed(self, ctx)
-        automatic = await InfoUtils.automaticinstallembed(self, ctx)
-        if option not in ["channel", "help", "all", "both", "automatic", "manual"]:
-            await ctx.reply("Specify manual, automatic or both", delete_after=10, mention_author=False)
-            return
-        elif option == "both":
-            await ctx.reply(embed=manual, delete_after=120, mention_author=False)
-            await ctx.reply(embed=automatic, delete_after=120, mention_author=False)
-        elif option == "all":
-            await ctx.reply(embed=help, delete_after=120, mention_author=False)
-            await ctx.reply(embed=manual, delete_after=120, mention_author=False)
-            await ctx.reply(embed=automatic, delete_after=120, mention_author=False)
-        elif ctx.author.guild_permissions.administrator and option == "channel":
-            await ctx.message.delete()
-            channel = ctx.guild.get_channel(922662496588943430)
-            msg1 = await channel.fetch_message(968179173753516112)
-            msg2 = await channel.fetch_message(968179174407831556)
-            msg3 = await channel.fetch_message(968179175729012736)
-            await msg1.edit(embed=help)
-            await msg2.edit(embed=manual)
-            await msg3.edit(embed=automatic)
-            # await ctx.send(embed=help)
-            # await ctx.send(embed=manual)
-            # await ctx.send(embed=automatic)
-        else:
-            option = await InfoUtils.EmbedOption(self, ctx, option)
-            await ctx.reply(embed=option, delete_after=120, mention_author=False)
-
-    @commands.slash_command(name="installation", description="Shows you guides on how to install Northstar.")
-    async def installation2(self, ctx, option: discord.Option(str, "What installation guide would you like to view?", choices=installation_options)):
-        help = await InfoUtils.helpinstallembed(self, ctx)
-        manual = await InfoUtils.manualinstallembed(self, ctx)
-        automatic = await InfoUtils.automaticinstallembed(self, ctx)
-        if option not in ["help", "all", "both", "automatic", "manual"]:
-            await ctx.respond("Specify manual, automatic or both", ephemeral=True)
-            return
-        elif option == "both":
-            await ctx.respond(embed=manual, ephemeral=True)
-            await ctx.respond(embed=automatic, ephemeral=True)
-        elif option == "all":
-            await ctx.respond(embed=help, ephemeral=True)
-            await ctx.respond(embed=manual, ephemeral=True)
-            await ctx.respond(embed=automatic, ephemeral=True)
-        else:
-            e = await InfoUtils.EmbedOption(self, ctx, option)
-            await ctx.respond(embed=e, ephemeral=True)
-
     @bridge.bridge_command(name="help", description="Shows you this help page")
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def help(self, ctx):
@@ -113,27 +61,31 @@ class InfoCommands(commands.Cog):
         else:
             await paginator.respond(ctx.interaction, ephemeral=True)
 
-    @bridge.bridge_command(name="install", description="Shows you guides on how to install Northstar.")
+    @bridge.bridge_command(name="installation", description="Shows you guides on how to install Northstar.")
     @commands.cooldown(1, 10, commands.BucketType.user)
-    async def install(self, ctx):
+    async def installation(self, ctx):
         page_groups = [
+            pages.PageGroup(
+                pages=InfoUtils.get_pages_automatic(),
+                label="Automatic Installation",
+                description="",
+            ),
+            pages.PageGroup(
+                pages=InfoUtils.get_pages_manual(),
+                label="Manual Installation",
+                description="",
+            ),
             pages.PageGroup(
                 pages=InfoUtils.get_pages_help(),
                 label="Useful wiki help",
                 description="Wiki Pages with useful information for fixing issues",
             ),
-            pages.PageGroup(
-                pages=InfoUtils.get_pages_manual(),
-                label="Manual Installation",
-                description="A guide for you on how to install Northstar manually",
-            ),
-            pages.PageGroup(
-                pages=InfoUtils.get_pages_automatic(),
-                label="Automatic Installation",
-                description="A guide for you on how to install Northstar automatically",
-            ),
         ]
-        paginator = pages.Paginator(pages=page_groups, show_menu=True)
+        paginator = pages.Paginator(
+            pages=page_groups,
+            show_menu=True,
+            show_indicator=False,
+            show_disabled=False)
         if await utils.CheckInstance(ctx):
             try:
                 await paginator.send(ctx, target=ctx.author)
@@ -142,6 +94,24 @@ class InfoCommands(commands.Cog):
                 await utils.senderror(ctx, "I couldn't DM you!")
         else:
             await paginator.respond(ctx.interaction, ephemeral=True)
+
+    @commands.command(name="adminstall", description="Shows you guides on how to install Northstar.")
+    @commands.has_permissions(administrator=True)
+    async def adminstall(self, ctx, option=None):
+        e = [InfoUtils.get_pages_help()[0],
+             InfoUtils.get_pages_manual()[0],
+             InfoUtils.get_pages_automatic()[0]]
+        if option is not None:
+            await ctx.message.delete()
+            channel = ctx.guild.get_channel(922662496588943430)
+            msg = [await channel.fetch_message(968179173753516112), await channel.fetch_message(968179174407831556), await channel.fetch_message(968179175729012736)]
+            await msg[0].edit(embed=e[0])
+            await msg[1].edit(embed=e[1])
+            await msg[2].edit(embed=e[2])
+        else:
+            await ctx.send(embed=e[0])
+            await ctx.send(embed=e[1])
+            await ctx.send(embed=e[2])
 
 
 class InfoUtils():
@@ -310,7 +280,7 @@ class InfoUtils():
         pages = [
             discord.Embed(
                 title="Manual Installation for Northstar",
-                description="you'll have to do this every update if you don't use a manager", color=0xFF6969)
+                description="**you'll have to do this every update if you don't use a manager**", color=0xFF6969)
         ]
         pages[0].add_field(
             name="Download",
@@ -330,7 +300,7 @@ class InfoUtils():
         pages = [
             discord.Embed(
                 title="Automatic Installation for Northstar",
-                description="Head over to an installer repository listed below", color=0x69FF69)
+                description="**Head over to an installer repository listed below**", color=0x69FF69)
         ]
         pages[0].add_field(
             name="VTOL",
