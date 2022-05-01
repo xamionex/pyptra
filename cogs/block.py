@@ -86,7 +86,7 @@ class BlockCommands(commands.Cog):
     def __init__(self, ctx):
         self.ctx = ctx
 
-    @commands.command(name="block")
+    @commands.command(name="block", description="Block a user to deny them from using the bot")
     @commands.has_permissions(administrator=True)
     async def blacklist(self, ctx, user: discord.Member, *, reason=None):
         if await BlockUtils.get_blacklist(user) == True:
@@ -97,7 +97,7 @@ class BlockCommands(commands.Cog):
                 description=f"{ctx.author.mention} has blacklisted {user.mention} for: {reason}", color=0xFF6969)
             await utils.sendembed(ctx, e, False)
 
-    @commands.command(name="unblock")
+    @commands.command(name="unblock", description="Unblock a user to allow them to use the bot")
     @commands.has_permissions(administrator=True)
     async def unblacklist(self, ctx, user: discord.Member):
         if await BlockUtils.get_blacklist(user) == False:
@@ -130,7 +130,7 @@ class BlockCommands(commands.Cog):
                 description=f"I'll let people use my commands with you", color=0x66FF99)
             await utils.sendembed(ctx, e, False)
 
-    @commands.command(name="weird")
+    @commands.command(name="weird", description="Allow a user to use kiss, hug, pet, etc. commands")
     @commands.has_permissions(administrator=True)
     async def weird(self, ctx, user: discord.Member):
         if await BlockUtils.get_weird(user) == True:
@@ -141,7 +141,7 @@ class BlockCommands(commands.Cog):
                 description=f"Made {user.mention} weird", color=0xFF6969)
             await utils.sendembed(ctx, e, False)
 
-    @commands.command(name="unweird")
+    @commands.command(name="unweird", description="Disallow a user to use kiss, hug, pet, etc. commands")
     @commands.has_permissions(administrator=True)
     async def unweird(self, ctx, user: discord.Member):
         if await BlockUtils.get_weird(user) == False:

@@ -4,11 +4,16 @@ from discord.ext import commands, pages, bridge
 from cogs import utils
 
 installation_options = [
-    discord.OptionChoice(name="help", value="help"),
-    discord.OptionChoice(name="manual", value="manual"),
-    discord.OptionChoice(name="automatic", value="automatic"),
-    discord.OptionChoice(name="both", value="both"),
-    discord.OptionChoice(name="all", value="all")
+    discord.OptionChoice(name="help",
+                         value="help"),
+    discord.OptionChoice(name="manual",
+                         value="manual"),
+    discord.OptionChoice(name="automatic",
+                         value="automatic"),
+    discord.OptionChoice(name="both",
+                         value="both"),
+    discord.OptionChoice(name="all",
+                         value="all")
 ]
 
 
@@ -16,34 +21,7 @@ class InfoCommands(commands.Cog):
     def __init__(self, ctx):
         self.ctx = ctx
 
-    @bridge.bridge_command(name="help", description="Check PTRA's help page")
-    @commands.cooldown(1, 10, commands.BucketType.user)
-    async def help(self, ctx):
-        paginator = pages.Paginator(pages=InfoUtils.get_pages())
-        if ctx.author.guild_permissions.administrator:
-            page_groups = [
-                pages.PageGroup(
-                    pages=InfoUtils.get_pages(),
-                    label="Main Page Group",
-                    description="Main Pages for Main Things",
-                ),
-                pages.PageGroup(
-                    pages=InfoUtils.get_pages(),
-                    label="Second Page Group",
-                    description="Secondary Pages for Secondary Things",
-                ),
-            ]
-            paginator = pages.Paginator(pages=page_groups, show_menu=True)
-        if await utils.CheckInstance(ctx):
-            try:
-                await paginator.send(ctx, target=ctx.author)
-                await ctx.reply("Check your DMs!", mention_author=False)
-            except:
-                utils.senderror("I couldn't DM you!")
-        else:
-            await paginator.respond(ctx.interaction, ephemeral=True)
-
-    @bridge.bridge_command(name="userinfo", description="Finds info about users.")
+    @bridge.bridge_command(name="userinfo", description="Shows you information about users")
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def userinfo(self, ctx, user: Optional[discord.Member]):
         user = user or ctx.author
@@ -56,7 +34,7 @@ class InfoCommands(commands.Cog):
         e = await utils.ping(ctx)
         await utils.sendembed(ctx, e, show_all=False, delete=3)
 
-    @commands.command(name="installation", description="Sends the installation embeds.")
+    @commands.command(name="installation", description="Shows you guides on how to install Northstar.")
     @commands.cooldown(1, 120, commands.BucketType.user)
     async def installation1(self, ctx, option=None):
         await ctx.message.delete(delay=120.0)
@@ -89,7 +67,7 @@ class InfoCommands(commands.Cog):
             option = await InfoUtils.EmbedOption(self, ctx, option)
             await ctx.reply(embed=option, delete_after=120, mention_author=False)
 
-    @commands.slash_command(name="installation", description="Sends the installation embeds.")
+    @commands.slash_command(name="installation", description="Shows you guides on how to install Northstar.")
     async def installation2(self, ctx, option: discord.Option(str, "What installation guide would you like to view?", choices=installation_options)):
         help = await InfoUtils.helpinstallembed(self, ctx)
         manual = await InfoUtils.manualinstallembed(self, ctx)
@@ -108,50 +86,260 @@ class InfoCommands(commands.Cog):
             e = await InfoUtils.EmbedOption(self, ctx, option)
             await ctx.respond(embed=e, ephemeral=True)
 
+    @bridge.bridge_command(name="help", description="Shows you this help page")
+    @commands.cooldown(1, 10, commands.BucketType.user)
+    async def help(self, ctx):
+        paginator = pages.Paginator(pages=InfoUtils.get_pages(self, ctx))
+        if ctx.author.guild_permissions.administrator:
+            page_groups = [
+                pages.PageGroup(
+                    pages=InfoUtils.get_pages(self, ctx),
+                    label="Main Commands",
+                    description="Main Pages for commands that Members can use",
+                ),
+                pages.PageGroup(
+                    pages=InfoUtils.get_pages_admin(self, ctx),
+                    label="Moderator Commands",
+                    description="Moderator Pages for commands that only Moderators can use",
+                ),
+            ]
+            paginator = pages.Paginator(pages=page_groups, show_menu=True)
+        if await utils.CheckInstance(ctx):
+            try:
+                await paginator.send(ctx, target=ctx.author)
+                await ctx.reply("Check your DMs!", mention_author=False)
+            except:
+                await utils.senderror(ctx, "I couldn't DM you!")
+        else:
+            await paginator.respond(ctx.interaction, ephemeral=True)
+
+    @bridge.bridge_command(name="install", description="Shows you guides on how to install Northstar.")
+    @commands.cooldown(1, 10, commands.BucketType.user)
+    async def install(self, ctx):
+        page_groups = [
+            pages.PageGroup(
+                pages=InfoUtils.get_pages_help(),
+                label="Useful wiki help",
+                description="Wiki Pages with useful information for fixing issues",
+            ),
+            pages.PageGroup(
+                pages=InfoUtils.get_pages_manual(),
+                label="Manual Installation",
+                description="A guide for you on how to install Northstar manually",
+            ),
+            pages.PageGroup(
+                pages=InfoUtils.get_pages_automatic(),
+                label="Automatic Installation",
+                description="A guide for you on how to install Northstar automatically",
+            ),
+        ]
+        paginator = pages.Paginator(pages=page_groups, show_menu=True)
+        if await utils.CheckInstance(ctx):
+            try:
+                await paginator.send(ctx, target=ctx.author)
+                await ctx.reply("Check your DMs!", mention_author=False)
+            except:
+                await utils.senderror(ctx, "I couldn't DM you!")
+        else:
+            await paginator.respond(ctx.interaction, ephemeral=True)
+
 
 class InfoUtils():
-    def get_pages():
+    def get_cmd_desc(self, ctx, cmd):
+        for cog in self.ctx.cogs:
+            for command in self.ctx.get_cog(cog).get_commands():
+                if command.name == cmd:
+                    return command.description
+
+    def get_pages(self, ctx):
         pages = [
-            discord.Embed(title="Help for PTRA bot",
-                          description="", color=0x69FFFF),
-            discord.Embed(title="Moderator only commands for MRVN bot",
-                          description="Commands that can only be used by moderators", color=0xFF6969)
+            discord.Embed(
+                title="Help for PTRA bot",
+                description="**Useful commands**", color=0x66FF99),
+            discord.Embed(
+                title="Help for PTRA bot",
+                description="**User commands**", color=0xFF6969),
+            discord.Embed(
+                title="Help for PTRA bot",
+                description="**Fun commands**", color=0x69FFFF),
         ]
-        pages[0].add_field(name="/installation or -installation",
-                           value="Shows you guides on how to install Northstar", inline=True)
         pages[0].add_field(
-            name="/suggest", value="Make a suggestion in\n<#951255789568409600>\nOr <#952007443842469928>", inline=True)
-        pages[0].add_field(name="/ping or -ping",
-                           value="used for checking the bot's ping", inline=True)
-        pages[0].add_field(name="/userinfo or -userinfo",
-                           value="Shows you info about a user", inline=True)
-        pages[0].add_field(name="/afk or -afk",
-                           value="Alerts users that mention you that you're AFK", inline=True)
-        pages[0].add_field(name="/gn or -gn",
-                           value="Same as AFK but it's goodnight \o/", inline=True)
-        pages[0].add_field(name="/help or -help",
-                           value="Shows you this help page", inline=True)
-        pages[1].add_field(name="-approve domain sID",
-                           value="Approves suggestion, making it green and saying Approved", inline=True)
-        pages[1].add_field(name="-deny domain sID",
-                           value="Denies suggestion, making it red and saying Denied", inline=True)
-        pages[1].add_field(name="-note domain sID text",
-                           value="Adding a comment to a suggestion", inline=True)
-        pages[1].add_field(name="-block mention",
-                           value="Block a user to deny them from using the bot", inline=True)
-        pages[1].add_field(name="-unblock mention",
-                           value="Unblock a user to allow them to use the bot", inline=True)
-        pages[1].add_field(name="-weird mention",
-                           value="Allow a user to use kiss, hug, pet, etc. commands", inline=True)
-        pages[1].add_field(name="-unweird mention",
-                           value="Disallow a user to use kiss, hug, pet, etc. com", inline=True)
-        pages[1].add_field(name="-reply text",
-                           value="Reply to someone's message with this command, it'll reply with the bot", inline=True)
-        pages[1].add_field(name="-dm user text",
-                           value="DM someone with the message saying your name", inline=True)
-        pages[1].add_field(name="-anondm user text",
-                           value="DM someone with the message not saying your name", inline=True)
-        pages[1].add_field(name="-reload", value="Restarts bot", inline=True)
+            name="/installation or -installation",
+            value=InfoUtils.get_cmd_desc(self, ctx, "installation"),
+            inline=True)
+        pages[0].add_field(
+            name="/suggest",
+            value=InfoUtils.get_cmd_desc(self, ctx, "suggest"),
+            inline=True)
+        pages[0].add_field(
+            name="/ping or -ping",
+            value=InfoUtils.get_cmd_desc(self, ctx, "ping"),
+            inline=True)
+        pages[0].add_field(
+            name="/userinfo or -userinfo",
+            value=InfoUtils.get_cmd_desc(self, ctx, "userinfo"),
+            inline=True)
+        pages[0].add_field(
+            name="/afk or -afk",
+            value=InfoUtils.get_cmd_desc(self, ctx, "afk"),
+            inline=True)
+        pages[0].add_field(
+            name="/gn or -gn",
+            value=InfoUtils.get_cmd_desc(self, ctx, "gn"),
+            inline=True)
+        # pages[0].add_field(
+        # name="/help or -help",
+        # value=InfoUtils.get_cmd_desc(self, ctx, "help"),
+        # inline=True)
+        pages[1].add_field(
+            name="/introvert or -introvert",
+            value=InfoUtils.get_cmd_desc(self, ctx, "introvert"),
+            inline=True)
+        pages[1].add_field(
+            name="/extrovert or -extrovert",
+            value=InfoUtils.get_cmd_desc(self, ctx, "extrovert"),
+            inline=True)
+        pages[2].add_field(
+            name="/pet or -pet",
+            value=InfoUtils.get_cmd_desc(self, ctx, "pet"),
+            inline=True)
+        pages[2].add_field(
+            name="/hug or -hug",
+            value=InfoUtils.get_cmd_desc(self, ctx, "hug"),
+            inline=True)
+        pages[2].add_field(
+            name="/kiss or -kiss",
+            value=InfoUtils.get_cmd_desc(self, ctx, "kiss"),
+            inline=True)
+        pages[2].add_field(
+            name="/fall or -fall",
+            value=InfoUtils.get_cmd_desc(self, ctx, "fall"),
+            inline=True)
+        return pages
+
+    def get_pages_admin(self, ctx):
+        pages = [
+            discord.Embed(
+                title="Moderator only commands for MRVN bot",
+                description="**Suggestion commands**", color=0x66FF99),
+            discord.Embed(
+                title="Moderator only commands for MRVN bot",
+                description="**Permission commands**", color=0xFF6969),
+            discord.Embed(
+                title="Moderator only commands for MRVN bot",
+                description="**Fun commands**", color=0x69FFFF),
+            discord.Embed(
+                title="Moderator only commands for MRVN bot",
+                description="**Maintanance commands**", color=0xFFAC00),
+        ]
+        pages[0].add_field(
+            name="-approve domain sID",
+            value=InfoUtils.get_cmd_desc(self, ctx, "approve"),
+            inline=True)
+        pages[0].add_field(
+            name="-deny domain sID",
+            value=InfoUtils.get_cmd_desc(self, ctx, "deny"),
+            inline=True)
+        pages[0].add_field(
+            name="-note domain sID text",
+            value=InfoUtils.get_cmd_desc(self, ctx, "note"),
+            inline=True)
+        pages[1].add_field(
+            name="-block mention",
+            value=InfoUtils.get_cmd_desc(self, ctx, "block"),
+            inline=True)
+        pages[1].add_field(
+            name="-unblock mention",
+            value=InfoUtils.get_cmd_desc(self, ctx, "unblock"),
+            inline=True)
+        pages[1].add_field(
+            name="-weird mention",
+            value=InfoUtils.get_cmd_desc(self, ctx, "weird"),
+            inline=True)
+        pages[1].add_field(
+            name="-unweird mention",
+            value=InfoUtils.get_cmd_desc(self, ctx, "unweird"),
+            inline=True)
+        pages[2].add_field(
+            name="-reply text",
+            value=InfoUtils.get_cmd_desc(self, ctx, "reply"),
+            inline=True)
+        pages[2].add_field(
+            name="-dm user text",
+            value=InfoUtils.get_cmd_desc(self, ctx, "dm"),
+            inline=True)
+        pages[2].add_field(
+            name="-namedm user text",
+            value=InfoUtils.get_cmd_desc(self, ctx, "namedm"),
+            inline=True)
+        pages[2].add_field(
+            name="-promote (mention optional) text",
+            value=InfoUtils.get_cmd_desc(self, ctx, "promote"),
+            inline=True)
+        pages[2].add_field(
+            name="-abuse",
+            value=InfoUtils.get_cmd_desc(self, ctx, "abuse"),
+            inline=True)
+        pages[2].add_field(
+            name="-noclip",
+            value=InfoUtils.get_cmd_desc(self, ctx, "noclip"),
+            inline=True)
+        pages[3].add_field(
+            name="-reload",
+            value=InfoUtils.get_cmd_desc(self, ctx, "reload"),
+            inline=True)
+        return pages
+
+    def get_pages_help():
+        pages = [
+            discord.Embed(
+                title="Useful wiki help",
+                description="**Head over to the wiki and locate your issue/Q&A's**", color=0xfffaac),
+        ]
+        pages[0].add_field(
+            name="Q&A",
+            value="[Q&A's can be seen here](https://r2northstar.gitbook.io/r2northstar-wiki/faq)",
+            inline=False)
+        pages[0].add_field(
+            name="Issues",
+            value="[Can be fixed here](https://r2northstar.gitbook.io/r2northstar-wiki/installing-northstar/troubleshooting)\nIf you can't fix your issue yourself, [go to this message](https://discord.com/channels/920776187884732556/922663326994018366/967648724383838288) and open a ticket\nRemember to be honest in your ticket and provide as much information as possible",
+            inline=False)
+        return pages
+
+    def get_pages_manual():
+        pages = [
+            discord.Embed(
+                title="Manual Installation for Northstar",
+                description="you'll have to do this every update if you don't use a manager", color=0xFF6969)
+        ]
+        pages[0].add_field(
+            name="Download",
+            value="[Download Northstar from this page](https://github.com/R2Northstar/Northstar/releases), pick the latest .zip",
+            inline=False)
+        pages[0].add_field(
+            name="Once Downloaded",
+            value="1. Extract .zip's contents\n2. Drop files into the folder containing Titanfall2.exe\n3. Launch via [adding a launch option for your platform](https://r2northstar.gitbook.io/r2northstar-wiki/installing-northstar/troubleshooting#launch-opts)\nYou can also launch using NorthstarLauncher.exe\nbut if you encounter errors, try the other option",
+            inline=False)
+        pages[0].add_field(
+            name="Launch the game!",
+            value="GLHF Pilot!",
+            inline=False)
+        return pages
+
+    def get_pages_automatic():
+        pages = [
+            discord.Embed(
+                title="Automatic Installation for Northstar",
+                description="Head over to an installer repository listed below", color=0x69FF69)
+        ]
+        pages[0].add_field(
+            name="VTOL",
+            value="[Download the latest release\nRun the setup](https://github.com/BigSpice/VTOL/releases/latest/download/VTOL_Installer1.2.1.msi)\nLocate your game's folder\nClick Install Northstar",
+            inline=False)
+        pages[0].add_field(
+            name="Viper",
+            value="[Download the latest release\nRun the setup](https://github.com/0neGal/viper#readme)\nLaunch Viper and click Launch!",
+            inline=False)
         return pages
 
     async def info(self, ctx, user: discord.Member):
@@ -159,54 +347,27 @@ class InfoUtils():
         e = discord.Embed(color=0xdfa3ff, description=user.mention)
         e.set_author(name=str(user), icon_url=user.avatar.url)
         e.set_thumbnail(url=user.avatar.url)
-        e.add_field(name="Joined", value=user.joined_at.strftime(date_format))
+        e.add_field(
+            name="Joined",
+            value=user.joined_at.strftime(date_format))
         members = sorted(ctx.guild.members, key=lambda m: m.joined_at)
-        e.add_field(name="Join position", value=str(members.index(user)+1))
-        e.add_field(name="Registered",
-                    value=user.created_at.strftime(date_format))
+        e.add_field(
+            name="Join position",
+            value=str(members.index(user)+1))
+        e.add_field(
+            name="Registered",
+            value=user.created_at.strftime(date_format))
         if len(user.roles) > 1:
             role_string = ' '.join([r.mention for r in user.roles][1:])
-            e.add_field(name="Roles [{}]".format(
-                len(user.roles)-1), value=role_string, inline=False)
+            e.add_field(
+                name="Roles [{}]".format(
+                    len(user.roles)-1),
+                value=role_string,
+                inline=False)
         # perm_string = ', '.join([str(p[0]).replace("_", " ").title() for p in user.guild_permissions if p[1]])
-        # e.add_field(name="Guild permissions", value=perm_string, inline=False) # way too big for my liking tbh
+        # e.add_field(
+        # name="Guild permissions",
+        # value=perm_string,
+        # inline=False) # way too big for my liking tbh
         e.set_footer(text='ID: ' + str(user.id))
-        return e
-
-    async def EmbedOption(self, ctx, option):
-        if option == "manual":
-            e = await InfoUtils.manualinstallembed(self, ctx)
-            return e
-        if option == "automatic":
-            e = await InfoUtils.automaticinstallembed(self, ctx)
-            return e
-        if option == "help":
-            e = await InfoUtils.helpinstallembed(self, ctx)
-            return e
-
-    async def helpinstallembed(self, ctx):
-        e = discord.Embed(title="Useful wiki help",
-                          description="Head over to the wiki and locate your issue/Q&A's", color=0xfffaac)
-        e.add_field(
-            name="Q&A", value="[Q&A's can be seen here](https://r2northstar.gitbook.io/r2northstar-wiki/faq)", inline=False)
-        e.add_field(name="Issues", value="[Can be fixed here](https://r2northstar.gitbook.io/r2northstar-wiki/installing-northstar/troubleshooting)\nIf you can't fix your issue yourself, [go to this message](https://discord.com/channels/920776187884732556/922663326994018366/967648724383838288) and open a ticket\nRemember to be honest in your ticket and provide as much information as possible", inline=False)
-        return e
-
-    async def manualinstallembed(self, ctx):
-        e = discord.Embed(title="Manual Installation for Northstar",
-                          description="you'll have to do this every update if you don't use a manager", color=0xFF6969)
-        e.add_field(
-            name="Download", value="[Download Northstar from this page](https://github.com/R2Northstar/Northstar/releases), pick the latest .zip", inline=False)
-        e.add_field(name="Once Downloaded",
-                    value="1. Extract .zip's contents\n2. Drop files into the folder containing Titanfall2.exe\n3. Launch via [adding a launch option for your platform](https://r2northstar.gitbook.io/r2northstar-wiki/installing-northstar/troubleshooting#launch-opts)\nYou can also launch using NorthstarLauncher.exe\nbut if you encounter errors, try the other option", inline=False)
-        e.add_field(name="Launch the game!", value="GLHF Pilot!", inline=False)
-        return e
-
-    async def automaticinstallembed(self, ctx):
-        e = discord.Embed(title="Automatic Installation for Northstar",
-                          description="Head over to an installer repository listed below", color=0x69FF69)
-        e.add_field(
-            name="VTOL", value="[Download the latest release\nRun the setup](https://github.com/BigSpice/VTOL/releases/latest/download/VTOL_Installer1.2.1.msi)\nLocate your game's folder\nClick Install Northstar", inline=False)
-        e.add_field(
-            name="Viper", value="[Download the latest release\nRun the setup](https://github.com/0neGal/viper#readme)\nLaunch Viper and click Launch!", inline=False)
         return e
