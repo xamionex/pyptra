@@ -3,6 +3,9 @@ import discord
 from discord.ext import commands, bridge
 from cogs import block, utils
 import random
+# get image from url
+import io
+import aiohttp
 # image
 from io import BytesIO
 from petpetgif import petpet
@@ -46,32 +49,45 @@ class FunCommands(commands.Cog):
         if await block.BlockUtils.get_weird(ctx.author) or ctx.author.guild_permissions.administrator:
             return
         else:
-            raise commands.CommandError(
-                f"{ctx.author.mention}, You aren\'t weird enough to use this.. (dm <@139095725110722560>)")
+            await utils.senderror(ctx, f"{ctx.author.mention}, You aren\'t weird enough to use this.. (dm <@139095725110722560>)")
 
     async def checkping(self, ctx, member):
         if await block.BlockUtils.get_ping(member):
-            raise commands.CommandError(
-                f"This person has disallowed me from using them in commands.")
+            await utils.senderror(ctx, f"This person has disallowed me from using them in commands.")
 
     @bridge.bridge_command(name="pet", description="Pet someone :D")
-    @commands.cooldown(1, 60, commands.BucketType.user)
-    async def pet(self, ctx, member: Optional[discord.member.Member], emoji: Optional[discord.PartialEmoji]):
-        image = member or emoji
+    @commands.cooldown(1, 30, commands.BucketType.user)
+    async def pet(self, ctx, member: Optional[discord.member.Member], emoji: Optional[discord.PartialEmoji], url=None):
+        attachment = None
+        try:
+            attachment = ctx.message.attachments[0]
+        except:
+            pass
+        image = member or emoji or attachment or url
         if type(image) == discord.PartialEmoji:
             what = "an emoji"
             image = await image.read()
+        elif type(image) == discord.Attachment:
+            what = "an image"
+            image = await image.read()
+        elif url is not None:
+            url = ctx.message.content.split(" ")[1]
+            what = "an image"
+            async with aiohttp.ClientSession().get(url) as url:
+                if url.status != 200:
+                    await utils.senderror(ctx, "Could not download file")
+                image = await url.read()
         elif type(image) == discord.member.Member:
             await self.checkping(ctx, image)
             what = image.mention
             image = await image.avatar.with_format('png').read()
         else:
-            raise commands.CommandError(
-                'Please use a custom emoji or tag a member to petpet their avatar.')
+            await utils.senderror(ctx, "Please use a custom emoji or tag a member to petpet their avatar.")
         # retrieve the image bytes above
         # file-like container to hold the emoji in memory
-        source = BytesIO(image)
+        source = BytesIO(image)  # sets image as "source"
         dest = BytesIO()  # container to store the petpet gif in memory
+        # takes source (image) and makes pet-pet and puts into memory
         petpet.make(source, dest)
         # set the file pointer back to the beginning so it doesn't upload a blank file.
         dest.seek(0)
