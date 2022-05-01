@@ -94,8 +94,8 @@ class BlockCommands(commands.Cog):
         else:
             await BlockUtils.add_blacklist(user)
             e = discord.Embed(
-                description=f"{ctx.author.mention} has blacklisted {user.mention} for: {reason}", color=0xed4245)
-            await utils.sendembed(self, ctx, e, show_all=False)
+                description=f"{ctx.author.mention} has blacklisted {user.mention} for: {reason}", color=0xFF6969)
+            await utils.sendembed(ctx, e, False)
 
     @commands.command(name="unblock")
     @commands.has_permissions(administrator=True)
@@ -105,49 +105,49 @@ class BlockCommands(commands.Cog):
         else:
             await BlockUtils.remove_blacklist(user)
             e = discord.Embed(
-                description=f"{ctx.author.mention} has unblacklisted {user.mention}", color=0x3ba55d)
-            await utils.sendembed(self, ctx, e, show_all=False)
+                description=f"{ctx.author.mention} has unblacklisted {user.mention}", color=0x66FF99)
+            await utils.sendembed(ctx, e, False)
 
     @bridge.bridge_command(name="introvert", description="Don't let people use commands like pet on you")
     async def introvert(self, ctx):
         if await BlockUtils.get_ping(ctx.author) == True:
-            raise commands.CommandError(
-                f"I'm already not letting people use my commands with you.")
+            await utils.senderror(ctx,
+                                  f"I'm already not letting people use my commands with you.")
         else:
             await BlockUtils.add_ping(ctx.author)
             e = discord.Embed(
-                description=f"I wont let people use my commands with you", color=0xed4245)
-            await utils.sendembed(self, ctx, e, show_all=False)
+                description=f"I wont let people use my commands with you", color=0xFF6969)
+            await utils.sendembed(ctx, e, False)
 
     @bridge.bridge_command(name="extrovert", description="Let people use commands like pet on you")
     async def extrovert(self, ctx):
         if await BlockUtils.get_ping(ctx.author) == False:
-            raise commands.CommandError(
-                f"I'm already letting people use my commands with you.")
+            await utils.senderror(ctx,
+                                  f"I'm already letting people use my commands with you.")
         else:
             await BlockUtils.remove_ping(ctx.author)
             e = discord.Embed(
-                description=f"I'll let people use my commands with you", color=0x3ba55d)
-            await utils.sendembed(self, ctx, e, show_all=False)
+                description=f"I'll let people use my commands with you", color=0x66FF99)
+            await utils.sendembed(ctx, e, False)
 
     @commands.command(name="weird")
     @commands.has_permissions(administrator=True)
     async def weird(self, ctx, user: discord.Member):
         if await BlockUtils.get_weird(user) == True:
-            raise commands.CommandError(f"That person is already weird.")
+            await utils.senderror(ctx, f"That person is already weird.")
         else:
             await BlockUtils.add_weird(user)
             e = discord.Embed(
-                description=f"Made {user.mention} weird", color=0xed4245)
-            await utils.sendembed(self, ctx, e, show_all=False)
+                description=f"Made {user.mention} weird", color=0xFF6969)
+            await utils.sendembed(ctx, e, False)
 
     @commands.command(name="unweird")
     @commands.has_permissions(administrator=True)
     async def unweird(self, ctx, user: discord.Member):
         if await BlockUtils.get_weird(user) == False:
-            raise commands.CommandError(f"That person is already normal.")
+            await utils.senderror(ctx, f"That person is already normal.")
         else:
             await BlockUtils.remove_weird(user)
             e = discord.Embed(
-                description=f"Normalized {user.mention}", color=0x3ba55d)
-            await utils.sendembed(self, ctx, e, show_all=False)
+                description=f"Normalized {user.mention}", color=0x66FF99)
+            await utils.sendembed(ctx, e, False)

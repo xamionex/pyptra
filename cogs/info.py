@@ -45,14 +45,14 @@ class InfoCommands(commands.Cog):
 
     @bridge.bridge_command(name="userinfo", description="Finds info about users.")
     @commands.cooldown(1, 10, commands.BucketType.user)
-    async def userinfo1(self, ctx, user: Optional[discord.Member]):
+    async def userinfo(self, ctx, user: Optional[discord.Member]):
         user = user or ctx.author
         e = await InfoUtils.info(self, ctx, user)
         await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
 
     @bridge.bridge_command(name="ping", description="Tells you the bot's ping.")
     @commands.cooldown(1, 10, commands.BucketType.user)
-    async def ping1(self, ctx):
+    async def ping(self, ctx):
         e = await utils.ping(ctx)
         await utils.sendembed(ctx, e, show_all=False, delete=3)
 

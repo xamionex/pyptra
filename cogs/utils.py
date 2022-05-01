@@ -175,3 +175,8 @@ async def sendembed(ctx, e, show_all=True, delete=1, delete_speed=5):
         else:
             await ctx.respond(embed=e, ephemeral=True)
         # true shows in chat, false shows to user only
+
+
+async def senderror(ctx, cerror):
+    e = discord.Embed(description=cerror, color=0xFF6969)
+    await sendembed(ctx, e, False)
