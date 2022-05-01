@@ -2,12 +2,7 @@ import discord
 from discord.ext import commands, bridge
 
 import secrets
-import cogs.utils as utils
-import cogs.suggestions as suggestions
-import cogs.other as other
-import cogs.block as block
-import cogs.info as info
-import cogs.fun as fun
+from cogs import utils, suggestions, other, block, info, fun
 
 intents = discord.Intents.default()
 intents.members = True
