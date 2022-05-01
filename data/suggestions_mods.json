@@ -1,5 +1,5 @@
 {
-    "latestId": 138,
+    "latestId": 140,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1110,6 +1110,22 @@
             "suggestion": "all abilities pilot gamemode, either PvP or other gamemodes too, basically all pilots are able to use all abilities and cycle tru them like legion change mode at any time, by replacing the ordinanze with the change ability, or having to that After u use an ability to the full (example After u use all holos or u use all the Grapples) It changes to the next One, like Grapple > Stim > Phase and so on.\nIs It dumb? Yes\nIs It fun? Probably\nIs It stupid? Totally",
             "sid": 138,
             "message": 969686181795209296,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 500427471204778006,
+            "suggestion": "make a server side mod that requires all players to have it installed, and what it does is make their custom skins not only on their client, but on everyone's since the skin will be sent to the server, and thus be displayed",
+            "sid": 139,
+            "message": 970120423297675275,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 326355636101316609,
+            "suggestion": "Have the first few seconds (0:07 - 0:017) of \u201cLink to Pilot\u201d play whenever you call your Titan (dome shielded, because warp fall might be too short)",
+            "sid": 140,
+            "message": 970142504987013192,
             "status": "open",
             "note": ""
         }
