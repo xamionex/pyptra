@@ -1,5 +1,5 @@
 {
-    "latestId": 29,
+    "latestId": 30,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -238,6 +238,14 @@
             "suggestion": "add a .args command that would be like .convars but list launch args",
             "sid": 29,
             "message": 969421528540270592,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 162387546905640960,
+            "suggestion": "Add a way to view current players on Northstar Client/Servers in the discord if possible",
+            "sid": 30,
+            "message": 970024023314550824,
             "status": "open",
             "note": ""
         }
