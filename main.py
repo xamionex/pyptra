@@ -28,10 +28,10 @@ async def on_application_command_error(ctx: discord.ApplicationContext, error):
     if isinstance(error, commands.BotMissingPermissions):
         raise error
     elif isinstance(error, commands.CommandOnCooldown):
-        e = discord.Embed(description=error)
+        e = discord.Embed(description=error, color=0xFF6969)
         await utils.sendembed(ctx, e, show_all=False)
     elif isinstance(error, discord.ApplicationCommandError):
-        e = discord.Embed(description=error)
+        e = discord.Embed(description=error, color=0xFF6969)
         await utils.sendembed(ctx, e, show_all=False)
     raise error
 
@@ -47,7 +47,7 @@ async def on_command_error(ctx, error):
     elif isinstance(error, commands.BotMissingPermissions):
         raise error
     elif isinstance(error, commands.CommandError):
-        e = discord.Embed(description=error)
+        e = discord.Embed(description=error, color=0xFF6969)
         await utils.sendembed(ctx, e, delete=3)
     raise error
 
