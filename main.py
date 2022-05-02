@@ -27,6 +27,9 @@ async def on_application_command_error(ctx: discord.ApplicationContext, error):
     # await ctx.respond(f'{ctx.author.mention} You\'re missing permissions for this command', ephemeral=True)
     if isinstance(error, commands.BotMissingPermissions):
         raise error
+    elif isinstance(error, commands.CommandOnCooldown):
+        e = discord.Embed(description=error)
+        await utils.sendembed(ctx, e, show_all=False)
     elif isinstance(error, discord.ApplicationCommandError):
         e = discord.Embed(description=error)
         await utils.sendembed(ctx, e, show_all=False)
