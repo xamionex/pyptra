@@ -6,7 +6,7 @@
     },
     "139095725110722560": {
         "blacklist": false,
-        "ping": false,
+        "ping": true,
         "weird": true
     },
     "162387546905640960": {
@@ -31,7 +31,7 @@
     },
     "201553786974502912": {
         "blacklist": false,
-        "ping": false,
+        "ping": true,
         "weird": false
     },
     "216341908954284045": {
@@ -109,6 +109,11 @@
         "weird": true
     },
     "301638437121818625": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "319401422477197313": {
         "blacklist": false,
         "ping": false,
         "weird": false
@@ -233,6 +238,16 @@
         "ping": false,
         "weird": false
     },
+    "489029612421120012": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "492376330709499904": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
     "495590559621054495": {
         "blacklist": false,
         "ping": false,
@@ -343,6 +358,11 @@
         "ping": false,
         "weird": false
     },
+    "703015901011902575": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
     "705011815138197504": {
         "blacklist": false,
         "ping": false,
@@ -369,6 +389,11 @@
         "weird": false
     },
     "741664461416562728": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "752566466733146132": {
         "blacklist": false,
         "ping": false,
         "weird": false

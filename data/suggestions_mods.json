@@ -1,5 +1,5 @@
 {
-    "latestId": 141,
+    "latestId": 142,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1134,6 +1134,14 @@
             "suggestion": "A server mod that can be used to time out people's chat for  a set amount of time which stops them from using both voice and texte chat for however long the owner sees fit. This is really because they're are alot of people who say some dumb shit in chat and get reported who end up getting banned and I find that personally that punishment might be too hash.",
             "sid": 141,
             "message": 970304852745932820,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "disables hitmarkers plz",
+            "sid": 142,
+            "message": 970394390164017182,
             "status": "open",
             "note": ""
         }
