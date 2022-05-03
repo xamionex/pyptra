@@ -93,6 +93,11 @@
         "ping": false,
         "weird": false
     },
+    "274185867961171970": {
+        "blacklist": false,
+        "ping": false,
+        "weird": true
+    },
     "275215231918276608": {
         "blacklist": false,
         "ping": false,

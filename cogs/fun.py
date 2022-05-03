@@ -104,8 +104,8 @@ class FunCommands(commands.Cog):
             await ctx.respond(embed=e, file=file)
 
     @bridge.bridge_command(name="hug", description="Hug someone :O")
-    @commands.before_invoke(checkweird)
     @commands.cooldown(1, 60, commands.BucketType.user)
+    @commands.before_invoke(checkweird)
     async def hug(self, ctx, *, member: Optional[discord.Member]):
         if member == None:
             e = discord.Embed(
@@ -118,8 +118,8 @@ class FunCommands(commands.Cog):
         await utils.sendembed(ctx, e)
 
     @bridge.bridge_command(name="kiss", description="Kiss someone :O")
-    @commands.before_invoke(checkweird)
     @commands.cooldown(1, 60, commands.BucketType.user)
+    @commands.before_invoke(checkweird)
     async def kiss(self, ctx, *, member: Optional[discord.Member]):
         if member == None:
             e = discord.Embed(
@@ -132,8 +132,8 @@ class FunCommands(commands.Cog):
         await utils.sendembed(ctx, e)
 
     @bridge.bridge_command(name="fall", description="Make someone fall >:)")
-    @commands.before_invoke(checkweird)
     @commands.cooldown(1, 60, commands.BucketType.user)
+    @commands.before_invoke(checkweird)
     async def fall(self, ctx, *, member: Optional[discord.Member]):
         if member == None:
             e = discord.Embed(
@@ -146,8 +146,8 @@ class FunCommands(commands.Cog):
         await utils.sendembed(ctx, e)
 
     @commands.command(name="promote", description="Promote someone :D")
-    @commands.before_invoke(checkweird)
     @commands.has_permissions(administrator=True)
+    @commands.before_invoke(checkweird)
     async def promote(self, ctx, member: discord.Member, *, message=None):
         if member == ctx.author:
             e = discord.Embed(
