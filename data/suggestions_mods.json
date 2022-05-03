@@ -1,5 +1,5 @@
 {
-    "latestId": 145,
+    "latestId": 146,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1166,6 +1166,14 @@
             "suggestion": "Replace all prime titans with monarch",
             "sid": 145,
             "message": 970848118784540712,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 422369274947043328,
+            "suggestion": "make it play yoda death sound whenever someone dies, whether its you or your target",
+            "sid": 146,
+            "message": 971045883489697812,
             "status": "open",
             "note": ""
         }

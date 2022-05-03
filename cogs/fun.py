@@ -58,6 +58,7 @@ class FunCommands(commands.Cog):
     @bridge.bridge_command(name="pet", description="Pet someone :D")
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def pet(self, ctx, member: Optional[discord.member.Member], emoji: Optional[discord.PartialEmoji], url=None):
+        await self.checkweird(ctx)
         attachment = None
         try:
             attachment = ctx.message.attachments[0]
