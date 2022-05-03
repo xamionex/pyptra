@@ -105,8 +105,8 @@ class FunCommands(commands.Cog):
 
     @bridge.bridge_command(name="hug", description="Hug someone :O")
     @commands.cooldown(1, 60, commands.BucketType.user)
-    @commands.before_invoke(checkweird)
     async def hug(self, ctx, *, member: Optional[discord.Member]):
+        await self.checkweird(ctx)
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(hug_words_bot))} me!", color=0x0690FF)
@@ -119,8 +119,8 @@ class FunCommands(commands.Cog):
 
     @bridge.bridge_command(name="kiss", description="Kiss someone :O")
     @commands.cooldown(1, 60, commands.BucketType.user)
-    @commands.before_invoke(checkweird)
     async def kiss(self, ctx, *, member: Optional[discord.Member]):
+        await self.checkweird(ctx)
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(kiss_words_bot))} me!", color=0x0690FF)
@@ -133,8 +133,8 @@ class FunCommands(commands.Cog):
 
     @bridge.bridge_command(name="fall", description="Make someone fall >:)")
     @commands.cooldown(1, 60, commands.BucketType.user)
-    @commands.before_invoke(checkweird)
     async def fall(self, ctx, *, member: Optional[discord.Member]):
+        await self.checkweird(ctx)
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} you fell", color=0xFF6969)
@@ -147,8 +147,8 @@ class FunCommands(commands.Cog):
 
     @commands.command(name="promote", description="Promote someone :D")
     @commands.has_permissions(administrator=True)
-    @commands.before_invoke(checkweird)
     async def promote(self, ctx, member: discord.Member, *, message=None):
+        await self.checkweird(ctx)
         if member == ctx.author:
             e = discord.Embed(
                 description=f"{ctx.author.mention} promoted themselves to {message}", color=0xFF6969)
