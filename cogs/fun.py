@@ -103,8 +103,8 @@ class FunCommands(commands.Cog):
         else:
             await ctx.respond(embed=e, file=file)
 
-    @commands.before_invoke(checkweird)
     @bridge.bridge_command(name="hug", description="Hug someone :O")
+    @commands.before_invoke(checkweird)
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def hug(self, ctx, *, member: Optional[discord.Member]):
         if member == None:
@@ -117,8 +117,8 @@ class FunCommands(commands.Cog):
         e.set_image(url=(random.choice(hug_gifs)))
         await utils.sendembed(ctx, e)
 
-    @commands.before_invoke(checkweird)
     @bridge.bridge_command(name="kiss", description="Kiss someone :O")
+    @commands.before_invoke(checkweird)
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def kiss(self, ctx, *, member: Optional[discord.Member]):
         if member == None:
@@ -131,8 +131,8 @@ class FunCommands(commands.Cog):
         e.set_image(url=(random.choice(kiss_gifs)))
         await utils.sendembed(ctx, e)
 
-    @commands.before_invoke(checkweird)
     @bridge.bridge_command(name="fall", description="Make someone fall >:)")
+    @commands.before_invoke(checkweird)
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def fall(self, ctx, *, member: Optional[discord.Member]):
         if member == None:
@@ -145,8 +145,8 @@ class FunCommands(commands.Cog):
             "https://media.discordapp.net/attachments/854984817862508565/883437876493307924/image0-2.gif"))
         await utils.sendembed(ctx, e)
 
-    @commands.before_invoke(checkweird)
     @commands.command(name="promote", description="Promote someone :D")
+    @commands.before_invoke(checkweird)
     @commands.has_permissions(administrator=True)
     async def promote(self, ctx, member: discord.Member, *, message=None):
         if member == ctx.author:
