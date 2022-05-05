@@ -304,7 +304,7 @@ class InfoUtils():
         ]
         pages[0].add_field(
             name="VTOL",
-            value="[Download the latest release\nRun the setup](https://github.com/BigSpice/VTOL/releases/latest/download/VTOL_Installer1.2.1.msi)\nLocate your game's folder\nClick Install Northstar",
+            value="[Download the latest release\nRun the setup](https://github.com/BigSpice/VTOL/releases/latest/download/VTOL_Installer.msi)\nLocate your game's folder\nClick Install Northstar",
             inline=False)
         pages[0].add_field(
             name="Viper",

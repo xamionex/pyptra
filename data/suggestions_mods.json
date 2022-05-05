@@ -1,5 +1,5 @@
 {
-    "latestId": 146,
+    "latestId": 150,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1174,6 +1174,38 @@
             "suggestion": "make it play yoda death sound whenever someone dies, whether its you or your target",
             "sid": 146,
             "message": 971045883489697812,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 220699447653433344,
+            "suggestion": "Make a mod/mode that is exactly like the Survival mode as seen in call of duty: modern warfare 3. Featuring 3 crates to buy various things. Weapons, Equipment, Air support, AI allies to call in through dropships.",
+            "sid": 147,
+            "message": 971216084281749565,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 415599067373109270,
+            "suggestion": "make the <#939573786355859498> a channel that can be followed on other servers.",
+            "sid": 148,
+            "message": 971526667967299645,
+            "status": "denied",
+            "note": "Impossible because webhooks cant publish themselves as announcements and I don't think anyone of the mod team is going to manually publish all of the new messages in there - <@139095725110722560>"
+        },
+        {
+            "user": 336075182181449728,
+            "suggestion": "Scorch Splatoon Gamemode",
+            "sid": 149,
+            "message": 971527474439671859,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 181824867849601024,
+            "suggestion": "Gauntlet race gamemode.",
+            "sid": 150,
+            "message": 971728115309088798,
             "status": "open",
             "note": ""
         }

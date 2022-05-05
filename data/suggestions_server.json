@@ -1,5 +1,5 @@
 {
-    "latestId": 32,
+    "latestId": 36,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -262,6 +262,38 @@
             "suggestion": "since i saw many people talk about how Northstar has no basic servers how stuff Is too complicated and mixed, It maybe would be helpfull to have something like a \"Verified Vanilla server\", i know that if you search for Vanilla you get some servers, but some of them some times have stuff like max player count modified or black listed weapons etc. This would basically be like a check near the name of the server, and you can search by \"Verified servers\" in the search bar, the way to have the Verified Vanilla server May Be something like the server owners ask for It and they talk with the mods and stuff like that, not really sure if this Is possible, but if It Is It might help",
             "sid": 32,
             "message": 970290210367762463,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 829694789833457684,
+            "suggestion": "QOL changes, for example: a wall doesnt \"slips\" or places in random ways in some maps, holograms doesnt get destroied if their foot touches a literal grain of salt, grapple reachable crossair (kinda like pathfinder's grapple in apex that becomes Blue when looking at something grapple-reachable) and the climbing animation doesnt magically becomes a death sentence by making it faster, or just make it u go tru an object if its just X height (why tf do i need to climb over a fucking bar that is on the ground to go tru it, w h y), and so on. idk if this should be in <#951255789568409600> or somewhere else still my suggetion stays the same.",
+            "sid": 33,
+            "message": 971454282123595836,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 676832666213154818,
+            "suggestion": "in light of the whole fake servers thing, allow us to filter by the amount of ppl that can join a server",
+            "sid": 34,
+            "message": 971493432897978448,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 139095725110722560,
+            "suggestion": "Another tab in the server browser that only shows confirmed good/official servers, possible solution maybe api keys?",
+            "sid": 35,
+            "message": 971674253059559454,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 226211469279100928,
+            "suggestion": "Have northstarlauncher.exe automatically download newest patch + update.  There for no need for 3rd party launchers, installers or manually drag / drop to update to latest NorthStar .version",
+            "sid": 36,
+            "message": 971711653404102656,
             "status": "open",
             "note": ""
         }
