@@ -1,4 +1,9 @@
 {
+    "104117150683250688": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
     "106444118577676288": {
         "blacklist": false,
         "ping": false,
@@ -58,6 +63,11 @@
         "ping": false,
         "weird": false
     },
+    "221929944178098177": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
     "226211469279100928": {
         "blacklist": false,
         "ping": false,
@@ -69,6 +79,11 @@
         "weird": false
     },
     "231892869143592960": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "236996224450953218": {
         "blacklist": false,
         "ping": false,
         "weird": false
@@ -109,6 +124,11 @@
         "weird": true
     },
     "275215231918276608": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "275676668012658689": {
         "blacklist": false,
         "ping": false,
         "weird": false
@@ -353,6 +373,11 @@
         "ping": false,
         "weird": false
     },
+    "532550985185361931": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
     "533990653055467520": {
         "blacklist": false,
         "ping": false,
@@ -463,6 +488,11 @@
         "ping": false,
         "weird": false
     },
+    "688048789835087947": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
     "703015901011902575": {
         "blacklist": false,
         "ping": false,
@@ -513,6 +543,11 @@
         "ping": false,
         "weird": false
     },
+    "757029373240016942": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
     "760308299575853126": {
         "blacklist": false,
         "ping": true,
@@ -529,6 +564,11 @@
         "weird": false
     },
     "795447886061895680": {
+        "blacklist": false,
+        "ping": false,
+        "weird": false
+    },
+    "800680565266579458": {
         "blacklist": false,
         "ping": false,
         "weird": false

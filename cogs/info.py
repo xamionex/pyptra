@@ -100,9 +100,10 @@ class InfoCommands(commands.Cog):
     async def adminstall(self, ctx, option=None):
         e = [InfoUtils.get_pages_help()[0],
              InfoUtils.get_pages_manual()[0],
-             InfoUtils.get_pages_automatic()[0]]
+             InfoUtils.get_pages_automatic()[0],
+             discord.Embed(description=f"{ctx.author.mention} just updated the installation embeds in <#922662496588943430>")]
         if option is not None:
-            await ctx.message.delete()
+            await utils.sendembed(ctx, e[3], show_all=False, delete=3, delete_speed=20)
             channel = ctx.guild.get_channel(922662496588943430)
             msg = [await channel.fetch_message(968179173753516112), await channel.fetch_message(968179174407831556), await channel.fetch_message(968179175729012736)]
             await msg[0].edit(embed=e[0])
@@ -302,6 +303,10 @@ class InfoUtils():
                 title="Automatic Installation for Northstar",
                 description="**Head over to an installer repository listed below**", color=0x69FF69)
         ]
+        pages[0].add_field(
+            name="R2Modman",
+            value="[Click Manual Download\nInside the .zip run the related Setup.exe](https://northstar.thunderstore.io/package/ebkr/r2modman/)\nFollow the steps in the installer",
+            inline=False)
         pages[0].add_field(
             name="VTOL",
             value="[Download the latest release\nRun the setup](https://github.com/BigSpice/VTOL/releases/latest/download/VTOL_Installer.msi)\nLocate your game's folder\nClick Install Northstar",

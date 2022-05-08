@@ -1,5 +1,5 @@
 {
-    "latestId": 36,
+    "latestId": 37,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -294,6 +294,14 @@
             "suggestion": "Have northstarlauncher.exe automatically download newest patch + update.  There for no need for 3rd party launchers, installers or manually drag / drop to update to latest NorthStar .version",
             "sid": 36,
             "message": 971711653404102656,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 226211469279100928,
+            "suggestion": "Fix Live Fire:  = so works without starting from lobby + continues to work on map rotations",
+            "sid": 37,
+            "message": 971786780699418684,
             "status": "open",
             "note": ""
         }

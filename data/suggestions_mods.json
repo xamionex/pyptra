@@ -1,5 +1,5 @@
 {
-    "latestId": 150,
+    "latestId": 161,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1206,6 +1206,94 @@
             "suggestion": "Gauntlet race gamemode.",
             "sid": 150,
             "message": 971728115309088798,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 221929944178098177,
+            "suggestion": "UT2004 Original Announcer as a client-side mod",
+            "sid": 151,
+            "message": 971818755418107944,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 336075182181449728,
+            "suggestion": "PS5 Trigger Support throught the open C++ Lib.",
+            "sid": 152,
+            "message": 971859530306691192,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 336075182181449728,
+            "suggestion": "PS5 Adaptive trigger Support Through the open C++ lib.",
+            "sid": 153,
+            "message": 971859714960928798,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 576887540930576425,
+            "suggestion": "Ricochet royal, free for all but everyone gets a kraber with ricochet, the gimmick is that it starts by dealing no damage until it bounces where it'll gain a small damage bonus which increases with every bounce, also the shots have like 50 max bounces and on the last bounce it's a guaranteed one shot. For clarification the shots increase in damage individually, so after one shot bounces let's say 20 times the next shot will NOT do the damage equivalent to 20 bounces",
+            "sid": 154,
+            "message": 971889761583255572,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 576887540930576425,
+            "suggestion": "Wilhelm scream death sound for when someone dies by falling or by dying to the out of bounds tomer",
+            "sid": 155,
+            "message": 971897343400087583,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 139095725110722560,
+            "suggestion": "Lurch disabler of sorts? Or a mod to modify the speedloss and/or timeframe? Would be cool and FUNKY.",
+            "sid": 156,
+            "message": 972023784871718932,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 104117150683250688,
+            "suggestion": "POTG Play of the Game mod. Somehow track who gets the most kills or scores the most points in a given amount of seconds. Play the replay of the top clip after a match.",
+            "sid": 157,
+            "message": 972156335560994857,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "abilty to turn off hud with the press of a button",
+            "sid": 158,
+            "message": 972201296071372901,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 464149458561662977,
+            "suggestion": "<@!830498850841690193> : Hey wouldn\u2019t it be cool to have sort of a \u201cfloor-is-lava\u201d mode? Idk but all the movement options in TF2 just scream for a floor is lava mode. The lava could rise every few seconds and it would be a last person standing mode. Everyone would have the grapple ability and a grande launcher that instead of doing damage, it\u2019s does knock back. Could be pretty dope.",
+            "sid": 159,
+            "message": 972229594629419078,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 236996224450953218,
+            "suggestion": "The ability to customize spawn rate and AI cap per team for Attrition.",
+            "sid": 160,
+            "message": 972243208417443941,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "Titanfall 1 OS mods for ion and legion, don't care which ones, ion prime and reg plz",
+            "sid": 161,
+            "message": 972692694797279283,
             "status": "open",
             "note": ""
         }
