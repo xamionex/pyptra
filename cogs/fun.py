@@ -46,13 +46,13 @@ class FunCommands(commands.Cog):
         self.ctx = ctx
 
     async def checkweird(self, ctx):
-        if await block.BlockUtils.get_weird(ctx.author) or ctx.author.guild_permissions.administrator:
+        if await block.BlockUtils.get_perm("weird", ctx.author) or ctx.author.guild_permissions.administrator:
             return
         else:
             await utils.senderror(ctx, f"{ctx.author.mention}, You aren\'t weird enough to use this.. (dm <@139095725110722560>)")
 
     async def checkping(self, ctx, member):
-        if await block.BlockUtils.get_ping(member):
+        if await block.BlockUtils.get_perm("ping", member):
             await utils.senderror(ctx, f"This person has disallowed me from using them in commands.")
 
     @bridge.bridge_command(name="pet", description="Pet someone :D")
