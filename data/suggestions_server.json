@@ -1,5 +1,5 @@
 {
-    "latestId": 37,
+    "latestId": 39,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -302,6 +302,22 @@
             "suggestion": "Fix Live Fire:  = so works without starting from lobby + continues to work on map rotations",
             "sid": 37,
             "message": 971786780699418684,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 780277023401705502,
+            "suggestion": "region roles like NA EU AUS etc, that puts that nation's flag next to your name using image roles",
+            "sid": 38,
+            "message": 972971622132760606,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 957791247077109770,
+            "suggestion": "Renovate <#937922165163065384> to be a guide for server owners to handle their own reports. Maybe like a server command to report users to the owner/mods of the server that saves the server replay of the player for review. General directions to include a discord server/way to contact the owner for reports.",
+            "sid": 39,
+            "message": 973920064959025162,
             "status": "open",
             "note": ""
         }

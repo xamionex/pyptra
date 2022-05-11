@@ -1,5 +1,5 @@
 {
-    "latestId": 161,
+    "latestId": 170,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1294,6 +1294,78 @@
             "suggestion": "Titanfall 1 OS mods for ion and legion, don't care which ones, ion prime and reg plz",
             "sid": 161,
             "message": 972692694797279283,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 505807904062832640,
+            "suggestion": "a new 3v3 pilots only gamemode where you only have one life, but teammates can bring you back in the fight",
+            "sid": 162,
+            "message": 972878198746513408,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 731724400617062490,
+            "suggestion": "someone make a mod that replaces ronin voice lines with jetstream sam and when the core is active the song \"The Only Thing I Know For Real\" plays",
+            "sid": 163,
+            "message": 972880847415935006,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 260972586131914753,
+            "suggestion": "A Client side randomiser mod that change a pilots weapons, attachments, abilities, ordiance, ect. every time you spawn. Sort of like the tf|2 randomiser websites.",
+            "sid": 164,
+            "message": 973133512376995861,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 381485392324591616,
+            "suggestion": "turn Legion into Heavy Weapons Guy, or change Legion's AI to sound like Heavy.",
+            "sid": 165,
+            "message": 973215439205326888,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 642643091161088010,
+            "suggestion": "i see  Halo announcer, What about Redac From Killzone 2? i would love to see it",
+            "sid": 166,
+            "message": 973336041106841611,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 379386592474955786,
+            "suggestion": "replace the MRVN's screen and Kraber ammo counter with a video of someone playing doom",
+            "sid": 167,
+            "message": 973379612086251552,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 381485392324591616,
+            "suggestion": "make Legion\u2019s Smart Core blare the solo from Freebird for as long as it\u2019s active.",
+            "sid": 168,
+            "message": 973714326517067776,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 307999532267077643,
+            "suggestion": "disable the lock on for the archer so you can turn in into another useable projectile, then make a gamemode where we play tennis using archer rockets and ronin swords. might as well turn the pillars map to a tennis court because its so empty.",
+            "sid": 169,
+            "message": 973967728199217152,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 271698083685990401,
+            "suggestion": "custom maps <:trol:935813734335676446>",
+            "sid": 170,
+            "message": 973975635233996821,
             "status": "open",
             "note": ""
         }
