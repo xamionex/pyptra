@@ -1,7 +1,7 @@
 import json
 import discord
 from discord.ext import commands, bridge
-from cogs import utils
+from cogs import utils, block
 # afk command data
 import datetime
 import humanize
@@ -122,7 +122,7 @@ class OtherUtils():
         with open('./data/afk.json', 'r') as f:
             afk = json.load(f)
         for member in message.mentions:
-            if member.bot:
+            if member.bot or await block.BlockUtils.get_perm("afkcheck", message.author):
                 return
             if afk[f'{member.id}']['AFK'] == 'True':
                 if message.author.bot:

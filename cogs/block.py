@@ -21,7 +21,9 @@ class BlockUtils():
         perms = {"blacklist": "Denies usage for bot",
                  "weird": "Allows -hug -kiss",
                  "ping": "Denies pinging user in -hug -kiss -pet",
-                 "pet": "Allows petting users/images/emojis", "joke": "Allows using -fall -promote"}
+                 "pet": "Allows petting users/images/emojis",
+                 "joke": "Allows using -fall -promote",
+                 "afkcheck": "Denies/Allows AFK alerts"}
         return perms
 
     async def set_member_perms(users, user):
@@ -115,6 +117,19 @@ class BlockCommands(commands.Cog):
             await BlockUtils.remove_perm("ping", ctx.author)
             e = discord.Embed(
                 description=f"I'll let people use my commands with you", color=0x66FF99)
+            await utils.sendembed(ctx, e, False)
+
+    @bridge.bridge_command(name="alerts", description="Enable or disable AFK messages")
+    async def alerts(self, ctx):
+        if await BlockUtils.get_perm("afkcheck", ctx.author) == True:
+            await BlockUtils.remove_perm("afkcheck", ctx.author)
+            e = discord.Embed(
+                description=f"✅ Enabled AFK Alerts", color=0x66FF99)
+            await utils.sendembed(ctx, e, False)
+        else:
+            await BlockUtils.add_perm("afkcheck", ctx.author)
+            e = discord.Embed(
+                description=f"❌ Disabled AFK Alerts", color=0xFF6969)
             await utils.sendembed(ctx, e, False)
 
     @commands.command(name="give", description=f"Give a permission to a user (use -permslist)")

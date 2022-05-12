@@ -151,6 +151,10 @@ class InfoUtils():
             value=InfoUtils.get_cmd_desc(self, ctx, "userinfo"),
             inline=True)
         pages[0].add_field(
+            name="/alerts or -alerts",
+            value=InfoUtils.get_cmd_desc(self, ctx, "alerts"),
+            inline=True)
+        pages[0].add_field(
             name="/afk or -afk",
             value=InfoUtils.get_cmd_desc(self, ctx, "afk"),
             inline=True)
