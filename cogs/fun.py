@@ -49,7 +49,7 @@ class FunCommands(commands.Cog):
         if await block.BlockUtils.get_perm("weird", ctx.author) or ctx.author.guild_permissions.administrator:
             return
         else:
-            await utils.senderror(ctx, f"{ctx.author.mention}, You aren\'t weird enough to use this.. (dm <@139095725110722560>)")
+            await utils.senderror(ctx, f"{ctx.author.mention}, You aren\'t allowed to use this")
 
     async def checkping(self, ctx, member):
         if await block.BlockUtils.get_perm("ping", member):
