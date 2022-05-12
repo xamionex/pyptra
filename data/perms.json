@@ -1,116 +1,162 @@
 {
     "104117150683250688": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "106444118577676288": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "139095725110722560": {
         "blacklist": false,
+        "joke": true,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "146416331896520704": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "162387546905640960": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "171813598031511552": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "174335307557109761": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "181824867849601024": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "183718882182168576": {
         "blacklist": true,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "197053340809560064": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "200647491631316993": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "201553786974502912": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": true,
         "weird": false
     },
     "216341908954284045": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "220699447653433344": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "221929944178098177": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "226211469279100928": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "231123391820726282": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "231892869143592960": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "236996224450953218": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "239314727937900544": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "260972586131914753": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "265724507841363968": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "267106006926884864": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
@@ -121,16 +167,22 @@
     },
     "268494575780233216": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "270296241143808000": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "271698083685990401": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
@@ -141,381 +193,533 @@
     },
     "275215231918276608": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "275676668012658689": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "278073569177632769": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "282970673255809024": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "285153778800263168": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "288835361977925632": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "293811410532827137": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "296358394355253258": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "301638437121818625": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "307999532267077643": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "319401422477197313": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "320853412256415745": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "321184148666449920": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "326355636101316609": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "329709085807345675": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "334806124496683038": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "336075182181449728": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "353485809694801923": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "354083155147358210": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "354531192508252160": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "374125969990090763": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "374972613736398848": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "375616010402922498": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "375671695240855553": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "376664708805033984": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "378626415651848194": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "379386592474955786": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "381485392324591616": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "396375745502380045": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "400497874590367755": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "415599067373109270": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "419897508429299712": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "422369274947043328": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "432613614168571904": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "435938038997057546": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "436979190290448397": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "447441511504805888": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "457360894100242452": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "464149458561662977": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "464994760646459393": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "465458221369393163": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "469257805904478241": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "475452223758008331": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": true,
         "weird": false
     },
     "475771415170252830": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "479859203259891712": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "483995186117083155": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "485927254677913605": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "486714853944459295": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "489029612421120012": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "492376330709499904": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "492969803611504641": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "495590559621054495": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "500427471204778006": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "505807904062832640": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "521515870967693322": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "521844853592817667": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "523909047921934336": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "528654092122456075": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "532550985185361931": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "533990653055467520": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "554848063735332864": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "556757542492045312": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "558690387620003861": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "564416588632031242": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "564463541248065547": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "574170668321734656": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "575389794889367558": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "576887540930576425": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "577583547116945419": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "579347068573974559": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "607842753900183552": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "609827171569106945": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "610890924565987329": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "612118712492883972": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "620104730320044043": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "625796609804075070": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
@@ -526,256 +730,358 @@
     },
     "642643091161088010": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "653598071153885215": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": true,
         "weird": false
     },
     "655110370939240448": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "655988053357101067": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "667720301462945803": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": true,
         "weird": false
     },
     "669309725695016980": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "672246569130524693": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "676832666213154818": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "679365977485475874": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "685981406672715833": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "685996161429274682": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "688048789835087947": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "699852363313446974": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "703015901011902575": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "705011815138197504": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "708094727588937799": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "713893988377165985": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "730831296238190626": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": true,
         "weird": false
     },
     "731724400617062490": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "741664461416562728": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "748364862824120375": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "752566466733146132": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "755499635833045132": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "757029373240016942": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "760308299575853126": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": true,
         "weird": false
     },
     "771141590436937770": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "771393204473167892": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "780277023401705502": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "787216534598057994": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "795447886061895680": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "800680565266579458": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "803242439262470173": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "806568367766372432": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "827766664870625281": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "829694789833457684": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "852684066293022772": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "877966975786172456": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "917022071933005854": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "922274710207737940": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "925064195186233344": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "928036141205184573": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "936323651408629790": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "936846938458951712": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "937382709557354517": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "940825405374472212": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "949269806824181770": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "957480709449211944": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "957791247077109770": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "959359781460643840": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "959624613833351178": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     },
     "967602886609633360": {
         "blacklist": false,
+        "joke": false,
+        "pet": false,
         "ping": false,
         "weird": false
     }

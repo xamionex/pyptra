@@ -45,8 +45,8 @@ class FunCommands(commands.Cog):
     def __init__(self, ctx):
         self.ctx = ctx
 
-    async def checkweird(self, ctx):
-        if await block.BlockUtils.get_perm("weird", ctx.author) or ctx.author.guild_permissions.administrator:
+    async def checkperm(self, ctx, perm):
+        if await block.BlockUtils.get_perm(perm, ctx.author) or ctx.author.guild_permissions.administrator:
             return
         else:
             await utils.senderror(ctx, f"{ctx.author.mention}, You aren\'t allowed to use this")
@@ -58,7 +58,7 @@ class FunCommands(commands.Cog):
     @bridge.bridge_command(name="pet", description="Pet someone :D")
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def pet(self, ctx, member: Optional[discord.member.Member], emoji: Optional[discord.PartialEmoji], url=None):
-        await self.checkweird(ctx)
+        await self.checkperm(ctx, "pet")
         attachment = None
         try:
             attachment = ctx.message.attachments[0]
@@ -104,10 +104,10 @@ class FunCommands(commands.Cog):
         else:
             await ctx.respond(embed=e, file=file)
 
-    @bridge.bridge_command(name="hug", description="Hug someone :O")
+    @commands.command(name="hug", description="Hug someone :O")
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def hug(self, ctx, *, member: Optional[discord.Member]):
-        await self.checkweird(ctx)
+        await self.checkperm(ctx, "weird")
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(hug_words_bot))} me!", color=0x0690FF)
@@ -118,10 +118,10 @@ class FunCommands(commands.Cog):
         e.set_image(url=(random.choice(hug_gifs)))
         await utils.sendembed(ctx, e)
 
-    @bridge.bridge_command(name="kiss", description="Kiss someone :O")
+    @commands.command(name="kiss", description="Kiss someone :O")
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def kiss(self, ctx, *, member: Optional[discord.Member]):
-        await self.checkweird(ctx)
+        await self.checkperm(ctx, "weird")
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(kiss_words_bot))} me!", color=0x0690FF)
@@ -132,10 +132,10 @@ class FunCommands(commands.Cog):
         e.set_image(url=(random.choice(kiss_gifs)))
         await utils.sendembed(ctx, e)
 
-    @bridge.bridge_command(name="fall", description="Make someone fall >:)")
+    @commands.command(name="fall", description="Make someone fall >:)")
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def fall(self, ctx, *, member: Optional[discord.Member]):
-        await self.checkweird(ctx)
+        await self.checkperm(ctx, "joke")
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} you fell", color=0xFF6969)
@@ -149,7 +149,7 @@ class FunCommands(commands.Cog):
     @commands.command(name="promote", description="Promote someone :D")
     @commands.has_permissions(administrator=True)
     async def promote(self, ctx, member: discord.Member, *, message=None):
-        await self.checkweird(ctx)
+        await self.checkperm(ctx, "joke")
         if member == ctx.author:
             e = discord.Embed(
                 description=f"{ctx.author.mention} promoted themselves to {message}", color=0xFF6969)

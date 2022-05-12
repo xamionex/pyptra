@@ -127,12 +127,12 @@ class InfoUtils():
             discord.Embed(
                 title="Help for PTRA bot",
                 description="**Useful commands**", color=0x66FF99),
-            discord.Embed(
-                title="Help for PTRA bot",
-                description="**User commands**", color=0xFF6969),
-            discord.Embed(
-                title="Help for PTRA bot",
-                description="**Fun commands**", color=0x69FFFF),
+            # discord.Embed(
+            #    title="Help for PTRA bot",
+            #    description="**User commands**", color=0xFF6969),
+            # discord.Embed(
+            #    title="Help for PTRA bot",
+            #    description="**Fun commands** (requires permissions)", color=0x69FFFF),
         ]
         pages[0].add_field(
             name="/installation or -installation",
@@ -162,30 +162,30 @@ class InfoUtils():
         # name="/help or -help",
         # value=InfoUtils.get_cmd_desc(self, ctx, "help"),
         # inline=True)
-        pages[1].add_field(
-            name="/introvert or -introvert",
-            value=InfoUtils.get_cmd_desc(self, ctx, "introvert"),
-            inline=True)
-        pages[1].add_field(
-            name="/extrovert or -extrovert",
-            value=InfoUtils.get_cmd_desc(self, ctx, "extrovert"),
-            inline=True)
-        pages[2].add_field(
-            name="/pet or -pet",
-            value=InfoUtils.get_cmd_desc(self, ctx, "pet"),
-            inline=True)
-        pages[2].add_field(
-            name="/hug or -hug",
-            value=InfoUtils.get_cmd_desc(self, ctx, "hug"),
-            inline=True)
-        pages[2].add_field(
-            name="/kiss or -kiss",
-            value=InfoUtils.get_cmd_desc(self, ctx, "kiss"),
-            inline=True)
-        pages[2].add_field(
-            name="/fall or -fall",
-            value=InfoUtils.get_cmd_desc(self, ctx, "fall"),
-            inline=True)
+        # pages[1].add_field(
+        #    name="/introvert or -introvert",
+        #    value=InfoUtils.get_cmd_desc(self, ctx, "introvert"),
+        #    inline=True)
+        # pages[1].add_field(
+        #    name="/extrovert or -extrovert",
+        #    value=InfoUtils.get_cmd_desc(self, ctx, "extrovert"),
+        #    inline=True)
+        # pages[2].add_field(
+        #    name="/pet or -pet",
+        #    value=InfoUtils.get_cmd_desc(self, ctx, "pet"),
+        #    inline=True)
+        # pages[2].add_field(
+        #    name="/hug or -hug",
+        #    value=InfoUtils.get_cmd_desc(self, ctx, "hug"),
+        #    inline=True)
+        # pages[2].add_field(
+        #    name="/kiss or -kiss",
+        #    value=InfoUtils.get_cmd_desc(self, ctx, "kiss"),
+        #    inline=True)
+        # pages[2].add_field(
+        #    name="/fall or -fall",
+        #    value=InfoUtils.get_cmd_desc(self, ctx, "fall"),
+        #    inline=True)
         return pages
 
     def get_pages_admin(self, ctx):
@@ -224,12 +224,12 @@ class InfoUtils():
             value=InfoUtils.get_cmd_desc(self, ctx, "unblock"),
             inline=True)
         pages[1].add_field(
-            name="-weird mention",
-            value=InfoUtils.get_cmd_desc(self, ctx, "weird"),
+            name="-give mention",
+            value=InfoUtils.get_cmd_desc(self, ctx, "give"),
             inline=True)
         pages[1].add_field(
-            name="-unweird mention",
-            value=InfoUtils.get_cmd_desc(self, ctx, "unweird"),
+            name="-remove mention",
+            value=InfoUtils.get_cmd_desc(self, ctx, "remove"),
             inline=True)
         pages[2].add_field(
             name="-reply text",
