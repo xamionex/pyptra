@@ -1,5 +1,5 @@
 {
-    "latestId": 170,
+    "latestId": 173,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1367,6 +1367,30 @@
             "sid": 170,
             "message": 973975635233996821,
             "status": "open",
+            "note": ""
+        },
+        {
+            "user": 755499635833045132,
+            "suggestion": "Give IMC grunts Combine voice lines (and maybe if masterliberty approves ill port the model)",
+            "sid": 171,
+            "message": 974043433075367936,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 576887540930576425,
+            "suggestion": "Dodgeball, (can be played with everyone in titans or not. if in titans, everyone gets Scorch) Everyone is one shot and have a vortex shield that lasts 0.5 seconds and has a 0.5 second cooldown, the game begins with a few players having one ammo in scorch's gun, when someone catches it with their vortex shield they gain it as ammo for their gun. When the thermite is on the ground, a player can walk on it to gain the ammo by \"picking up\" the ball which causes the thermite to disappear.",
+            "sid": 172,
+            "message": 974118463641636904,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 612118712492883972,
+            "suggestion": "so this kinda is dumb and sounds dumb, but what if by using chat (as console commands) you manually change your titan, as well as kits, of course this would be limited, it would put some strain on the server as well, but on the plus side, kits are easier to add/balance, and you can add new titans (with mods of course), i'm not too good at coding and stuff so it might even be impossible for all i know, oh yeah with that system i would like to add on pilots and stuff as that does allow more moular editting (more abilities, more ordanance, more guns, with this it even allows for a server-side EXP system, where playing on the server increases XP and unlocks stuff), this in total will put some strain on the server, so it'd only really work i you have something dedicated to doing this",
+            "sid": 173,
+            "message": 974145934890008646,
+            "status": "denied",
             "note": ""
         }
     ]
