@@ -1,4 +1,5 @@
 import json
+import random
 import discord
 from discord.ext import commands, bridge
 from cogs import utils, block
@@ -169,7 +170,7 @@ class OtherUtils():
 
     async def memeschannel(message):
         if message.channel.id == 973438217196040242:
-            await message.delete(delay=3600)
+            await message.delete(delay=random.randrange(100, 3600, 100))
 
     def period(delta, pattern):
         d = {'d': delta.days}
