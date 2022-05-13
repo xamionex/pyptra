@@ -167,6 +167,10 @@ class OtherUtils():
         with open('./data/afk.json', 'w') as f:
             json.dump(afk, f, indent=4, sort_keys=True)
 
+    async def memeschannel(message):
+        if message.guild.get_channel(941678125853601862):
+            await message.delete(delay=300)
+
     def period(delta, pattern):
         d = {'d': delta.days}
         d['h'], rem = divmod(delta.seconds, 3600)

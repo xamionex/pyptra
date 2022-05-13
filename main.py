@@ -78,6 +78,7 @@ async def on_message(message):
         # return
     if message.mention_everyone:
         return
+    await other.OtherUtils.memeschannel(message)
     await other.OtherUtils.afkcheck(message)
     if message.author.bot == False and bot.user.mentioned_in(message) and len(message.content) == len(bot.user.mention):
         await message.reply(f'My prefix is `-` or {bot.user.mention}, you can also use slash commands\nFor more info use the /help command!')
