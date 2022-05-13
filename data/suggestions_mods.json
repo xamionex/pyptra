@@ -1,5 +1,5 @@
 {
-    "latestId": 173,
+    "latestId": 174,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1391,6 +1391,14 @@
             "sid": 173,
             "message": 974145934890008646,
             "status": "denied",
+            "note": ""
+        },
+        {
+            "user": 689301509317591043,
+            "suggestion": "have blood splatters, explosions, and gore related things be replaced with confetti",
+            "sid": 174,
+            "message": 974319066003177484,
+            "status": "open",
             "note": ""
         }
     ]

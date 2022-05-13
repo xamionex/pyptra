@@ -1,5 +1,5 @@
 {
-    "latestId": 39,
+    "latestId": 40,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -318,6 +318,14 @@
             "suggestion": "Renovate <#937922165163065384> to be a guide for server owners to handle their own reports. Maybe like a server command to report users to the owner/mods of the server that saves the server replay of the player for review. General directions to include a discord server/way to contact the owner for reports.",
             "sid": 39,
             "message": 973920064959025162,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 558690387620003861,
+            "suggestion": "add my dog as a sticker https://cdn.discordapp.com/attachments/971213666248687616/974498827568545802/unknown.png",
+            "sid": 40,
+            "message": 974499605490331698,
             "status": "open",
             "note": ""
         }
