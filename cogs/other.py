@@ -168,8 +168,8 @@ class OtherUtils():
             json.dump(afk, f, indent=4, sort_keys=True)
 
     async def memeschannel(message):
-        if message.channel.id == 890335827459211305:
-            await message.delete()
+        if message.channel.id == 973438217196040242:
+            await message.delete(delay=3600)
 
     def period(delta, pattern):
         d = {'d': delta.days}

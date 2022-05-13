@@ -858,6 +858,14 @@
         "ping": false,
         "weird": false
     },
+    "458305822448156695": {
+        "afkcheck": false,
+        "blacklist": false,
+        "joke": false,
+        "pet": false,
+        "ping": false,
+        "weird": false
+    },
     "459766305931657217": {
         "afkcheck": false,
         "blacklist": false,
@@ -1275,6 +1283,14 @@
         "weird": false
     },
     "630805672526741505": {
+        "afkcheck": false,
+        "blacklist": false,
+        "joke": false,
+        "pet": false,
+        "ping": false,
+        "weird": false
+    },
+    "633622056768110613": {
         "afkcheck": false,
         "blacklist": false,
         "joke": false,
