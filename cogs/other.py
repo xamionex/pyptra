@@ -1,5 +1,4 @@
 import json
-import random
 import discord
 from discord.ext import commands, bridge
 from cogs import utils, block
@@ -15,12 +14,33 @@ import os
 class OtherCommands(commands.Cog):
     def __init__(self, ctx):
         self.ctx = ctx
+        self.bot = ctx
 
-    @commands.command(name="reload", description="Restarts the bot")
+    @commands.command(name="restart", description="Restarts the bot")
     @commands.has_permissions(administrator=True)
-    async def reload(self, ctx: discord.ApplicationContext):
+    @commands.command(hidden=True)
+    async def restart(self, ctx: discord.ApplicationContext):
         await ctx.message.delete()
         os.execv(sys.executable, ['python'] + sys.argv)
+
+    @commands.command(name="load", description="Loads a module")
+    @commands.has_permissions(administrator=True)
+    @commands.command(hidden=True)
+    async def load(self, *, module: str):
+        self.bot.load_extension(module)
+
+    @commands.command(name="unload", description="Unloads a module")
+    @commands.has_permissions(administrator=True)
+    @commands.command(hidden=True)
+    async def unload(self, *, module: str):
+        self.bot.unload_extension(module)
+
+    @commands.command(name="reload", description="Reloads a module")
+    @commands.has_permissions(administrator=True)
+    @commands.command(hidden=True)
+    async def reload(self, *, module: str):
+        self.bot.reload_extension(module)
+        self.bot.load_extension(module)
 
     @commands.command(name="echo", description="Echoes the message you send.")
     @commands.has_permissions(administrator=True)
@@ -167,10 +187,6 @@ class OtherUtils():
                 await message.reply(embed=e, delete_after=10, mention_author=False)
         with open('./data/afk.json', 'w') as f:
             json.dump(afk, f, indent=4, sort_keys=True)
-
-    async def memeschannel(message):
-        if message.channel.id == 973438217196040242:
-            await message.delete(delay=random.randrange(100, 3600, 100))
 
     def period(delta, pattern):
         d = {'d': delta.days}

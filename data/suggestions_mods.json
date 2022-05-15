@@ -1,5 +1,5 @@
 {
-    "latestId": 174,
+    "latestId": 176,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1398,6 +1398,22 @@
             "suggestion": "have blood splatters, explosions, and gore related things be replaced with confetti",
             "sid": 174,
             "message": 974319066003177484,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 502229618841878529,
+            "suggestion": "Replaces default ronin sword with prime sword for improved visibility while using the regular chassis, allowing for use of the \"Freeze Frame\" titan paint while not willingly hindering yourself (important)",
+            "sid": 175,
+            "message": 974688438991327252,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "imc grunts have militia grunt model and milita grunts have imc model",
+            "sid": 176,
+            "message": 974807434428284978,
             "status": "open",
             "note": ""
         }
