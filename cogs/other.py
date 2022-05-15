@@ -6,9 +6,10 @@ from cogs import utils, block
 import datetime
 import humanize
 import time
-# restart command
-import sys
-import os
+
+
+def setup(bot):
+    bot.add_cog(OtherCommands(bot))
 
 
 class OtherCommands(commands.Cog):
@@ -16,39 +17,13 @@ class OtherCommands(commands.Cog):
         self.ctx = ctx
         self.bot = ctx
 
-    @commands.command(name="restart", description="Restarts the bot")
-    @commands.has_permissions(administrator=True)
-    @commands.command(hidden=True)
-    async def restart(self, ctx: discord.ApplicationContext):
-        await ctx.message.delete()
-        os.execv(sys.executable, ['python'] + sys.argv)
-
-    @commands.command(name="load", description="Loads a module")
-    @commands.has_permissions(administrator=True)
-    @commands.command(hidden=True)
-    async def load(self, *, module: str):
-        self.bot.load_extension(module)
-
-    @commands.command(name="unload", description="Unloads a module")
-    @commands.has_permissions(administrator=True)
-    @commands.command(hidden=True)
-    async def unload(self, *, module: str):
-        self.bot.unload_extension(module)
-
-    @commands.command(name="reload", description="Reloads a module")
-    @commands.has_permissions(administrator=True)
-    @commands.command(hidden=True)
-    async def reload(self, *, module: str):
-        self.bot.reload_extension(module)
-        self.bot.load_extension(module)
-
-    @commands.command(name="echo", description="Echoes the message you send.")
+    @commands.command(hidden=True, name="echo", description="Echoes the message you send.")
     @commands.has_permissions(administrator=True)
     async def say(self, ctx, *, message=None):
         await ctx.message.delete()
         await ctx.send(message)
 
-    @commands.command(name="echoembed", description="Echos the message you put in, was used for testing.")
+    @commands.command(hidden=True, name="echoembed", description="Echos the message you put in, was used for testing.")
     @commands.has_permissions(administrator=True)
     async def Say(self, ctx, *, message=None):
         await ctx.message.delete()
@@ -59,7 +34,7 @@ class OtherCommands(commands.Cog):
             name=f"Sent by {ctx.message.author}", value=str(message))
         await ctx.send(embed=embed)
 
-    @commands.command(name="reply", description="Reply to someone's message with this command, It'll reply with the bot")
+    @commands.command(hidden=True, name="reply", description="Reply to someone's message with this command, It'll reply with the bot")
     @commands.has_permissions(administrator=True)
     async def reply(self, ctx, *, message=None):
         reference = ctx.message.reference
@@ -68,21 +43,21 @@ class OtherCommands(commands.Cog):
         await reference.resolved.reply(message)
         await ctx.message.delete()
 
-    @commands.command(name="namedm", description="DM someone with the message saying your name")
+    @commands.command(hidden=True, name="namedm", description="DM someone with the message saying your name")
     @commands.has_permissions(administrator=True)
     async def namedm(self, ctx, user: discord.User, *, message=None):
         message = f"From {ctx.author.mention}: {message}" or f"{ctx.author.mention} sent you a message but it was empty"
         await user.send(message)
         await ctx.message.delete()
 
-    @commands.command(name="dm", description="DM someone without the message saying your name")
+    @commands.command(hidden=True, name="dm", description="DM someone without the message saying your name")
     @commands.has_permissions(administrator=True)
     async def dm(self, ctx, user: discord.User, *, message=None):
         message = message or "Someone sent you a message but it was empty"
         await user.send(message)
         await ctx.message.delete()
 
-    @commands.command(name="nick", description="Changes a users nickname, mostly for testing purposes :)")
+    @commands.command(hidden=True, name="nick", description="Changes a users nickname, mostly for testing purposes :)")
     @commands.has_permissions(administrator=True)
     async def nick(self, ctx, member: discord.Member, *, nick=None):
         nick = nick or "Cringe"

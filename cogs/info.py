@@ -17,9 +17,14 @@ installation_options = [
 ]
 
 
+def setup(bot):
+    bot.add_cog(InfoCommands(bot))
+
+
 class InfoCommands(commands.Cog):
     def __init__(self, ctx):
         self.ctx = ctx
+        self.bot = ctx
 
     @bridge.bridge_command(name="userinfo", description="Shows you information about users")
     @commands.cooldown(1, 10, commands.BucketType.user)
@@ -95,7 +100,7 @@ class InfoCommands(commands.Cog):
         else:
             await paginator.respond(ctx.interaction, ephemeral=True)
 
-    @commands.command(name="adminstall", description="Shows you guides on how to install Northstar.")
+    @commands.command(hidden=True, name="adminstall", description="Shows you guides on how to install Northstar.")
     @commands.has_permissions(administrator=True)
     async def adminstall(self, ctx, option=None):
         e = [InfoUtils.get_pages_help()[0],

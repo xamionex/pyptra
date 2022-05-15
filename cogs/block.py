@@ -4,72 +4,14 @@ from discord.ext import commands, bridge
 from cogs import utils
 
 
-class BlockUtils():
-    async def get_member_data():
-        with open("./data/perms.json") as f:
-            users = json.load(f)
-            return users
-
-    async def open_member_perms(user):
-        users = await BlockUtils.get_member_data()
-        if str(user.id) in users:
-            return False
-        else:
-            await BlockUtils.set_member_perms(users, user)
-
-    def get_perms_list():
-        perms = {"blacklist": "Denies usage for bot",
-                 "weird": "Allows -hug -kiss",
-                 "ping": "Denies pinging user in -hug -kiss -pet",
-                 "pet": "Allows petting users/images/emojis",
-                 "joke": "Allows using -fall -promote",
-                 "afkcheck": "Denies/Allows AFK alerts"}
-        return perms
-
-    async def set_member_perms(users, user):
-        users[str(user.id)] = {}
-        perms = BlockUtils.get_perms_list()
-        for value in perms:
-            users[str(user.id)][value] = False
-        with open("./data/perms.json", "w") as f:
-            json.dump(users, f, indent=4, sort_keys=True)
-            return True
-
-    async def get_perm(perm, user):
-        await BlockUtils.open_member_perms(user)
-        users = await BlockUtils.get_member_data()
-        yn = users[str(user.id)][perm]
-        return yn
-
-    async def add_perm(perm, user):
-        await BlockUtils.open_member_perms(user)
-        users = await BlockUtils.get_member_data()
-        users[str(user.id)][perm] = True
-        await BlockUtils.dump(users)
-
-    async def remove_perm(perm, user):
-        await BlockUtils.open_member_perms(user)
-        users = await BlockUtils.get_member_data()
-        users[str(user.id)][perm] = False
-        await BlockUtils.dump(users)
-
-    async def dump(users):
-        with open("./data/perms.json", "w") as f:
-            json.dump(users, f, indent=4, sort_keys=True)
-
-    async def check_perm_arg(self, ctx):
-        perms_list = BlockUtils.get_perms_list()
-        for perms, perm_desc in perms_list:
-            msg = ctx.message.content.split(" ")[2]
-            if msg in perms:
-                return msg
-            else:
-                await utils.senderror(ctx, f"{ctx.author.mention}, I couldn't find that permission.")
+def setup(bot):
+    bot.add_cog(BlockCommands(bot))
 
 
 class BlockCommands(commands.Cog):
     def __init__(self, ctx):
         self.ctx = ctx
+        self.bot = ctx
 
     @commands.command(name="block", description="Block a user to deny them from using the bot")
     @commands.has_permissions(administrator=True)
@@ -179,3 +121,66 @@ class BlockCommands(commands.Cog):
                 await utils.senderror(ctx, f"Couldn't reset {user.mention}")
         else:
             await utils.senderror(ctx, "User isn't in data")
+
+
+class BlockUtils():
+    async def get_member_data():
+        with open("./data/perms.json") as f:
+            users = json.load(f)
+            return users
+
+    async def open_member_perms(user):
+        users = await BlockUtils.get_member_data()
+        if str(user.id) in users:
+            return False
+        else:
+            await BlockUtils.set_member_perms(users, user)
+
+    def get_perms_list():
+        perms = {"blacklist": "Denies usage for bot",
+                 "weird": "Allows -hug -kiss",
+                 "ping": "Denies pinging user in -hug -kiss -pet",
+                 "pet": "Allows petting users/images/emojis",
+                 "joke": "Allows using -fall -promote",
+                 "afkcheck": "Denies/Allows AFK alerts"}
+        return perms
+
+    async def set_member_perms(users, user):
+        users[str(user.id)] = {}
+        perms = BlockUtils.get_perms_list()
+        for value in perms:
+            users[str(user.id)][value] = False
+        with open("./data/perms.json", "w") as f:
+            json.dump(users, f, indent=4, sort_keys=True)
+            return True
+
+    async def get_perm(perm, user):
+        await BlockUtils.open_member_perms(user)
+        users = await BlockUtils.get_member_data()
+        yn = users[str(user.id)][perm]
+        return yn
+
+    async def add_perm(perm, user):
+        await BlockUtils.open_member_perms(user)
+        users = await BlockUtils.get_member_data()
+        users[str(user.id)][perm] = True
+        await BlockUtils.dump(users)
+
+    async def remove_perm(perm, user):
+        await BlockUtils.open_member_perms(user)
+        users = await BlockUtils.get_member_data()
+        users[str(user.id)][perm] = False
+        await BlockUtils.dump(users)
+
+    async def dump(users):
+        with open("./data/perms.json", "w") as f:
+            json.dump(users, f, indent=4, sort_keys=True)
+
+    async def check_perm_arg(self, ctx):
+        perms_list = BlockUtils.get_perms_list()
+        for perms, perm_desc in perms_list:
+            msg = ctx.message.content.split(" ")[2]
+            if msg in perms:
+                return msg
+            else:
+                await utils.senderror(ctx, f"{ctx.author.mention}, I couldn't find that permission.")

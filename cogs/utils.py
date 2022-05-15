@@ -1,4 +1,5 @@
 import json
+import os
 import discord
 from discord.ext import bridge, commands
 
@@ -184,3 +185,13 @@ async def senderror(ctx, cerror):
         raise commands.CommandError(cerror)
     else:
         raise discord.ApplicationCommandError(cerror)
+
+
+def extensions():
+    extensions = []
+    skip_list = ["utils"]
+    for module in next(os.walk("cogs"), (None, None, []))[2]:  # [] if no file
+        module = module.replace('.py', '')
+        if module not in skip_list:
+            extensions.append(module)
+    return extensions, skip_list

@@ -41,9 +41,14 @@ kiss_words = ['kissed', 'smooched', 'embraced']
 kiss_words_bot = ['kiss', 'smooch', 'embrace']
 
 
+def setup(bot):
+    bot.add_cog(FunCommands(bot))
+
+
 class FunCommands(commands.Cog):
     def __init__(self, ctx):
         self.ctx = ctx
+        self.bot = ctx
 
     async def checkperm(self, ctx, perm):
         if await block.BlockUtils.get_perm(perm, ctx.author) or ctx.author.guild_permissions.administrator:

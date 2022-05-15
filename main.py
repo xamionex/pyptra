@@ -1,9 +1,9 @@
 import discord
 import random
 from discord.ext import commands, bridge
-
+# cogs
 import secrets
-from cogs import utils, suggestions, other, block, info, fun
+from cogs import block, utils, other
 
 intents = discord.Intents.default()
 intents.members = True
@@ -48,7 +48,7 @@ async def on_command_error(ctx, error):
     elif isinstance(error, commands.BotMissingPermissions):
         raise error
     elif isinstance(error, commands.CommandError):
-        e = discord.Embed(description=error, color=0xFF6969)
+        e = discord.Embed(description=f"❌ {error}", color=0xFF6969)
         await utils.sendembed(ctx, e, delete=3)
     raise error
 
@@ -91,11 +91,11 @@ async def on_message(message):
                 return
         await bot.process_commands(message)
 
-
-bot.add_cog(suggestions.SuggestionCommands(bot))
-bot.add_cog(other.OtherCommands(bot))
-bot.add_cog(info.InfoCommands(bot))
-bot.add_cog(block.BlockCommands(bot))
-bot.add_cog(fun.FunCommands(bot))
-
+extensions = utils.extensions()
+for module in extensions[0]:
+    bot.load_extension(f"cogs.{module}")
+print("Found", end=" ")
+print(*extensions[0], sep=', ')
+print("Ignored", end=" ")
+print(*extensions[1], sep=', ')
 bot.run(secrets.secret)
