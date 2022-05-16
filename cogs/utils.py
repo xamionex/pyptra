@@ -164,11 +164,11 @@ async def sendembed(ctx, e, show_all=True, delete=1, delete_speed=5):
         if delete == 1:
             await ctx.respond(embed=e, mention_author=False)
         elif delete == 2:
-            await ctx.message.delete(delay=delete_speed)
             await ctx.respond(embed=e, mention_author=False)
+            await delete_message(ctx, delete_speed)
         else:
-            await ctx.message.delete(delay=delete_speed)
             await ctx.respond(embed=e, delete_after=delete_speed, mention_author=False)
+            await delete_message(ctx, delete_speed)
             # 1 doesnt delete, 2 deletes only cause, 3 deletes all
     else:
         if show_all:
@@ -176,6 +176,13 @@ async def sendembed(ctx, e, show_all=True, delete=1, delete_speed=5):
         else:
             await ctx.respond(embed=e, ephemeral=True)
         # true shows in chat, false shows to user only
+
+
+async def delete_message(ctx, delete_speed):
+    try:
+        await ctx.message.delete(delay=delete_speed)
+    except Exception:
+        return
 
 
 async def senderror(ctx, cerror):

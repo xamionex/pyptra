@@ -1,4 +1,5 @@
-from typing import Optional
+from distutils.cmd import Command
+from typing import Optional, Union
 import discord
 from discord.ext import commands, pages, bridge
 from cogs import utils
@@ -21,54 +22,34 @@ def setup(bot):
     bot.add_cog(InfoCommands(bot))
 
 
-class InfoCommands(commands.Cog):
+class InfoCommands(commands.Cog, name="Informational"):
+    """Commands that show you general information about multiple things."""
+    COG_EMOJI = "ℹ️"
+
     def __init__(self, ctx):
         self.ctx = ctx
         self.bot = ctx
 
-    @bridge.bridge_command(name="userinfo", description="Shows you information about users")
+    @bridge.bridge_command(name="userinfo")
     @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.guild_only()
     async def userinfo(self, ctx, user: Optional[discord.Member]):
+        """Shows you information about users"""
         user = user or ctx.author
         e = await InfoUtils.info(self, ctx, user)
         await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
 
-    @bridge.bridge_command(name="ping", description="Tells you the bot's ping.")
+    @bridge.bridge_command(name="ping")
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def ping(self, ctx):
+        """Tells you the bot's ping."""
         e = await utils.ping(ctx)
         await utils.sendembed(ctx, e, show_all=False, delete=3)
 
-    @bridge.bridge_command(name="help", description="Shows you this help page")
-    @commands.cooldown(1, 10, commands.BucketType.user)
-    async def help(self, ctx):
-        paginator = pages.Paginator(pages=InfoUtils.get_pages(self, ctx))
-        if ctx.author.guild_permissions.administrator:
-            page_groups = [
-                pages.PageGroup(
-                    pages=InfoUtils.get_pages(self, ctx),
-                    label="Main Commands",
-                    description="Main Pages for commands that Members can use",
-                ),
-                pages.PageGroup(
-                    pages=InfoUtils.get_pages_admin(self, ctx),
-                    label="Moderator Commands",
-                    description="Moderator Pages for commands that only Moderators can use",
-                ),
-            ]
-            paginator = pages.Paginator(pages=page_groups, show_menu=True)
-        if await utils.CheckInstance(ctx):
-            try:
-                await paginator.send(ctx, target=ctx.author)
-                await ctx.reply("Check your DMs!", mention_author=False)
-            except:
-                await utils.senderror(ctx, "I couldn't DM you!")
-        else:
-            await paginator.respond(ctx.interaction, ephemeral=True)
-
-    @bridge.bridge_command(name="installation", description="Shows you guides on how to install Northstar.")
+    @bridge.bridge_command(name="installation")
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def installation(self, ctx):
+        """Shows you guides on how to install Northstar."""
         page_groups = [
             pages.PageGroup(
                 pages=InfoUtils.get_pages_automatic(),
@@ -100,9 +81,11 @@ class InfoCommands(commands.Cog):
         else:
             await paginator.respond(ctx.interaction, ephemeral=True)
 
-    @commands.command(hidden=True, name="adminstall", description="Shows you guides on how to install Northstar.")
+    @commands.command(hidden=True, name="adminstall")
     @commands.has_permissions(administrator=True)
+    @commands.guild_only()
     async def adminstall(self, ctx, option=None):
+        """Shows you guides on how to install Northstar."""
         e = [InfoUtils.get_pages_help()[0],
              InfoUtils.get_pages_manual()[0],
              InfoUtils.get_pages_automatic()[0],
@@ -126,6 +109,20 @@ class InfoUtils():
             for command in self.ctx.get_cog(cog).get_commands():
                 if command.name == cmd:
                     return command.description
+
+    def get_cogs(self, ctx):
+        cogs = []
+        commands = []
+        for cog in self.ctx.cogs:
+            e = discord.Embed(title=cog)
+            for command in self.ctx.get_cog(cog).get_commands():
+                cmd = [command.name, command.description]
+                if cmd[0] not in commands:
+                    commands.append(cmd[0])
+                    e.add_field(name=cmd[0],
+                                value=cmd[1])
+            cogs.append(e)
+        return cogs
 
     def get_pages(self, ctx):
         pages = [
