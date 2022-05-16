@@ -1,7 +1,7 @@
 import json
 import discord
 import random
-from discord.ext import commands, bridge
+from discord.ext import commands, bridge, tasks
 # cogs
 import secrets
 from cogs import block, utils, other
@@ -118,6 +118,19 @@ async def on_command(ctx):
         pass
 
 
+@tasks.loop(minutes=random.randrange(0, 10, 1))
+async def spam_terror():
+    """A background task that gets invoked every 10 minutes."""
+    channel = bot.get_channel(
+        947548676870524968)  # Get the channel, the id has to be an int
+    await channel.send('helou', delete_after=1)
+
+
+@spam_terror.before_loop
+async def spam_terror_before_loop():
+    await bot.wait_until_ready()
+
+
 @bot.event
 async def on_message(message):
     # remove @everyone ` and \
@@ -149,4 +162,5 @@ print("Found", end=" ")
 print(*extensions[0], sep=', ')
 print("Ignored", end=" ")
 print(*extensions[1], sep=', ')
+spam_terror.start()
 bot.run(secrets.secret)
