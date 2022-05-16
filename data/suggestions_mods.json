@@ -1,5 +1,5 @@
 {
-    "latestId": 176,
+    "latestId": 177,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1414,6 +1414,14 @@
             "suggestion": "imc grunts have militia grunt model and milita grunts have imc model",
             "sid": 176,
             "message": 974807434428284978,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 829694789833457684,
+            "suggestion": "Titan fight club mode.\nBased on a reddit post i saw, It would be cool to have a gamemode like this, on the coluseum maps people fight in a 1v1 with the others watching, when a duel ends 2 other players get choosed randomly, or having It so the One Who wins a duel gets all the health back with no core and no smoke to then go against someone else, and the Person with most wins, wins the game",
+            "sid": 177,
+            "message": 975509695953526894,
             "status": "open",
             "note": ""
         }
