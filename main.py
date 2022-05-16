@@ -1,17 +1,37 @@
+import json
 import discord
 import random
 from discord.ext import commands, bridge
-
+# cogs
 import secrets
-from cogs import utils, suggestions, other, block, info, fun
+from cogs import block, utils, other
 
 intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
 intents.guilds = True
 
-bot = bridge.Bot(command_prefix=commands.when_mentioned_or(
-    "-"), intents=intents, help_command=None)
+
+def get_prefix(bot, msg):
+    with open("./data/prefixes.json", "r") as f:
+        prefixes = json.load(f)
+        try:
+            prefix = prefixes.get(str(msg.guild.id))
+        except AttributeError:
+            prefix = "-"
+    return prefix
+
+
+def when_mentioned_or_function(func):
+    def inner(bot, msg):
+        r = list(func(bot, msg))
+        r = commands.when_mentioned(bot, msg) + r
+        return r
+    return inner
+
+
+bot = bridge.Bot(
+    command_prefix=when_mentioned_or_function(get_prefix), intents=intents)
 
 
 @bot.event
@@ -48,7 +68,7 @@ async def on_command_error(ctx, error):
     elif isinstance(error, commands.BotMissingPermissions):
         raise error
     elif isinstance(error, commands.CommandError):
-        e = discord.Embed(description=error, color=0xFF6969)
+        e = discord.Embed(description=f"❌ {error}", color=0xFF6969)
         await utils.sendembed(ctx, e, delete=3)
     raise error
 
@@ -58,44 +78,75 @@ async def on_member_join(member):
     await other.OtherUtils.afkjoin(member)
 
 
-@bot.check
-async def globally_block_dms(ctx):
-    return ctx.guild is not None
+@bot.event
+async def on_guild_join(guild):
+    with open('./data/prefixes.json', 'r') as f:
+        prefixes = json.load(f)
+    prefixes[str(guild.id)] = '-'
+    with open('./data/prefixes.json', 'w') as f:
+        json.dump(prefixes, f, indent=4)
+
+    with open('./data/perms.json', 'r') as f:
+        perms = json.load(f)
+    perms[str(guild.id)] = {}
+    with open('./data/perms.json', 'w') as f:
+        json.dump(perms, f, indent=4)
+
+
+@bot.event
+async def on_guild_remove(guild):
+    with open('./data/prefixes.json', 'r') as f:
+        prefixes = json.load(f)
+    prefixes.pop(str(guild.id))
+    with open('./data/prefixes.json', 'w') as f:
+        json.dump(prefixes, f, indent=4)
+
+    with open('./data/perms.json', 'r') as f:
+        perms = json.load(f)
+    perms.pop(str(guild.id))
+    with open('./data/perms.json', 'w') as f:
+        json.dump(perms, f, indent=4)
 
 
 @bot.before_invoke
 async def on_command(ctx):
-    if await block.BlockUtils.get_perm("blacklist", ctx.author) and ctx.author.guild_permissions.administrator == False:
-        raise commands.CommandError(
-            f"{ctx.author.mention}, You were **blocked** from using this bot, direct message <@139095725110722560> if you feel this is unfair")
+    try:
+        if await block.BlockUtils.get_perm("blacklist", ctx.author) and ctx.author.guild_permissions.administrator == False:
+            raise commands.CommandError(
+                f"{ctx.author.mention}, You were **blocked** from using this bot, direct message <@139095725110722560> if you feel this is unfair")
+    except AttributeError:
+        pass
 
 
 @bot.event
 async def on_message(message):
-    disable = {'`': '', '\\': '', '@everyone': ''}
-    for key, value in disable.items():
-        message.content = message.content.replace(key, value)
+    # remove @everyone ` and \
+    disable = ['`', '\\', '@everyone']
+    for item in disable:
+        message.content = message.content.replace(item, '')
+
+    # delete messages in Northstar memes :dread:
     if message.channel.id == 973438217196040242:
         await message.delete(delay=random.randrange(100, 3600, 100))
+
+    # check if user isnt bot and isnt mentioning @everyone
+    if message.mention_everyone or message.author.bot:
         return
-    # if message.author.bot:
-        # return
-    if message.mention_everyone:
-        return
+
+    # check if user is afk
     await other.OtherUtils.afkcheck(message)
+
+    # check if user's message is only bot ping and reply with help, if not process commands
     if message.author.bot == False and bot.user.mentioned_in(message) and len(message.content) == len(bot.user.mention):
-        await message.reply(f'My prefix is `-` or {bot.user.mention}, you can also use slash commands\nFor more info use the /help command!')
+        await message.reply(embed=discord.Embed(description=f'My prefix is `{get_prefix(bot, message)}` or {bot.user.mention}, you can also use slash commands\nFor more info use the /help command!'), delete_after=20, mention_author=False)
     else:
-        for member in message.mentions:
-            if member.bot:
-                return
         await bot.process_commands(message)
 
-
-bot.add_cog(suggestions.SuggestionCommands(bot))
-bot.add_cog(other.OtherCommands(bot))
-bot.add_cog(info.InfoCommands(bot))
-bot.add_cog(block.BlockCommands(bot))
-bot.add_cog(fun.FunCommands(bot))
-
+extensions = utils.extensions()
+for module in extensions[0]:
+    bot.load_extension(f"cogs.{module}")
+print("Found", end=" ")
+print(*extensions[0], sep=', ')
+print("Ignored", end=" ")
+print(*extensions[1], sep=', ')
 bot.run(secrets.secret)

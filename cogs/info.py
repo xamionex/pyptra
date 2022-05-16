@@ -1,4 +1,5 @@
-from typing import Optional
+from distutils.cmd import Command
+from typing import Optional, Union
 import discord
 from discord.ext import commands, pages, bridge
 from cogs import utils
@@ -17,53 +18,38 @@ installation_options = [
 ]
 
 
-class InfoCommands(commands.Cog):
+def setup(bot):
+    bot.add_cog(InfoCommands(bot))
+
+
+class InfoCommands(commands.Cog, name="Informational"):
+    """Commands that show you general information about multiple things."""
+    COG_EMOJI = "ℹ️"
+
     def __init__(self, ctx):
         self.ctx = ctx
+        self.bot = ctx
 
-    @bridge.bridge_command(name="userinfo", description="Shows you information about users")
+    @bridge.bridge_command(name="userinfo")
     @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.guild_only()
     async def userinfo(self, ctx, user: Optional[discord.Member]):
+        """Shows you information about users"""
         user = user or ctx.author
         e = await InfoUtils.info(self, ctx, user)
         await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
 
-    @bridge.bridge_command(name="ping", description="Tells you the bot's ping.")
+    @bridge.bridge_command(name="ping")
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def ping(self, ctx):
+        """Tells you the bot's ping."""
         e = await utils.ping(ctx)
         await utils.sendembed(ctx, e, show_all=False, delete=3)
 
-    @bridge.bridge_command(name="help", description="Shows you this help page")
-    @commands.cooldown(1, 10, commands.BucketType.user)
-    async def help(self, ctx):
-        paginator = pages.Paginator(pages=InfoUtils.get_pages(self, ctx))
-        if ctx.author.guild_permissions.administrator:
-            page_groups = [
-                pages.PageGroup(
-                    pages=InfoUtils.get_pages(self, ctx),
-                    label="Main Commands",
-                    description="Main Pages for commands that Members can use",
-                ),
-                pages.PageGroup(
-                    pages=InfoUtils.get_pages_admin(self, ctx),
-                    label="Moderator Commands",
-                    description="Moderator Pages for commands that only Moderators can use",
-                ),
-            ]
-            paginator = pages.Paginator(pages=page_groups, show_menu=True)
-        if await utils.CheckInstance(ctx):
-            try:
-                await paginator.send(ctx, target=ctx.author)
-                await ctx.reply("Check your DMs!", mention_author=False)
-            except:
-                await utils.senderror(ctx, "I couldn't DM you!")
-        else:
-            await paginator.respond(ctx.interaction, ephemeral=True)
-
-    @bridge.bridge_command(name="installation", description="Shows you guides on how to install Northstar.")
+    @bridge.bridge_command(name="installation")
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def installation(self, ctx):
+        """Shows you guides on how to install Northstar."""
         page_groups = [
             pages.PageGroup(
                 pages=InfoUtils.get_pages_automatic(),
@@ -95,9 +81,11 @@ class InfoCommands(commands.Cog):
         else:
             await paginator.respond(ctx.interaction, ephemeral=True)
 
-    @commands.command(name="adminstall", description="Shows you guides on how to install Northstar.")
+    @commands.command(hidden=True, name="adminstall")
     @commands.has_permissions(administrator=True)
+    @commands.guild_only()
     async def adminstall(self, ctx, option=None):
+        """Shows you guides on how to install Northstar."""
         e = [InfoUtils.get_pages_help()[0],
              InfoUtils.get_pages_manual()[0],
              InfoUtils.get_pages_automatic()[0],
@@ -116,155 +104,6 @@ class InfoCommands(commands.Cog):
 
 
 class InfoUtils():
-    def get_cmd_desc(self, ctx, cmd):
-        for cog in self.ctx.cogs:
-            for command in self.ctx.get_cog(cog).get_commands():
-                if command.name == cmd:
-                    return command.description
-
-    def get_pages(self, ctx):
-        pages = [
-            discord.Embed(
-                title="Help for PTRA bot",
-                description="**Useful commands**", color=0x66FF99),
-            # discord.Embed(
-            #    title="Help for PTRA bot",
-            #    description="**User commands**", color=0xFF6969),
-            # discord.Embed(
-            #    title="Help for PTRA bot",
-            #    description="**Fun commands** (requires permissions)", color=0x69FFFF),
-        ]
-        pages[0].add_field(
-            name="/installation or -installation",
-            value=InfoUtils.get_cmd_desc(self, ctx, "installation"),
-            inline=True)
-        pages[0].add_field(
-            name="/suggest",
-            value=InfoUtils.get_cmd_desc(self, ctx, "suggest"),
-            inline=True)
-        pages[0].add_field(
-            name="/ping or -ping",
-            value=InfoUtils.get_cmd_desc(self, ctx, "ping"),
-            inline=True)
-        pages[0].add_field(
-            name="/userinfo or -userinfo",
-            value=InfoUtils.get_cmd_desc(self, ctx, "userinfo"),
-            inline=True)
-        pages[0].add_field(
-            name="/alerts or -alerts",
-            value=InfoUtils.get_cmd_desc(self, ctx, "alerts"),
-            inline=True)
-        pages[0].add_field(
-            name="/afk or -afk",
-            value=InfoUtils.get_cmd_desc(self, ctx, "afk"),
-            inline=True)
-        pages[0].add_field(
-            name="/gn or -gn",
-            value=InfoUtils.get_cmd_desc(self, ctx, "gn"),
-            inline=True)
-        # pages[0].add_field(
-        # name="/help or -help",
-        # value=InfoUtils.get_cmd_desc(self, ctx, "help"),
-        # inline=True)
-        # pages[1].add_field(
-        #    name="/introvert or -introvert",
-        #    value=InfoUtils.get_cmd_desc(self, ctx, "introvert"),
-        #    inline=True)
-        # pages[1].add_field(
-        #    name="/extrovert or -extrovert",
-        #    value=InfoUtils.get_cmd_desc(self, ctx, "extrovert"),
-        #    inline=True)
-        # pages[2].add_field(
-        #    name="/pet or -pet",
-        #    value=InfoUtils.get_cmd_desc(self, ctx, "pet"),
-        #    inline=True)
-        # pages[2].add_field(
-        #    name="/hug or -hug",
-        #    value=InfoUtils.get_cmd_desc(self, ctx, "hug"),
-        #    inline=True)
-        # pages[2].add_field(
-        #    name="/kiss or -kiss",
-        #    value=InfoUtils.get_cmd_desc(self, ctx, "kiss"),
-        #    inline=True)
-        # pages[2].add_field(
-        #    name="/fall or -fall",
-        #    value=InfoUtils.get_cmd_desc(self, ctx, "fall"),
-        #    inline=True)
-        return pages
-
-    def get_pages_admin(self, ctx):
-        pages = [
-            discord.Embed(
-                title="Moderator only commands for MRVN bot",
-                description="**Suggestion commands**", color=0x66FF99),
-            discord.Embed(
-                title="Moderator only commands for MRVN bot",
-                description="**Permission commands**", color=0xFF6969),
-            discord.Embed(
-                title="Moderator only commands for MRVN bot",
-                description="**Fun commands**", color=0x69FFFF),
-            discord.Embed(
-                title="Moderator only commands for MRVN bot",
-                description="**Maintanance commands**", color=0xFFAC00),
-        ]
-        pages[0].add_field(
-            name="-approve domain sID",
-            value=InfoUtils.get_cmd_desc(self, ctx, "approve"),
-            inline=True)
-        pages[0].add_field(
-            name="-deny domain sID",
-            value=InfoUtils.get_cmd_desc(self, ctx, "deny"),
-            inline=True)
-        pages[0].add_field(
-            name="-note domain sID text",
-            value=InfoUtils.get_cmd_desc(self, ctx, "note"),
-            inline=True)
-        pages[1].add_field(
-            name="-block mention",
-            value=InfoUtils.get_cmd_desc(self, ctx, "block"),
-            inline=True)
-        pages[1].add_field(
-            name="-unblock mention",
-            value=InfoUtils.get_cmd_desc(self, ctx, "unblock"),
-            inline=True)
-        pages[1].add_field(
-            name="-give mention",
-            value=InfoUtils.get_cmd_desc(self, ctx, "give"),
-            inline=True)
-        pages[1].add_field(
-            name="-remove mention",
-            value=InfoUtils.get_cmd_desc(self, ctx, "remove"),
-            inline=True)
-        pages[2].add_field(
-            name="-reply text",
-            value=InfoUtils.get_cmd_desc(self, ctx, "reply"),
-            inline=True)
-        pages[2].add_field(
-            name="-dm user text",
-            value=InfoUtils.get_cmd_desc(self, ctx, "dm"),
-            inline=True)
-        pages[2].add_field(
-            name="-namedm user text",
-            value=InfoUtils.get_cmd_desc(self, ctx, "namedm"),
-            inline=True)
-        pages[2].add_field(
-            name="-promote (mention optional) text",
-            value=InfoUtils.get_cmd_desc(self, ctx, "promote"),
-            inline=True)
-        pages[2].add_field(
-            name="-abuse",
-            value=InfoUtils.get_cmd_desc(self, ctx, "abuse"),
-            inline=True)
-        pages[2].add_field(
-            name="-noclip",
-            value=InfoUtils.get_cmd_desc(self, ctx, "noclip"),
-            inline=True)
-        pages[3].add_field(
-            name="-reload",
-            value=InfoUtils.get_cmd_desc(self, ctx, "reload"),
-            inline=True)
-        return pages
-
     def get_pages_help():
         pages = [
             discord.Embed(

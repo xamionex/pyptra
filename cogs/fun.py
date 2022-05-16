@@ -41,9 +41,17 @@ kiss_words = ['kissed', 'smooched', 'embraced']
 kiss_words_bot = ['kiss', 'smooch', 'embrace']
 
 
-class FunCommands(commands.Cog):
+def setup(bot):
+    bot.add_cog(FunCommands(bot))
+
+
+class FunCommands(commands.Cog, name="Fun"):
+    """Commands you can use on other users for fun."""
+    COG_EMOJI = "🚀"
+
     def __init__(self, ctx):
         self.ctx = ctx
+        self.bot = ctx
 
     async def checkperm(self, ctx, perm):
         if await block.BlockUtils.get_perm(perm, ctx.author) or ctx.author.guild_permissions.administrator:
@@ -55,9 +63,11 @@ class FunCommands(commands.Cog):
         if await block.BlockUtils.get_perm("ping", member):
             await utils.senderror(ctx, f"This person has disallowed me from using them in commands.")
 
-    @bridge.bridge_command(name="pet", description="Pet someone :D")
+    @bridge.bridge_command(name="pet")
+    @commands.guild_only()
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def pet(self, ctx, member: Optional[discord.member.Member], emoji: Optional[discord.PartialEmoji], url=None):
+        """Pet someone :D"""
         await self.checkperm(ctx, "pet")
         attachment = None
         try:
@@ -104,9 +114,11 @@ class FunCommands(commands.Cog):
         else:
             await ctx.respond(embed=e, file=file)
 
-    @commands.command(name="hug", description="Hug someone :O")
+    @commands.command(hidden=True, name="hug")
+    @commands.guild_only()
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def hug(self, ctx, *, member: Optional[discord.Member]):
+        """Hug someone :O"""
         await self.checkperm(ctx, "weird")
         if member == None:
             e = discord.Embed(
@@ -118,9 +130,11 @@ class FunCommands(commands.Cog):
         e.set_image(url=(random.choice(hug_gifs)))
         await utils.sendembed(ctx, e)
 
-    @commands.command(name="kiss", description="Kiss someone :O")
+    @commands.command(hidden=True, name="kiss")
+    @commands.guild_only()
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def kiss(self, ctx, *, member: Optional[discord.Member]):
+        """Kiss someone :O"""
         await self.checkperm(ctx, "weird")
         if member == None:
             e = discord.Embed(
@@ -132,9 +146,11 @@ class FunCommands(commands.Cog):
         e.set_image(url=(random.choice(kiss_gifs)))
         await utils.sendembed(ctx, e)
 
-    @commands.command(name="fall", description="Make someone fall >:)")
+    @commands.command(hidden=True, name="fall")
+    @commands.guild_only()
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def fall(self, ctx, *, member: Optional[discord.Member]):
+        """Make someone fall >:)"""
         await self.checkperm(ctx, "joke")
         if member == None:
             e = discord.Embed(
@@ -146,9 +162,11 @@ class FunCommands(commands.Cog):
             "https://media.discordapp.net/attachments/854984817862508565/883437876493307924/image0-2.gif"))
         await utils.sendembed(ctx, e)
 
-    @commands.command(name="promote", description="Promote someone :D")
+    @commands.command(hidden=True, name="promote")
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def promote(self, ctx, member: discord.Member, *, message=None):
+        """Promote someone :D"""
         await self.checkperm(ctx, "joke")
         if member == ctx.author:
             e = discord.Embed(
@@ -158,18 +176,22 @@ class FunCommands(commands.Cog):
                 description=f"{ctx.author.mention} promoted {member.mention} to {message}", color=0xFF6969)
         await utils.sendembed(ctx, e)
 
-    @commands.command(name="noclip", description="Go rogue..")
+    @commands.command(hidden=True, name="noclip")
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def noclip(self, ctx):
+        """Go rogue.."""
         e = discord.Embed(
             description=f"{ctx.author.mention} is going rogue..", color=0xff0000)
         e.set_image(
             url=("https://c.tenor.com/xnQ97QtwQGkAAAAC/mm2roblox-fly-and-use-noclip.gif"))
         await utils.sendembed(ctx, e)
 
-    @commands.command(name="abuse", description="Adbmind abuse!!")
+    @commands.command(hidden=True, name="abuse")
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def abuse(self, ctx, *, member: Optional[discord.Member]):
+        """Adbmind abuse!!"""
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} is going to abuse 😈", color=0xff0000)
