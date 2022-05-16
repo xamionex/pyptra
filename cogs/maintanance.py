@@ -28,7 +28,7 @@ class MaintananceCommands(commands.Cog, name="Maintanance"):
         for cog in module:
             if cog in extensions[0]:
                 self.ctx.load_extension(cog)
-                await utils.sendembed(ctx, discord.Embed(description=f'✅ {cog} successfully loaded', color=0x69FF69), show_all=False, delete=3, delete_speed=20)
+                await utils.sendembed(ctx, discord.Embed(description=f'✅ {cog} successfully loaded', color=0x69FF69), show_all=False, delete=3, delete_speed=5)
             else:
                 await utils.senderror(ctx, f"Couldn't find module {cog}")
 
@@ -40,7 +40,7 @@ class MaintananceCommands(commands.Cog, name="Maintanance"):
         for cog in module:
             if cog in extensions[0]:
                 self.ctx.unload_extension(cog)
-                await utils.sendembed(ctx, discord.Embed(description=f'✅ {cog} successfully unloaded', color=0x69FF69), show_all=False, delete=3, delete_speed=20)
+                await utils.sendembed(ctx, discord.Embed(description=f'✅ {cog} successfully unloaded', color=0x69FF69), show_all=False, delete=3, delete_speed=5)
             else:
                 await utils.senderror(ctx, f"Couldn't find module {cog}")
 
@@ -52,11 +52,11 @@ class MaintananceCommands(commands.Cog, name="Maintanance"):
         for cog in module:
             if cog in extensions[0]:
                 self.ctx.reload_extension(f"cogs.{cog}")
-                await utils.sendembed(ctx, discord.Embed(description=f'✅ {cog} successfully reloaded', color=0x69FF69), show_all=False, delete=3, delete_speed=20)
+                await utils.sendembed(ctx, discord.Embed(description=f'✅ {cog} successfully reloaded', color=0x69FF69), show_all=False, delete=3, delete_speed=5)
             elif cog == "all":
                 for cog in extensions[0]:
                     self.ctx.reload_extension(f"cogs.{cog}")
-                    await utils.sendembed(ctx, discord.Embed(description=f'✅ {cog} successfully reloaded', color=0x69FF69), show_all=False, delete=3, delete_speed=20)
+                    await utils.sendembed(ctx, discord.Embed(description=f'✅ {cog} successfully reloaded', color=0x69FF69), show_all=False, delete=3, delete_speed=5)
             else:
                 await utils.senderror(ctx, f"Couldn't find module {cog}")
 
@@ -64,7 +64,7 @@ class MaintananceCommands(commands.Cog, name="Maintanance"):
     @commands.is_owner()
     async def restart(self, ctx):
         """Restarts the bot"""
-        await utils.delete_message(ctx, 20)
+        await utils.delete_message(ctx)
         os.execv(sys.executable, ['python'] + sys.argv)
 
     @commands.command(hidden=True, name="modules")
@@ -74,7 +74,7 @@ class MaintananceCommands(commands.Cog, name="Maintanance"):
         modules = ", ".join(extensions[0])
         e = discord.Embed(title=f'Modules found:',
                           description=modules, color=0x69FF69)
-        await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
+        await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=5)
 
     @commands.command(hidden=True, name="prefix")
     @commands.is_owner()
