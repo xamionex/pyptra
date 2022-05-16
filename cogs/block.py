@@ -16,7 +16,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
         self.ctx = ctx
         self.bot = ctx
 
-    @commands.command(name="block")
+    @commands.command(hidden=True, name="block")
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
     async def blacklist(self, ctx, user: discord.Member, *, reason=None):
@@ -31,7 +31,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
                     description=f"{ctx.author.mention} has blacklisted {user.mention} for: {reason}", color=0xFF6969)
                 await utils.sendembed(ctx, e, False)
 
-    @commands.command(name="unblock")
+    @commands.command(hidden=True, name="unblock")
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
     async def unblacklist(self, ctx, user: discord.Member):
@@ -87,7 +87,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
                 description=f"❌ Disabled AFK Alerts", color=0xFF6969)
             await utils.sendembed(ctx, e, False)
 
-    @commands.command(name="give")
+    @commands.command(hidden=True, name="give")
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
     async def give(self, ctx, user: discord.Member):
@@ -101,7 +101,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
                 description=f"Gave {perm} to {user.mention}", color=0xFF6969)
             await utils.sendembed(ctx, e, False)
 
-    @commands.command(name="remove")
+    @commands.command(hidden=True, name="remove")
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
     async def remove(self, ctx, user: discord.Member):
@@ -115,7 +115,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
                 description=f"Removed {perm} from {user.mention}", color=0x66FF99)
             await utils.sendembed(ctx, e, False)
 
-    @commands.command(name="permslist")
+    @commands.command(hidden=True, name="permslist")
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
     async def permslist(self, ctx):
@@ -127,7 +127,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
             e.add_field(name=f"{perm}", value=f"{perm_desc}", inline=False)
         await utils.sendembed(ctx, e, False)
 
-    @commands.command(name="reset")
+    @commands.command(hidden=True, name="reset")
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
     async def reset(self, ctx, user: discord.Member):
@@ -178,8 +178,7 @@ class BlockUtils():
     async def get_perm(perm, user):
         await BlockUtils.open_member_perms(user)
         perms = await BlockUtils.get_perms_data()
-        yn = perms[str(user.guild.id)][str(user.id)][perm]
-        return yn
+        return perms[str(user.guild.id)][str(user.id)][perm]
 
     async def add_perm(perm, user):
         await BlockUtils.open_member_perms(user)
