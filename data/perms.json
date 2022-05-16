@@ -1,13 +1,5 @@
 {
-    "139095725110722560": {
-        "afkcheck": false,
-        "blacklist": false,
-        "joke": false,
-        "pet": false,
-        "ping": false,
-        "weird": false
-    },
-    "196573388423168000": {
+    "920776187884732556": {
         "104117150683250688": {
             "afkcheck": false,
             "blacklist": false,
@@ -1305,7 +1297,7 @@
             "joke": false,
             "pet": false,
             "ping": false,
-            "weird": false
+            "weird": true
         },
         "355439090750980115": {
             "afkcheck": false,
@@ -4577,13 +4569,5 @@
             "ping": false,
             "weird": false
         }
-    },
-    "296358394355253258": {
-        "afkcheck": false,
-        "blacklist": false,
-        "joke": false,
-        "pet": false,
-        "ping": false,
-        "weird": false
     }
 }
