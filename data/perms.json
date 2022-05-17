@@ -16,6 +16,14 @@
             "ping": false,
             "weird": false
         },
+        "107310464429518848": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "112398884050923520": {
             "afkcheck": false,
             "blacklist": false,
@@ -33,6 +41,14 @@
             "weird": false
         },
         "122700525199163392": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "126114304649854976": {
             "afkcheck": false,
             "blacklist": false,
             "joke": false,
@@ -351,7 +367,23 @@
             "ping": false,
             "weird": false
         },
+        "210062841900826626": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "212054038718578689": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "212190970949795841": {
             "afkcheck": false,
             "blacklist": false,
             "joke": false,
@@ -551,6 +583,14 @@
             "ping": false,
             "weird": false
         },
+        "248962962512019457": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "250195051542609920": {
             "afkcheck": false,
             "blacklist": false,
@@ -568,6 +608,14 @@
             "weird": false
         },
         "251178669626621952": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "251446851788603393": {
             "afkcheck": false,
             "blacklist": false,
             "joke": false,
@@ -844,7 +892,7 @@
             "weird": false
         },
         "296358394355253258": {
-            "afkcheck": false,
+            "afkcheck": true,
             "blacklist": false,
             "joke": false,
             "pet": false,
@@ -940,6 +988,14 @@
             "weird": false
         },
         "312296986067861516": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "312800311976787980": {
             "afkcheck": false,
             "blacklist": false,
             "joke": false,
@@ -1123,6 +1179,14 @@
             "ping": false,
             "weird": false
         },
+        "329818872284971036": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "330683190798843905": {
             "afkcheck": false,
             "blacklist": false,
@@ -1179,6 +1243,22 @@
             "ping": false,
             "weird": false
         },
+        "338637795922935809": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "338841213505372161": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "339975530059137024": {
             "afkcheck": false,
             "blacklist": false,
@@ -1212,6 +1292,14 @@
             "weird": false
         },
         "340605254682804227": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "340726382776680451": {
             "afkcheck": false,
             "blacklist": false,
             "joke": false,
@@ -1292,6 +1380,14 @@
             "weird": false
         },
         "350722922991845387": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "352589689766805509": {
             "afkcheck": false,
             "blacklist": false,
             "joke": false,
@@ -1411,6 +1507,14 @@
             "ping": false,
             "weird": false
         },
+        "372840415654838274": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "374125969990090763": {
             "afkcheck": false,
             "blacklist": false,
@@ -1420,6 +1524,14 @@
             "weird": false
         },
         "374972613736398848": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "375310115512909845": {
             "afkcheck": false,
             "blacklist": false,
             "joke": false,
@@ -1547,6 +1659,14 @@
             "ping": false,
             "weird": false
         },
+        "396323118353743873": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "396375745502380045": {
             "afkcheck": false,
             "blacklist": false,
@@ -1588,6 +1708,14 @@
             "weird": false
         },
         "401013880085676034": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "402516939852742666": {
             "afkcheck": false,
             "blacklist": false,
             "joke": false,
@@ -1660,6 +1788,14 @@
             "weird": false
         },
         "412410726775259157": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "412769976068341780": {
             "afkcheck": false,
             "blacklist": false,
             "joke": false,
@@ -1795,6 +1931,14 @@
             "ping": false,
             "weird": false
         },
+        "426734320288268299": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "426750357704540160": {
             "afkcheck": false,
             "blacklist": false,
@@ -1867,6 +2011,14 @@
             "ping": false,
             "weird": false
         },
+        "438502398105747456": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "440187154744868904": {
             "afkcheck": false,
             "blacklist": false,
@@ -1899,6 +2051,14 @@
             "ping": false,
             "weird": false
         },
+        "444349330883870723": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "447441511504805888": {
             "afkcheck": false,
             "blacklist": false,
@@ -1908,6 +2068,14 @@
             "weird": false
         },
         "448643746981216256": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "448852529334321156": {
             "afkcheck": false,
             "blacklist": false,
             "joke": false,
@@ -2107,6 +2275,14 @@
             "ping": false,
             "weird": false
         },
+        "473335959811915776": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "475452223758008331": {
             "afkcheck": false,
             "blacklist": false,
@@ -2275,6 +2451,14 @@
             "ping": false,
             "weird": false
         },
+        "495526736176611348": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "495590559621054495": {
             "afkcheck": false,
             "blacklist": false,
@@ -2379,6 +2563,22 @@
             "ping": false,
             "weird": false
         },
+        "518881913142902796": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "519297790778802205": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "520690410536960039": {
             "afkcheck": false,
             "blacklist": false,
@@ -2404,6 +2604,14 @@
             "weird": false
         },
         "521094084815880192": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "521434707913736196": {
             "afkcheck": false,
             "blacklist": false,
             "joke": false,
@@ -2476,6 +2684,14 @@
             "weird": false
         },
         "528348609444315200": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "528445833952362497": {
             "afkcheck": false,
             "blacklist": false,
             "joke": false,
@@ -2587,6 +2803,14 @@
             "ping": false,
             "weird": false
         },
+        "541141200007069706": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "541342854589448217": {
             "afkcheck": false,
             "blacklist": false,
@@ -2596,6 +2820,14 @@
             "weird": false
         },
         "546352042390847488": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "550402252527894530": {
             "afkcheck": false,
             "blacklist": false,
             "joke": false,
@@ -2745,6 +2977,14 @@
             "joke": false,
             "pet": false,
             "ping": false,
+            "weird": false
+        },
+        "573248130389114880": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": true,
             "weird": false
         },
         "574111255384686593": {
@@ -3035,9 +3275,41 @@
             "ping": false,
             "weird": false
         },
+        "638401647948857365": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "639479092181336077": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "639488429868187668": {
             "afkcheck": false,
             "blacklist": false,
+            "ping": false,
+            "weird": false
+        },
+        "640334947349037069": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "641744711341834299": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
             "ping": false,
             "weird": false
         },
@@ -3265,6 +3537,14 @@
             "ping": false,
             "weird": false
         },
+        "677362608793190410": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "677655388828729358": {
             "afkcheck": false,
             "blacklist": false,
@@ -3282,6 +3562,14 @@
             "weird": false
         },
         "679365977485475874": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "680533040283648071": {
             "afkcheck": false,
             "blacklist": false,
             "joke": false,
@@ -3466,6 +3754,14 @@
             "weird": false
         },
         "705011815138197504": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "705350546416205826": {
             "afkcheck": false,
             "blacklist": false,
             "joke": false,
@@ -3705,6 +4001,14 @@
             "ping": false,
             "weird": false
         },
+        "737938127909421128": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "741664461416562728": {
             "afkcheck": false,
             "blacklist": false,
@@ -3865,6 +4169,14 @@
             "ping": false,
             "weird": false
         },
+        "774259103224692786": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "778421498209501245": {
             "afkcheck": false,
             "blacklist": false,
@@ -3889,6 +4201,14 @@
             "ping": false,
             "weird": false
         },
+        "781795662978482187": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "781873829055430658": {
             "afkcheck": false,
             "blacklist": false,
@@ -3898,6 +4218,14 @@
             "weird": false
         },
         "782640788517027841": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "782706304769589258": {
             "afkcheck": false,
             "blacklist": false,
             "joke": false,
@@ -4049,6 +4377,14 @@
             "ping": false,
             "weird": false
         },
+        "808337157759696906": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "808748234905223181": {
             "afkcheck": false,
             "blacklist": false,
@@ -4162,6 +4498,14 @@
             "weird": false
         },
         "839255098807025665": {
+            "afkcheck": false,
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "839975168729677834": {
             "afkcheck": false,
             "blacklist": false,
             "joke": false,
