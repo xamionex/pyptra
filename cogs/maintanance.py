@@ -27,7 +27,7 @@ class MaintananceCommands(commands.Cog, name="Maintanance"):
         module = module.split(sep=" ")
         for cog in module:
             if cog in extensions[0]:
-                self.ctx.load_extension(cog)
+                self.ctx.load_extension(f"cogs.{cog}")
                 await utils.sendembed(ctx, discord.Embed(description=f'✅ {cog} successfully loaded', color=0x69FF69), show_all=False, delete=3, delete_speed=5)
             else:
                 await utils.senderror(ctx, f"Couldn't find module {cog}")
@@ -39,7 +39,7 @@ class MaintananceCommands(commands.Cog, name="Maintanance"):
         module = module.split(sep=" ")
         for cog in module:
             if cog in extensions[0]:
-                self.ctx.unload_extension(cog)
+                self.ctx.unload_extension(f"cogs.{cog}")
                 await utils.sendembed(ctx, discord.Embed(description=f'✅ {cog} successfully unloaded', color=0x69FF69), show_all=False, delete=3, delete_speed=5)
             else:
                 await utils.senderror(ctx, f"Couldn't find module {cog}")
