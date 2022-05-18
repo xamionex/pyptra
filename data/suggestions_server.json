@@ -1,5 +1,5 @@
 {
-    "latestId": 43,
+    "latestId": 44,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -350,6 +350,14 @@
             "suggestion": "replace ear tensifier with another bot, (maybe fredboat or something?)",
             "sid": 43,
             "message": 975444700481851473,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 780277023401705502,
+            "suggestion": "offer any contributor that isnt a helper yet the role, considering they have a lot of hands on experience with N* and also considering there's going to be a boom in tickets given the sale",
+            "sid": 44,
+            "message": 976423181214687242,
             "status": "open",
             "note": ""
         }
