@@ -1,5 +1,6 @@
 import json
 import discord
+import main
 from discord.ext import commands, bridge
 from cogs import utils, block
 # afk command data
@@ -97,6 +98,9 @@ class OtherCommands(commands.Cog, name="Other commands"):
 
 
 class OtherUtils():
+    def __init__(self, ctx):
+        self.ctx = ctx
+
     async def setafk(self, ctx, reason):
         with open('./data/afk.json', 'r') as f:
             afk = json.load(f)
@@ -133,10 +137,12 @@ class OtherUtils():
         with open('./data/afk.json', 'w') as f:
             json.dump(afk, f, indent=4, sort_keys=True)
 
-    async def afkcheck(message):
+    async def afkcheck(self, message):
         send = False
         afk_alert = discord.Embed(
             title=f"Members in your message are afk:")
+        afk_alert.set_footer(
+            text=f"Protip: Disable these message with {main.get_prefix(self.ctx, message)}alerts")
         if message.author.bot:
             return
         with open('./data/afk.json', 'r') as f:
