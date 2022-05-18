@@ -25,7 +25,7 @@ class OtherCommands(commands.Cog, name="Other commands"):
     @commands.guild_only()
     async def say(self, ctx, *, message=None):
         """Echoes the message you send."""
-        await utils.delete_message(ctx, 20)
+        await utils.delete_message(ctx)
         await ctx.send(message)
 
     @commands.command(hidden=True, name="echoembed")
@@ -33,7 +33,7 @@ class OtherCommands(commands.Cog, name="Other commands"):
     @commands.guild_only()
     async def Say(self, ctx, *, message=None):
         """Echos the message you put in, was used for testing."""
-        await utils.delete_message(ctx, 20)
+        await utils.delete_message(ctx)
         embed = discord.Embed(color=ctx.author.color,
                               timestamp=ctx.message.created_at)
         embed.set_author(name="Announcement!", icon_url=ctx.author.avatar.url)
@@ -50,7 +50,7 @@ class OtherCommands(commands.Cog, name="Other commands"):
         if reference is None:
             return await ctx.reply(f"{ctx.author.mention} You didn't reply to any message.")
         await reference.resolved.reply(message)
-        await utils.delete_message(ctx, 20)
+        await utils.delete_message(ctx)
 
     @commands.command(hidden=True, name="namedm")
     @commands.has_permissions(administrator=True)
@@ -59,7 +59,7 @@ class OtherCommands(commands.Cog, name="Other commands"):
         """DM someone with the message saying your name"""
         message = f"From {ctx.author.mention}: {message}" or f"{ctx.author.mention} sent you a message but it was empty"
         await user.send(message)
-        await utils.delete_message(ctx, 20)
+        await utils.delete_message(ctx)
 
     @commands.command(hidden=True, name="dm")
     @commands.has_permissions(administrator=True)
@@ -68,7 +68,7 @@ class OtherCommands(commands.Cog, name="Other commands"):
         """DM someone without the message saying your name"""
         message = message or "Someone sent you a message but it was empty"
         await user.send(message)
-        await utils.delete_message(ctx, 20)
+        await utils.delete_message(ctx)
 
     @commands.command(hidden=True, name="nick")
     @commands.has_permissions(administrator=True)
@@ -77,13 +77,14 @@ class OtherCommands(commands.Cog, name="Other commands"):
         """Changes a users nickname, mostly for testing purposes :)"""
         nick = nick or ""
         await member.edit(nick=nick)
-        await utils.delete_message(ctx, 20)
+        await utils.delete_message(ctx)
 
     @bridge.bridge_command(name="afk")
     async def afk(self, ctx, *, reason=None):
         """Alerts users that mention you that you're AFK."""
         e = await OtherUtils.setafk(self, ctx, reason)
-        await utils.sendembed(ctx, e)
+        if not ctx.author.bot and await block.BlockUtils.get_perm("afkcheck", ctx.author) == False:
+            await utils.sendembed(ctx, e)
 
     @bridge.bridge_command(name="gn")
     async def gn(self, ctx):
@@ -91,7 +92,8 @@ class OtherCommands(commands.Cog, name="Other commands"):
         await OtherUtils.setafk(self, ctx, "Sleeping 💤")
         e = discord.Embed(description=f"Goodnight {ctx.author.mention}")
         e.set_image(url="https://c.tenor.com/nPYfVs6FsBQAAAAS/kitty-kitten.gif")
-        await utils.sendembed(ctx, e)
+        if not ctx.author.bot and await block.BlockUtils.get_perm("afkcheck", ctx.author) == False:
+            await utils.sendembed(ctx, e)
 
 
 class OtherUtils():
@@ -132,51 +134,84 @@ class OtherUtils():
             json.dump(afk, f, indent=4, sort_keys=True)
 
     async def afkcheck(message):
+        send = False
+        afk_alert = discord.Embed(
+            title=f"Members in your message are afk:")
+        if message.author.bot:
+            return
         with open('./data/afk.json', 'r') as f:
             afk = json.load(f)
         for member in message.mentions:
-            if member.bot or await block.BlockUtils.get_perm("afkcheck", message.author):
+            if member.bot:
                 return
             if afk[f'{member.id}']['AFK'] == 'True':
-                if message.author.bot:
-                    return
+                send = True
+
+                # gets afk message
                 reason = afk[f'{member.id}']['reason']
-                timeafk = int(time.time()) - int(afk[f'{member.id}']['time'])
+
+                # gets unix time
+                unix_time = int(time.time()) - int(afk[f'{member.id}']['time'])
+
+                # user was afk for time.now() - time
                 afktime = humanize.naturaltime(
-                    datetime.datetime.now() - datetime.timedelta(seconds=timeafk))
-                isafk = discord.Embed(
-                    description=f"{member.mention} is afk: {reason} - {afktime}")
-                await message.reply(embed=isafk, delete_after=10.0, mention_author=False)
-                timementioned = int(afk[f'{member.id}']['mentions']) + 1
-                afk[f'{member.id}']['mentions'] = timementioned
+                    datetime.datetime.now() - datetime.timedelta(seconds=unix_time))
+
+                # add embed
+                afk_alert.add_field(
+                    name=f"{member.display_name.replace('[AFK]', '')} - {afktime}", value=f"\"{reason}\"", inline=True)
+
+                # plus 1 time mentioned in afk.json
+                afk[f'{member.id}']['mentions'] = int(
+                    afk[f'{member.id}']['mentions']) + 1
+
+                # save json
                 with open('./data/afk.json', 'w') as f:
                     json.dump(afk, f, indent=4, sort_keys=True)
-        if not message.author.bot:
-            await OtherUtils.update_data(afk, message.author)
-            if afk[f'{message.author.id}']['AFK'] == 'True':
-                timeafk = int(time.time()) - \
-                    int(afk[f'{message.author.id}']['time'])
-                afktime = OtherUtils.period(datetime.timedelta(
-                    seconds=round(timeafk)), "{d}d {h}h {m}m {s}s")
-                mentionz = afk[f'{message.author.id}']['mentions']
-                e = discord.Embed(
-                    description=f"**Welcome back {message.author.mention}!**")
-                e.add_field(name="Afk for", value=afktime, inline=True)
-                e.add_field(name="Mentioned",
-                            value=f"{mentionz} time(s)", inline=True)
-                afk[f'{message.author.id}']['AFK'] = 'False'
-                afk[f'{message.author.id}']['reason'] = 'None'
-                afk[f'{message.author.id}']['time'] = '0'
-                afk[f'{message.author.id}']['mentions'] = 0
-                with open('./data/afk.json', 'w') as f:
-                    json.dump(afk, f, indent=4, sort_keys=True)
-                try:
-                    nick = message.author.display_name.replace('[AFK]', '')
-                    await message.author.edit(nick=nick)
-                except:
-                    print(
-                        f'I wasnt able to edit [{message.author} / {message.author.id}].')
-                await message.reply(embed=e, delete_after=10, mention_author=False)
+
+        if send:
+            # if alerts are on
+            if await block.BlockUtils.get_perm("afkcheck", message.author) == False:
+                # send reply that mention is afk
+                await message.reply(embed=afk_alert, delete_after=10.0, mention_author=False)
+        await OtherUtils.update_data(afk, message.author)
+        # if message's author is afk continue
+        if afk[f'{message.author.id}']['AFK'] == 'True':
+            # unix now - unix since afk
+            timeafk = int(time.time()) - \
+                int(afk[f'{message.author.id}']['time'])
+
+            # make time readable for user
+            afktime = OtherUtils.period(datetime.timedelta(
+                seconds=round(timeafk)), "{d}d {h}h {m}m {s}s")
+
+            # get mentions
+            mentionz = afk[f'{message.author.id}']['mentions']
+
+            # make embed
+            welcome_back = discord.Embed(
+                description=f"**Welcome back {message.author.mention}!**")
+            welcome_back.add_field(name="Afk for", value=afktime, inline=True)
+            welcome_back.add_field(
+                name="Mentioned", value=f"{mentionz} time(s)", inline=True)
+
+            # reset afk for user
+            afk[f'{message.author.id}']['AFK'] = 'False'
+            afk[f'{message.author.id}']['reason'] = 'None'
+            afk[f'{message.author.id}']['time'] = '0'
+            afk[f'{message.author.id}']['mentions'] = 0
+            with open('./data/afk.json', 'w') as f:
+                json.dump(afk, f, indent=4, sort_keys=True)
+
+            # try to reset nickname
+            try:
+                nick = message.author.display_name.replace('[AFK]', '')
+                await message.author.edit(nick=nick)
+            except:
+                print(
+                    f'I wasnt able to edit [{message.author} / {message.author.id}].')
+
+            await message.reply(embed=welcome_back, delete_after=10, mention_author=False)
         with open('./data/afk.json', 'w') as f:
             json.dump(afk, f, indent=4, sort_keys=True)
 

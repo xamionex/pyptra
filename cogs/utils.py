@@ -178,7 +178,7 @@ async def sendembed(ctx, e, show_all=True, delete=1, delete_speed=5):
         # true shows in chat, false shows to user only
 
 
-async def delete_message(ctx, delete_speed=None):
+async def delete_message(ctx, delete_speed=5):
     try:
         if delete_speed is None:
             await ctx.message.delete()
