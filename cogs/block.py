@@ -21,30 +21,26 @@ class BlockCommands(commands.Cog, name="Permissions"):
     @commands.guild_only()
     async def blacklist(self, ctx, user: discord.Member, *, reason=None):
         """Block a user to deny them from using the bot"""
-        if await BlockUtils.get_blacklist(user) == True:
-            if await BlockUtils.get_perm("blacklist", user) == True:
-                await ctx.reply("The person is already blacklisted.")
-            else:
-                await BlockUtils.add_blacklist(user)
-                await BlockUtils.add_perm("blacklist", user)
-                e = discord.Embed(
-                    description=f"{ctx.author.mention} has blacklisted {user.mention} for: {reason}", color=0xFF6969)
-                await utils.sendembed(ctx, e, False)
+        if await BlockUtils.get_perm("blacklist", user) == True:
+            await ctx.reply("The person is already blacklisted.")
+        else:
+            await BlockUtils.add_perm("blacklist", user)
+            e = discord.Embed(
+                description=f"{ctx.author.mention} has blacklisted {user.mention} for: {reason}", color=0xFF6969)
+            await utils.sendembed(ctx, e, False)
 
     @commands.command(name="unblock")
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
     async def unblacklist(self, ctx, user: discord.Member):
         """Unblock a user to allow them to use the bot"""
-        if await BlockUtils.get_blacklist(user) == False:
-            if await BlockUtils.get_perm("blacklist", user) == False:
-                await ctx.reply("The person is already unblacklisted.")
-            else:
-                await BlockUtils.remove_blacklist(user)
-                await BlockUtils.remove_perm("blacklist", user)
-                e = discord.Embed(
-                    description=f"{ctx.author.mention} has unblacklisted {user.mention}", color=0x66FF99)
-                await utils.sendembed(ctx, e, False)
+        if await BlockUtils.get_perm("blacklist", user) == False:
+            await ctx.reply("The person is already unblacklisted.")
+        else:
+            await BlockUtils.remove_perm("blacklist", user)
+            e = discord.Embed(
+                description=f"{ctx.author.mention} has unblacklisted {user.mention}", color=0x66FF99)
+            await utils.sendembed(ctx, e, False)
 
     @bridge.bridge_command(name="introvert")
     @commands.guild_only()
