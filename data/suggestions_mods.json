@@ -1,5 +1,5 @@
 {
-    "latestId": 179,
+    "latestId": 182,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1438,6 +1438,30 @@
             "suggestion": "Unreal Tournament Announcer",
             "sid": 179,
             "message": 975968450008739860,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 576887540930576425,
+            "suggestion": "A mod that automatically switches the display mode to full screen on opening the game, my reason is that my (not sure if other people experience it) game often opens in the windowed display mode which is just a minor inconvenience that a mod could fix",
+            "sid": 180,
+            "message": 976080689848021002,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 375310115512909845,
+            "suggestion": "ALLOW IPV6 PLEASE",
+            "sid": 181,
+            "message": 976083666772054056,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 612118712492883972,
+            "suggestion": "Add a juggernaut mode (simply make one player have like 100*(player count)% health (possible max of 500%), but they are in a state of constant radar ping (pilots type)",
+            "sid": 182,
+            "message": 976229740811800597,
             "status": "open",
             "note": ""
         }
