@@ -82,7 +82,7 @@ async def on_command(ctx):
 async def spam_terror():
     """A background task that gets invoked every 10 minutes."""
     channel = bot.get_channel(
-        890335827459211305)  # Get the channel, the id has to be an int
+        947548676870524968)  # Get the channel, the id has to be an int
     await channel.send('helou', delete_after=1)
 
 
