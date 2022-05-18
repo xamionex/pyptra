@@ -142,7 +142,7 @@ class OtherUtils():
         afk_alert = discord.Embed(
             title=f"Members in your message are afk:")
         afk_alert.set_footer(
-            text=f"Protip: Disable these message with {main.get_prefix(self.ctx, message)}alerts")
+            text=f"Protip: Disable these message with {main.get_prefix(self.bot, message)}alerts")
         if message.author.bot:
             return
         with open('./data/afk.json', 'r') as f:

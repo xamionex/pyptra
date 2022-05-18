@@ -98,7 +98,7 @@ class Events(commands.Cog, name="Events"):
     @commands.Cog.listener("on_message")
     async def afk_check(self, message):
         # check if user is afk
-        await other.OtherUtils.afkcheck(message)
+        await other.OtherUtils.afkcheck(self, message)
 
     @commands.Cog.listener("on_message")
     async def help_check(self, message):
