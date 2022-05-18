@@ -1,5 +1,5 @@
 {
-    "latestId": 40,
+    "latestId": 43,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -326,6 +326,30 @@
             "suggestion": "add my dog as a sticker https://cdn.discordapp.com/attachments/971213666248687616/974498827568545802/unknown.png",
             "sid": 40,
             "message": 974499605490331698,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 226211469279100928,
+            "suggestion": "[Suggestion]:  When lauching NorthstarLauncher.exe it is designed to \"Starting Origin...\" - Instead, have it check if Origin is Started, if not; pop up a window that says \"Please Start + Login to Origin before launching Northstar\" ............ [Context]: Many novice computer users will see the \"LSX authentication Challenge failed\" error and come straight to opening a ticket.  \"Starting Origin....\" is suppose to help prevent errors, but does not work, even if it start origin and auto logs in, you will still get this error and have to restart NS.  If person is not logged in, it will continue to happen until they login with their origin username/password....... [More info]:  This suggestion will save time, elminate confusion, avoid the bad rep the \"error\" looks + lessen the number of help tickets",
+            "sid": 41,
+            "message": 975352706858385408,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 226211469279100928,
+            "suggestion": "[Suggestion]:  When starting NorthstarLauncher.exe= have it do a version check.  If not the latest release, pop up a window that says \"You don't have the latest release of NorthStar.  Would you like to update now?\" {YES} or {NO} If \"yes\", it auto installs the latest northstar version into their \\titanfall2 game folder......... [Context]:  Help tickets are always created by people updating their northstar version wrong.  This would lessen the need for support staff to request \"please show your \\titanfall 2 files\" it would eliminate the need for 3rd party install program + lessen the human errors made updating",
+            "sid": 42,
+            "message": 975355949088907274,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 612118712492883972,
+            "suggestion": "replace ear tensifier with another bot, (maybe fredboat or something?)",
+            "sid": 43,
+            "message": 975444700481851473,
             "status": "open",
             "note": ""
         }

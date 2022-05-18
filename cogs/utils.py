@@ -180,7 +180,10 @@ async def sendembed(ctx, e, show_all=True, delete=1, delete_speed=5):
 
 async def delete_message(ctx, delete_speed=5):
     try:
-        await ctx.message.delete(delay=delete_speed)
+        if delete_speed is None:
+            await ctx.message.delete()
+        else:
+            await ctx.message.delete(delay=delete_speed)
     except Exception:
         return
 
