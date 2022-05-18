@@ -9,12 +9,12 @@ from cogs import utils
 extensions = utils.extensions()
 
 
-def setup(ctx):
-    ctx.add_cog(MaintananceCommands(ctx))
+def setup(bot):
+    bot.add_cog(MaintananceCommands(bot))
 
 
 class MaintananceCommands(commands.Cog, name="Maintanance"):
-    """Commands for managing the ctx."""
+    """Commands for managing the bot."""
     COG_EMOJI = "🛠️"
 
     def __init__(self, ctx):
@@ -88,4 +88,4 @@ class MaintananceCommands(commands.Cog, name="Maintanance"):
                 json.dump(prefixes, f, indent=4)
             await utils.sendembed(ctx, discord.Embed(description=f'Prefix changed to: {prefix}'), False, 3, 5)
         else:
-            await utils.sendembed(ctx, discord.Embed(description=f'My prefix is `{main.get_prefix(ctx, ctx.message)}` or {self.ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!'), False, 3, 20)
+            await utils.sendembed(ctx, discord.Embed(description=f'My prefix is `{main.get_prefix(ctx, ctx.message)}` or {ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!'), False, 3, 20)
