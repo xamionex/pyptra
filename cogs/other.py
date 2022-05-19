@@ -84,7 +84,7 @@ class OtherCommands(commands.Cog, name="Other commands"):
     async def afk(self, ctx, *, reason=None):
         """Alerts users that mention you that you're AFK."""
         e = await OtherUtils.setafk(self, ctx, reason)
-        await OtherUtils.sendafk(self, ctx, ["afk_alert", "afk_alert_dm"], e)
+        await OtherUtils.cmdsendafk(self, ctx, ["afk_alert", "afk_alert_dm"], e)
 
     @bridge.bridge_command(name="gn")
     async def gn(self, ctx):
@@ -92,7 +92,7 @@ class OtherCommands(commands.Cog, name="Other commands"):
         await OtherUtils.setafk(self, ctx, "Sleeping 💤")
         e = discord.Embed(description=f"Goodnight {ctx.author.mention}")
         e.set_image(url="https://c.tenor.com/nPYfVs6FsBQAAAAS/kitty-kitten.gif")
-        await OtherUtils.sendafk(self, ctx, ["afk_alert", "afk_alert_dm"], e)
+        await OtherUtils.cmdsendafk(self, ctx, ["afk_alert", "afk_alert_dm"], e)
 
 
 class OtherUtils():
@@ -140,7 +140,7 @@ class OtherUtils():
         afk_alert = discord.Embed(
             title=f"Members in your message are afk:")
         afk_alert.set_footer(
-            text=f"Disable these message with {main.get_prefix(self.bot, message)}help Permissions")
+            text=f"Disable these messages with {main.get_prefix(self.bot, message)}alerts for more info check {main.get_prefix(self.bot, message)}help Permissions")
         if message.author.bot:
             return
         with open('./data/afk.json', 'r') as f:
@@ -223,6 +223,13 @@ class OtherUtils():
         return pattern.format(**d)
 
     async def sendafk(self, ctx, perm, e):
+        if await block.GlobalBlockUtils.get_global_perm(perm[0], ctx.author):
+            if await block.GlobalBlockUtils.get_global_perm(perm[1], ctx.author):
+                await utils.senddmembed(ctx, e)
+            else:
+                await ctx.reply(embed=e, delete_after=10, mention_author=False)
+
+    async def cmdsendafk(self, ctx, perm, e):
         if await block.GlobalBlockUtils.get_global_perm(perm[0], ctx.author):
             if await block.GlobalBlockUtils.get_global_perm(perm[1], ctx.author):
                 await utils.senddmembed(ctx, e)
