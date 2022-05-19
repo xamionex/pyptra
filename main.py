@@ -5,7 +5,7 @@ import random
 from discord.ext import commands, bridge, tasks
 # cogs
 import secrets
-from cogs import block, utils, other
+from cogs import block, utils
 
 intents = discord.Intents.default()
 intents.members = True

@@ -84,8 +84,7 @@ class OtherCommands(commands.Cog, name="Other commands"):
     async def afk(self, ctx, *, reason=None):
         """Alerts users that mention you that you're AFK."""
         e = await OtherUtils.setafk(self, ctx, reason)
-        if not ctx.author.bot and await block.BlockUtils.get_perm("afkcheck", ctx.author) == False:
-            await utils.sendembed(ctx, e)
+        await OtherUtils.sendafk(self, ctx, ["afk_alert", "afk_alert_dm"], e)
 
     @bridge.bridge_command(name="gn")
     async def gn(self, ctx):
@@ -93,8 +92,7 @@ class OtherCommands(commands.Cog, name="Other commands"):
         await OtherUtils.setafk(self, ctx, "Sleeping 💤")
         e = discord.Embed(description=f"Goodnight {ctx.author.mention}")
         e.set_image(url="https://c.tenor.com/nPYfVs6FsBQAAAAS/kitty-kitten.gif")
-        if not ctx.author.bot and await block.BlockUtils.get_perm("afkcheck", ctx.author) == False:
-            await utils.sendembed(ctx, e)
+        await OtherUtils.sendafk(self, ctx, ["afk_alert", "afk_alert_dm"], e)
 
 
 class OtherUtils():
@@ -142,13 +140,13 @@ class OtherUtils():
         afk_alert = discord.Embed(
             title=f"Members in your message are afk:")
         afk_alert.set_footer(
-            text=f"Protip: Disable these message with {main.get_prefix(self.bot, message)}alerts")
+            text=f"Disable these message with {main.get_prefix(self.bot, message)}help Permissions")
         if message.author.bot:
             return
         with open('./data/afk.json', 'r') as f:
             afk = json.load(f)
         for member in message.mentions:
-            if member.bot:
+            if member.bot or member.id == message.author.id:
                 return
             if afk[f'{member.id}']['AFK'] == 'True':
                 send = True
@@ -176,10 +174,7 @@ class OtherUtils():
                     json.dump(afk, f, indent=4, sort_keys=True)
 
         if send:
-            # if alerts are on
-            if await block.BlockUtils.get_perm("afkcheck", message.author) == False:
-                # send reply that mention is afk
-                await message.reply(embed=afk_alert, delete_after=10.0, mention_author=False)
+            await OtherUtils.sendafk(self, message, ["afk_alert", "afk_alert_dm"], afk_alert)
         await OtherUtils.update_data(afk, message.author)
         # if message's author is afk continue
         if afk[f'{message.author.id}']['AFK'] == 'True':
@@ -217,7 +212,7 @@ class OtherUtils():
                 print(
                     f'I wasnt able to edit [{message.author} / {message.author.id}].')
 
-            await message.reply(embed=welcome_back, delete_after=10, mention_author=False)
+            await OtherUtils.sendafk(self, message, ["wb_alert", "wb_alert_dm"], welcome_back)
         with open('./data/afk.json', 'w') as f:
             json.dump(afk, f, indent=4, sort_keys=True)
 
@@ -226,3 +221,13 @@ class OtherUtils():
         d['h'], rem = divmod(delta.seconds, 3600)
         d['m'], d['s'] = divmod(rem, 60)
         return pattern.format(**d)
+
+    async def sendafk(self, ctx, perm, e):
+        if await block.GlobalBlockUtils.get_global_perm(perm[0], ctx.author):
+            if await block.GlobalBlockUtils.get_global_perm(perm[1], ctx.author):
+                await utils.senddmembed(ctx, e)
+            else:
+                if isinstance(ctx, bridge.BridgeExtContext):
+                    await ctx.reply(embed=e, delete_after=10, mention_author=False)
+                elif isinstance(ctx, bridge.BridgeApplicationContext):
+                    await ctx.reply(embed=e, ephemeral=True)

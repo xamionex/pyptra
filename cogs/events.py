@@ -1,12 +1,10 @@
-import asyncio
-import re
 import json
 import discord
 import random
 import main
-from discord.ext import commands, tasks
+from discord.ext import commands
 # cogs
-from cogs import block, utils, other
+from cogs import utils, other
 
 
 def setup(bot):
@@ -27,7 +25,7 @@ class Events(commands.Cog, name="Events"):
         print("------")
 
     @commands.Cog.listener("on_application_command_error")
-    async def slash_command_error(ctx: discord.ApplicationContext, error):
+    async def slash_command_error(self, ctx: discord.ApplicationContext, error):
         # if isinstance(error, commands.CommandOnCooldown):
         # await ctx.respond(f'{ctx.author.mention} You\'re on cooldown for {round(error.retry_after, 2)}s', ephemeral=True)
         # if isinstance(error, commands.MissingPermissions):

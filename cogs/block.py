@@ -21,7 +21,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
     @commands.guild_only()
     async def blacklist(self, ctx, user: discord.Member, *, reason=None):
         """Block a user to deny them from using the bot"""
-        if await BlockUtils.get_perm("blacklist", user) == True:
+        if await BlockUtils.get_perm("blacklist", user):
             await ctx.reply("The person is already blacklisted.")
         else:
             await BlockUtils.add_perm("blacklist", user)
@@ -46,7 +46,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
     @commands.guild_only()
     async def introvert(self, ctx):
         """Don't let people use commands like pet on you"""
-        if await BlockUtils.get_perm("ping", ctx.author) == True:
+        if await BlockUtils.get_perm("ping", ctx.author):
             await utils.senderror(ctx,
                                   f"I'm already not letting people use my commands with you.")
         else:
@@ -69,19 +69,30 @@ class BlockCommands(commands.Cog, name="Permissions"):
             await utils.sendembed(ctx, e, False)
 
     @bridge.bridge_command(name="alerts")
-    @commands.guild_only()
     async def alerts(self, ctx):
-        """Enable or disable AFK messages"""
-        if await BlockUtils.get_perm("afkcheck", ctx.author) == True:
-            await BlockUtils.remove_perm("afkcheck", ctx.author)
-            e = discord.Embed(
-                description=f"✅ Enabled AFK Alerts", color=0x66FF99)
-            await utils.sendembed(ctx, e, False)
+        """Enable/disable AFK messages"""
+        await GlobalBlockUtils.switch_perm(self, ctx, "afk_alert", "AFK Alerts")
+
+    @bridge.bridge_command(name="dmalerts")
+    async def dmalerts(self, ctx):
+        """Enable/disable AFK messages in DM instead"""
+        if await utils.can_dm_user(ctx.author):
+            await GlobalBlockUtils.switch_perm(self, ctx, "afk_alert_dm", "AFK Alerts in DMs instead")
         else:
-            await BlockUtils.add_perm("afkcheck", ctx.author)
-            e = discord.Embed(
-                description=f"❌ Disabled AFK Alerts", color=0xFF6969)
-            await utils.sendembed(ctx, e, False)
+            await utils.senderror(ctx, "I can't DM you! Try unblocking me or enabling your DMs.")
+
+    @bridge.bridge_command(name="wbalerts")
+    async def wbalerts(self, ctx):
+        """Enable/disable Welcome Back message"""
+        await GlobalBlockUtils.switch_perm(self, ctx, "wb_alert", "Welcome Back message")
+
+    @bridge.bridge_command(name="wbdmalerts")
+    async def wbdmalerts(self, ctx):
+        """Enable/disable Welcome Back message in DM instead"""
+        if await utils.can_dm_user(ctx.author):
+            await GlobalBlockUtils.switch_perm(self, ctx, "wb_alert_dm", "Welcome Back message in DMs instead")
+        else:
+            await utils.senderror(ctx, "I can't DM you! Try unblocking me or enabling your DMs.")
 
     @commands.command(hidden=True, name="give")
     @commands.has_permissions(administrator=True)
@@ -89,7 +100,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
     async def give(self, ctx, user: discord.Member):
         """Give a permission to a user (use -permslist)"""
         perm = await BlockUtils.check_perm_arg(self, ctx)
-        if await BlockUtils.get_perm(perm, user) == True:
+        if await BlockUtils.get_perm(perm, user):
             await utils.senderror(ctx, f"Nothing was changed.")
         else:
             await BlockUtils.add_perm(perm, user)
@@ -158,8 +169,7 @@ class BlockUtils():
                  "weird": "Allows -hug -kiss",
                  "ping": "Denies pinging user in -hug -kiss -pet",
                  "pet": "Allows petting users/images/emojis",
-                 "joke": "Allows using -fall -promote",
-                 "afkcheck": "Denies/Allows AFK alerts"}
+                 "joke": "Allows using -fall -promote"}
         return perms
 
     async def set_member_perms(perms, user):
@@ -172,25 +182,22 @@ class BlockUtils():
             return True
 
     async def get_perm(perm, user):
-        await BlockUtils.open_member_perms(user)
-        perms = await BlockUtils.get_perms_data()
+        perms = await BlockUtils.open_perms(user)
         return perms[str(user.guild.id)][str(user.id)][perm]
 
     async def add_perm(perm, user):
-        await BlockUtils.open_member_perms(user)
-        perms = await BlockUtils.get_perms_data()
+        perms = await BlockUtils.open_perms(user)
         perms[str(user.guild.id)][str(user.id)][perm] = True
         await BlockUtils.dump(perms)
 
     async def remove_perm(perm, user):
-        await BlockUtils.open_member_perms(user)
-        perms = await BlockUtils.get_perms_data()
+        perms = await BlockUtils.open_perms(user)
         perms[str(user.guild.id)][str(user.id)][perm] = False
         await BlockUtils.dump(perms)
 
-    async def dump(perms):
-        with open("./data/perms.json", "w") as f:
-            json.dump(perms, f, indent=4, sort_keys=True)
+    async def open_perms(user):
+        await BlockUtils.open_member_perms(user)
+        return await BlockUtils.get_perms_data()
 
     async def check_perm_arg(self, ctx):
         perms_list = BlockUtils.get_perms_list()
@@ -199,3 +206,87 @@ class BlockUtils():
             return msg
         else:
             await utils.senderror(ctx, f"{ctx.author.mention}, I couldn't find that permission.")
+
+    async def switch_perm(self, ctx, perm, message):
+        if await BlockUtils.get_perm(perm, ctx.author):
+            await BlockUtils.remove_perm(perm, ctx.author)
+            e = discord.Embed(
+                description=f"✅ Enabled {message}", color=0x66FF99)
+            await utils.sendembed(ctx, e, False)
+        else:
+            await BlockUtils.add_perm(perm, ctx.author)
+            e = discord.Embed(
+                description=f"❌ Disabled {message}", color=0xFF6969)
+            await utils.sendembed(ctx, e, False)
+
+    async def dump(perms):
+        with open("./data/perms.json", "w") as f:
+            json.dump(perms, f, indent=4, sort_keys=True)
+
+
+class GlobalBlockUtils():
+    async def get_global_perms_data():
+        with open("./data/global_perms.json") as f:
+            perms = json.load(f)
+            return perms
+
+    async def open_global_member_perms(user):
+        perms = await GlobalBlockUtils.get_global_perms_data()
+        if str(user.id) in perms:
+            return False
+        else:
+            await GlobalBlockUtils.set_global_member_perms(perms, user)
+
+    def get_global_perms_list():
+        perms = {"wb_alert_dm": "Disables/Enables welcome back embed sending in DM instead",
+                 "afk_alert_dm": "Disables/Enables AFK alerts sending in DM instead"}
+        invert_perms = {"wb_alert": "Disables/Enables welcome back embed, overrides DM",
+                        "afk_alert": "Disables/Enables AFK alerts, overrides DM", }
+        return invert_perms, perms
+
+    async def set_global_member_perms(perms, user):
+        perms[str(user.id)] = {}
+        perms_list = GlobalBlockUtils.get_global_perms_list()
+        for value in perms_list[0]:
+            perms[str(user.id)][value] = True
+        for value in perms_list[1]:
+            perms[str(user.id)][value] = False
+        with open("./data/global_perms.json", "w") as f:
+            json.dump(perms, f, indent=4, sort_keys=True)
+            return True
+
+    async def get_global_perm(perm, user):
+        perms = await GlobalBlockUtils.open_global_perm(user)
+        return perms[str(user.id)][perm]
+
+    async def add_global_perm(perm, user):
+        perms = await GlobalBlockUtils.open_global_perm(user)
+        perms[str(user.id)][perm] = True
+        await GlobalBlockUtils.dump(perms)
+
+    async def remove_global_perm(perm, user):
+        perms = await GlobalBlockUtils.open_global_perm(user)
+        perms[str(user.id)][perm] = False
+        await GlobalBlockUtils.dump(perms)
+
+    async def open_global_perm(user):
+        await GlobalBlockUtils.open_global_member_perms(user)
+        return await GlobalBlockUtils.get_global_perms_data()
+
+    async def switch_perm(self, ctx, perm, message):
+        if await GlobalBlockUtils.get_global_perm(perm, ctx.author):
+            await GlobalBlockUtils.switch_perm_remove(self, ctx, perm, message)
+        else:
+            await GlobalBlockUtils.switch_perm_add(self, ctx, perm, message)
+
+    async def switch_perm_remove(self, ctx, perm, message):
+        await GlobalBlockUtils.remove_global_perm(perm, ctx.author)
+        await utils.sendembed(ctx, discord.Embed(description=f"❌ Disabled {message}", color=0xFF6969), False)
+
+    async def switch_perm_add(self, ctx, perm, message):
+        await GlobalBlockUtils.add_global_perm(perm, ctx.author)
+        await utils.sendembed(ctx, discord.Embed(description=f"✅ Enabled {message}", color=0x66FF99), False)
+
+    async def dump(perms):
+        with open("./data/global_perms.json", "w") as f:
+            json.dump(perms, f, indent=4, sort_keys=True)

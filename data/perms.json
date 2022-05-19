@@ -1,5 +1,27 @@
 {
-    "196573388423168000": {},
+    "196573388423168000": {
+        "139095725110722560": {
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "741664461416562728": {
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "936323651408629790": {
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        }
+    },
     "920776187884732556": {
         "104117150683250688": {
             "afkcheck": false,
