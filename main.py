@@ -83,7 +83,7 @@ async def spam_terror():
     """A background task that gets invoked every 10 minutes."""
     channel = bot.get_channel(
         947548676870524968)  # Get the channel, the id has to be an int
-    await channel.send('helou', delete_after=1)
+    await channel.send('Message to update last message timestamp (Discord allows you to see that without seeing the channel for some reason)', delete_after=60)
 
 
 @ spam_terror.before_loop
