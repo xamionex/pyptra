@@ -84,7 +84,7 @@ class OtherCommands(commands.Cog, name="Other commands"):
     async def afk(self, ctx, *, reason=None):
         """Alerts users that mention you that you're AFK."""
         e = await OtherUtils.setafk(self, ctx, reason)
-        await OtherUtils.cmdsendafk(self, ctx, ["afk_alert", "afk_alert_dm"], e)
+        await OtherUtils.sendafk(self, ctx, ["afk_alert", "afk_alert_dm"], e)
 
     @bridge.bridge_command(name="gn")
     async def gn(self, ctx):
@@ -92,7 +92,7 @@ class OtherCommands(commands.Cog, name="Other commands"):
         await OtherUtils.setafk(self, ctx, "Sleeping 💤")
         e = discord.Embed(description=f"Goodnight {ctx.author.mention}")
         e.set_image(url="https://c.tenor.com/nPYfVs6FsBQAAAAS/kitty-kitten.gif")
-        await OtherUtils.cmdsendafk(self, ctx, ["afk_alert", "afk_alert_dm"], e)
+        await OtherUtils.sendafk(self, ctx, ["afk_alert", "afk_alert_dm"], e)
 
 
 class OtherUtils():
@@ -227,14 +227,7 @@ class OtherUtils():
             if await block.GlobalBlockUtils.get_global_perm(perm[1], ctx.author):
                 await utils.senddmembed(ctx, e)
             else:
-                await ctx.reply(embed=e, delete_after=10, mention_author=False)
-
-    async def cmdsendafk(self, ctx, perm, e):
-        if await block.GlobalBlockUtils.get_global_perm(perm[0], ctx.author):
-            if await block.GlobalBlockUtils.get_global_perm(perm[1], ctx.author):
-                await utils.senddmembed(ctx, e)
-            else:
-                if isinstance(ctx, bridge.BridgeExtContext):
-                    await ctx.reply(embed=e, delete_after=10, mention_author=False)
-                elif isinstance(ctx, bridge.BridgeApplicationContext):
+                if isinstance(ctx, bridge.BridgeApplicationContext):
                     await ctx.reply(embed=e, ephemeral=True)
+                else:
+                    await ctx.reply(embed=e, delete_after=10, mention_author=False)
