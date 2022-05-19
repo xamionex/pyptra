@@ -1,5 +1,5 @@
 {
-    "latestId": 182,
+    "latestId": 183,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1462,6 +1462,14 @@
             "suggestion": "Add a juggernaut mode (simply make one player have like 100*(player count)% health (possible max of 500%), but they are in a state of constant radar ping (pilots type)",
             "sid": 182,
             "message": 976229740811800597,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 495590559621054495,
+            "suggestion": "Checking for interest, may or may not do myself: Arenas in titanfall. Start with P2016, gain and lose money over rounds, which allow you to buy weapons, abilities, boosts and titans.",
+            "sid": 183,
+            "message": 976921063780929606,
             "status": "open",
             "note": ""
         }

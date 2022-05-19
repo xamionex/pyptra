@@ -1,5 +1,5 @@
 {
-    "latestId": 44,
+    "latestId": 46,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -358,6 +358,22 @@
             "suggestion": "offer any contributor that isnt a helper yet the role, considering they have a lot of hands on experience with N* and also considering there's going to be a boom in tickets given the sale",
             "sid": 44,
             "message": 976423181214687242,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 99938186779709440,
+            "suggestion": "A separate channel for announcing mods that just change a single sound effect/the menu music/etc. The mods are cool but they're repetitive and fill the feed",
+            "sid": 45,
+            "message": 976637981693739009,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 104117150683250688,
+            "suggestion": "New Titanfall 2 gamemode with weapon economy ala CS/VALORANT.",
+            "sid": 46,
+            "message": 976902210279571456,
             "status": "open",
             "note": ""
         }
