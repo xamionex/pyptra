@@ -106,7 +106,7 @@ async def spam_terror_after_loop():
 @ bot.event
 async def on_message(message):
     # remove markdown
-    message = discord.utils.escape_markdown(message)
+    message.content = utils.escape_markdown(message.content)
     # check if user isnt bot and isnt mentioning @everyone
     if message.mention_everyone or message.author.bot:
         return

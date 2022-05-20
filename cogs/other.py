@@ -83,6 +83,7 @@ class OtherCommands(commands.Cog, name="Other commands"):
     @bridge.bridge_command(name="afk")
     async def afk(self, ctx, *, reason=None):
         """Alerts users that mention you that you're AFK."""
+        reason = utils.remove_newlines(reason)
         e = await OtherUtils.setafk(self, ctx, reason)
         await OtherUtils.sendafk(self, ctx, ["afk_alert", "afk_alert_dm"], e)
 
@@ -140,7 +141,7 @@ class OtherUtils():
         afk_alert = discord.Embed(
             title=f"Members in your message are afk:")
         afk_alert.set_footer(
-            text=f"Disable these messages with {main.get_prefix(self.bot, message)}alerts for more info check {main.get_prefix(self.bot, message)}help Permissions")
+            text=f"Disable these messages with {main.get_prefix(self.bot, message)}alerts\nfor more info check {main.get_prefix(self.bot, message)}help Permissions")
         if message.author.bot:
             return
         with open('./data/afk.json', 'r') as f:

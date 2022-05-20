@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import discord
 from discord.ext import bridge, commands
 
@@ -228,3 +229,15 @@ async def can_dm_user(user: discord.User) -> bool:
         return False
     except discord.HTTPException:
         return True
+
+
+def escape_markdown(text):
+    # Use {} and reverse markdown carefully.
+    parse = re.sub(r"([\\`])", r"\\\1", text)
+    reparse = re.sub(r"\\\\([\\`])", r"\1", parse)
+    return reparse
+
+
+def remove_newlines(text):
+    new_text = " ".join(text.split())
+    return new_text
