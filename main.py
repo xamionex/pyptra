@@ -32,7 +32,13 @@ def when_mentioned_or_function(func):
 
 
 bot = bridge.Bot(
-    command_prefix=when_mentioned_or_function(get_prefix), intents=intents)
+    command_prefix=when_mentioned_or_function(get_prefix),
+    intents=intents,
+    allowed_mentions=discord.AllowedMentions(
+        everyone=False,      # Whether to ping @everyone or @here mentions
+        roles=False,         # Whether to ping role @mentions
+    ),
+)
 
 
 ''' @bot.event
@@ -99,10 +105,8 @@ async def spam_terror_after_loop():
 
 @ bot.event
 async def on_message(message):
-    # remove @everyone ` and \
-    disable = ['`', '\\', '@everyone']
-    for item in disable:
-        message.content = message.content.replace(item, '')
+    # remove markdown
+    message = discord.utils.escape_markdown(message)
     # check if user isnt bot and isnt mentioning @everyone
     if message.mention_everyone or message.author.bot:
         return
