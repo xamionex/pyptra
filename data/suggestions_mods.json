@@ -1,5 +1,5 @@
 {
-    "latestId": 183,
+    "latestId": 184,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1470,6 +1470,14 @@
             "suggestion": "Checking for interest, may or may not do myself: Arenas in titanfall. Start with P2016, gain and lose money over rounds, which allow you to buy weapons, abilities, boosts and titans.",
             "sid": 183,
             "message": 976921063780929606,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 576887540930576425,
+            "suggestion": "not sure if this one is even possible but if it is I think it could be cool.\nReplace the smart pistol with the marksman from ultrakill (the one where you throw up a coin in the air and if you hit said coin the bullet Ricochets off the coin and flies to an enemy weak point)",
+            "sid": 184,
+            "message": 977176844812034079,
             "status": "open",
             "note": ""
         }
