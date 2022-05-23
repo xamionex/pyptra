@@ -83,7 +83,8 @@ class OtherCommands(commands.Cog, name="Other commands"):
     @bridge.bridge_command(name="afk")
     async def afk(self, ctx, *, reason=None):
         """Alerts users that mention you that you're AFK."""
-        reason = utils.remove_newlines(reason)
+        if reason:
+            reason = utils.remove_newlines(reason)
         e = await OtherUtils.setafk(self, ctx, reason)
         await OtherUtils.sendafk(self, ctx, ["afk_alert", "afk_alert_dm"], e)
 
@@ -106,27 +107,31 @@ class OtherUtils():
         if not reason:
             reason = 'AFK'
         elif reason and len(reason) > 100:
-            raise commands.CommandError(
+            await utils.senderror(
                 "You went over the 100 character limit")
         await OtherUtils.update_data(afk, ctx.author)
-        afk[f'{ctx.author.id}']['AFK'] = 'True'
         afk[f'{ctx.author.id}']['reason'] = f'{reason}'
-        afk[f'{ctx.author.id}']['time'] = int(time.time())
-        afk[f'{ctx.author.id}']['mentions'] = 0
-        rply = discord.Embed(
-            description=f"Goodbye {ctx.author.mention}, Your afk is \"{reason}\"")
+        if afk[f'{ctx.author.id}']['AFK']:
+            rply = discord.Embed(
+                description=f"Goodbye {ctx.author.mention}, Updated alert to \"{reason}\"")
+        else:
+            afk[f'{ctx.author.id}']['AFK'] = True
+            afk[f'{ctx.author.id}']['time'] = int(time.time())
+            afk[f'{ctx.author.id}']['mentions'] = 0
+            rply = discord.Embed(
+                description=f"Goodbye {ctx.author.mention}, Set alert to \"{reason}\"")
+            try:
+                await ctx.author.edit(nick=f'[AFK] {ctx.author.display_name}')
+            except:
+                pass
         with open('./data/afk.json', 'w') as f:
             json.dump(afk, f, indent=4, sort_keys=True)
-        try:
-            await ctx.author.edit(nick=f'[AFK] {ctx.author.display_name}')
-        except:
-            print(f'I wasnt able to edit [{ctx.author} / {ctx.author.id}].')
         return rply
 
     async def update_data(afk, user):
         if not f'{user.id}' in afk:
             afk[f'{user.id}'] = {}
-            afk[f'{user.id}']['AFK'] = 'False'
+            afk[f'{user.id}']['AFK'] = False
 
     async def afkjoin(member):
         print(f'{member} has joined the server!')
@@ -137,11 +142,12 @@ class OtherUtils():
             json.dump(afk, f, indent=4, sort_keys=True)
 
     async def afkcheck(self, message):
+        prefix = main.get_prefix(self.bot, message)
         send = False
         afk_alert = discord.Embed(
             title=f"Members in your message are afk:")
         afk_alert.set_footer(
-            text=f"Disable these messages with {main.get_prefix(self.bot, message)}alerts\nfor more info check {main.get_prefix(self.bot, message)}help Permissions")
+            text=f"Toggle: {prefix}alerts\nDMs Toggle: {prefix}dmalerts")
         if message.author.bot:
             return
         with open('./data/afk.json', 'r') as f:
@@ -149,7 +155,7 @@ class OtherUtils():
         for member in message.mentions:
             if member.bot or member.id == message.author.id:
                 return
-            if afk[f'{member.id}']['AFK'] == 'True':
+            if afk[f'{member.id}']['AFK']:
                 send = True
 
                 # gets afk message
@@ -178,7 +184,7 @@ class OtherUtils():
             await OtherUtils.sendafk(self, message, ["afk_alert", "afk_alert_dm"], afk_alert)
         await OtherUtils.update_data(afk, message.author)
         # if message's author is afk continue
-        if afk[f'{message.author.id}']['AFK'] == 'True':
+        if list(message.content.split())[0] != f'{prefix}afk' and afk[f'{message.author.id}']['AFK']:
             # unix now - unix since afk
             timeafk = int(time.time()) - \
                 int(afk[f'{message.author.id}']['time'])
@@ -196,9 +202,11 @@ class OtherUtils():
             welcome_back.add_field(name="Afk for", value=afktime, inline=True)
             welcome_back.add_field(
                 name="Mentioned", value=f"{mentionz} time(s)", inline=True)
+            welcome_back.set_footer(
+                text=f"Toggle: {prefix}wbalerts\nDMs Toggle: {prefix}wbdmalerts")
 
             # reset afk for user
-            afk[f'{message.author.id}']['AFK'] = 'False'
+            afk[f'{message.author.id}']['AFK'] = False
             afk[f'{message.author.id}']['reason'] = 'None'
             afk[f'{message.author.id}']['time'] = '0'
             afk[f'{message.author.id}']['mentions'] = 0
