@@ -1,5 +1,5 @@
 {
-    "latestId": 187,
+    "latestId": 188,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1502,6 +1502,14 @@
             "suggestion": "some one needs to make voice mode in Titanfall 2 and just have andrew tate say random things",
             "sid": 187,
             "message": 978072096167059548,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 255935440744480768,
+            "suggestion": "Streamer Mode, the server name change's to random number or something",
+            "sid": 188,
+            "message": 978284223192506408,
             "status": "open",
             "note": ""
         }
