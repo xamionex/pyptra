@@ -1090,6 +1090,13 @@
             "ping": false,
             "weird": false
         },
+        "314155571840548864": {
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "314523916724862976": {
             "blacklist": false,
             "joke": false,
@@ -1853,6 +1860,13 @@
             "ping": false,
             "weird": false
         },
+        "409068690408210433": {
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "410016393489022987": {
             "blacklist": false,
             "joke": false,
@@ -1868,6 +1882,13 @@
             "weird": false
         },
         "411328169350660096": {
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "412393589352431619": {
             "blacklist": false,
             "joke": false,
             "pet": false,
@@ -3944,6 +3965,13 @@
             "ping": false,
             "weird": false
         },
+        "709136867785834506": {
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
         "710120487786905661": {
             "blacklist": false,
             "joke": false,
@@ -4001,6 +4029,13 @@
             "weird": false
         },
         "717745465814286368": {
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "720147201526857779": {
             "blacklist": false,
             "joke": false,
             "pet": false,
@@ -5074,7 +5109,7 @@
         "949269806824181770": {
             "blacklist": false,
             "joke": false,
-            "pet": false,
+            "pet": true,
             "ping": false,
             "weird": false
         },
@@ -5093,6 +5128,13 @@
             "weird": false
         },
         "953492374405935166": {
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "954082670286086154": {
             "blacklist": false,
             "joke": false,
             "pet": false,

@@ -1,5 +1,5 @@
 {
-    "latestId": 46,
+    "latestId": 47,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -374,6 +374,14 @@
             "suggestion": "New Titanfall 2 gamemode with weapon economy ala CS/VALORANT.",
             "sid": 46,
             "message": 976902210279571456,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 409068690408210433,
+            "suggestion": "Video tutorial: \"how to host a server in linux (docker) for complete noobs\"",
+            "sid": 47,
+            "message": 978070497860395068,
             "status": "open",
             "note": ""
         }
