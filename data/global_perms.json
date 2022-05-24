@@ -1,11 +1,23 @@
 {
     "139095725110722560": {
         "afk_alert": true,
-        "afk_alert_dm": true,
+        "afk_alert_dm": false,
         "wb_alert": true,
-        "wb_alert_dm": true
+        "wb_alert_dm": false
+    },
+    "166706596636786688": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
     },
     "176032296858550275": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
+    "179433464511201280": {
         "afk_alert": true,
         "afk_alert_dm": false,
         "wb_alert": true,
@@ -42,6 +54,12 @@
         "wb_alert_dm": false
     },
     "278073569177632769": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
+    "282970673255809024": {
         "afk_alert": true,
         "afk_alert_dm": false,
         "wb_alert": true,
@@ -95,6 +113,12 @@
         "wb_alert": true,
         "wb_alert_dm": false
     },
+    "417102681136693268": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
     "424923917241810944": {
         "afk_alert": true,
         "afk_alert_dm": false,
@@ -119,6 +143,12 @@
         "wb_alert": true,
         "wb_alert_dm": false
     },
+    "556757542492045312": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
     "579347068573974559": {
         "afk_alert": true,
         "afk_alert_dm": false,
@@ -138,7 +168,7 @@
         "wb_alert_dm": false
     },
     "653598071153885215": {
-        "afk_alert": false,
+        "afk_alert": true,
         "afk_alert_dm": false,
         "wb_alert": true,
         "wb_alert_dm": false
@@ -150,6 +180,12 @@
         "wb_alert_dm": false
     },
     "670189468736553011": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
+    "688515263284510742": {
         "afk_alert": true,
         "afk_alert_dm": false,
         "wb_alert": true,
@@ -168,6 +204,12 @@
         "wb_alert_dm": false
     },
     "733178664056913930": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
+    "752566466733146132": {
         "afk_alert": true,
         "afk_alert_dm": false,
         "wb_alert": true,
@@ -198,6 +240,12 @@
         "wb_alert_dm": false
     },
     "792836547040116757": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
+    "803242439262470173": {
         "afk_alert": true,
         "afk_alert_dm": false,
         "wb_alert": true,

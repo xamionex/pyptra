@@ -1,5 +1,5 @@
 {
-    "latestId": 188,
+    "latestId": 189,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1510,6 +1510,14 @@
             "suggestion": "Streamer Mode, the server name change's to random number or something",
             "sid": 188,
             "message": 978284223192506408,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 576887540930576425,
+            "suggestion": "RGB pulse blade sonar and tone sonar",
+            "sid": 189,
+            "message": 978428724447969290,
             "status": "open",
             "note": ""
         }
