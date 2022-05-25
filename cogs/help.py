@@ -1,7 +1,7 @@
 from typing import Optional, Set
 from cogs import utils
 import discord
-from discord.ext import commands, bridge
+from discord.ext import commands
 
 
 class HelpCog(commands.Cog, name="Help"):
@@ -89,10 +89,7 @@ class MyHelpCommand(commands.MinimalHelpCommand):
                              icon_url=avatar.url)
         if command_set:
             # show help about all commands in the set
-            if not self.context.author.guild_permissions.administrator:
-                filtered = await self.filter_commands(command_set, sort=True)
-            else:
-                filtered = await self.filter_commands(command_set, sort=True, show_hidden=True)
+            filtered = await self.get_filtered(command_set)
             for command in filtered:
                 embed.add_field(
                     name=self.get_command_signature(command),
@@ -102,10 +99,7 @@ class MyHelpCommand(commands.MinimalHelpCommand):
         elif mapping:
             # add a short description of commands in each cog
             for cog, command_set in mapping.items():
-                if not self.context.author.guild_permissions.administrator:
-                    filtered = await self.filter_commands(command_set, sort=True)
-                else:
-                    filtered = await self.filter_commands(command_set, sort=True, show_hidden=True)
+                filtered = await self.get_filtered(command_set)
                 if not filtered:
                     continue
                 name = cog.qualified_name if cog else "No category"
@@ -196,7 +190,7 @@ class MyHelpCommand(commands.MinimalHelpCommand):
         async def predicate(cmd):
             try:
                 return await cmd.can_run(self.context)
-            except commands.CommandError:
+            except discord.ext.commands.CommandError:
                 return False
 
         ret = []
@@ -208,6 +202,14 @@ class MyHelpCommand(commands.MinimalHelpCommand):
         if sort:
             ret.sort(key=key)
         return ret
+
+    async def get_filtered(self, command_set):
+        try:
+            if self.context.author.guild_permissions.administrator:
+                filtered = await self.filter_commands(command_set, sort=True, show_hidden=True)
+        except:
+            filtered = await self.filter_commands(command_set, sort=True)
+        return filtered
 
     # Use the same function as command help for group help
     send_group_help = send_command_help
