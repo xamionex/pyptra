@@ -1,5 +1,5 @@
 {
-    "latestId": 189,
+    "latestId": 191,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1518,6 +1518,22 @@
             "suggestion": "RGB pulse blade sonar and tone sonar",
             "sid": 189,
             "message": 978428724447969290,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 612118712492883972,
+            "suggestion": "battle royale: dislike apex becasue the movement is waaaay too slow and doesn't really itch that titanfall 2 battle royale scratch? well when map editor comes out you can make large maps with an enclosing ring (e-smoke), as well as leave guns lying on the ground in areas to pick up, you can also have limited ammo by importing some code from campaign. now this will be pilots only of course, and it will have a tactical and ultimate type system as well (ability and boost), of course this is a dumb idea, but does it sort of sound unique and interesting in a gameplay perspective you must admit.",
+            "sid": 190,
+            "message": 978753637272666122,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 528830566590578699,
+            "suggestion": "Would like to see a wavespawn mechanic for pilots and AI",
+            "sid": 191,
+            "message": 978912565566521354,
             "status": "open",
             "note": ""
         }
