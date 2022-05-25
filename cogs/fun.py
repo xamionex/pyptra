@@ -83,9 +83,9 @@ class FunCommands(commands.Cog, name="Fun"):
             image = await image.read()
         elif url is not None:
             url = ctx.message.content.split(" ")[1]
-            disable = {'<': '', '>': ''}
-            for key, value in disable.items():
-                url = url.replace(key, value)
+            disable = {'<', '>'}
+            for key in disable.items():
+                url = url.replace(key, '')
             what = "an image"
             async with aiohttp.ClientSession().get(url) as url:
                 if url.status != 200:

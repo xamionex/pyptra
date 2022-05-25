@@ -1,10 +1,14 @@
 import json
+import time
 import discord
 import random
 import main
 from discord.ext import commands
 # cogs
 from cogs import utils, other
+# afk command data
+import datetime
+import humanize
 
 
 def setup(bot):
@@ -57,7 +61,11 @@ class Events(commands.Cog, name="Events"):
 
     @commands.Cog.listener("on_member_join")
     async def member_data(self, member):
-        await other.OtherUtils.afkjoin(member)
+        with open('./data/afk.json', 'r') as f:
+            afk = json.load(f)
+        await other.OtherUtils.update_data(afk, member)
+        with open('./data/afk.json', 'w') as f:
+            json.dump(afk, f, indent=4, sort_keys=True)
 
     @commands.Cog.listener("on_guild_join")
     async def guild_add_data(self, guild):
@@ -95,8 +103,89 @@ class Events(commands.Cog, name="Events"):
 
     @commands.Cog.listener("on_message")
     async def afk_check(self, message):
-        # check if user is afk
-        await other.OtherUtils.afkcheck(self, message)
+        # check if user is afk or members in message
+        prefix = main.get_prefix(self.bot, message)
+        send = False
+        afk_alert = discord.Embed(
+            title=f"Members in your message are afk:")
+        afk_alert.set_footer(
+            text=f"Toggle: {prefix}alerts\nDMs Toggle: {prefix}dmalerts")
+        if message.author.bot:
+            return
+        with open('./data/afk.json', 'r') as f:
+            afk = json.load(f)
+        for member in message.mentions:
+            if member.bot or member.id == message.author.id:
+                return
+            if afk[f'{member.id}']['AFK']:
+                send = True
+
+                # gets afk message
+                reason = afk[f'{member.id}']['reason']
+
+                # gets unix time
+                unix_time = int(time.time()) - int(afk[f'{member.id}']['time'])
+
+                # user was afk for time.now() - time
+                afktime = humanize.naturaltime(
+                    datetime.datetime.now() - datetime.timedelta(seconds=unix_time))
+
+                # add embed
+                afk_alert.add_field(
+                    name=f"{member.display_name.replace('[AFK]', '')} - {afktime}", value=f"\"{reason}\"", inline=True)
+
+                # plus 1 time mentioned in afk.json
+                afk[f'{member.id}']['mentions'] = int(
+                    afk[f'{member.id}']['mentions']) + 1
+
+                # save json
+                with open('./data/afk.json', 'w') as f:
+                    json.dump(afk, f, indent=4, sort_keys=True)
+
+        if send:
+            await other.OtherUtils.sendafk(self, message, ["afk_alert", "afk_alert_dm"], afk_alert)
+        await other.OtherUtils.update_data(afk, message.author)
+        # if message's author is afk continue
+        if list(message.content.split())[0] != f'{prefix}afk' and afk[f'{message.author.id}']['AFK']:
+            # unix now - unix since afk
+            timeafk = int(time.time()) - \
+                int(afk[f'{message.author.id}']['time'])
+
+            # make time readable for user
+            afktime = other.OtherUtils.period(datetime.timedelta(
+                seconds=round(timeafk)), "{d}d {h}h {m}m {s}s")
+
+            # get mentions
+            mentionz = afk[f'{message.author.id}']['mentions']
+
+            # make embed
+            welcome_back = discord.Embed(
+                description=f"**Welcome back {message.author.mention}!**")
+            welcome_back.add_field(name="Afk for", value=afktime, inline=True)
+            welcome_back.add_field(
+                name="Mentioned", value=f"{mentionz} time(s)", inline=True)
+            welcome_back.set_footer(
+                text=f"Toggle: {prefix}wbalerts\nDMs Toggle: {prefix}wbdmalerts")
+
+            # reset afk for user
+            afk[f'{message.author.id}']['AFK'] = False
+            afk[f'{message.author.id}']['reason'] = 'None'
+            afk[f'{message.author.id}']['time'] = '0'
+            afk[f'{message.author.id}']['mentions'] = 0
+            with open('./data/afk.json', 'w') as f:
+                json.dump(afk, f, indent=4, sort_keys=True)
+
+            # try to reset nickname
+            try:
+                nick = message.author.display_name.replace('[AFK]', '')
+                await message.author.edit(nick=nick)
+            except:
+                print(
+                    f'I wasnt able to edit [{message.author} / {message.author.id}].')
+
+            await other.OtherUtils.sendafk(self, message, ["wb_alert", "wb_alert_dm"], welcome_back)
+        with open('./data/afk.json', 'w') as f:
+            json.dump(afk, f, indent=4, sort_keys=True)
 
     @commands.Cog.listener("on_message")
     async def help_check(self, message):

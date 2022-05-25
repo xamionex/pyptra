@@ -1,11 +1,8 @@
 import json
 import discord
-import main
 from discord.ext import commands, bridge
 from cogs import utils, block
 # afk command data
-import datetime
-import humanize
 import time
 
 
@@ -132,98 +129,6 @@ class OtherUtils():
         if not f'{user.id}' in afk:
             afk[f'{user.id}'] = {}
             afk[f'{user.id}']['AFK'] = False
-
-    async def afkjoin(member):
-        print(f'{member} has joined the server!')
-        with open('./data/afk.json', 'r') as f:
-            afk = json.load(f)
-        await OtherUtils.update_data(afk, member)
-        with open('./data/afk.json', 'w') as f:
-            json.dump(afk, f, indent=4, sort_keys=True)
-
-    async def afkcheck(self, message):
-        prefix = main.get_prefix(self.bot, message)
-        send = False
-        afk_alert = discord.Embed(
-            title=f"Members in your message are afk:")
-        afk_alert.set_footer(
-            text=f"Toggle: {prefix}alerts\nDMs Toggle: {prefix}dmalerts")
-        if message.author.bot:
-            return
-        with open('./data/afk.json', 'r') as f:
-            afk = json.load(f)
-        for member in message.mentions:
-            if member.bot or member.id == message.author.id:
-                return
-            if afk[f'{member.id}']['AFK']:
-                send = True
-
-                # gets afk message
-                reason = afk[f'{member.id}']['reason']
-
-                # gets unix time
-                unix_time = int(time.time()) - int(afk[f'{member.id}']['time'])
-
-                # user was afk for time.now() - time
-                afktime = humanize.naturaltime(
-                    datetime.datetime.now() - datetime.timedelta(seconds=unix_time))
-
-                # add embed
-                afk_alert.add_field(
-                    name=f"{member.display_name.replace('[AFK]', '')} - {afktime}", value=f"\"{reason}\"", inline=True)
-
-                # plus 1 time mentioned in afk.json
-                afk[f'{member.id}']['mentions'] = int(
-                    afk[f'{member.id}']['mentions']) + 1
-
-                # save json
-                with open('./data/afk.json', 'w') as f:
-                    json.dump(afk, f, indent=4, sort_keys=True)
-
-        if send:
-            await OtherUtils.sendafk(self, message, ["afk_alert", "afk_alert_dm"], afk_alert)
-        await OtherUtils.update_data(afk, message.author)
-        # if message's author is afk continue
-        if list(message.content.split())[0] != f'{prefix}afk' and afk[f'{message.author.id}']['AFK']:
-            # unix now - unix since afk
-            timeafk = int(time.time()) - \
-                int(afk[f'{message.author.id}']['time'])
-
-            # make time readable for user
-            afktime = OtherUtils.period(datetime.timedelta(
-                seconds=round(timeafk)), "{d}d {h}h {m}m {s}s")
-
-            # get mentions
-            mentionz = afk[f'{message.author.id}']['mentions']
-
-            # make embed
-            welcome_back = discord.Embed(
-                description=f"**Welcome back {message.author.mention}!**")
-            welcome_back.add_field(name="Afk for", value=afktime, inline=True)
-            welcome_back.add_field(
-                name="Mentioned", value=f"{mentionz} time(s)", inline=True)
-            welcome_back.set_footer(
-                text=f"Toggle: {prefix}wbalerts\nDMs Toggle: {prefix}wbdmalerts")
-
-            # reset afk for user
-            afk[f'{message.author.id}']['AFK'] = False
-            afk[f'{message.author.id}']['reason'] = 'None'
-            afk[f'{message.author.id}']['time'] = '0'
-            afk[f'{message.author.id}']['mentions'] = 0
-            with open('./data/afk.json', 'w') as f:
-                json.dump(afk, f, indent=4, sort_keys=True)
-
-            # try to reset nickname
-            try:
-                nick = message.author.display_name.replace('[AFK]', '')
-                await message.author.edit(nick=nick)
-            except:
-                print(
-                    f'I wasnt able to edit [{message.author} / {message.author.id}].')
-
-            await OtherUtils.sendafk(self, message, ["wb_alert", "wb_alert_dm"], welcome_back)
-        with open('./data/afk.json', 'w') as f:
-            json.dump(afk, f, indent=4, sort_keys=True)
 
     def period(delta, pattern):
         d = {'d': delta.days}
