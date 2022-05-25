@@ -1,5 +1,5 @@
 {
-    "latestId": 191,
+    "latestId": 192,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1534,6 +1534,14 @@
             "suggestion": "Would like to see a wavespawn mechanic for pilots and AI",
             "sid": 191,
             "message": 978912565566521354,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 293948527589982210,
+            "suggestion": "something that causes titans to ragdoll more instead of just exploding, the ragdolls are honestly better looking than things exploding completely",
+            "sid": 192,
+            "message": 978935446753128479,
             "status": "open",
             "note": ""
         }
