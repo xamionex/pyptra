@@ -1,7 +1,7 @@
 from typing import Optional, Set
 from cogs import utils
 import discord
-from discord.ext import commands, bridge
+from discord.ext import commands
 
 
 class HelpCog(commands.Cog, name="Help"):
@@ -89,7 +89,7 @@ class MyHelpCommand(commands.MinimalHelpCommand):
                              icon_url=avatar.url)
         if command_set:
             # show help about all commands in the set
-            filtered = await self.filter_commands(command_set, sort=True)
+            filtered = await self.get_filtered(command_set)
             for command in filtered:
                 embed.add_field(
                     name=self.get_command_signature(command),
@@ -99,7 +99,7 @@ class MyHelpCommand(commands.MinimalHelpCommand):
         elif mapping:
             # add a short description of commands in each cog
             for cog, command_set in mapping.items():
-                filtered = await self.filter_commands(command_set, sort=True)
+                filtered = await self.get_filtered(command_set)
                 if not filtered:
                     continue
                 name = cog.qualified_name if cog else "No category"
@@ -162,6 +162,54 @@ class MyHelpCommand(commands.MinimalHelpCommand):
         ctx = self.context
         if await utils.CheckInstance(ctx) and ctx.guild:
             await ctx.reply("Check your DMs!", mention_author=False)
+
+    async def filter_commands(self, commands, *, sort=False, key=None, show_hidden=False):
+        if sort and key is None:
+            def key(c): return c.name
+
+        # Ignore Application Commands cause they dont have hidden/docs
+        prefix_commands = [
+            command for command in commands if not isinstance(command, discord.commands.ApplicationCommand)
+        ]
+        if show_hidden:
+            iterator = prefix_commands
+        else:
+            iterator = prefix_commands if self.show_hidden else filter(
+                lambda c: not c.hidden, prefix_commands)
+
+        if self.verify_checks is False:
+            # if we do not need to verify the checks then we can just
+            # run it straight through normally without using await.
+            return sorted(iterator, key=key) if sort else list(iterator)
+
+        if self.verify_checks is None and not self.context.guild:
+            # if verify_checks is None and we're in a DM, don't verify
+            return sorted(iterator, key=key) if sort else list(iterator)
+
+        # if we're here then we need to check every command if it can run
+        async def predicate(cmd):
+            try:
+                return await cmd.can_run(self.context)
+            except discord.ext.commands.CommandError:
+                return False
+
+        ret = []
+        for cmd in iterator:
+            valid = await predicate(cmd)
+            if valid:
+                ret.append(cmd)
+
+        if sort:
+            ret.sort(key=key)
+        return ret
+
+    async def get_filtered(self, command_set):
+        try:
+            if self.context.author.guild_permissions.administrator:
+                filtered = await self.filter_commands(command_set, sort=True, show_hidden=True)
+        except:
+            filtered = await self.filter_commands(command_set, sort=True)
+        return filtered
 
     # Use the same function as command help for group help
     send_group_help = send_command_help
