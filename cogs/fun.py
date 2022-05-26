@@ -20,21 +20,15 @@ class FunCommands(commands.Cog, name="Fun"):
 
     def __init__(self, ctx):
         self.ctx = ctx
-        self.hug_gifs = ctx.hug_gifs
-        self.hug_words = ctx.hug_words
-        self.hug_words_bot = ctx.hug_words_bot
-        self.kiss_gifs = ctx.kiss_gifs
-        self.kiss_words = ctx.kiss_words
-        self.kiss_words_bot = ctx.kiss_words_bot
 
     async def checkperm(self, ctx, perm):
-        if await block.BlockUtils.get_perm(perm, ctx.author) or ctx.author.guild_permissions.administrator:
+        if await block.BlockUtils.get_perm(self, ctx, perm, ctx.author) or ctx.author.guild_permissions.administrator:
             return
         else:
             await utils.senderror(ctx, f"{ctx.author.mention}, You aren\'t allowed to use this")
 
     async def checkping(self, ctx, member):
-        if await block.BlockUtils.get_perm("ping", member):
+        if await block.BlockUtils.get_perm(self, ctx, "ping", member):
             await utils.senderror(ctx, f"This person has disallowed me from using them in commands.")
 
     @bridge.bridge_command(name="pet")
@@ -42,7 +36,7 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def pet(self, ctx, member: Optional[discord.member.Member], emoji: Optional[discord.PartialEmoji], url=None):
         """Pet someone :D"""
-        await self.checkperm(ctx, "pet")
+        await FunCommands.checkperm(self, ctx, "pet")
         attachment = None
         try:
             attachment = ctx.message.attachments[0]
@@ -93,15 +87,15 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def hug(self, ctx, *, member: Optional[discord.Member]):
         """Hug someone :O"""
-        await self.checkperm(ctx, "weird")
+        await FunCommands.checkperm(self, ctx, "weird")
         if member == None:
             e = discord.Embed(
-                description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(self.hug_words_bot))} me!", color=0x0690FF)
+                description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(self.ctx.hug_words_bot))} me!", color=0x0690FF)
         else:
             await self.checkping(ctx, member)
             e = discord.Embed(
-                description=f"{ctx.author.mention} {(random.choice(self.hug_words))} {member.mention}", color=0x0690FF)
-        e.set_image(url=(random.choice(self.hug_gifs)))
+                description=f"{ctx.author.mention} {(random.choice(self.ctx.hug_words))} {member.mention}", color=0x0690FF)
+        e.set_image(url=(random.choice(self.ctx.hug_gifs)))
         await utils.sendembed(ctx, e)
 
     @commands.command(hidden=True, name="kiss")
@@ -109,15 +103,15 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def kiss(self, ctx, *, member: Optional[discord.Member]):
         """Kiss someone :O"""
-        await self.checkperm(ctx, "weird")
+        await FunCommands.checkperm(self, ctx, "weird")
         if member == None:
             e = discord.Embed(
-                description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(self.kiss_words_bot))} me!", color=0x0690FF)
+                description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(self.ctx.kiss_words_bot))} me!", color=0x0690FF)
         else:
             await self.checkping(ctx, member)
             e = discord.Embed(
-                description=f"{ctx.author.mention} {(random.choice(self.kiss_words))} {member.mention}", color=0x0690FF)
-        e.set_image(url=(random.choice(self.kiss_gifs)))
+                description=f"{ctx.author.mention} {(random.choice(self.ctx.kiss_words))} {member.mention}", color=0x0690FF)
+        e.set_image(url=(random.choice(self.ctx.kiss_gifs)))
         await utils.sendembed(ctx, e)
 
     @commands.command(hidden=True, name="fall")
@@ -125,7 +119,7 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def fall(self, ctx, *, member: Optional[discord.Member]):
         """Make someone fall >:)"""
-        await self.checkperm(ctx, "joke")
+        await FunCommands.checkperm(self, ctx, "joke")
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} you fell", color=0xFF6969)
@@ -141,7 +135,7 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.has_permissions(administrator=True)
     async def promote(self, ctx, member: discord.Member, *, message=None):
         """Promote someone :D"""
-        await self.checkperm(ctx, "joke")
+        await FunCommands.checkperm(self, ctx, "joke")
         if member == ctx.author:
             e = discord.Embed(
                 description=f"{ctx.author.mention} promoted themselves to {message}", color=0xFF6969)
