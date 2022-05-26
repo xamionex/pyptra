@@ -41,43 +41,10 @@ bot = bridge.Bot(
 )
 
 
-''' @bot.event
-async def on_application_command_error(ctx: discord.ApplicationContext, error):
-    # if isinstance(error, commands.CommandOnCooldown):
-    # await ctx.respond(f'{ctx.author.mention} You\'re on cooldown for {round(error.retry_after, 2)}s', ephemeral=True)
-    # if isinstance(error, commands.MissingPermissions):
-    # await ctx.respond(f'{ctx.author.mention} You\'re missing permissions for this command', ephemeral=True)
-    if isinstance(error, commands.BotMissingPermissions):
-        raise error
-    elif isinstance(error, commands.CommandOnCooldown):
-        e = discord.Embed(description=error, color=0xFF6969)
-        await utils.sendembed(ctx, e, show_all=False)
-    elif isinstance(error, discord.ApplicationCommandError):
-        e = discord.Embed(description=error, color=0xFF6969)
-        await utils.sendembed(ctx, e, show_all=False)
-    raise error
-
-
-@bot.event
-async def on_command_error(ctx, error):
-    # if isinstance(error, commands.CommandOnCooldown):
-    # await ctx.reply(f'{ctx.author.mention} You\'re on cooldown for {round(error.retry_after, 2)}s')
-    # if isinstance(error, commands.MissingPermissions):
-    # await ctx.reply(f'{ctx.author.mention} You\'re missing permissions for this command')
-    if isinstance(error, commands.CommandNotFound):
-        raise error
-    elif isinstance(error, commands.BotMissingPermissions):
-        raise error
-    elif isinstance(error, commands.CommandError):
-        e = discord.Embed(description=f"❌ {error}", color=0xFF6969)
-        await utils.sendembed(ctx, e, delete=3)
-    raise error '''
-
-
 @bot.before_invoke
 async def on_command(ctx):
     try:
-        if await block.BlockUtils.get_perm("blacklist", ctx.author) and ctx.author.guild_permissions.administrator == False:
+        if await block.BlockUtils.get_perm(ctx, ctx, "blacklist", ctx.author) and ctx.author.guild_permissions.administrator == False:
             raise commands.CommandError(
                 f"{ctx.author.mention}, You were **blocked** from using this bot, direct message <@139095725110722560> if you feel this is unfair")
     except AttributeError:

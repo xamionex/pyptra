@@ -10,55 +10,73 @@ extensions = utils.extensions()
 
 
 def setup(bot):
-    bot.add_cog(MaintananceCommands(bot))
+    bot.add_cog(ManageCommands(bot))
 
 
-class MaintananceCommands(commands.Cog, name="Maintanance"):
+class ManageCommands(commands.Cog, name="Manage"):
     """Commands for managing the bot."""
     COG_EMOJI = "🛠️"
 
     def __init__(self, ctx):
         self.ctx = ctx
 
+    @commands.command(hidden=True, name="log")
+    @commands.is_owner()
+    async def log(self, ctx):
+        message = ctx.message.content
+        find = getattr(getattr(self, message.split(" ")
+                       [1]), message.split(" ")[2])
+        print(find)
+        await utils.sendembed(ctx, discord.Embed(description=find), show_all=False, delete=3, delete_speed=5)
+
     @commands.command(hidden=True, name="load")
     @commands.is_owner()
     async def load(self, ctx, *, module: str):
         """Loads a module"""
+        e = discord.Embed(
+            description=f"Trying to load modules \"{module}\"", color=0x69FF69)
         module = module.split(sep=" ")
         for cog in module:
             if cog in extensions[0]:
                 self.ctx.load_extension(f"cogs.{cog}")
-                await utils.sendembed(ctx, discord.Embed(description=f'✅ {cog} successfully loaded', color=0x69FF69), show_all=False, delete=3, delete_speed=5)
+                e.add_field(name=f"{cog}", value="`✅` Success")
             else:
-                await utils.senderror(ctx, f"Couldn't find module {cog}")
+                e.add_field(name=f"{cog}", value="`❌` Not found")
+        await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=5)
 
     @commands.command(hidden=True, name="unload")
     @commands.is_owner()
     async def unload(self, ctx, *, module: str):
         """Unloads a module"""
+        e = discord.Embed(
+            description=f"Trying to unload modules \"{module}\"", color=0x69FF69)
         module = module.split(sep=" ")
         for cog in module:
             if cog in extensions[0]:
                 self.ctx.unload_extension(f"cogs.{cog}")
-                await utils.sendembed(ctx, discord.Embed(description=f'✅ {cog} successfully unloaded', color=0x69FF69), show_all=False, delete=3, delete_speed=5)
+                e.add_field(name=f"{cog}", value="`✅` Success")
             else:
-                await utils.senderror(ctx, f"Couldn't find module {cog}")
+                e.add_field(name=f"{cog}", value="`❌` Not found")
+        await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=5)
 
     @commands.command(hidden=True, name="reload")
     @commands.is_owner()
     async def reload(self, ctx, *, module: str):
         """Reloads a module"""
+        e = discord.Embed(
+            description=f"Trying to reload modules \"{module}\"", color=0x69FF69)
         module = module.split(sep=" ")
         for cog in module:
             if cog in extensions[0]:
                 self.ctx.reload_extension(f"cogs.{cog}")
-                await utils.sendembed(ctx, discord.Embed(description=f'✅ {cog} successfully reloaded', color=0x69FF69), show_all=False, delete=3, delete_speed=5)
+                e.add_field(name=f"{cog}", value="`✅` Success")
             elif cog == "all":
                 for cog in extensions[0]:
                     self.ctx.reload_extension(f"cogs.{cog}")
-                    await utils.sendembed(ctx, discord.Embed(description=f'✅ {cog} successfully reloaded', color=0x69FF69), show_all=False, delete=3, delete_speed=5)
+                    e.add_field(name=f"{cog}", value="`✅` Success")
             else:
-                await utils.senderror(ctx, f"Couldn't find module {cog}")
+                e.add_field(name=f"{cog}", value="`❌` Not found")
+        await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=5)
 
     @commands.command(hidden=True, name="restart")
     @commands.is_owner()

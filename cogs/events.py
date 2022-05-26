@@ -1,11 +1,12 @@
+import main
+import discord
+from discord.ext import commands
+# data
 import json
 import time
-import discord
 import random
-import main
-from discord.ext import commands
 # cogs
-from cogs import utils, other
+from cogs import utils, other, configs
 # afk command data
 import datetime
 import humanize
@@ -30,10 +31,6 @@ class Events(commands.Cog, name="Events"):
 
     @commands.Cog.listener("on_application_command_error")
     async def slash_command_error(self, ctx: discord.ApplicationContext, error):
-        # if isinstance(error, commands.CommandOnCooldown):
-        # await ctx.respond(f'{ctx.author.mention} You\'re on cooldown for {round(error.retry_after, 2)}s', ephemeral=True)
-        # if isinstance(error, commands.MissingPermissions):
-        # await ctx.respond(f'{ctx.author.mention} You\'re missing Permissions for this command', ephemeral=True)
         if isinstance(error, commands.BotMissingPermissions):
             raise error
         elif isinstance(error, commands.CommandOnCooldown):
@@ -46,10 +43,6 @@ class Events(commands.Cog, name="Events"):
 
     @commands.Cog.listener("on_command_error")
     async def command_error(self, ctx, error):
-        # if isinstance(error, commands.CommandOnCooldown):
-        # await ctx.reply(f'{ctx.author.mention} You\'re on cooldown for {round(error.retry_after, 2)}s')
-        # if isinstance(error, commands.MissingPermissions):
-        # await ctx.reply(f'{ctx.author.mention} You\'re missing Permissions for this command')
         if isinstance(error, commands.CommandNotFound):
             raise error
         elif isinstance(error, commands.BotMissingPermissions):
@@ -75,11 +68,11 @@ class Events(commands.Cog, name="Events"):
         with open('./data/prefixes.json', 'w') as f:
             json.dump(prefixes, f, indent=4)
 
-        with open('./data/channels.json', 'r') as f:
+        """with open('./data/channels.json', 'r') as f:
             channels = json.load(f)
         channels[str(guild.id)] = {}
         with open('./data/channels.json', 'w') as f:
-            json.dump(channels, f, indent=4)
+            json.dump(channels, f, indent=4)"""
 
     @commands.Cog.listener("on_guild_remove")
     async def guild_remove_data(self, guild):
@@ -89,11 +82,11 @@ class Events(commands.Cog, name="Events"):
         with open('./data/prefixes.json', 'w') as f:
             json.dump(prefixes, f, indent=4)
 
-        with open('./data/channels.json', 'r') as f:
+        """with open('./data/channels.json', 'r') as f:
             channels = json.load(f)
         channels.pop(str(guild.id))
         with open('./data/channels.json', 'w') as f:
-            json.dump(channels, f, indent=4)
+            json.dump(channels, f, indent=4)"""
 
     @commands.Cog.listener("on_message")
     async def memes_channel(self, message):
@@ -112,19 +105,19 @@ class Events(commands.Cog, name="Events"):
             text=f"Toggle: {prefix}alerts\nDMs Toggle: {prefix}dmalerts")
         if message.author.bot:
             return
-        with open('./data/afk.json', 'r') as f:
-            afk = json.load(f)
+
         for member in message.mentions:
             if member.bot or member.id == message.author.id:
                 return
-            if afk[f'{member.id}']['AFK']:
+            if self.bot.afk_file[f'{member.id}']['AFK']:
                 send = True
 
                 # gets afk message
-                reason = afk[f'{member.id}']['reason']
+                reason = self.bot.afk_file[f'{member.id}']['reason']
 
                 # gets unix time
-                unix_time = int(time.time()) - int(afk[f'{member.id}']['time'])
+                unix_time = int(time.time()) - \
+                    int(self.bot.afk_file[f'{member.id}']['time'])
 
                 # user was afk for time.now() - time
                 afktime = humanize.naturaltime(
@@ -135,28 +128,27 @@ class Events(commands.Cog, name="Events"):
                     name=f"{member.display_name.replace('[AFK]', '')} - {afktime}", value=f"\"{reason}\"", inline=True)
 
                 # plus 1 time mentioned in afk.json
-                afk[f'{member.id}']['mentions'] = int(
-                    afk[f'{member.id}']['mentions']) + 1
+                self.bot.afk_file[f'{member.id}']['mentions'] = int(
+                    self.bot.afk_file[f'{member.id}']['mentions']) + 1
 
                 # save json
-                with open('./data/afk.json', 'w') as f:
-                    json.dump(afk, f, indent=4, sort_keys=True)
+                configs.save('./data/afk.json', 'w', self.bot.afk_file)
 
         if send:
             await other.OtherUtils.sendafk(self, message, ["afk_alert", "afk_alert_dm"], afk_alert)
-        await other.OtherUtils.update_data(afk, message.author)
+        await other.OtherUtils.update_data(self.bot.afk_file, message.author)
         # if message's author is afk continue
-        if list(message.content.split())[0] != f'{prefix}afk' and afk[f'{message.author.id}']['AFK']:
+        if list(message.content.split())[0] != f'{prefix}afk' and self.bot.afk_file[f'{message.author.id}']['AFK']:
             # unix now - unix since afk
             timeafk = int(time.time()) - \
-                int(afk[f'{message.author.id}']['time'])
+                int(self.bot.afk_file[f'{message.author.id}']['time'])
 
             # make time readable for user
             afktime = other.OtherUtils.period(datetime.timedelta(
                 seconds=round(timeafk)), "{d}d {h}h {m}m {s}s")
 
             # get mentions
-            mentionz = afk[f'{message.author.id}']['mentions']
+            mentionz = self.bot.afk_file[f'{message.author.id}']['mentions']
 
             # make embed
             welcome_back = discord.Embed(
@@ -168,12 +160,11 @@ class Events(commands.Cog, name="Events"):
                 text=f"Toggle: {prefix}wbalerts\nDMs Toggle: {prefix}wbdmalerts")
 
             # reset afk for user
-            afk[f'{message.author.id}']['AFK'] = False
-            afk[f'{message.author.id}']['reason'] = 'None'
-            afk[f'{message.author.id}']['time'] = '0'
-            afk[f'{message.author.id}']['mentions'] = 0
-            with open('./data/afk.json', 'w') as f:
-                json.dump(afk, f, indent=4, sort_keys=True)
+            self.bot.afk_file[f'{message.author.id}']['AFK'] = False
+            self.bot.afk_file[f'{message.author.id}']['reason'] = 'None'
+            self.bot.afk_file[f'{message.author.id}']['time'] = '0'
+            self.bot.afk_file[f'{message.author.id}']['mentions'] = 0
+            configs.save('./data/afk.json', 'w', self.bot.afk_file)
 
             # try to reset nickname
             try:
@@ -184,8 +175,7 @@ class Events(commands.Cog, name="Events"):
                     f'I wasnt able to edit [{message.author} / {message.author.id}].')
 
             await other.OtherUtils.sendafk(self, message, ["wb_alert", "wb_alert_dm"], welcome_back)
-        with open('./data/afk.json', 'w') as f:
-            json.dump(afk, f, indent=4, sort_keys=True)
+        configs.save('./data/afk.json', 'w', self.bot.afk_file)
 
     @commands.Cog.listener("on_message")
     async def help_check(self, message):

@@ -16,7 +16,6 @@ class OtherCommands(commands.Cog, name="Other commands"):
 
     def __init__(self, ctx):
         self.ctx = ctx
-        self.bot = ctx
 
     @commands.command(hidden=True, name="echo")
     @commands.has_permissions(administrator=True)
