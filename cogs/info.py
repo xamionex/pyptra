@@ -28,7 +28,6 @@ class InfoCommands(commands.Cog, name="Informational"):
 
     def __init__(self, ctx):
         self.ctx = ctx
-        self.bot = ctx
 
     @bridge.bridge_command(name="userinfo")
     @commands.cooldown(1, 10, commands.BucketType.user)
