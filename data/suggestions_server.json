@@ -1,5 +1,5 @@
 {
-    "latestId": 47,
+    "latestId": 49,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -382,6 +382,22 @@
             "suggestion": "Video tutorial: \"how to host a server in linux (docker) for complete noobs\"",
             "sid": 47,
             "message": 978070497860395068,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 226211469279100928,
+            "suggestion": "For Server Owners + Hosts:  Force new nslog.txt files to be created after <x> time or <x> amount of data or <x> number of days... so the individual files do not get too large and \"freeze\" / hang while opening.... Benefits:  helps with hosting on slower machines, Helps with quickly getting hacker UID / IP info **faster** to ban etc.",
+            "sid": 48,
+            "message": 979122897551523881,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 139166150666878976,
+            "suggestion": "REST API to see PlayerCount",
+            "sid": 49,
+            "message": 979193315771686962,
             "status": "open",
             "note": ""
         }

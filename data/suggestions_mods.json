@@ -1,5 +1,5 @@
 {
-    "latestId": 192,
+    "latestId": 201,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1542,6 +1542,78 @@
             "suggestion": "something that causes titans to ragdoll more instead of just exploding, the ragdolls are honestly better looking than things exploding completely",
             "sid": 192,
             "message": 978935446753128479,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 445740265995632660,
+            "suggestion": "A mod that increases the head bob value so it can feel more like titanfall 1",
+            "sid": 193,
+            "message": 979206378260418570,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 884612064507756625,
+            "suggestion": "When you throw your pulse blade, you teleport to where it lands",
+            "sid": 194,
+            "message": 979211302159401051,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 528830566590578699,
+            "suggestion": "Just a fun Arcade mechanic where damaging enemy titans restores the same amount of health on a changeable modifier.",
+            "sid": 195,
+            "message": 979235695967223819,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 466843176594964481,
+            "suggestion": "A mod which servves as a framework to create custom inspect animations.",
+            "sid": 196,
+            "message": 979254864674701342,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 528830566590578699,
+            "suggestion": "A combination of Attrition, bounty hunt (if possible), amped hardpoint, and ctf into one game mode. You can multiply the scoring systems of each together to create one scoring system. Eg. if your team had 200 points in amped hardpoint and 2 flags captured you would have a total of 400 points. (score limits would have to be adjusted accordingly)",
+            "sid": 197,
+            "message": 979460645714014228,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 528830566590578699,
+            "suggestion": "Attrition (or any gamemode) but it always starts like LTS where you can see the titans people are selecting as well as the pilot type with primary and ordanance",
+            "sid": 198,
+            "message": 979462378842366052,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 528830566590578699,
+            "suggestion": "in the campaign there are moments where you embark in bt and can look around while inside the cockpit. The visual effect is that when you look left or right the visuals of the cockpit moves in the oposite direction giving the feeling that you are looking around. Would love to see a mod for this.",
+            "sid": 199,
+            "message": 979469762990071898,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 528830566590578699,
+            "suggestion": "A mod that makes enemy titans gives voicelines when attacked or performing manuevers, like in the campaign.",
+            "sid": 200,
+            "message": 979472495373598721,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 536037480059764766,
+            "suggestion": "A mod that will randomize certain parts of your loadout everytime you click a button. It would be nice to be able to only randomize primary weapons and grenades for example, or to be able to select whether or not you'd also like to randomize the attachments as well.",
+            "sid": 201,
+            "message": 979509728386355290,
             "status": "open",
             "note": ""
         }
