@@ -21,12 +21,12 @@ class Events(commands.Cog, name="Events"):
     """Event listeners (no commands)."""
     COG_EMOJI = "🛠️"
 
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, ctx):
+        self.ctx = ctx
 
     @commands.Cog.listener("on_ready")
     async def logged_in(self):
-        print(f"Logged in as {self.bot.user} (ID: {self.bot.user.id})")
+        print(f"Logged in as {self.ctx.user} (ID: {self.ctx.user.id})")
         print("------")
 
     @commands.Cog.listener("on_application_command_error")
@@ -97,7 +97,7 @@ class Events(commands.Cog, name="Events"):
     @commands.Cog.listener("on_message")
     async def afk_check(self, message):
         # check if user is afk or members in message
-        prefix = main.get_prefix(self.bot, message)
+        prefix = main.get_prefix(self.ctx, message)
         send = False
         afk_alert = discord.Embed(
             title=f"Members in your message are afk:")
@@ -109,15 +109,15 @@ class Events(commands.Cog, name="Events"):
         for member in message.mentions:
             if member.bot or member.id == message.author.id:
                 return
-            if self.bot.afk[f'{member.id}']['AFK']:
+            if self.ctx.afk[f'{member.id}']['AFK']:
                 send = True
 
                 # gets afk message
-                reason = self.bot.afk[f'{member.id}']['reason']
+                reason = self.ctx.afk[f'{member.id}']['reason']
 
                 # gets unix time
                 unix_time = int(time.time()) - \
-                    int(self.bot.afk[f'{member.id}']['time'])
+                    int(self.ctx.afk[f'{member.id}']['time'])
 
                 # user was afk for time.now() - time
                 afktime = humanize.naturaltime(
@@ -128,27 +128,27 @@ class Events(commands.Cog, name="Events"):
                     name=f"{member.display_name.replace('[AFK]', '')} - {afktime}", value=f"\"{reason}\"", inline=True)
 
                 # plus 1 time mentioned in afk.json
-                self.bot.afk[f'{member.id}']['mentions'] = int(
-                    self.bot.afk[f'{member.id}']['mentions']) + 1
+                self.ctx.afk[f'{member.id}']['mentions'] = int(
+                    self.ctx.afk[f'{member.id}']['mentions']) + 1
 
                 # save json
-                configs.save(self.bot.afk_path, 'w', self.bot.afk)
+                configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
 
         if send:
             await users.UserUtils.sendafk(self, message, ["afk_alert", "afk_alert_dm"], afk_alert)
-        await users.UserUtils.update_data(self.bot.afk, message.author)
+        await users.UserUtils.update_data(self.ctx.afk, message.author)
         # if message's author is afk continue
-        if list(message.content.split(" "))[0] != f'{prefix}afk' and self.bot.afk[f'{message.author.id}']['AFK']:
+        if list(message.content.split(" "))[0] != f'{prefix}afk' and self.ctx.afk[f'{message.author.id}']['AFK']:
             # unix now - unix since afk
             timeafk = int(time.time()) - \
-                int(self.bot.afk[f'{message.author.id}']['time'])
+                int(self.ctx.afk[f'{message.author.id}']['time'])
 
             # make time readable for user
             afktime = users.UserUtils.period(datetime.timedelta(
                 seconds=round(timeafk)), "{d}d {h}h {m}m {s}s")
 
             # get mentions
-            mentionz = self.bot.afk[f'{message.author.id}']['mentions']
+            mentionz = self.ctx.afk[f'{message.author.id}']['mentions']
 
             # make embed
             welcome_back = discord.Embed(
@@ -160,11 +160,11 @@ class Events(commands.Cog, name="Events"):
                 text=f"Toggle: {prefix}wbalerts\nDMs Toggle: {prefix}wbdmalerts")
 
             # reset afk for user
-            self.bot.afk[f'{message.author.id}']['AFK'] = False
-            self.bot.afk[f'{message.author.id}']['reason'] = 'None'
-            self.bot.afk[f'{message.author.id}']['time'] = '0'
-            self.bot.afk[f'{message.author.id}']['mentions'] = 0
-            configs.save(self.bot.afk_path, 'w', self.bot.afk)
+            self.ctx.afk[f'{message.author.id}']['AFK'] = False
+            self.ctx.afk[f'{message.author.id}']['reason'] = 'None'
+            self.ctx.afk[f'{message.author.id}']['time'] = '0'
+            self.ctx.afk[f'{message.author.id}']['mentions'] = 0
+            configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
 
             # try to reset nickname
             try:
@@ -175,20 +175,20 @@ class Events(commands.Cog, name="Events"):
                     f'I wasnt able to edit [{message.author} / {message.author.id}].')
 
             await users.UserUtils.sendafk(self, message, ["wb_alert", "wb_alert_dm"], welcome_back)
-        configs.save(self.bot.afk_path, 'w', self.bot.afk)
+        configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
 
     @commands.Cog.listener("on_message")
     async def help_check(self, message):
         # check if user's message is only bot ping and reply with help, if not process commands
-        if message.author.bot == False and self.bot.user.mentioned_in(message) and len(message.content) == len(self.bot.user.mention):
-            await message.reply(embed=discord.Embed(description=f'My prefix is `{self.bot.guild_prefixes[str(message.guild.id)]}` or {self.bot.user.mention}, you can also use slash commands\nFor more info use the /help command!'), delete_after=20, mention_author=False)
+        if message.author.bot == False and self.ctx.user.mentioned_in(message) and len(message.content) == len(self.ctx.user.mention):
+            await message.reply(embed=discord.Embed(description=f'My prefix is `{self.ctx.guild_prefixes[str(message.guild.id)]}` or {self.ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!'), delete_after=20, mention_author=False)
         else:
-            await self.bot.process_commands(message)
+            await self.ctx.process_commands(message)
 
     @commands.Cog.listener("on_message")
     async def word_trigger(self, message):
         if message.author.bot == False:
-            for trigger, reply in self.bot.triggers.items():
+            for trigger, reply in self.ctx.triggers.items():
                 multi_trigger = list(trigger.split(' ⨉ '))
                 for triggers in multi_trigger:
                     if triggers in message.content.lower():
