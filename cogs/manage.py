@@ -26,6 +26,8 @@ class ManageCommands(commands.Cog, name="Manage"):
         args = ctx.message.content.split(" ")
         if args[1] == "ctx":
             find = getattr(ctx, args[2])
+        elif args[1] == "self.ctx":
+            find = getattr(self.ctx, args[2])
         else:
             find = getattr(getattr(self, args[1]), args[2])
         print(find)
@@ -108,4 +110,4 @@ class ManageCommands(commands.Cog, name="Manage"):
                 json.dump(prefixes, f, indent=4)
             await utils.sendembed(ctx, discord.Embed(description=f'Prefix changed to: {prefix}'), False, 3, 5)
         else:
-            await utils.sendembed(ctx, discord.Embed(description=f'My prefix is `{main.get_prefix(ctx, ctx.message)}` or {ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!'), False, 3, 20)
+            await utils.sendembed(ctx, discord.Embed(description=f'My prefix is `{self.ctx.guild_prefixes[str(ctx.guild.id)]}` or {self.ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!'), False, 3, 20)

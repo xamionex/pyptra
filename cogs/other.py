@@ -10,7 +10,7 @@ def setup(bot):
     bot.add_cog(OtherCommands(bot))
 
 
-class OtherCommands(commands.Cog, name="Other commands"):
+class OtherCommands(commands.Cog, name="Other Commands"):
     """Uncategorized commands with general use."""
     COG_EMOJI = "❔"
 
@@ -75,72 +75,3 @@ class OtherCommands(commands.Cog, name="Other commands"):
         nick = nick or ""
         await member.edit(nick=nick)
         await utils.delete_message(ctx)
-
-    @bridge.bridge_command(name="afk")
-    async def afk(self, ctx, *, reason=None):
-        """Alerts users that mention you that you're AFK."""
-        if reason:
-            reason = utils.remove_newlines(reason)
-        e = await OtherUtils.setafk(self, ctx, reason)
-        await OtherUtils.sendafk(self, ctx, ["afk_alert", "afk_alert_dm"], e)
-
-    @bridge.bridge_command(name="gn")
-    async def gn(self, ctx):
-        """Sets your AFK to `Sleeping 💤`"""
-        await OtherUtils.setafk(self, ctx, "Sleeping 💤")
-        e = discord.Embed(description=f"Goodnight {ctx.author.mention}")
-        e.set_image(url="https://c.tenor.com/nPYfVs6FsBQAAAAS/kitty-kitten.gif")
-        await OtherUtils.sendafk(self, ctx, ["afk_alert", "afk_alert_dm"], e)
-
-
-class OtherUtils():
-    def __init__(self, ctx):
-        self.ctx = ctx
-
-    async def setafk(self, ctx, reason):
-        with open('./data/afk.json', 'r') as f:
-            afk = json.load(f)
-        if not reason:
-            reason = 'AFK'
-        elif reason and len(reason) > 100:
-            await utils.senderror(
-                "You went over the 100 character limit")
-        await OtherUtils.update_data(afk, ctx.author)
-        afk[f'{ctx.author.id}']['reason'] = f'{reason}'
-        if afk[f'{ctx.author.id}']['AFK']:
-            rply = discord.Embed(
-                description=f"Goodbye {ctx.author.mention}, Updated alert to \"{reason}\"")
-        else:
-            afk[f'{ctx.author.id}']['AFK'] = True
-            afk[f'{ctx.author.id}']['time'] = int(time.time())
-            afk[f'{ctx.author.id}']['mentions'] = 0
-            rply = discord.Embed(
-                description=f"Goodbye {ctx.author.mention}, Set alert to \"{reason}\"")
-            try:
-                await ctx.author.edit(nick=f'[AFK] {ctx.author.display_name}')
-            except:
-                pass
-        with open('./data/afk.json', 'w') as f:
-            json.dump(afk, f, indent=4, sort_keys=True)
-        return rply
-
-    async def update_data(afk, user):
-        if not f'{user.id}' in afk:
-            afk[f'{user.id}'] = {}
-            afk[f'{user.id}']['AFK'] = False
-
-    def period(delta, pattern):
-        d = {'d': delta.days}
-        d['h'], rem = divmod(delta.seconds, 3600)
-        d['m'], d['s'] = divmod(rem, 60)
-        return pattern.format(**d)
-
-    async def sendafk(self, ctx, perm, e):
-        if await block.GlobalBlockUtils.get_global_perm(self, ctx, perm[0], ctx.author):
-            if await block.GlobalBlockUtils.get_global_perm(self, ctx, perm[1], ctx.author):
-                await utils.senddmembed(ctx, e)
-            else:
-                if isinstance(ctx, bridge.BridgeApplicationContext):
-                    await ctx.reply(embed=e, ephemeral=True)
-                else:
-                    await ctx.reply(embed=e, delete_after=10, mention_author=False)

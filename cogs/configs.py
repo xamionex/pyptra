@@ -11,12 +11,26 @@ class Configs(commands.Cog, name="Configs"):
     COG_EMOJI = "⚙️"
 
     def __init__(self, ctx):
-        paths = {"./data/afk.json": "afk_file",
+        paths = {"./data/afk.json": "afk",
                  "./data/global_perms.json": "global_perms",
-                 "./data/perms.json": "perms"}
+                 "./data/reputation.json": "reputation",
+                 "./data/perms.json": "perms",
+                 "./data/prefixes.json": "guild_prefixes"}
         for path, name in paths.items():
             with open(path, "r") as f:
                 setattr(ctx, str(name), json.loads(f.read()))
+                setattr(ctx, str(name) + "_path", path)
+
+        ctx.rep_types = {"positive": "✅ 👍 plus p +",
+                         "negative": "❌ 👎 minus m -",
+                         "informative": "ℹ️ ❓ stats s info i ?"}
+        ctx.rep_type_positive = ctx.rep_types["positive"].split(" ")
+        ctx.rep_type_negative = ctx.rep_types["negative"].split(" ")
+        ctx.rep_type_informative = ctx.rep_types["informative"].split(" ")
+        ctx.rep_type_combined = ctx.rep_type_positive + \
+            ctx.rep_type_negative + ctx.rep_type_informative
+        ctx.rep_type_list = {"positive": "Positive Reputation",
+                             "negative": "Negative Reputation"}
         ctx.perms_list = {"blacklist": "Denies usage for bot",
                           "weird": "Allows -hug -kiss",
                           "ping": "Denies pinging user in -hug -kiss -pet",

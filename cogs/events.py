@@ -6,7 +6,7 @@ import json
 import time
 import random
 # cogs
-from cogs import utils, other, configs
+from cogs import utils, users, configs
 # afk command data
 import datetime
 import humanize
@@ -34,10 +34,10 @@ class Events(commands.Cog, name="Events"):
         if isinstance(error, commands.BotMissingPermissions):
             raise error
         elif isinstance(error, commands.CommandOnCooldown):
-            e = discord.Embed(description=error, color=0xFF6969)
+            e = discord.Embed(description=f"`❌` {error}", color=0xFF6969)
             await utils.sendembed(ctx, e, show_all=False)
         elif isinstance(error, discord.ApplicationCommandError):
-            e = discord.Embed(description=error, color=0xFF6969)
+            e = discord.Embed(description=f"`❌` {error}", color=0xFF6969)
             await utils.sendembed(ctx, e, show_all=False)
         raise error
 
@@ -56,7 +56,7 @@ class Events(commands.Cog, name="Events"):
     async def member_data(self, member):
         with open('./data/afk.json', 'r') as f:
             afk = json.load(f)
-        await other.OtherUtils.update_data(afk, member)
+        await users.UserUtils.update_data(afk, member)
         with open('./data/afk.json', 'w') as f:
             json.dump(afk, f, indent=4, sort_keys=True)
 
@@ -109,15 +109,15 @@ class Events(commands.Cog, name="Events"):
         for member in message.mentions:
             if member.bot or member.id == message.author.id:
                 return
-            if self.bot.afk_file[f'{member.id}']['AFK']:
+            if self.bot.afk[f'{member.id}']['AFK']:
                 send = True
 
                 # gets afk message
-                reason = self.bot.afk_file[f'{member.id}']['reason']
+                reason = self.bot.afk[f'{member.id}']['reason']
 
                 # gets unix time
                 unix_time = int(time.time()) - \
-                    int(self.bot.afk_file[f'{member.id}']['time'])
+                    int(self.bot.afk[f'{member.id}']['time'])
 
                 # user was afk for time.now() - time
                 afktime = humanize.naturaltime(
@@ -128,27 +128,27 @@ class Events(commands.Cog, name="Events"):
                     name=f"{member.display_name.replace('[AFK]', '')} - {afktime}", value=f"\"{reason}\"", inline=True)
 
                 # plus 1 time mentioned in afk.json
-                self.bot.afk_file[f'{member.id}']['mentions'] = int(
-                    self.bot.afk_file[f'{member.id}']['mentions']) + 1
+                self.bot.afk[f'{member.id}']['mentions'] = int(
+                    self.bot.afk[f'{member.id}']['mentions']) + 1
 
                 # save json
-                configs.save('./data/afk.json', 'w', self.bot.afk_file)
+                configs.save(self.bot.afk_path, 'w', self.bot.afk)
 
         if send:
-            await other.OtherUtils.sendafk(self, message, ["afk_alert", "afk_alert_dm"], afk_alert)
-        await other.OtherUtils.update_data(self.bot.afk_file, message.author)
+            await users.UserUtils.sendafk(self, message, ["afk_alert", "afk_alert_dm"], afk_alert)
+        await users.UserUtils.update_data(self.bot.afk, message.author)
         # if message's author is afk continue
-        if list(message.content.split())[0] != f'{prefix}afk' and self.bot.afk_file[f'{message.author.id}']['AFK']:
+        if list(message.content.split())[0] != f'{prefix}afk' and self.bot.afk[f'{message.author.id}']['AFK']:
             # unix now - unix since afk
             timeafk = int(time.time()) - \
-                int(self.bot.afk_file[f'{message.author.id}']['time'])
+                int(self.bot.afk[f'{message.author.id}']['time'])
 
             # make time readable for user
-            afktime = other.OtherUtils.period(datetime.timedelta(
+            afktime = users.UserUtils.period(datetime.timedelta(
                 seconds=round(timeafk)), "{d}d {h}h {m}m {s}s")
 
             # get mentions
-            mentionz = self.bot.afk_file[f'{message.author.id}']['mentions']
+            mentionz = self.bot.afk[f'{message.author.id}']['mentions']
 
             # make embed
             welcome_back = discord.Embed(
@@ -160,11 +160,11 @@ class Events(commands.Cog, name="Events"):
                 text=f"Toggle: {prefix}wbalerts\nDMs Toggle: {prefix}wbdmalerts")
 
             # reset afk for user
-            self.bot.afk_file[f'{message.author.id}']['AFK'] = False
-            self.bot.afk_file[f'{message.author.id}']['reason'] = 'None'
-            self.bot.afk_file[f'{message.author.id}']['time'] = '0'
-            self.bot.afk_file[f'{message.author.id}']['mentions'] = 0
-            configs.save('./data/afk.json', 'w', self.bot.afk_file)
+            self.bot.afk[f'{message.author.id}']['AFK'] = False
+            self.bot.afk[f'{message.author.id}']['reason'] = 'None'
+            self.bot.afk[f'{message.author.id}']['time'] = '0'
+            self.bot.afk[f'{message.author.id}']['mentions'] = 0
+            configs.save(self.bot.afk_path, 'w', self.bot.afk)
 
             # try to reset nickname
             try:
@@ -174,14 +174,14 @@ class Events(commands.Cog, name="Events"):
                 print(
                     f'I wasnt able to edit [{message.author} / {message.author.id}].')
 
-            await other.OtherUtils.sendafk(self, message, ["wb_alert", "wb_alert_dm"], welcome_back)
-        configs.save('./data/afk.json', 'w', self.bot.afk_file)
+            await users.UserUtils.sendafk(self, message, ["wb_alert", "wb_alert_dm"], welcome_back)
+        configs.save(self.bot.afk_path, 'w', self.bot.afk)
 
     @commands.Cog.listener("on_message")
     async def help_check(self, message):
         # check if user's message is only bot ping and reply with help, if not process commands
         if message.author.bot == False and self.bot.user.mentioned_in(message) and len(message.content) == len(self.bot.user.mention):
-            await message.reply(embed=discord.Embed(description=f'My prefix is `{main.get_prefix(self.bot, message)}` or {self.bot.user.mention}, you can also use slash commands\nFor more info use the /help command!'), delete_after=20, mention_author=False)
+            await message.reply(embed=discord.Embed(description=f'My prefix is `{self.bot.guild_prefixes[str(message.guild.id)]}` or {self.bot.user.mention}, you can also use slash commands\nFor more info use the /help command!'), delete_after=20, mention_author=False)
         else:
             await self.bot.process_commands(message)
 
