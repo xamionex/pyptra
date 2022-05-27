@@ -138,7 +138,7 @@ class Events(commands.Cog, name="Events"):
             await users.UserUtils.sendafk(self, message, ["afk_alert", "afk_alert_dm"], afk_alert)
         await users.UserUtils.update_data(self.bot.afk, message.author)
         # if message's author is afk continue
-        if list(message.content.split())[0] != f'{prefix}afk' and self.bot.afk[f'{message.author.id}']['AFK']:
+        if list(message.content.split(" "))[0] != f'{prefix}afk' and self.bot.afk[f'{message.author.id}']['AFK']:
             # unix now - unix since afk
             timeafk = int(time.time()) - \
                 int(self.bot.afk[f'{message.author.id}']['time'])
@@ -187,12 +187,14 @@ class Events(commands.Cog, name="Events"):
 
     @commands.Cog.listener("on_message")
     async def word_trigger(self, message):
-        for trigger, reply in self.bot.triggers.items():
-            multi_trigger = list(trigger.split(' ⨉ '))
-            for triggers in multi_trigger:
-                if triggers in message.content.lower():
-                    reply = random.choice(list(reply.split(' ⨉ ')))
-                    await message.reply(reply)
+        if message.author.bot == False:
+            for trigger, reply in self.bot.triggers.items():
+                multi_trigger = list(trigger.split(' ⨉ '))
+                for triggers in multi_trigger:
+                    if triggers in message.content.lower():
+                        reply = random.choice(list(reply.split(' ⨉ ')))
+                        await message.reply(reply)
+                        break
 
 
 """
