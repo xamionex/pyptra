@@ -1,5 +1,5 @@
 {
-    "latestId": 201,
+    "latestId": 202,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1614,6 +1614,14 @@
             "suggestion": "A mod that will randomize certain parts of your loadout everytime you click a button. It would be nice to be able to only randomize primary weapons and grenades for example, or to be able to select whether or not you'd also like to randomize the attachments as well.",
             "sid": 201,
             "message": 979509728386355290,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 709136867785834506,
+            "suggestion": "custom banner maybe?",
+            "sid": 202,
+            "message": 979521847848742962,
             "status": "open",
             "note": ""
         }
