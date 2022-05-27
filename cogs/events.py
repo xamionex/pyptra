@@ -185,6 +185,15 @@ class Events(commands.Cog, name="Events"):
         else:
             await self.bot.process_commands(message)
 
+    @commands.Cog.listener("on_message")
+    async def word_trigger(self, message):
+        for trigger, reply in self.bot.triggers.items():
+            multi_trigger = list(trigger.split(' ⨉ '))
+            for triggers in multi_trigger:
+                if triggers in message.content.lower():
+                    reply = random.choice(list(reply.split(' ⨉ ')))
+                    await message.reply(reply)
+
 
 """
 class Loops(commands.Cog):
