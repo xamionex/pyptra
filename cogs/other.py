@@ -136,8 +136,8 @@ class OtherUtils():
         return pattern.format(**d)
 
     async def sendafk(self, ctx, perm, e):
-        if await block.GlobalBlockUtils.get_global_perm(perm[0], ctx.author):
-            if await block.GlobalBlockUtils.get_global_perm(perm[1], ctx.author):
+        if await block.GlobalBlockUtils.get_global_perm(self, ctx, perm[0], ctx.author):
+            if await block.GlobalBlockUtils.get_global_perm(self, ctx, perm[1], ctx.author):
                 await utils.senddmembed(ctx, e)
             else:
                 if isinstance(ctx, bridge.BridgeApplicationContext):

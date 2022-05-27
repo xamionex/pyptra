@@ -23,9 +23,11 @@ class ManageCommands(commands.Cog, name="Manage"):
     @commands.command(hidden=True, name="log")
     @commands.is_owner()
     async def log(self, ctx):
-        message = ctx.message.content
-        find = getattr(getattr(self, message.split(" ")
-                       [1]), message.split(" ")[2])
+        args = ctx.message.content.split(" ")
+        if args[1] == "ctx":
+            find = getattr(ctx, args[2])
+        else:
+            find = getattr(getattr(self, args[1]), args[2])
         print(find)
         await utils.sendembed(ctx, discord.Embed(description=find), show_all=False, delete=3, delete_speed=5)
 
