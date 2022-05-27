@@ -1,5 +1,5 @@
 {
-    "latestId": 49,
+    "latestId": 50,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -398,6 +398,14 @@
             "suggestion": "REST API to see PlayerCount",
             "sid": 49,
             "message": 979193315771686962,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 701834982947029125,
+            "suggestion": "Seperate out the ticket system into Moderator Tickets, Technical Tickets, and Helper Tickets. An Example of this has been posted in the thread. It can be done in 5 or so minutes of tinkering.",
+            "sid": 50,
+            "message": 979856302983483402,
             "status": "open",
             "note": ""
         }
