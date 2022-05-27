@@ -41,7 +41,7 @@ class UserCommands(commands.Cog, name="User Commands"):
             e.add_field(
                 name="Negative", value=f"`{'`, `'.join(self.ctx.rep_type_negative)}`")
             e.set_footer(
-                text=f"For stats type {self.ctx.guild_prefixes[str(ctx.guild.id)]}repstats @user")
+                text=f"For stats type {self.ctx.guild_prefixes[str(ctx.guild.id)]}showrep @user or {self.ctx.guild_prefixes[str(ctx.guild.id)]}showreps")
             await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=15)
             ctx.command.reset_cooldown(ctx)
             return
@@ -69,8 +69,8 @@ class UserCommands(commands.Cog, name="User Commands"):
             await UserUtils.manage_rep(self, ctx, "negative", user, amount)
             await utils.sendembed(ctx, discord.Embed(description=f"`🛠️` Setting {user.mention}'s negative rep to {amount}"), show_all=False)
 
-    @bridge.bridge_command(name="repstats")
-    async def repstats(self, ctx, user: discord.Member = None):
+    @bridge.bridge_command(name="showrep")
+    async def showrep(self, ctx, user: discord.Member = None):
         """Show a user's reputation"""
         user = user or ctx.author
         rep = await UserUtils.get_rep(self, ctx, user)
@@ -78,6 +78,22 @@ class UserCommands(commands.Cog, name="User Commands"):
         e.add_field(name="Final Reputation", value=rep[0], inline=False)
         e.add_field(name="Positive Reputation", value=rep[1], inline=False)
         e.add_field(name="Negative Reputation", value=rep[2], inline=False)
+        await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
+
+    @bridge.bridge_command(name="showreps")
+    async def showreps(self, ctx):
+        """Shows global reputation of users"""
+        f = 0
+        p = 0
+        n = 0
+        for user in self.ctx.reputation.items():
+            p += user[1]["positive"]
+            n += user[1]["negative"]
+            f += user[1]["positive"] - user[1]["negative"]
+        e = discord.Embed(description=f"**Global reputation:**")
+        e.add_field(name="Final Reputation", value=f, inline=False)
+        e.add_field(name="Positive Reputation", value=p, inline=False)
+        e.add_field(name="Negative Reputation", value=n, inline=False)
         await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
 
     @commands.command(hidden=True, name="resetrep")
