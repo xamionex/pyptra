@@ -204,11 +204,12 @@ class MyHelpCommand(commands.MinimalHelpCommand):
         return ret
 
     async def get_filtered(self, command_set):
+        filtered = await self.filter_commands(command_set, sort=True)
         try:
             if self.context.author.guild_permissions.administrator:
                 filtered = await self.filter_commands(command_set, sort=True, show_hidden=True)
         except:
-            filtered = await self.filter_commands(command_set, sort=True)
+            pass
         return filtered
 
     # Use the same function as command help for group help
