@@ -21,8 +21,8 @@ class Configs(commands.Cog, name="Configs"):
                 setattr(ctx, str(name), json.loads(f.read()))
                 setattr(ctx, str(name) + "_path", path)
 
-        ctx.rep_types = {"positive": "✅ 👍 plus p +",
-                         "negative": "❌ 👎 minus m -",
+        ctx.rep_types = {"positive": "+ p plus ✅ 👍",
+                         "negative": "- m minus ❌ 👎",
                          "informative": "ℹ️ ❓ stats s info i ?"}
         ctx.rep_type_positive = ctx.rep_types["positive"].split(" ")
         ctx.rep_type_negative = ctx.rep_types["negative"].split(" ")
