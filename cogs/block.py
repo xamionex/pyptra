@@ -148,7 +148,7 @@ class BlockUtils():
         perms[str(user.guild.id)][str(user.id)] = {}
         for value in self.ctx.perms_list:
             perms[str(user.guild.id)][str(user.id)][value] = False
-        configs.save("./data/perms.json", "w", self.ctx.perms)
+        configs.save(self.ctx.perms_path, "w", self.ctx.perms)
         return True
 
     async def get_perm(self, ctx, perm, user):
@@ -158,12 +158,12 @@ class BlockUtils():
     async def add_perm(self, ctx, perm, user):
         perms = await BlockUtils.open_perms(self, ctx, user)
         perms[str(user.guild.id)][str(user.id)][perm] = True
-        configs.save("./data/perms.json", "w", self.ctx.perms)
+        configs.save(self.ctx.perms_path, "w", self.ctx.perms)
 
     async def remove_perm(self, ctx, perm, user):
         perms = await BlockUtils.open_perms(self, ctx, user)
         perms[str(user.guild.id)][str(user.id)][perm] = False
-        configs.save("./data/perms.json", "w", self.ctx.perms)
+        configs.save(self.ctx.perms_path, "w", self.ctx.perms)
 
     async def check_perm_arg(self, ctx):
         perms_list = self.ctx.perms_list
@@ -199,7 +199,7 @@ class GlobalBlockUtils():
             perms[str(user.id)][value] = True
         for value in self.ctx.global_perms_list_false:
             perms[str(user.id)][value] = False
-        configs.save("./data/global_perms.json", "w", perms)
+        configs.save(self.ctx.global_perms_path, "w", perms)
         return True
 
     async def get_global_perm(self, ctx, perm, user):
@@ -209,12 +209,12 @@ class GlobalBlockUtils():
     async def add_global_perm(self, ctx, perm, user):
         perms = await GlobalBlockUtils.open_global_perm(self, ctx, user)
         perms[str(user.id)][perm] = True
-        configs.save("./data/global_perms.json", "w", perms)
+        configs.save(self.ctx.global_perms_path, "w", perms)
 
     async def remove_global_perm(self, ctx, perm, user):
         perms = await GlobalBlockUtils.open_global_perm(self, ctx, user)
         perms[str(user.id)][perm] = False
-        configs.save("./data/global_perms.json", "w", perms)
+        configs.save(self.ctx.global_perms_path, "w", perms)
 
     async def open_global_perm(self, ctx, user):
         await GlobalBlockUtils.open_global_member_perms(self, ctx, user)
