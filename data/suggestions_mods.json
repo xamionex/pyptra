@@ -1,5 +1,5 @@
 {
-    "latestId": 202,
+    "latestId": 203,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1622,6 +1622,14 @@
             "suggestion": "custom banner maybe?",
             "sid": 202,
             "message": 979521847848742962,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 255935440744480768,
+            "suggestion": "bounty hunt mode?",
+            "sid": 203,
+            "message": 979813624216445028,
             "status": "open",
             "note": ""
         }
