@@ -43,6 +43,8 @@ bot = bridge.Bot(
 
 @bot.before_invoke
 async def on_command(ctx):
+    if ctx.author.guild_permissions.administrator:
+        ctx.command.reset_cooldown(ctx)
     try:
         if await block.BlockUtils.get_perm(ctx, ctx, "blacklist", ctx.author) and ctx.author.guild_permissions.administrator == False:
             raise commands.CommandError(
