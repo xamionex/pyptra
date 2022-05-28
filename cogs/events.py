@@ -70,8 +70,12 @@ class Events(commands.Cog, name="Events"):
 
         triggers = self.ctx.triggers
         triggers[str(guild.id)] = {}
-        triggers[str(guild.id)]["toggle"] = True
-        triggers[str(guild.id)]["triggers"] = {}
+        triggers[str(guild.id)]["regex"] = {}
+        triggers[str(guild.id)]["regex"]["toggle"] = False
+        triggers[str(guild.id)]["regex"]["triggers"] = {}
+        triggers[str(guild.id)]["match"] = {}
+        triggers[str(guild.id)]["match"]["toggle"] = False
+        triggers[str(guild.id)]["match"]["triggers"] = {}
         configs.save(self.ctx.triggers_path, "w", triggers)
 
     @commands.Cog.listener("on_guild_remove")
@@ -187,12 +191,23 @@ class Events(commands.Cog, name="Events"):
 
     @commands.Cog.listener("on_message")
     async def word_trigger(self, message):
-        if message.author.bot == False and self.ctx.triggers[str(message.guild.id)]["toggle"]:
-            for trigger, reply in self.ctx.triggers[str(message.guild.id)]["triggers"].items():
-                multi_trigger = list(trigger.split('/'))
+        if message.author.bot == False and self.ctx.triggers[str(message.guild.id)]["match"]["toggle"]:
+            for trigger, reply in self.ctx.triggers[str(message.guild.id)]["match"]["triggers"].items():
+                multi_trigger = list(trigger.split('|'))
                 for triggers in multi_trigger:
                     if triggers in message.content.split(" "):
-                        reply = random.choice(list(reply.split('/')))
+                        reply = random.choice(list(reply.split('|')))
+                        await message.reply(reply)
+                        break
+
+    @commands.Cog.listener("on_message")
+    async def regex_trigger(self, message):
+        if message.author.bot == False and self.ctx.triggers[str(message.guild.id)]["regex"]["toggle"]:
+            for trigger, reply in self.ctx.triggers[str(message.guild.id)]["regex"]["triggers"].items():
+                multi_trigger = list(trigger.split('|'))
+                for triggers in multi_trigger:
+                    if triggers in message.content.lower():
+                        reply = random.choice(list(reply.split('|')))
                         await message.reply(reply)
                         break
 

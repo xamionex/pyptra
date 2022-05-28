@@ -1,6 +1,12 @@
 {
-    "920776187884732556": {
-        "toggle": false,
-        "triggers": {}
+    "196573388423168000": {
+        "match": {
+            "toggle": false,
+            "triggers": {}
+        },
+        "regex": {
+            "toggle": false,
+            "triggers": {}
+        }
     }
 }
