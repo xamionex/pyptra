@@ -114,14 +114,14 @@ class ManageCommands(commands.Cog, name="Manage"):
     @commands.group(hidden=True, name="triggers", invoke_without_command=True)
     @commands.has_permissions(administrator=True)
     async def triggers(self, ctx):
-        await utils.senderror(ctx, "No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help triggers for more info")
         """Triggers that reply whenever someone mentions a trigger"""
+        await utils.senderror(ctx, "No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help triggers for more info")
 
     @triggers.group(hidden=True, name="match", invoke_without_command=True)
     @commands.has_permissions(administrator=True)
     async def match(self, ctx):
         """Text triggers that have a match in one of the user's words"""
-        await utils.senderror(ctx, "No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help triggers match for more info")
+        await utils.senderror(ctx, f"No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help triggers match for more info")
 
     @match.command(hidden=True, name="toggle")
     @commands.has_permissions(administrator=True)
@@ -151,7 +151,7 @@ class ManageCommands(commands.Cog, name="Manage"):
     @commands.has_permissions(administrator=True)
     async def regex(self, ctx):
         """Text triggers that have a regex in one of the user's words"""
-        await utils.senderror(ctx, "No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help triggers regex for more info")
+        await utils.senderror(ctx, f"No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help triggers regex for more info")
 
     @regex.command(hidden=True, name="toggle")
     @commands.has_permissions(administrator=True)
