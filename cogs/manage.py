@@ -98,7 +98,7 @@ class ManageCommands(commands.Cog, name="Manage"):
         await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=5)
 
     @commands.command(hidden=True, name="prefix")
-    @commands.is_owner()
+    @commands.has_permissions(administrator=True)
     async def prefix(self, ctx, prefix=None):
         """Shows or changes prefix"""
         if prefix is not None:
@@ -111,51 +111,132 @@ class ManageCommands(commands.Cog, name="Manage"):
         else:
             await utils.sendembed(ctx, discord.Embed(description=f'My prefix is `{self.ctx.guild_prefixes[str(ctx.guild.id)]}` or {self.ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!'), False, 3, 20)
 
-    @commands.command(hidden=True, name="triggers")
+    @commands.group(hidden=True, name="triggers", invoke_without_command=True)
     @commands.has_permissions(administrator=True)
-    async def toggle_triggers(self, ctx):
+    async def triggers(self, ctx):
+        await utils.senderror(ctx, "No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help triggers for more info")
+        """Triggers that reply whenever someone mentions a trigger"""
+
+    @triggers.group(hidden=True, name="match", invoke_without_command=True)
+    @commands.has_permissions(administrator=True)
+    async def match(self, ctx):
+        """Text triggers that have a match in one of the user's words"""
+        await utils.senderror(ctx, "No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help triggers match for more info")
+
+    @match.command(name="toggle")
+    async def matchtoggletriggers(self, ctx):
         """Toggles message triggers"""
+        await ManageUtils.toggletriggers(self, ctx, "match")
+
+    @match.command(name="list")
+    async def matchlisttriggers(self, ctx):
+        """Lists message triggers"""
+        await ManageUtils.listtriggers(self, ctx, "match")
+
+    @match.command(name="add")
+    async def matchaddtrigger(self, ctx, trigger: str, *, reply: str):
+        """Adds a message trigger (ex. -triggers match add trigger|anothertrigger this is the reply)"""
+        await ManageUtils.addtrigger(self, ctx, trigger, reply, "match")
+
+    @match.command(name="rem")
+    async def matchremovetrigger(self, ctx, *, trigger: str):
+        """Removes a message trigger (ex. -triggers match del this|trigger other|trigger)"""
+        await ManageUtils.removetrigger(self, ctx, trigger, "match")
+
+    @triggers.group(hidden=True, name="regex", invoke_without_command=True)
+    @commands.has_permissions(administrator=True)
+    async def regex(self, ctx):
+        """Text triggers that have a regex in one of the user's words"""
+        await utils.senderror(ctx, "No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help triggers regex for more info")
+
+    @regex.command(name="toggle")
+    async def regextoggletriggers(self, ctx):
+        """Toggles message triggers"""
+        await ManageUtils.toggletriggers(self, ctx, "regex")
+
+    @regex.command(name="list")
+    async def regexlisttriggers(self, ctx):
+        """Lists message triggers"""
+        await ManageUtils.listtriggers(self, ctx, "regex")
+
+    @regex.command(name="add")
+    async def regexaddtrigger(self, ctx, trigger: str, *, reply: str):
+        """Adds a message trigger (ex. -triggers regex add trigger|anothertrigger this is the reply)"""
+        await ManageUtils.addtrigger(self, ctx, trigger, reply, "regex")
+
+    @regex.command(name="rem")
+    async def regexremovetrigger(self, ctx, *, trigger: str):
+        """Removes a message trigger (ex. -triggers regex del this|trigger other|trigger)"""
+        await ManageUtils.removetrigger(self, ctx, trigger, "regex")
+
+
+class ManageUtils():
+    def __init__(self, ctx):
+        self.ctx = ctx
+
+    async def define_triggers(self, ctx):
         triggers = self.ctx.triggers
         if str(ctx.guild.id) not in triggers:
             triggers[str(ctx.guild.id)] = {}
-            triggers[str(ctx.guild.id)]["toggle"] = True
-            triggers[str(ctx.guild.id)]["triggers"] = {}
-        if triggers[str(ctx.guild.id)]["toggle"]:
-            triggers[str(ctx.guild.id)]["toggle"] = False
-            await utils.sendembed(ctx, discord.Embed(description=f"❌ Disabled triggers", color=0xFF6969), False)
+            triggers[str(ctx.guild.id)]["regex"] = {}
+            triggers[str(ctx.guild.id)]["regex"]["toggle"] = False
+            triggers[str(ctx.guild.id)]["regex"]["triggers"] = {}
+            triggers[str(ctx.guild.id)]["match"] = {}
+            triggers[str(ctx.guild.id)]["match"]["toggle"] = False
+            triggers[str(ctx.guild.id)]["match"]["triggers"] = {}
+        return triggers
+
+    async def toggletriggers(self, ctx, type: str):
+        triggers = await ManageUtils.define_triggers(self, ctx)
+        if triggers[str(ctx.guild.id)][type]["toggle"]:
+            triggers[str(ctx.guild.id)][type]["toggle"] = False
+            await utils.sendembed(ctx, discord.Embed(description=f"❌ Disabled {type} triggers", color=0xFF6969), False)
         else:
-            triggers[str(ctx.guild.id)]["toggle"] = True
-            await utils.sendembed(ctx, discord.Embed(description=f"✅ Enabled triggers", color=0x66FF99), False)
+            triggers[str(ctx.guild.id)][type]["toggle"] = True
+            await utils.sendembed(ctx, discord.Embed(description=f"✅ Enabled {type} triggers", color=0x66FF99), False)
         configs.save(self.ctx.triggers_path, "w", triggers)
 
-    @commands.command(hidden=True, name="addtrigger")
-    @commands.has_permissions(administrator=True)
-    async def addtrigger(self, ctx, trigger: str, *, reply: str):
-        """Adds a message trigger (ex. -addtrigger this_text_triggers/this_also_triggers this is the reply)"""
-        triggers = self.ctx.triggers
-        trigger = trigger.replace('_', ' ')
-        if str(ctx.guild.id) not in triggers:
-            triggers[str(ctx.guild.id)] = {}
-            triggers[str(ctx.guild.id)]["toggle"] = True
-            triggers[str(ctx.guild.id)]["triggers"] = {}
-        triggers_list = triggers[str(ctx.guild.id)]["triggers"]
-        triggers_list[trigger] = reply
-        configs.save(self.ctx.triggers_path, "w", triggers)
+    async def listtriggers(self, ctx, type: str):
+        triggers = await ManageUtils.define_triggers(self, ctx)
+        if triggers[str(ctx.guild.id)][type]["triggers"]:
+            e = discord.Embed(description=f"Triggers found:")
+            for trigger, reply in triggers[str(ctx.guild.id)][type]["triggers"].items():
+                e.add_field(name=trigger, value=reply)
+            await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
+        else:
+            await utils.senderror(ctx, "No triggers found")
 
-    @commands.command(hidden=True, name="removetrigger")
-    @commands.has_permissions(administrator=True)
-    async def removetrigger(self, ctx, trigger: str):
-        """Removes a message trigger (ex. -removetrigger this_text_triggers/this_also_triggers)"""
-        triggers = self.ctx.triggers
-        trigger = trigger.replace('_', ' ')
-        if str(ctx.guild.id) not in triggers:
-            triggers[str(ctx.guild.id)] = {}
-            triggers[str(ctx.guild.id)]["toggle"] = True
-            triggers[str(ctx.guild.id)]["triggers"] = {}
-        triggers_list = triggers[str(ctx.guild.id)]["triggers"]
+    async def addtrigger(self, ctx, trigger: str, reply: str, type: str):
+        triggers = await ManageUtils.define_triggers(self, ctx)
+        triggers_list = triggers[str(ctx.guild.id)][type]["triggers"]
+        e = discord.Embed(title=f"🛠️ Trying to add trigger:", color=0x66FF99)
+        old_reply = None
         try:
-            triggers_list.pop(str(trigger))
-            await utils.sendembed(ctx, discord.Embed(description=f"✅ Removed trigger \"{trigger}\"", color=0x66FF99), False)
+            old_reply = triggers_list[trigger]
         except:
-            await utils.senderror(ctx, "Couldn't find trigger")
+            pass
+        triggers_list[trigger] = reply
+        if old_reply is not None:
+            e.add_field(
+                name=f"Overwrote: {', '.join(trigger.split('|'))}", value=f"**Old reply:** `{old_reply}`\n**New reply:** `{triggers_list[trigger]}`")
+        else:
+            e.add_field(
+                name=f"Trigger: {', '.join(trigger.split('|'))}", value=f"**Reply:** `{reply}`")
+        await utils.sendembed(ctx, e, False)
+        configs.save(self.ctx.triggers_path, "w", triggers)
+
+    async def removetrigger(self, ctx, trigger: str, type: str):
+        triggers = await ManageUtils.define_triggers(self, ctx)
+        triggers_list = triggers[str(ctx.guild.id)][type]["triggers"]
+        trigger = trigger.split(" ")
+        e = discord.Embed(
+            title=f"🛠️ Trying to remove triggers:", color=0x66FF99)
+        for item in trigger:
+            try:
+                reply = triggers_list[item]
+                triggers_list.pop(str(item))
+                e.add_field(name=f"Removed {item}", value=reply)
+            except:
+                e.add_field(name=f"Couldn't find", value=item)
+        await utils.sendembed(ctx, e, False)
         configs.save(self.ctx.triggers_path, "w", triggers)
