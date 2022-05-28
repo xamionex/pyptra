@@ -1,5 +1,5 @@
 {
-    "latestId": 204,
+    "latestId": 206,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1638,6 +1638,22 @@
             "suggestion": "I was wondering if it would be possible to change the color of the a-wall?",
             "sid": 204,
             "message": 979902815734493184,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 314155571840548864,
+            "suggestion": "I know there is a mod like this for the double take, but It would be nice to use some of the guns default sites and not be super zoomed in while ADS with the iron sites. Love to see this on the 201, spitfire, hemlock, alternator, and maybe even the 97. Or just like a general FOV slide for all ADS weapons.",
+            "sid": 205,
+            "message": 979943445005230100,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 183454986221387776,
+            "suggestion": "A gamemode called \"Time Kills\" or something, when you hit an enemy, it phase rewinds them. Health will have to be kept post damage through the rewind though. If this was done with smart pistols, it would be fun and chaotic, but most guns should work decently well with this.",
+            "sid": 206,
+            "message": 980105297202929694,
             "status": "open",
             "note": ""
         }
