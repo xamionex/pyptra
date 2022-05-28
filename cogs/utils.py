@@ -232,7 +232,7 @@ async def can_dm_user(user: discord.User) -> bool:
 
 
 def escape_markdown(text):
-    # Use {} and reverse markdown carefully.
+    # escapes `` and \ (discord's escape character), for more chars just add them inside ([])
     parse = re.sub(r"([\\`])", r"\\\1", text)
     reparse = re.sub(r"\\\\([\\`])", r"\1", parse)
     return reparse
