@@ -126,25 +126,25 @@ class ManageCommands(commands.Cog, name="Manage"):
     @match.command(hidden=True, name="toggle")
     @commands.has_permissions(administrator=True)
     async def matchtoggletriggers(self, ctx):
-        """Toggles message triggers"""
+        """Toggles match message triggers"""
         await ManageUtils.toggletriggers(self, ctx, "match")
 
     @match.command(hidden=True, name="list")
     @commands.has_permissions(administrator=True)
     async def matchlisttriggers(self, ctx):
-        """Lists message triggers"""
+        """Lists match message triggers"""
         await ManageUtils.listtriggers(self, ctx, "match")
 
     @match.command(hidden=True, name="add")
     @commands.has_permissions(administrator=True)
     async def matchaddtrigger(self, ctx, trigger: str, *, reply: str):
-        f"""Adds a message trigger (ex. {self.ctx.guild_prefixes[str(ctx.guild.id)]}triggers match add trigger|anothertrigger this is the reply)"""
+        f"""Adds a match message trigger (ex. {self.ctx.guild_prefixes[str(ctx.guild.id)]}triggers match add trigger|anothertrigger this is the reply)"""
         await ManageUtils.addtrigger(self, ctx, trigger, reply, "match")
 
     @match.command(hidden=True, name="rem")
     @commands.has_permissions(administrator=True)
     async def matchremovetrigger(self, ctx, *, trigger: str):
-        f"""Removes a message trigger (ex. {self.ctx.guild_prefixes[str(ctx.guild.id)]}triggers match del this|trigger other|trigger)"""
+        f"""Removes a match message trigger (ex. {self.ctx.guild_prefixes[str(ctx.guild.id)]}triggers match del this|trigger other|trigger)"""
         await ManageUtils.removetrigger(self, ctx, trigger, "match")
 
     @triggers.group(hidden=True, name="regex", invoke_without_command=True)
@@ -156,25 +156,25 @@ class ManageCommands(commands.Cog, name="Manage"):
     @regex.command(hidden=True, name="toggle")
     @commands.has_permissions(administrator=True)
     async def regextoggletriggers(self, ctx):
-        """Toggles message triggers"""
+        """Toggles regex message triggers"""
         await ManageUtils.toggletriggers(self, ctx, "regex")
 
     @regex.command(hidden=True, name="list")
     @commands.has_permissions(administrator=True)
     async def regexlisttriggers(self, ctx):
-        """Lists message triggers"""
+        """Lists regex message triggers"""
         await ManageUtils.listtriggers(self, ctx, "regex")
 
     @regex.command(hidden=True, name="add")
     @commands.has_permissions(administrator=True)
     async def regexaddtrigger(self, ctx, trigger: str, *, reply: str):
-        f"""Adds a message trigger (ex. {self.ctx.guild_prefixes[str(ctx.guild.id)]}triggers regex add this_trigger|another_trigger this is the reply)"""
+        f"""Adds a regex message trigger, underscores are replaced with a space (ex. {self.ctx.guild_prefixes[str(ctx.guild.id)]}triggers regex add this_trigger|another_trigger this is the reply)"""
         await ManageUtils.addtrigger(self, ctx, trigger, reply, "regex")
 
     @regex.command(hidden=True, name="rem")
     @commands.has_permissions(administrator=True)
     async def regexremovetrigger(self, ctx, *, trigger: str):
-        f"""Removes a message trigger (ex. {self.ctx.guild_prefixes[str(ctx.guild.id)]}triggers regex del this|trigger another_trigger)"""
+        f"""Removes a regex message trigger, underscores are replaced with a space (ex. {self.ctx.guild_prefixes[str(ctx.guild.id)]}triggers regex del this|trigger another_trigger)"""
         await ManageUtils.removetrigger(self, ctx, trigger, "regex")
 
 
