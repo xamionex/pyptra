@@ -54,39 +54,39 @@ class Events(commands.Cog, name="Events"):
 
     @commands.Cog.listener("on_member_join")
     async def member_data(self, member):
-        with open('./data/afk.json', 'r') as f:
-            afk = json.load(f)
+        afk = self.ctx.afk
         await users.UserUtils.update_data(afk, member)
-        with open('./data/afk.json', 'w') as f:
-            json.dump(afk, f, indent=4, sort_keys=True)
+        configs.save(self.ctx.afk_path, "w", afk)
 
     @commands.Cog.listener("on_guild_join")
     async def guild_add_data(self, guild):
-        with open('./data/prefixes.json', 'r') as f:
-            prefixes = json.load(f)
+        prefixes = self.ctx.guild_prefixes
         prefixes[str(guild.id)] = '-'
-        with open('./data/prefixes.json', 'w') as f:
-            json.dump(prefixes, f, indent=4)
+        configs.save(self.ctx.guild_prefixes_path, "w", prefixes)
 
-        """with open('./data/channels.json', 'r') as f:
-            channels = json.load(f)
-        channels[str(guild.id)] = {}
-        with open('./data/channels.json', 'w') as f:
-            json.dump(channels, f, indent=4)"""
+        perms = self.ctx.perms
+        perms[str(guild.id)] = {}
+        configs.save(self.ctx.perms_path, "w", perms)
+
+        triggers = self.ctx.triggers
+        triggers[str(guild.id)] = {}
+        triggers[str(guild.id)]["toggle"] = True
+        triggers[str(guild.id)]["triggers"] = {}
+        configs.save(self.ctx.triggers_path, "w", triggers)
 
     @commands.Cog.listener("on_guild_remove")
     async def guild_remove_data(self, guild):
-        with open('./data/prefixes.json', 'r') as f:
-            prefixes = json.load(f)
+        prefixes = self.ctx.guild_prefixes
         prefixes.pop(str(guild.id))
-        with open('./data/prefixes.json', 'w') as f:
-            json.dump(prefixes, f, indent=4)
+        configs.save(self.ctx.guild_prefixes_path, "w", prefixes)
 
-        """with open('./data/channels.json', 'r') as f:
-            channels = json.load(f)
-        channels.pop(str(guild.id))
-        with open('./data/channels.json', 'w') as f:
-            json.dump(channels, f, indent=4)"""
+        perms = self.ctx.perms
+        perms.pop(str(guild.id))
+        configs.save(self.ctx.perms_path, "w", perms)
+
+        triggers = self.ctx.triggers
+        triggers.pop(str(guild.id))
+        configs.save(self.ctx.triggers_path, "w", triggers)
 
     @commands.Cog.listener("on_message")
     async def memes_channel(self, message):
@@ -187,8 +187,8 @@ class Events(commands.Cog, name="Events"):
 
     @commands.Cog.listener("on_message")
     async def word_trigger(self, message):
-        if message.author.bot == False:
-            for trigger, reply in self.ctx.triggers.items():
+        if message.author.bot == False and self.ctx.triggers[str(message.guild.id)]["toggle"]:
+            for trigger, reply in self.ctx.triggers[str(message.guild.id)]["triggers"].items():
                 multi_trigger = list(trigger.split(' ⨉ '))
                 for triggers in multi_trigger:
                     if triggers in message.content.lower():

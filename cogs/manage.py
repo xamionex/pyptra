@@ -2,9 +2,8 @@ import json
 import discord
 import os
 import sys
-import main
 from discord.ext import commands
-from cogs import utils
+from cogs import utils, configs
 
 extensions = utils.extensions()
 
@@ -111,3 +110,19 @@ class ManageCommands(commands.Cog, name="Manage"):
             await utils.sendembed(ctx, discord.Embed(description=f'Prefix changed to: {prefix}'), False, 3, 5)
         else:
             await utils.sendembed(ctx, discord.Embed(description=f'My prefix is `{self.ctx.guild_prefixes[str(ctx.guild.id)]}` or {self.ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!'), False, 3, 20)
+
+    @commands.command(hidden=True, name="triggers")
+    @commands.has_permissions(administrator=True)
+    async def toggle_triggers(self, ctx):
+        triggers = self.ctx.triggers
+        if str(ctx.guild.id) not in triggers:
+            triggers[str(ctx.guild.id)] = {}
+            triggers[str(ctx.guild.id)]["toggle"] = True
+            triggers[str(ctx.guild.id)]["triggers"] = {}
+        if triggers[str(ctx.guild.id)]["toggle"]:
+            triggers[str(ctx.guild.id)]["toggle"] = False
+            await utils.sendembed(ctx, discord.Embed(description=f"❌ Disabled triggers", color=0xFF6969), False)
+        else:
+            triggers[str(ctx.guild.id)]["toggle"] = True
+            await utils.sendembed(ctx, discord.Embed(description=f"✅ Enabled triggers", color=0x66FF99), False)
+        configs.save(self.ctx.triggers_path, "w", triggers)

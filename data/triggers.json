@@ -1,0 +1,8 @@
+{
+    "920776187884732556": {
+        "toggle": true,
+        "triggers": {
+            "authentication failed \u2a09 masterserver down \u2a09 master server down \u2a09 servers are down \u2a09 is down \u2a09 northstar down \u2a09 is northstar down": "The masterserver is currently down, please check <#920780605132800080>"
+        }
+    }
+}

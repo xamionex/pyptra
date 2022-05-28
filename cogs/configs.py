@@ -15,15 +15,13 @@ class Configs(commands.Cog, name="Configs"):
                  "./data/global_perms.json": "global_perms",
                  "./data/reputation.json": "reputation",
                  "./data/perms.json": "perms",
+                 "./data/triggers.json": "triggers",
                  "./data/prefixes.json": "guild_prefixes"}
         for path, name in paths.items():
             with open(path, "r") as f:
                 setattr(ctx, str(name), json.loads(f.read()))
                 setattr(ctx, str(name) + "_path", path)
 
-        ctx.triggers = {
-            "authentication failed ⨉ masterserver down ⨉ master server down ⨉ servers are down ⨉ is down ⨉ northstar down ⨉ is northstar down": "The masterserver is currently down, please check <#920780605132800080>"
-        }
         ctx.rep_types = {"positive": "+ p plus ✅ 👍",
                          "negative": "- m minus ❌ 👎",
                          "informative": "ℹ️ ❓ stats s info i ?"}
