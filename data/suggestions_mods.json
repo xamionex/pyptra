@@ -1,5 +1,5 @@
 {
-    "latestId": 203,
+    "latestId": 204,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1630,6 +1630,14 @@
             "suggestion": "bounty hunt mode?",
             "sid": 203,
             "message": 979813624216445028,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 350692618604118017,
+            "suggestion": "I was wondering if it would be possible to change the color of the a-wall?",
+            "sid": 204,
+            "message": 979902815734493184,
             "status": "open",
             "note": ""
         }
