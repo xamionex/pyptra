@@ -29,7 +29,7 @@ class UserCommands(commands.Cog, name="User Commands"):
             e.add_field(
                 name="Negative", value=f"`{'`, `'.join(self.ctx.rep_type_negative)}`")
             e.set_footer(
-                text=f"For stats type {self.ctx.guild_prefixes[str(ctx.guild.id)]}repstats @user")
+                text=f"For stats type {self.ctx.guild_prefixes[str(ctx.guild.id)]}showrep @user or {self.ctx.guild_prefixes[str(ctx.guild.id)]}showreps")
             await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
             ctx.command.reset_cooldown(ctx)
             return
