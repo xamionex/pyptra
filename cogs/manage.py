@@ -114,6 +114,7 @@ class ManageCommands(commands.Cog, name="Manage"):
     @commands.command(hidden=True, name="triggers")
     @commands.has_permissions(administrator=True)
     async def toggle_triggers(self, ctx):
+        """Toggles message triggers"""
         triggers = self.ctx.triggers
         if str(ctx.guild.id) not in triggers:
             triggers[str(ctx.guild.id)] = {}
@@ -125,4 +126,36 @@ class ManageCommands(commands.Cog, name="Manage"):
         else:
             triggers[str(ctx.guild.id)]["toggle"] = True
             await utils.sendembed(ctx, discord.Embed(description=f"✅ Enabled triggers", color=0x66FF99), False)
+        configs.save(self.ctx.triggers_path, "w", triggers)
+
+    @commands.command(hidden=True, name="addtrigger")
+    @commands.has_permissions(administrator=True)
+    async def addtrigger(self, ctx, trigger: str, *, reply: str):
+        """Adds a message trigger (ex. -addtrigger this_text_triggers/this_also_triggers this is the reply)"""
+        triggers = self.ctx.triggers
+        trigger = trigger.replace('_', ' ')
+        if str(ctx.guild.id) not in triggers:
+            triggers[str(ctx.guild.id)] = {}
+            triggers[str(ctx.guild.id)]["toggle"] = True
+            triggers[str(ctx.guild.id)]["triggers"] = {}
+        triggers_list = triggers[str(ctx.guild.id)]["triggers"]
+        triggers_list[trigger] = reply
+        configs.save(self.ctx.triggers_path, "w", triggers)
+
+    @commands.command(hidden=True, name="removetrigger")
+    @commands.has_permissions(administrator=True)
+    async def removetrigger(self, ctx, trigger: str):
+        """Removes a message trigger (ex. -removetrigger this_text_triggers/this_also_triggers)"""
+        triggers = self.ctx.triggers
+        trigger = trigger.replace('_', ' ')
+        if str(ctx.guild.id) not in triggers:
+            triggers[str(ctx.guild.id)] = {}
+            triggers[str(ctx.guild.id)]["toggle"] = True
+            triggers[str(ctx.guild.id)]["triggers"] = {}
+        triggers_list = triggers[str(ctx.guild.id)]["triggers"]
+        try:
+            triggers_list.pop(str(trigger))
+            await utils.sendembed(ctx, discord.Embed(description=f"✅ Removed trigger \"{trigger}\"", color=0x66FF99), False)
+        except:
+            await utils.senderror(ctx, "Couldn't find trigger")
         configs.save(self.ctx.triggers_path, "w", triggers)

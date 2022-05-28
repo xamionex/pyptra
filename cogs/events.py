@@ -189,10 +189,10 @@ class Events(commands.Cog, name="Events"):
     async def word_trigger(self, message):
         if message.author.bot == False and self.ctx.triggers[str(message.guild.id)]["toggle"]:
             for trigger, reply in self.ctx.triggers[str(message.guild.id)]["triggers"].items():
-                multi_trigger = list(trigger.split(' ⨉ '))
+                multi_trigger = list(trigger.split('/'))
                 for triggers in multi_trigger:
-                    if triggers in message.content.lower():
-                        reply = random.choice(list(reply.split(' ⨉ ')))
+                    if triggers in message.content.split(" "):
+                        reply = random.choice(list(reply.split('/')))
                         await message.reply(reply)
                         break
 
