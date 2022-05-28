@@ -250,8 +250,8 @@ class ManageUtils():
                 reply = triggers_list[str(item)]
                 triggers_list.pop(str(item))
                 e.add_field(
-                    name=f"Removed {item.replace(' ', '_')}", value=reply)
+                    name=f"✅ Removed {item.replace(' ', '_')}", value=f"`{reply}`")
             except:
-                e.add_field(name=f"Couldn't find", value=item)
+                e.add_field(name="❌ Couldn't find", value=f"`{item}`")
         await utils.sendembed(ctx, e, False)
         configs.save(self.ctx.triggers_path, "w", triggers)
