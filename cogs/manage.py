@@ -150,7 +150,7 @@ class ManageCommands(commands.Cog, name="Manage"):
     @triggers.group(hidden=True, name="regex", invoke_without_command=True)
     @commands.has_permissions(administrator=True)
     async def regex(self, ctx):
-        """Text triggers that have a regex in one of the user's words"""
+        """Text triggers that have a regex match in one of the user's words"""
         await utils.senderror(ctx, f"No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help triggers regex for more info")
 
     @regex.command(hidden=True, name="toggle")
