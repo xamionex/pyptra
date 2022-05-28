@@ -115,7 +115,7 @@ class ManageCommands(commands.Cog, name="Manage"):
     @commands.has_permissions(administrator=True)
     async def triggers(self, ctx):
         """Triggers that reply whenever someone mentions a trigger"""
-        await utils.senderror(ctx, "No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help triggers for more info")
+        await utils.senderror(ctx, f"No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help triggers for more info")
 
     @triggers.group(hidden=True, name="match", invoke_without_command=True)
     @commands.has_permissions(administrator=True)
@@ -138,13 +138,13 @@ class ManageCommands(commands.Cog, name="Manage"):
     @match.command(hidden=True, name="add")
     @commands.has_permissions(administrator=True)
     async def matchaddtrigger(self, ctx, trigger: str, *, reply: str):
-        """Adds a message trigger (ex. -triggers match add trigger|anothertrigger this is the reply)"""
+        f"""Adds a message trigger (ex. {self.ctx.guild_prefixes[str(ctx.guild.id)]}triggers match add trigger|anothertrigger this is the reply)"""
         await ManageUtils.addtrigger(self, ctx, trigger, reply, "match")
 
     @match.command(hidden=True, name="rem")
     @commands.has_permissions(administrator=True)
     async def matchremovetrigger(self, ctx, *, trigger: str):
-        """Removes a message trigger (ex. -triggers match del this|trigger other|trigger)"""
+        f"""Removes a message trigger (ex. {self.ctx.guild_prefixes[str(ctx.guild.id)]}triggers match del this|trigger other|trigger)"""
         await ManageUtils.removetrigger(self, ctx, trigger, "match")
 
     @triggers.group(hidden=True, name="regex", invoke_without_command=True)
@@ -168,13 +168,13 @@ class ManageCommands(commands.Cog, name="Manage"):
     @regex.command(hidden=True, name="add")
     @commands.has_permissions(administrator=True)
     async def regexaddtrigger(self, ctx, trigger: str, *, reply: str):
-        """Adds a message trigger (ex. -triggers regex add trigger|anothertrigger this is the reply)"""
+        f"""Adds a message trigger (ex. {self.ctx.guild_prefixes[str(ctx.guild.id)]}triggers regex add this_trigger|another_trigger this is the reply)"""
         await ManageUtils.addtrigger(self, ctx, trigger, reply, "regex")
 
     @regex.command(hidden=True, name="rem")
     @commands.has_permissions(administrator=True)
     async def regexremovetrigger(self, ctx, *, trigger: str):
-        """Removes a message trigger (ex. -triggers regex del this|trigger other|trigger)"""
+        f"""Removes a message trigger (ex. {self.ctx.guild_prefixes[str(ctx.guild.id)]}triggers regex del this|trigger another_trigger)"""
         await ManageUtils.removetrigger(self, ctx, trigger, "regex")
 
 
@@ -209,6 +209,8 @@ class ManageUtils():
         if triggers[str(ctx.guild.id)][type]["triggers"]:
             e = discord.Embed(description=f"Triggers found:")
             for trigger, reply in triggers[str(ctx.guild.id)][type]["triggers"].items():
+                if type == "regex":
+                    trigger = trigger.replace(" ", "_")
                 e.add_field(name=trigger, value=reply)
             await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
         else:
@@ -217,6 +219,8 @@ class ManageUtils():
     async def addtrigger(self, ctx, trigger: str, reply: str, type: str):
         triggers = await ManageUtils.define_triggers(self, ctx)
         triggers_list = triggers[str(ctx.guild.id)][type]["triggers"]
+        if type == "regex":
+            trigger = trigger.replace("_", " ")
         e = discord.Embed(title=f"🛠️ Trying to add trigger:", color=0x66FF99)
         old_reply = None
         try:
@@ -241,9 +245,12 @@ class ManageUtils():
             title=f"🛠️ Trying to remove triggers:", color=0x66FF99)
         for item in trigger:
             try:
-                reply = triggers_list[item]
+                if type == "regex":
+                    item = item.replace("_", " ")
+                reply = triggers_list[str(item)]
                 triggers_list.pop(str(item))
-                e.add_field(name=f"Removed {item}", value=reply)
+                e.add_field(
+                    name=f"Removed {item.replace(' ', '_')}", value=reply)
             except:
                 e.add_field(name=f"Couldn't find", value=item)
         await utils.sendembed(ctx, e, False)
