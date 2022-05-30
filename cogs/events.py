@@ -2,7 +2,6 @@ import main
 import discord
 from discord.ext import commands
 # data
-import json
 import time
 import random
 # cogs

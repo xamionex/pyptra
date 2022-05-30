@@ -17,31 +17,23 @@ class UserCommands(commands.Cog, name="User Commands"):
     def __init__(self, ctx):
         self.ctx = ctx
 
-    @bridge.bridge_command(name="rep")
+    @commands.group(hidden=True, name="rep", invoke_without_command=True)
+    @commands.has_permissions(administrator=True)
+    async def rep(self, ctx):
+        """Reputation commands for users"""
+        await utils.senderror(ctx, f"No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help rep for more info")
+
+    @rep.command(name="give")
     @commands.cooldown(1, 300, commands.BucketType.user)
-    async def rep(self, ctx, user: discord.Member = None, type=None):
-        """Add reputation to a user."""
+    async def give(self, ctx, user: discord.Member = None, type=None):
+        """Give reputation to a user."""
         if user is None:
-            e = discord.Embed(title=f"{self.ctx.guild_prefixes[str(ctx.guild.id)]}rep <mention> <type>",
-                              description="`❌` **You must mention someone and pick one of these for the type of rep:**", color=0xFF6969)
-            e.add_field(
-                name="Positive", value=f"`{'`, `'.join(self.ctx.rep_type_positive)}`")
-            e.add_field(
-                name="Negative", value=f"`{'`, `'.join(self.ctx.rep_type_negative)}`")
-            e.set_footer(
-                text=f"For stats type {self.ctx.guild_prefixes[str(ctx.guild.id)]}showrep @user or {self.ctx.guild_prefixes[str(ctx.guild.id)]}showreps")
+            e = UserUtils.rep_embed(self, ctx)
             await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
             ctx.command.reset_cooldown(ctx)
             return
         if type not in self.ctx.rep_type_combined:
-            e = discord.Embed(
-                description="`❌` **You must pick one of these for the type of rep:**", color=0xFF6969)
-            e.add_field(
-                name="Positive", value=f"`{'`, `'.join(self.ctx.rep_type_positive)}`")
-            e.add_field(
-                name="Negative", value=f"`{'`, `'.join(self.ctx.rep_type_negative)}`")
-            e.set_footer(
-                text=f"For stats type {self.ctx.guild_prefixes[str(ctx.guild.id)]}showrep @user or {self.ctx.guild_prefixes[str(ctx.guild.id)]}showreps")
+            e = UserUtils.rep_embed(self, ctx)
             await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=15)
             ctx.command.reset_cooldown(ctx)
             return
@@ -58,19 +50,35 @@ class UserCommands(commands.Cog, name="User Commands"):
                 await UserUtils.change_rep(self, ctx, "negative", user)
                 await utils.sendembed(ctx, discord.Embed(description=f"`➖` Giving {user.mention} negative rep"), show_all=False)
 
-    @commands.command(hidden=True, name="setrep")
-    @commands.is_owner()
-    async def setrep(self, ctx, user: discord.Member, type, amount: int):
-        """Set a user's reputation to a given amount."""
-        if type in self.ctx.rep_type_positive:
-            await UserUtils.manage_rep(self, ctx, "positive", user, amount)
-            await utils.sendembed(ctx, discord.Embed(description=f"`🛠️` Setting {user.mention}'s positive rep to {amount}"), show_all=False)
+    @rep.command(name="take")
+    @commands.cooldown(1, 300, commands.BucketType.user)
+    async def take(self, ctx, user: discord.Member = None, type=None):
+        """Remove reputation from a user."""
+        if user is None:
+            e = UserUtils.rep_embed(self, ctx)
+            await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
+            ctx.command.reset_cooldown(ctx)
+            return
+        if type not in self.ctx.rep_type_combined:
+            e = UserUtils.rep_embed(self, ctx)
+            await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=15)
+            ctx.command.reset_cooldown(ctx)
+            return
+        elif type in self.ctx.rep_type_positive:
+            if user.id == ctx.author.id:
+                await utils.senderror(ctx, "You can't give rep to yourself")
+            else:
+                await UserUtils.rem_rep(self, ctx, "positive", user)
+                await utils.sendembed(ctx, discord.Embed(description=f"`➕` Removing your positive rep from {user.mention}"), show_all=False)
         elif type in self.ctx.rep_type_negative:
-            await UserUtils.manage_rep(self, ctx, "negative", user, amount)
-            await utils.sendembed(ctx, discord.Embed(description=f"`🛠️` Setting {user.mention}'s negative rep to {amount}"), show_all=False)
+            if user.id == ctx.author.id:
+                await utils.senderror(ctx, "You can't give rep to yourself")
+            else:
+                await UserUtils.rem_rep(self, ctx, "negative", user)
+                await utils.sendembed(ctx, discord.Embed(description=f"`➖` Removing your negative rep from {user.mention}"), show_all=False)
 
-    @bridge.bridge_command(name="showrep")
-    async def showrep(self, ctx, user: discord.Member = None):
+    @rep.command(name="show")
+    async def show(self, ctx, user: discord.Member = None):
         """Show a user's reputation"""
         user = user or ctx.author
         rep = await UserUtils.get_rep(self, ctx, user)
@@ -80,16 +88,16 @@ class UserCommands(commands.Cog, name="User Commands"):
         e.add_field(name="Negative Reputation", value=rep[2], inline=False)
         await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
 
-    @bridge.bridge_command(name="showreps")
-    async def showreps(self, ctx):
+    @rep.command(name="everyone")
+    async def showall(self, ctx):
         """Shows global reputation of users"""
         f = 0
         p = 0
         n = 0
         for user in self.ctx.reputation.items():
-            p += user[1]["positive"]
-            n += user[1]["negative"]
-            f += user[1]["positive"] - user[1]["negative"]
+            p += len(user[1]["positive"])
+            n += len(user[1]["negative"])
+            f += p - n
         e = discord.Embed(description=f"**Global reputation:**")
         e.add_field(name="Final Reputation", value=f, inline=False)
         e.add_field(name="Positive Reputation", value=p, inline=False)
@@ -140,27 +148,32 @@ class UserUtils():
     async def set_rep(self, ctx, rep, user):
         rep[str(user.id)] = {}
         for value in self.ctx.rep_type_list:
-            rep[str(user.id)][value] = 0
+            rep[str(user.id)][value] = []
         configs.save(self.ctx.reputation_path, "w", rep)
         return True
 
     async def get_rep(self, ctx, user):
         rep = await UserUtils.open_rep(self, ctx, user)
-        current_rep = rep[str(user.id)]["positive"] - \
-            rep[str(user.id)]["negative"]
-        reps = [current_rep,
-                rep[str(user.id)]["positive"],
-                rep[str(user.id)]["negative"]]
+        p = len(rep[str(user.id)]["positive"])
+        n = len(rep[str(user.id)]["negative"])
+        u = p - n
+        reps = [u, p, n]
         return reps
 
     async def change_rep(self, ctx, change, user):
         rep = await UserUtils.open_rep(self, ctx, user)
-        rep[str(user.id)][change] += 1
+        if str(ctx.author.id) in rep[str(user.id)][change]:
+            await utils.senderror(ctx, f"You already gave this person {change} rep\nIf you want to remove it take a look at {self.ctx.guild_prefixes[str(ctx.guild.id)]}help rep")
+        else:
+            rep[str(user.id)][change].append(str(ctx.author.id))
         configs.save(self.ctx.reputation_path, "w", rep)
 
-    async def manage_rep(self, ctx, change, user, amount):
+    async def rem_rep(self, ctx, change, user):
         rep = await UserUtils.open_rep(self, ctx, user)
-        rep[str(user.id)][change] = amount
+        try:
+            rep[str(user.id)][change].remove(str(ctx.author.id))
+        except:
+            await utils.senderror(ctx, f"You don't have {change} rep on this person")
         configs.save(self.ctx.reputation_path, "w", rep)
 
     async def open_rep(self, ctx, user):
@@ -212,3 +225,14 @@ class UserUtils():
                     await ctx.reply(embed=e, ephemeral=True)
                 else:
                     await ctx.reply(embed=e, delete_after=10, mention_author=False)
+
+    async def rep_embed(self, ctx):
+        e = discord.Embed(title=f"{self.ctx.guild_prefixes[str(ctx.guild.id)]}rep <mention> <type>",
+                          description="`❌` **You must mention someone and pick one of these for the type of rep:**", color=0xFF6969)
+        e.add_field(
+            name="Positive", value=f"`{'`, `'.join(self.ctx.rep_type_positive)}`")
+        e.add_field(
+            name="Negative", value=f"`{'`, `'.join(self.ctx.rep_type_negative)}`")
+        e.set_footer(
+            text=f"For stats type {self.ctx.guild_prefixes[str(ctx.guild.id)]}showrep @user or {self.ctx.guild_prefixes[str(ctx.guild.id)]}showreps")
+        return e
