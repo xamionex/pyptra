@@ -2,3 +2,4 @@
 /__pycache__
 /cogs/__pycache__
 /data/afk.json
+data/timed_purge.json
