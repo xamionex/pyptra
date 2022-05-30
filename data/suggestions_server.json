@@ -1,5 +1,5 @@
 {
-    "latestId": 52,
+    "latestId": 55,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -422,6 +422,30 @@
             "suggestion": "A new bot command to submit mods (something like /submitforapproval or something) into a approval channel where mods and trusted members approve the mod where it can then be posted into the thunderstore and an approved mods channel through a bot, this is a way to avoid people posting cheats into the thunderstore. This may seem like an incovinience to some so maybe we could have a role like approved modder which let's them just use a command to post it instantly to both thunderstore and the approved mods channel without waiting for it to be approved",
             "sid": 52,
             "message": 980472498003005510,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 357887213817692162,
+            "suggestion": ".",
+            "sid": 53,
+            "message": 980747762452815933,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 357887213817692162,
+            "suggestion": "There's a grammatical error in the servers's description: \"...A community made mod for Titanfall 2 which __makes__ __enables__ you to host servers.\"",
+            "sid": 54,
+            "message": 980748421700911115,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 326355636101316609,
+            "suggestion": "Maybe make <#973438217196040242> keep at least 5 messages in it? It gets very eerie when no one has posted any meme in the past hour. Also, maybe don\u2019t delete messages that make it into the starboard - if the server deems them worthy they should get to stay, no?",
+            "sid": 55,
+            "message": 980770177132159046,
             "status": "open",
             "note": ""
         }

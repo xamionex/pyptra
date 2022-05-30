@@ -1,5 +1,5 @@
 {
-    "latestId": 215,
+    "latestId": 216,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1726,6 +1726,14 @@
             "suggestion": "Mod that adds various 'sub-gamemodes' without titans such as: Free for All No Titans, Capture The Flag No Titans, Armed Hardpoints No Titans, Marked For Death No Titans etc..",
             "sid": 215,
             "message": 980561493798060082,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 528830566590578699,
+            "suggestion": "mod that makes points earned from titans in attrition/bounty hunt proportional to damage done to the titan. eg tone has 12500 hp divided by ten would mean for every 1250 damage done to her you would gain a point.",
+            "sid": 216,
+            "message": 980862386917482496,
             "status": "open",
             "note": ""
         }
