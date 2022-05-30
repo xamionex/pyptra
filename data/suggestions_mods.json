@@ -1,5 +1,5 @@
 {
-    "latestId": 207,
+    "latestId": 215,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1662,6 +1662,70 @@
             "suggestion": "add a boost that deploys the smokecreens in frontier defense, then make a version of it that behaves like gibraltars ult.",
             "sid": 207,
             "message": 980157868579905636,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 929962001017495552,
+            "suggestion": "Make a gamemode called \"Off the wall\" where it would be a 6v6 or free for all where everyone is given a kraber with unlimited ammo, the ricochete attatchment. The point of the mod would be to kill someone with a recocheting bullet. Straight on shots wouldnt do any damage, only richochting bullets. This mode would only be on colisseum and pillars. just sound like it would be fun",
+            "sid": 208,
+            "message": 980242815491661905,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 870121646357352478,
+            "suggestion": "Add Cancelled Mode: Titan Marked For Death. https://youtu.be/XR4c5mPxKo4?t=841",
+            "sid": 209,
+            "message": 980256368810393600,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 870121646357352478,
+            "suggestion": "Mod that adds an ID card (/waveform/audio visualizer) to each faction, ideally from SP but if not possible then from Marvin's Finest Hour. https://static.wikia.nocookie.net/titanfall/images/6/68/Gates-0.png/revision/latest?cb=20170529133631",
+            "sid": 210,
+            "message": 980287685258260480,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 870121646357352478,
+            "suggestion": "Mod that changes the intro of each faction to Davis & Droz and doesn't remove dialogue so that it can be replaced with Davis & Droz by audio override. Would need sound extraction and some cutting/editing.",
+            "sid": 211,
+            "message": 980288891376508928,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 372976133605425155,
+            "suggestion": "a mod that replaces the titanfall 2 grunts with the titanfall 1 grunts",
+            "sid": 212,
+            "message": 980360555044945960,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 528830566590578699,
+            "suggestion": "a mod that allows you to toggle movement mechanics in the settings for private match. (double jumping, sliding, wallrunning, etc)",
+            "sid": 213,
+            "message": 980543181307387914,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 528830566590578699,
+            "suggestion": "mod that displays Anti titan and secondary weapons on your pilot when customizing your pilot",
+            "sid": 214,
+            "message": 980548335666622464,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 870121646357352478,
+            "suggestion": "Mod that adds various 'sub-gamemodes' without titans such as: Free for All No Titans, Capture The Flag No Titans, Armed Hardpoints No Titans, Marked For Death No Titans etc..",
+            "sid": 215,
+            "message": 980561493798060082,
             "status": "open",
             "note": ""
         }

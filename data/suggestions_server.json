@@ -1,5 +1,5 @@
 {
-    "latestId": 50,
+    "latestId": 52,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -406,6 +406,22 @@
             "suggestion": "Seperate out the ticket system into Moderator Tickets, Technical Tickets, and Helper Tickets. An Example of this has been posted in the thread. It can be done in 5 or so minutes of tinkering.",
             "sid": 50,
             "message": 979856302983483402,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 287606266476625920,
+            "suggestion": "remove embeds in <#973438217196040242> \ud83d\ude42 \ud83d\udc4d",
+            "sid": 51,
+            "message": 980220159723712512,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 576887540930576425,
+            "suggestion": "A new bot command to submit mods (something like /submitforapproval or something) into a approval channel where mods and trusted members approve the mod where it can then be posted into the thunderstore and an approved mods channel through a bot, this is a way to avoid people posting cheats into the thunderstore. This may seem like an incovinience to some so maybe we could have a role like approved modder which let's them just use a command to post it instantly to both thunderstore and the approved mods channel without waiting for it to be approved",
+            "sid": 52,
+            "message": 980472498003005510,
             "status": "open",
             "note": ""
         }
