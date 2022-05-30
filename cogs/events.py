@@ -198,14 +198,17 @@ class Events(commands.Cog, name="Events"):
             msg = message.content.lower()
         else:
             msg = message.content.split(" ")
-        if self.ctx.triggers[str(message.guild.id)][type]["toggle"]:
-            for trigger, reply in self.ctx.triggers[str(message.guild.id)][type]["triggers"].items():
-                multi_trigger = list(trigger.split('|'))
-                for triggers in multi_trigger:
-                    if triggers in msg:
-                        reply = random.choice(list(reply.split('|')))
-                        await message.reply(reply)
-                        break
+        try:
+            if self.ctx.triggers[str(message.guild.id)][type]["toggle"]:
+                for trigger, reply in self.ctx.triggers[str(message.guild.id)][type]["triggers"].items():
+                    multi_trigger = list(trigger.split('|'))
+                    for triggers in multi_trigger:
+                        if triggers in msg:
+                            reply = random.choice(list(reply.split('|')))
+                            await message.reply(reply)
+                            break
+        except:
+            pass
 
     @tasks.loop()
     async def purger(self):
@@ -215,10 +218,13 @@ class Events(commands.Cog, name="Events"):
                 delay = int(timed[0])
                 send_time = delay + timed[1] < current_time
                 if send_time:
-                    timed[1] = current_time
-                    await self.ctx.get_channel(int(channel)).purge(limit=999999)
-                    configs.save(self.ctx.timed_purge_path,
-                                 "w", self.ctx.timed_purge)
+                    try:
+                        timed[1] = current_time
+                        await self.ctx.get_channel(int(channel)).purge(limit=999999)
+                        configs.save(self.ctx.timed_purge_path,
+                                     "w", self.ctx.timed_purge)
+                    except:
+                        pass
 
     @purger.before_loop
     async def purger_before_loop(self):

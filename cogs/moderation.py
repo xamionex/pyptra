@@ -51,9 +51,9 @@ class ModerationCommands(commands.Cog, name="Moderation"):
     async def add_purge(self, ctx, channel: Optional[discord.TextChannel], interval: int = None):
         """Add a purge to a channel that happens in intervals"""
         timed_purge = self.ctx.timed_purge
-        if timed_purge[str(ctx.guild.id)]:
+        try:
             timed_purge[str(ctx.guild.id)][str(channel.id)] = [interval, 0]
-        else:
+        except KeyError:
             timed_purge[str(ctx.guild.id)] = {}
             timed_purge[str(ctx.guild.id)][str(channel.id)] = [interval, 0]
         await utils.sendembed(ctx, discord.Embed(description=f"Added {channel.mention} to timed purges"), show_all=False, delete=3, delete_speed=15)
@@ -64,10 +64,10 @@ class ModerationCommands(commands.Cog, name="Moderation"):
     async def rem_purge(self, ctx, channel: Optional[discord.TextChannel]):
         """Remove a purge from a channel"""
         timed_purge = self.ctx.timed_purge
-        if timed_purge[str(ctx.guild.id)][str(channel.id)]:
+        try:
             timed_purge[str(ctx.guild.id)].pop(str(channel.id))
             await utils.sendembed(ctx, discord.Embed(description=f"Removed {channel.mention} from timed purges"), show_all=False, delete=3, delete_speed=15)
-        else:
+        except:
             await utils.senderror(ctx, "That channel doesn't have a timed purge")
         configs.save(self.ctx.timed_purge_path, "w", timed_purge)
 
