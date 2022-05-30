@@ -1,5 +1,3 @@
-import json
-from typing import Optional
 import discord
 import os
 import sys
@@ -103,11 +101,9 @@ class ManageCommands(commands.Cog, name="Manage"):
     async def prefix(self, ctx, prefix=None):
         """Shows or changes prefix"""
         if prefix is not None:
-            with open('./data/prefixes.json', 'r') as f:
-                prefixes = json.load(f)
+            prefixes = self.ctx.prefixes
             prefixes[str(ctx.guild.id)] = prefix
-            with open('./data/prefixes.json', 'w') as f:
-                json.dump(prefixes, f, indent=4)
+            configs.save(self.ctx.prefixes_path, "w", prefixes)
             await utils.sendembed(ctx, discord.Embed(description=f'Prefix changed to: {prefix}'), False, 3, 5)
         else:
             await utils.sendembed(ctx, discord.Embed(description=f'My prefix is `{self.ctx.guild_prefixes[str(ctx.guild.id)]}` or {self.ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!'), False, 3, 20)
@@ -128,25 +124,25 @@ class ManageCommands(commands.Cog, name="Manage"):
     @commands.has_permissions(administrator=True)
     async def matchtoggletriggers(self, ctx):
         """Toggles match message triggers"""
-        await ManageUtils.toggletriggers(self, ctx, "match")
+        await self.toggletriggers(ctx, "match")
 
     @match.command(hidden=True, name="list")
     @commands.has_permissions(administrator=True)
     async def matchlisttriggers(self, ctx):
         """Lists match message triggers"""
-        await ManageUtils.listtriggers(self, ctx, "match")
+        await self.listtriggers(ctx, "match")
 
     @match.command(hidden=True, name="add")
     @commands.has_permissions(administrator=True)
     async def matchaddtrigger(self, ctx, trigger: str, *, reply: str):
         f"""Adds a match message trigger (ex. {self.ctx.guild_prefixes[str(ctx.guild.id)]}triggers match add trigger|anothertrigger this is the reply)"""
-        await ManageUtils.addtrigger(self, ctx, trigger, reply, "match")
+        await self.addtrigger(ctx, trigger, reply, "match")
 
     @match.command(hidden=True, name="rem")
     @commands.has_permissions(administrator=True)
     async def matchremovetrigger(self, ctx, *, trigger: str):
         f"""Removes a match message trigger (ex. {self.ctx.guild_prefixes[str(ctx.guild.id)]}triggers match del this|trigger other|trigger)"""
-        await ManageUtils.removetrigger(self, ctx, trigger, "match")
+        await self.removetrigger(ctx, trigger, "match")
 
     @triggers.group(hidden=True, name="regex", invoke_without_command=True)
     @commands.has_permissions(administrator=True)
@@ -158,30 +154,25 @@ class ManageCommands(commands.Cog, name="Manage"):
     @commands.has_permissions(administrator=True)
     async def regextoggletriggers(self, ctx):
         """Toggles regex message triggers"""
-        await ManageUtils.toggletriggers(self, ctx, "regex")
+        await self.toggletriggers(ctx, "regex")
 
     @regex.command(hidden=True, name="list")
     @commands.has_permissions(administrator=True)
     async def regexlisttriggers(self, ctx):
         """Lists regex message triggers"""
-        await ManageUtils.listtriggers(self, ctx, "regex")
+        await self.listtriggers(ctx, "regex")
 
     @regex.command(hidden=True, name="add")
     @commands.has_permissions(administrator=True)
     async def regexaddtrigger(self, ctx, trigger: str, *, reply: str):
         f"""Adds a regex message trigger, underscores are replaced with a space (ex. {self.ctx.guild_prefixes[str(ctx.guild.id)]}triggers regex add this_trigger|another_trigger this is the reply)"""
-        await ManageUtils.addtrigger(self, ctx, trigger, reply, "regex")
+        await self.addtrigger(ctx, trigger, reply, "regex")
 
     @regex.command(hidden=True, name="rem")
     @commands.has_permissions(administrator=True)
     async def regexremovetrigger(self, ctx, *, trigger: str):
         f"""Removes a regex message trigger, underscores are replaced with a space (ex. {self.ctx.guild_prefixes[str(ctx.guild.id)]}triggers regex del this|trigger another_trigger)"""
-        await ManageUtils.removetrigger(self, ctx, trigger, "regex")
-
-
-class ManageUtils():
-    def __init__(self, ctx):
-        self.ctx = ctx
+        await self.removetrigger(ctx, trigger, "regex")
 
     async def define_triggers(self, ctx):
         triggers = self.ctx.triggers
@@ -196,7 +187,7 @@ class ManageUtils():
         return triggers
 
     async def toggletriggers(self, ctx, type: str):
-        triggers = await ManageUtils.define_triggers(self, ctx)
+        triggers = await self.define_triggers(ctx)
         if triggers[str(ctx.guild.id)][type]["toggle"]:
             triggers[str(ctx.guild.id)][type]["toggle"] = False
             await utils.sendembed(ctx, discord.Embed(description=f"❌ Disabled {type} triggers", color=0xFF6969), False)
@@ -206,7 +197,7 @@ class ManageUtils():
         configs.save(self.ctx.triggers_path, "w", triggers)
 
     async def listtriggers(self, ctx, type: str):
-        triggers = await ManageUtils.define_triggers(self, ctx)
+        triggers = await self.define_triggers(ctx)
         if triggers[str(ctx.guild.id)][type]["triggers"]:
             e = discord.Embed(description=f"Triggers found:")
             for trigger, reply in triggers[str(ctx.guild.id)][type]["triggers"].items():
@@ -218,7 +209,7 @@ class ManageUtils():
             await utils.senderror(ctx, "No triggers found")
 
     async def addtrigger(self, ctx, trigger: str, reply: str, type: str):
-        triggers = await ManageUtils.define_triggers(self, ctx)
+        triggers = await self.define_triggers(ctx)
         triggers_list = triggers[str(ctx.guild.id)][type]["triggers"]
         if type == "regex":
             trigger = trigger.replace("_", " ")
@@ -239,7 +230,7 @@ class ManageUtils():
         configs.save(self.ctx.triggers_path, "w", triggers)
 
     async def removetrigger(self, ctx, trigger: str, type: str):
-        triggers = await ManageUtils.define_triggers(self, ctx)
+        triggers = await self.define_triggers(ctx)
         triggers_list = triggers[str(ctx.guild.id)][type]["triggers"]
         trigger = trigger.split(" ")
         e = discord.Embed(
