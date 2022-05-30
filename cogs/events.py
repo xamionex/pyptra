@@ -91,11 +91,11 @@ class Events(commands.Cog, name="Events"):
         triggers.pop(str(guild.id))
         configs.save(self.ctx.triggers_path, "w", triggers)
 
-    @commands.Cog.listener("on_message")
+    """@commands.Cog.listener("on_message")
     async def memes_channel(self, message):
         # delete messages in Northstar memes :dread:
         if message.channel.id == 973438217196040242:
-            await message.delete(delay=random.randrange(100, 3600, 100))
+            await message.delete(delay=random.randrange(100, 3600, 100))"""
 
     @commands.Cog.listener("on_message")
     async def afk_check(self, message):
