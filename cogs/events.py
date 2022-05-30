@@ -1,9 +1,12 @@
+import asyncio
+import threading
 import main
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 # data
 import time
 import random
+import re
 # cogs
 from cogs import utils, users, configs
 # afk command data
@@ -22,6 +25,7 @@ class Events(commands.Cog, name="Events"):
 
     def __init__(self, ctx):
         self.ctx = ctx
+        self.purger.start()
 
     @commands.Cog.listener("on_ready")
     async def logged_in(self):
@@ -54,7 +58,7 @@ class Events(commands.Cog, name="Events"):
     @commands.Cog.listener("on_member_join")
     async def member_data(self, member):
         afk = self.ctx.afk
-        await users.UserUtils.update_data(afk, member)
+        await users.UserCommands.update_data(afk, member)
         configs.save(self.ctx.afk_path, "w", afk)
 
     @commands.Cog.listener("on_guild_join")
@@ -90,12 +94,6 @@ class Events(commands.Cog, name="Events"):
         triggers = self.ctx.triggers
         triggers.pop(str(guild.id))
         configs.save(self.ctx.triggers_path, "w", triggers)
-
-    """@commands.Cog.listener("on_message")
-    async def memes_channel(self, message):
-        # delete messages in Northstar memes :dread:
-        if message.channel.id == 973438217196040242:
-            await message.delete(delay=random.randrange(100, 3600, 100))"""
 
     @commands.Cog.listener("on_message")
     async def afk_check(self, message):
@@ -138,8 +136,8 @@ class Events(commands.Cog, name="Events"):
                 configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
 
         if send:
-            await users.UserUtils.sendafk(self, message, ["afk_alert", "afk_alert_dm"], afk_alert)
-        await users.UserUtils.update_data(self.ctx.afk, message.author)
+            await users.UserCommands.sendafk(self, message, ["afk_alert", "afk_alert_dm"], afk_alert)
+        await users.UserCommands.update_data(self.ctx.afk, message.author)
         # if message's author is afk continue
         if list(message.content.split(" "))[0] != f'{prefix}afk' and self.ctx.afk[f'{message.author.id}']['AFK']:
             # unix now - unix since afk
@@ -147,7 +145,7 @@ class Events(commands.Cog, name="Events"):
                 int(self.ctx.afk[f'{message.author.id}']['time'])
 
             # make time readable for user
-            afktime = users.UserUtils.period(datetime.timedelta(
+            afktime = users.UserCommands.period(datetime.timedelta(
                 seconds=round(timeafk)), "{d}d {h}h {m}m {s}s")
 
             # get mentions
@@ -177,7 +175,7 @@ class Events(commands.Cog, name="Events"):
                 print(
                     f'I wasnt able to edit [{message.author} / {message.author.id}].')
 
-            await users.UserUtils.sendafk(self, message, ["wb_alert", "wb_alert_dm"], welcome_back)
+            await users.UserCommands.sendafk(self, message, ["wb_alert", "wb_alert_dm"], welcome_back)
         configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
 
     @commands.Cog.listener("on_message")
@@ -209,6 +207,23 @@ class Events(commands.Cog, name="Events"):
                         await message.reply(reply)
                         break
 
+    @tasks.loop()
+    async def purger(self):
+        for guild in self.ctx.timed_purge.items():
+            for channel, timed in self.ctx.timed_purge[str(guild[0])].items():
+                current_time = int(time.time())
+                delay = int(timed[0])
+                send_time = delay + timed[1] < current_time
+                if send_time:
+                    timed[1] = current_time
+                    await self.ctx.get_channel(int(channel)).purge(limit=999999)
+                    configs.save(self.ctx.timed_purge_path,
+                                 "w", self.ctx.timed_purge)
+
+    @purger.before_loop
+    async def purger_before_loop(self):
+        await self.ctx.wait_until_ready()
+
 
 """
 class Loops(commands.Cog):
@@ -225,8 +240,6 @@ class Loops(commands.Cog):
     @commands.command(name="spam")
     async def start_spam_now(self, ctx):
         self.spam.start()
-
-
 
     @commands.group()
     @commands.has_permissions(administrator=True)
@@ -254,33 +267,33 @@ class Loops(commands.Cog):
         seconds = int(match.groups()[0]) * \
             multiplier.get(str(match.groups()[1]))
 
-        input_data = [channel, seconds, message]
+        input_spam = [channel, seconds, message]
 
-        if await EventUtils.get_channel_bool(self, ctx, input_data):
+        if await EventUtils.get_channel_bool(self, ctx, input_spam):
             await utils.senderror(ctx, f"Channel already has repeating message.")
         else:
-            await EventUtils.add_channel(self, ctx, input_data)
+            await EventUtils.add_channel(self, ctx, input_spam)
             e = discord.Embed(title="Repeating message made:")
             e.add_field(name="Message", value=message)
             e.add_field(name="Repeats each", value=f"{seconds}s")
             e.add_field(name="In channel", value=channel.mention)
             await utils.sendembed(ctx, e)
-            await EventUtils.add_channel(self, ctx, input_data)
+            await EventUtils.add_channel(self, ctx, input_spam)
 
     @channels.command()
     async def remove(self, ctx, channel: discord.TextChannel):
-        data = await EventUtils.get_data()
-        if str(channel.id) in data[str(channel.guild.id)]:
-            data[str(channel.guild.id)].pop(str(channel.id))
+        spam = self.ctx.spam
+        if str(channel.id) in spam[str(channel.guild.id)]:
+            spam[str(channel.guild.id)].pop(str(channel.id))
             await utils.sendembed(ctx, e=discord.Embed(description=f"Removed {channel.mention}", color=0x66FF99))
         else:
             await utils.senderror(ctx, f"{channel.mention} isn't in data")
 
     @channels.command()
     async def list(self, ctx):
-        channel_data = await EventUtils.get_channels_active(self, ctx)
+        channel_spam = await EventUtils.get_channels_active(self, ctx)
         e = discord.Embed(description="Active repeating messages:")
-        for data in channel_data:
+        for data in channel_spam:
             for id, value in data.items():
                 e.add_field(
                     name=f"{id} - every {value[1]}s", value=f"{value[0]}")
@@ -288,10 +301,8 @@ class Loops(commands.Cog):
 
 
 class EventUtils():
-    async def get_data():
-        with open("./data/channels.json") as f:
-            data = json.load(f)
-            return data
+    def __init__(self, ctx):
+        self.ctx = ctx
 
     async def get_channels(guild):
         channels = []
@@ -304,58 +315,49 @@ class EventUtils():
         for guild in self.ctx.guilds:
             for channel in guild.text_channels:
                 if await EventUtils.get_channel_bool(self, ctx, [channel]):
-                    channel_data = await EventUtils.get_channel_data(self, ctx, channel)
-                    channel_list.append(channel_data)
+                    channel_spam = await EventUtils.get_channel_spam(self, ctx, channel)
+                    channel_list.append(channel_spam)
         return channel_list
 
-    async def check_channel(self, ctx, input_data):
-        data = await EventUtils.get_data()
+    async def check_channel(self, ctx, input_spam):
+        spam = self.ctx.spam
         # if channel id isnt in guild
-        if str(input_data[0].id) in data[str(input_data[0].guild.id)]:
+        if str(input_spam[0].id) in spam[str(input_spam[0].guild.id)]:
             return False
         else:
-            await EventUtils.set_channel(self, ctx, input_data, data)
+            await EventUtils.set_channel(self, ctx, input_spam, spam)
 
-    async def set_channel(self, ctx, input_data, data):
-        data[str(input_data[0].guild.id)][str(input_data[0].id)] = {}
-        data[str(input_data[0].guild.id)][str(input_data[0].id)]["on"] = False
-        data[str(input_data[0].guild.id)][str(input_data[0].id)]["time"] = None
-        data[str(input_data[0].guild.id)][str(input_data[0].id)]["text"] = None
-        with open("./data/channels.json", "w") as f:
-            json.dump(data, f, indent=4, sort_keys=True)
-            return True
+    async def set_channel(self, ctx, input_spam, spam):
+        spam[str(input_spam[0].guild.id)][str(input_spam[0].id)] = {}
+        spam[str(input_spam[0].guild.id)][str(input_spam[0].id)]["on"] = False
+        spam[str(input_spam[0].guild.id)][str(input_spam[0].id)]["time"] = None
+        spam[str(input_spam[0].guild.id)][str(input_spam[0].id)]["text"] = None
 
-    async def get_channel_bool(self, ctx, input_data):
-        await EventUtils.check_channel(self, ctx, input_data)
-        data = await EventUtils.get_data()
-        yn = data[str(input_data[0].guild.id)][str(input_data[0].id)]["on"]
+    async def get_channel_bool(self, ctx, input_spam):
+        await EventUtils.check_channel(self, ctx, input_spam)
+        spam = self.ctx.spam
+        yn = spam[str(input_spam[0].guild.id)][str(input_spam[0].id)]["on"]
         return yn
 
-    async def get_channel_data(self, ctx, channel):
+    async def get_channel_spam(self, ctx, channel):
         await EventUtils.check_channel(self, ctx, [channel])
-        data = await EventUtils.get_data()
-        channel_id = data[str(channel.guild.id)][str(channel.id)]
-        channel_data = {channel.id: [channel_id['text'], channel_id["time"]]}
-        return channel_data
+        spam = self.ctx.spam
+        channel_id = spam[str(channel.guild.id)][str(channel.id)]
+        channel_spam = {channel.id: [channel_id['text'], channel_id["time"]]}
+        return channel_spam
 
-    async def add_channel(self, ctx, input_data):
-        await EventUtils.check_channel(self, ctx, input_data)
-        data = await EventUtils.get_data()
-        data[str(input_data[0].guild.id)][str(input_data[0].id)]["on"] = True
-        data[str(input_data[0].guild.id)][str(
-            input_data[0].id)]["time"] = input_data[1]
-        data[str(input_data[0].guild.id)][str(
-            input_data[0].id)]["text"] = input_data[2]
-        await EventUtils.dump(data)
+    async def add_channel(self, ctx, input_spam):
+        await EventUtils.check_channel(self, ctx, input_spam)
+        spam = self.ctx.spam
+        spam[str(input_spam[0].guild.id)][str(input_spam[0].id)]["on"] = True
+        spam[str(input_spam[0].guild.id)][str(
+            input_spam[0].id)]["time"] = input_spam[1]
+        spam[str(input_spam[0].guild.id)][str(
+            input_spam[0].id)]["text"] = input_spam[2]
 
-    async def remove_channel(self, ctx, input_data):
-        await EventUtils.check_channel(self, ctx, input_data)
-        data = await EventUtils.get_data()
-        data[str(input_data[0].guild.id)].pop(str(input_data[0].id))
-        await EventUtils.check_channel(self, ctx, input_data)
-        await EventUtils.dump(data)
-
-    async def dump(data):
-        with open("./data/channels.json", "w") as f:
-            json.dump(data, f, indent=4, sort_keys=True)
+    async def remove_channel(self, ctx, input_spam):
+        await EventUtils.check_channel(self, ctx, input_spam)
+        spam = self.ctx.spam
+        spam[str(input_spam[0].guild.id)].pop(str(input_spam[0].id))
+        await EventUtils.check_channel(self, ctx, input_spam)
 """

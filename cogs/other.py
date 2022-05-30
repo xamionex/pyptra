@@ -1,9 +1,6 @@
-import json
 import discord
-from discord.ext import commands, bridge
-from cogs import utils, block
-# afk command data
-import time
+from discord.ext import commands
+from cogs import utils
 
 
 def setup(bot):

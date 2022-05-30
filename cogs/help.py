@@ -1,4 +1,4 @@
-from typing import Optional, Set
+from typing import Optional
 from cogs import utils
 import discord
 from discord.ext import commands
@@ -78,7 +78,7 @@ class MyHelpCommand(commands.MinimalHelpCommand):
 
     async def _help_embed(
         self, title: str, description: Optional[str] = None, mapping: Optional[str] = None,
-        command_set: Optional[Set[commands.Command]] = None, set_author: bool = False
+        command_set: Optional[set[commands.Command]] = None, set_author: bool = False
     ) -> discord.Embed:
         embed = discord.Embed(title=title)
         if description:

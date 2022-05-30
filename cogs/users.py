@@ -18,22 +18,21 @@ class UserCommands(commands.Cog, name="User Commands"):
         self.ctx = ctx
 
     @commands.group(hidden=True, name="rep", invoke_without_command=True)
-    @commands.has_permissions(administrator=True)
     async def rep(self, ctx):
         """Reputation commands for users"""
         await utils.senderror(ctx, f"No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help rep for more info")
 
     @rep.command(name="give")
-    @commands.cooldown(1, 300, commands.BucketType.user)
+    @commands.cooldown(1, 120, commands.BucketType.user)
     async def give(self, ctx, user: discord.Member = None, type=None):
         """Give reputation to a user."""
         if user is None:
-            e = UserUtils.rep_embed(self, ctx)
+            e = self.rep_embed(ctx)
             await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
             ctx.command.reset_cooldown(ctx)
             return
         if type not in self.ctx.rep_type_combined:
-            e = UserUtils.rep_embed(self, ctx)
+            e = self.rep_embed(ctx)
             await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=15)
             ctx.command.reset_cooldown(ctx)
             return
@@ -41,26 +40,25 @@ class UserCommands(commands.Cog, name="User Commands"):
             if user.id == ctx.author.id:
                 await utils.senderror(ctx, "You can't give rep to yourself")
             else:
-                await UserUtils.change_rep(self, ctx, "positive", user)
+                await self.change_rep(ctx, "positive", user)
                 await utils.sendembed(ctx, discord.Embed(description=f"`➕` Giving {user.mention} positive rep"), show_all=False)
         elif type in self.ctx.rep_type_negative:
             if user.id == ctx.author.id:
                 await utils.senderror(ctx, "You can't give rep to yourself")
             else:
-                await UserUtils.change_rep(self, ctx, "negative", user)
+                await self.change_rep(ctx, "negative", user)
                 await utils.sendembed(ctx, discord.Embed(description=f"`➖` Giving {user.mention} negative rep"), show_all=False)
 
     @rep.command(name="take")
-    @commands.cooldown(1, 300, commands.BucketType.user)
     async def take(self, ctx, user: discord.Member = None, type=None):
         """Remove reputation from a user."""
         if user is None:
-            e = UserUtils.rep_embed(self, ctx)
+            e = self.rep_embed(ctx)
             await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
             ctx.command.reset_cooldown(ctx)
             return
         if type not in self.ctx.rep_type_combined:
-            e = UserUtils.rep_embed(self, ctx)
+            e = self.rep_embed(ctx)
             await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=15)
             ctx.command.reset_cooldown(ctx)
             return
@@ -68,20 +66,20 @@ class UserCommands(commands.Cog, name="User Commands"):
             if user.id == ctx.author.id:
                 await utils.senderror(ctx, "You can't give rep to yourself")
             else:
-                await UserUtils.rem_rep(self, ctx, "positive", user)
+                await self.rem_rep(ctx, "positive", user)
                 await utils.sendembed(ctx, discord.Embed(description=f"`➕` Removing your positive rep from {user.mention}"), show_all=False)
         elif type in self.ctx.rep_type_negative:
             if user.id == ctx.author.id:
                 await utils.senderror(ctx, "You can't give rep to yourself")
             else:
-                await UserUtils.rem_rep(self, ctx, "negative", user)
+                await self.rem_rep(ctx, "negative", user)
                 await utils.sendembed(ctx, discord.Embed(description=f"`➖` Removing your negative rep from {user.mention}"), show_all=False)
 
     @rep.command(name="show")
     async def show(self, ctx, user: discord.Member = None):
         """Show a user's reputation"""
         user = user or ctx.author
-        rep = await UserUtils.get_rep(self, ctx, user)
+        rep = await self.get_rep(ctx, user)
         e = discord.Embed(description=f"{user.mention}'s reputation:")
         e.add_field(name="Final Reputation", value=rep[0], inline=False)
         e.add_field(name="Positive Reputation", value=rep[1], inline=False)
@@ -109,10 +107,10 @@ class UserCommands(commands.Cog, name="User Commands"):
     async def resetrep(self, ctx, user: discord.Member = None):
         """Reset a user's reputation"""
         user = user or ctx.author
-        rep = await UserUtils.open_rep(self, ctx, user)
+        rep = await self.open_rep(ctx, user)
         rep.pop(str(user.id))
         try:
-            await UserUtils.set_rep(self, ctx, rep, user)
+            await self.set_rep(ctx, rep, user)
             await utils.sendembed(ctx, e=discord.Embed(description=f"Successfully reset {user.mention}", color=0x66FF99))
         except:
             await utils.senderror(ctx, f"Couldn't reset {user.mention}")
@@ -122,28 +120,23 @@ class UserCommands(commands.Cog, name="User Commands"):
         """Alerts users that mention you that you're AFK."""
         if reason:
             reason = utils.remove_newlines(reason)
-        e = await UserUtils.setafk(self, ctx, reason)
-        await UserUtils.sendafk(self, ctx, ["afk_alert", "afk_alert_dm"], e)
+        e = await self.setafk(ctx, reason)
+        await self.sendafk(ctx, ["afk_alert", "afk_alert_dm"], e)
 
     @bridge.bridge_command(name="gn")
     async def gn(self, ctx):
         """Sets your AFK to `Sleeping 💤`"""
-        await UserUtils.setafk(self, ctx, "Sleeping 💤")
+        await self.setafk(ctx, "Sleeping 💤")
         e = discord.Embed(description=f"Goodnight {ctx.author.mention}")
         e.set_image(url="https://c.tenor.com/nPYfVs6FsBQAAAAS/kitty-kitten.gif")
-        await UserUtils.sendafk(self, ctx, ["afk_alert", "afk_alert_dm"], e)
-
-
-class UserUtils():
-    def __init__(self, ctx):
-        self.ctx = ctx
+        await self.sendafk(ctx, ["afk_alert", "afk_alert_dm"], e)
 
     async def open_member_rep(self, ctx, user):
         rep = self.ctx.reputation
         if str(user.id) in rep:
             return False
         else:
-            await UserUtils.set_rep(self, ctx, rep, user)
+            await self.set_rep(ctx, rep, user)
 
     async def set_rep(self, ctx, rep, user):
         rep[str(user.id)] = {}
@@ -153,7 +146,7 @@ class UserUtils():
         return True
 
     async def get_rep(self, ctx, user):
-        rep = await UserUtils.open_rep(self, ctx, user)
+        rep = await self.open_rep(ctx, user)
         p = len(rep[str(user.id)]["positive"])
         n = len(rep[str(user.id)]["negative"])
         u = p - n
@@ -161,7 +154,7 @@ class UserUtils():
         return reps
 
     async def change_rep(self, ctx, change, user):
-        rep = await UserUtils.open_rep(self, ctx, user)
+        rep = await self.open_rep(ctx, user)
         if str(ctx.author.id) in rep[str(user.id)][change]:
             await utils.senderror(ctx, f"You already gave this person {change} rep\nIf you want to remove it take a look at {self.ctx.guild_prefixes[str(ctx.guild.id)]}help rep")
         else:
@@ -169,7 +162,7 @@ class UserUtils():
         configs.save(self.ctx.reputation_path, "w", rep)
 
     async def rem_rep(self, ctx, change, user):
-        rep = await UserUtils.open_rep(self, ctx, user)
+        rep = await self.open_rep(ctx, user)
         try:
             rep[str(user.id)][change].remove(str(ctx.author.id))
         except:
@@ -177,7 +170,7 @@ class UserUtils():
         configs.save(self.ctx.reputation_path, "w", rep)
 
     async def open_rep(self, ctx, user):
-        await UserUtils.open_member_rep(self, ctx, user)
+        await self.open_member_rep(ctx, user)
         return self.ctx.reputation
 
     async def setafk(self, ctx, reason):
@@ -186,7 +179,7 @@ class UserUtils():
             reason = 'AFK'
         elif reason and len(reason) > 100:
             await utils.senderror(ctx, "You went over the 100 character limit")
-        await UserUtils.update_data(afk, ctx.author)
+        await self.update_data(afk, ctx.author)
         afk[f'{ctx.author.id}']['reason'] = f'{reason}'
         if afk[f'{ctx.author.id}']['AFK']:
             rply = discord.Embed(
@@ -217,8 +210,8 @@ class UserUtils():
         return pattern.format(**d)
 
     async def sendafk(self, ctx, perm, e):
-        if await block.GlobalBlockUtils.get_global_perm(self, ctx, perm[0], ctx.author):
-            if await block.GlobalBlockUtils.get_global_perm(self, ctx, perm[1], ctx.author):
+        if await block.GlobalBlockCommands.get_global_perm(self, ctx, perm[0], ctx.author):
+            if await block.GlobalBlockCommands.get_global_perm(self, ctx, perm[1], ctx.author):
                 await utils.senddmembed(ctx, e)
             else:
                 if isinstance(ctx, bridge.BridgeApplicationContext):

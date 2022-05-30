@@ -1,5 +1,4 @@
-from distutils.cmd import Command
-from typing import Optional, Union
+from typing import Optional
 import discord
 from discord.ext import commands, pages, bridge
 from cogs import utils
@@ -35,7 +34,7 @@ class InfoCommands(commands.Cog, name="Informational"):
     async def userinfo(self, ctx, user: Optional[discord.Member]):
         """Shows you information about users"""
         user = user or ctx.author
-        e = await InfoUtils.info(self, ctx, user)
+        e = await self.info(self, ctx, user)
         await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
 
     @bridge.bridge_command(name="ping")
@@ -51,17 +50,17 @@ class InfoCommands(commands.Cog, name="Informational"):
         """Shows you guides on how to install Northstar."""
         page_groups = [
             pages.PageGroup(
-                pages=InfoUtils.get_pages_automatic(),
+                pages=self.get_pages_automatic(),
                 label="Automatic Installation",
                 description="",
             ),
             pages.PageGroup(
-                pages=InfoUtils.get_pages_manual(),
+                pages=self.get_pages_manual(),
                 label="Manual Installation",
                 description="",
             ),
             pages.PageGroup(
-                pages=InfoUtils.get_pages_help(),
+                pages=self.get_pages_help(),
                 label="Useful wiki help",
                 description="Wiki Pages with useful information for fixing issues",
             ),
@@ -85,9 +84,9 @@ class InfoCommands(commands.Cog, name="Informational"):
     @commands.guild_only()
     async def adminstall(self, ctx, option=None):
         """Shows you guides on how to install Northstar."""
-        e = [InfoUtils.get_pages_help()[0],
-             InfoUtils.get_pages_manual()[0],
-             InfoUtils.get_pages_automatic()[0],
+        e = [self.get_pages_help()[0],
+             self.get_pages_manual()[0],
+             self.get_pages_automatic()[0],
              discord.Embed(description=f"{ctx.author.mention} just updated the installation embeds in <#922662496588943430>")]
         if option is not None:
             await utils.sendembed(ctx, e[3], show_all=False, delete=3, delete_speed=20)
@@ -101,8 +100,6 @@ class InfoCommands(commands.Cog, name="Informational"):
             await ctx.send(embed=e[1])
             await ctx.send(embed=e[2])
 
-
-class InfoUtils():
     def get_pages_help():
         pages = [
             discord.Embed(

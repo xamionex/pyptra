@@ -22,13 +22,13 @@ class FunCommands(commands.Cog, name="Fun"):
         self.ctx = ctx
 
     async def checkperm(self, ctx, perm):
-        if await block.BlockUtils.get_perm(self, ctx, perm, ctx.author) or ctx.author.guild_permissions.administrator:
+        if await block.BlockCommands.get_perm(self, ctx, perm, ctx.author) or ctx.author.guild_permissions.administrator:
             return
         else:
             await utils.senderror(ctx, f"{ctx.author.mention}, You aren\'t allowed to use this")
 
     async def checkping(self, ctx, member):
-        if await block.BlockUtils.get_perm(self, ctx, "ping", member):
+        if await block.BlockCommands.get_perm(self, ctx, "ping", member):
             await utils.senderror(ctx, f"This person has disallowed me from using them in commands.")
 
     @bridge.bridge_command(name="pet")

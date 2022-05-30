@@ -16,6 +16,8 @@ class Configs(commands.Cog, name="Configs"):
                  "./data/reputation.json": "reputation",
                  "./data/perms.json": "perms",
                  "./data/triggers.json": "triggers",
+                 "./data/timed_purge.json": "timed_purge",
+                 "./data/spam.json": "spam",
                  "./data/prefixes.json": "guild_prefixes"}
         for path, name in paths.items():
             with open(path, "r") as f:
