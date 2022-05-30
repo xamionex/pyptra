@@ -64,18 +64,30 @@ async def spam_terror():
     await channel.send('Message to update last message timestamp (Discord allows you to see that without seeing the channel for some reason)', delete_after=60)
 
 
-@ spam_terror.before_loop
+@tasks.loop(minutes=random.randrange(10, 30, 1))
+async def purge_memes():
+    """A background task that gets invoked every 10 minutes."""
+    channel = bot.get_channel(973438217196040242)
+    await channel.purge(limit=9999)
+
+
+@spam_terror.before_loop
 async def spam_terror_before_loop():
     await bot.wait_until_ready()
 
 
-@ spam_terror.after_loop
+@purge_memes.before_loop
+async def purge_memes_before_loop():
+    await bot.wait_until_ready()
+
+
+@spam_terror.after_loop
 async def spam_terror_after_loop():
     await asyncio.sleep(random.randrange(1800, 3600, 200))
     spam_terror.start()
 
 
-@ bot.event
+@bot.event
 async def on_message(message):
     # remove markdown
     message.content = utils.escape_markdown(message.content)
@@ -91,4 +103,5 @@ print(*extensions[0], sep=', ')
 print("Ignored", end=" ")
 print(*extensions[1], sep=', ')
 spam_terror.start()
+purge_memes.start()
 bot.run(secrets.secret)
