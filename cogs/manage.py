@@ -112,24 +112,6 @@ class ManageCommands(commands.Cog, name="Manage"):
         else:
             await utils.sendembed(ctx, discord.Embed(description=f'My prefix is `{self.ctx.guild_prefixes[str(ctx.guild.id)]}` or {self.ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!'), False, 3, 20)
 
-    @commands.command(hidden=True, name="purge")
-    @commands.has_permissions(administrator=True)
-    async def purge(self, ctx, channel: Optional[discord.TextChannel], user: Optional[discord.Member], amount=None):
-        """Purge a channel or user"""
-        if amount:
-            if channel and user:
-                channel = await ctx.fetch_channel(channel)
-                await channel.purge(limit=amount, check=lambda m: m.author == user)
-            elif channel:
-                channel = await ctx.fetch_channel(channel)
-                await channel.purge(limit=amount)
-            elif user:
-                await ctx.channel.purge(limit=amount, check=lambda m: m.author == user)
-            else:
-                await ctx.channel.purge(limit=amount)
-        else:
-            await utils.senderror(ctx, "Specify amount of messages to delete")
-
     @commands.group(hidden=True, name="triggers", invoke_without_command=True)
     @commands.has_permissions(administrator=True)
     async def triggers(self, ctx):
