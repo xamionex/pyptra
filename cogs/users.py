@@ -27,12 +27,12 @@ class UserCommands(commands.Cog, name="User Commands"):
     async def give(self, ctx, user: discord.Member = None, type=None):
         """Give reputation to a user."""
         if user is None:
-            e = self.rep_embed(ctx)
+            e = self.rep_embed(ctx, "give")
             await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
             ctx.command.reset_cooldown(ctx)
             return
         if type not in self.ctx.rep_type_combined:
-            e = self.rep_embed(ctx)
+            e = self.rep_embed(ctx, "give")
             await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=15)
             ctx.command.reset_cooldown(ctx)
             return
@@ -53,12 +53,12 @@ class UserCommands(commands.Cog, name="User Commands"):
     async def take(self, ctx, user: discord.Member = None, type=None):
         """Remove reputation from a user."""
         if user is None:
-            e = self.rep_embed(ctx)
+            e = self.rep_embed(ctx, "take")
             await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
             ctx.command.reset_cooldown(ctx)
             return
         if type not in self.ctx.rep_type_combined:
-            e = self.rep_embed(ctx)
+            e = self.rep_embed(ctx, "take")
             await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=15)
             ctx.command.reset_cooldown(ctx)
             return
@@ -219,8 +219,8 @@ class UserCommands(commands.Cog, name="User Commands"):
                 else:
                     await ctx.reply(embed=e, delete_after=10, mention_author=False)
 
-    async def rep_embed(self, ctx):
-        e = discord.Embed(title=f"{self.ctx.guild_prefixes[str(ctx.guild.id)]}rep <mention> <type>",
+    def rep_embed(self, ctx, type):
+        e = discord.Embed(title=f"{self.ctx.guild_prefixes[str(ctx.guild.id)]}rep {type} <mention> <type>",
                           description="`❌` **You must mention someone and pick one of these for the type of rep:**", color=0xFF6969)
         e.add_field(
             name="Positive", value=f"`{'`, `'.join(self.ctx.rep_type_positive)}`")
