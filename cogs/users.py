@@ -107,7 +107,7 @@ class UserCommands(commands.Cog, name="User Commands"):
     async def resetrep(self, ctx, user: discord.Member = None):
         """Reset a user's reputation"""
         user = user or ctx.author
-        rep = await self.open_rep(ctx, user)
+        rep = await UserCommands.open_rep(self, ctx, user)
         rep.pop(str(user.id))
         try:
             await self.set_rep(ctx, rep, user)
@@ -120,16 +120,16 @@ class UserCommands(commands.Cog, name="User Commands"):
         """Alerts users that mention you that you're AFK."""
         if reason:
             reason = utils.remove_newlines(reason)
-        e = await self.setafk(ctx, reason)
-        await self.sendafk(ctx, ["afk_alert", "afk_alert_dm"], e)
+        e = await UserCommands.setafk(self, ctx, reason)
+        await UserCommands.sendafk(self, ctx, ["afk_alert", "afk_alert_dm"], e)
 
     @bridge.bridge_command(name="gn")
     async def gn(self, ctx):
         """Sets your AFK to `Sleeping 💤`"""
-        await self.setafk(ctx, "Sleeping 💤")
+        await UserCommands.setafk(self, ctx, "Sleeping 💤")
         e = discord.Embed(description=f"Goodnight {ctx.author.mention}")
         e.set_image(url="https://c.tenor.com/nPYfVs6FsBQAAAAS/kitty-kitten.gif")
-        await self.sendafk(ctx, ["afk_alert", "afk_alert_dm"], e)
+        await UserCommands.sendafk(self, ctx, ["afk_alert", "afk_alert_dm"], e)
 
     async def open_member_rep(self, ctx, user):
         rep = self.ctx.reputation
@@ -146,7 +146,7 @@ class UserCommands(commands.Cog, name="User Commands"):
         return True
 
     async def get_rep(self, ctx, user):
-        rep = await self.open_rep(ctx, user)
+        rep = await UserCommands.open_rep(self, ctx, user)
         p = len(rep[str(user.id)]["positive"])
         n = len(rep[str(user.id)]["negative"])
         u = p - n
@@ -154,7 +154,7 @@ class UserCommands(commands.Cog, name="User Commands"):
         return reps
 
     async def change_rep(self, ctx, change, user):
-        rep = await self.open_rep(ctx, user)
+        rep = await UserCommands.open_rep(self, ctx, user)
         if str(ctx.author.id) in rep[str(user.id)][change]:
             await utils.senderror(ctx, f"You already gave this person {change} rep\nIf you want to remove it take a look at {self.ctx.guild_prefixes[str(ctx.guild.id)]}help rep")
         else:
@@ -162,7 +162,7 @@ class UserCommands(commands.Cog, name="User Commands"):
         configs.save(self.ctx.reputation_path, "w", rep)
 
     async def rem_rep(self, ctx, change, user):
-        rep = await self.open_rep(ctx, user)
+        rep = await UserCommands.open_rep(self, ctx, user)
         try:
             rep[str(user.id)][change].remove(str(ctx.author.id))
         except:
@@ -170,7 +170,7 @@ class UserCommands(commands.Cog, name="User Commands"):
         configs.save(self.ctx.reputation_path, "w", rep)
 
     async def open_rep(self, ctx, user):
-        await self.open_member_rep(ctx, user)
+        await UserCommands.open_member_rep(self, ctx, user)
         return self.ctx.reputation
 
     async def setafk(self, ctx, reason):
@@ -198,7 +198,7 @@ class UserCommands(commands.Cog, name="User Commands"):
             json.dump(afk, f, indent=4, sort_keys=True)
         return rply
 
-    async def update_data(afk, user):
+    async def update_data(self, afk, user):
         if not f'{user.id}' in afk:
             afk[f'{user.id}'] = {}
             afk[f'{user.id}']['AFK'] = False
@@ -210,8 +210,8 @@ class UserCommands(commands.Cog, name="User Commands"):
         return pattern.format(**d)
 
     async def sendafk(self, ctx, perm, e):
-        if await block.GlobalBlockCommands.get_global_perm(self, ctx, perm[0], ctx.author):
-            if await block.GlobalBlockCommands.get_global_perm(self, ctx, perm[1], ctx.author):
+        if await block.BlockCommands.get_global_perm(self, ctx, perm[0], ctx.author):
+            if await block.BlockCommands.get_global_perm(self, ctx, perm[1], ctx.author):
                 await utils.senddmembed(ctx, e)
             else:
                 if isinstance(ctx, bridge.BridgeApplicationContext):

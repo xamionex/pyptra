@@ -34,6 +34,8 @@ class Events(commands.Cog, name="Events"):
 
     @commands.Cog.listener("on_application_command_error")
     async def slash_command_error(self, ctx: discord.ApplicationContext, error):
+        channel = self.ctx.get_channel(980964223121256529)
+        await channel.send(embed=discord.Embed(description=error))
         if isinstance(error, commands.BotMissingPermissions):
             raise error
         elif isinstance(error, commands.CommandOnCooldown):
@@ -46,6 +48,8 @@ class Events(commands.Cog, name="Events"):
 
     @commands.Cog.listener("on_command_error")
     async def command_error(self, ctx, error):
+        channel = self.ctx.get_channel(980964223121256529)
+        await channel.send(embed=discord.Embed(description=error))
         if isinstance(error, commands.CommandNotFound):
             raise error
         elif isinstance(error, commands.BotMissingPermissions):
@@ -58,7 +62,7 @@ class Events(commands.Cog, name="Events"):
     @commands.Cog.listener("on_member_join")
     async def member_data(self, member):
         afk = self.ctx.afk
-        await users.UserCommands.update_data(afk, member)
+        await users.UserCommands.update_data(self, afk, member)
         configs.save(self.ctx.afk_path, "w", afk)
 
     @commands.Cog.listener("on_guild_join")
@@ -137,7 +141,7 @@ class Events(commands.Cog, name="Events"):
 
         if send:
             await users.UserCommands.sendafk(self, message, ["afk_alert", "afk_alert_dm"], afk_alert)
-        await users.UserCommands.update_data(self.ctx.afk, message.author)
+        await users.UserCommands.update_data(self, self.ctx.afk, message.author)
         # if message's author is afk continue
         if list(message.content.split(" "))[0] != f'{prefix}afk' and self.ctx.afk[f'{message.author.id}']['AFK']:
             # unix now - unix since afk
