@@ -35,7 +35,12 @@ class Events(commands.Cog, name="Events"):
     @commands.Cog.listener("on_application_command_error")
     async def slash_command_error(self, ctx: discord.ApplicationContext, error):
         channel = self.ctx.get_channel(980964223121256529)
-        await channel.send(embed=discord.Embed(description=error))
+        print(ctx.interaction.data)
+        e = discord.Embed(title=ctx.interaction.data.get(
+            "name"), description=error)
+        for i in ctx.interaction.data.get("options"):
+            e.add_field(name=i["name"], value=i["value"])
+        await channel.send(embed=e)
         if isinstance(error, commands.BotMissingPermissions):
             raise error
         elif isinstance(error, commands.CommandOnCooldown):
@@ -49,7 +54,14 @@ class Events(commands.Cog, name="Events"):
     @commands.Cog.listener("on_command_error")
     async def command_error(self, ctx, error):
         channel = self.ctx.get_channel(980964223121256529)
-        await channel.send(embed=discord.Embed(description=error))
+        msg = ctx.message.content.split(" ")
+        e = discord.Embed(title=msg[0], description=error)
+        msg.remove(str(msg[0]))
+        c = 0
+        for i in msg:
+            c += 1
+            e.add_field(name=f"Arg {c}", value=i)
+        await channel.send(embed=e)
         if isinstance(error, commands.CommandNotFound):
             raise error
         elif isinstance(error, commands.BotMissingPermissions):
