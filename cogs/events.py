@@ -37,7 +37,7 @@ class Events(commands.Cog, name="Events"):
         channel = self.ctx.get_channel(980964223121256529)
         print(ctx.interaction.data)
         e = discord.Embed(title=ctx.interaction.data.get(
-            "name"), description=error)
+            "name"), description=f"{ctx.author.mention} `❌` {error}")
         for i in ctx.interaction.data.get("options"):
             e.add_field(name=i["name"], value=i["value"])
         await channel.send(embed=e)
@@ -55,7 +55,8 @@ class Events(commands.Cog, name="Events"):
     async def command_error(self, ctx, error):
         channel = self.ctx.get_channel(980964223121256529)
         msg = ctx.message.content.split(" ")
-        e = discord.Embed(title=msg[0], description=error)
+        e = discord.Embed(
+            title=msg[0], description=f"{ctx.author.mention} `❌` {error}")
         msg.remove(str(msg[0]))
         c = 0
         for i in msg:
