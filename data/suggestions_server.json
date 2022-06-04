@@ -1,5 +1,5 @@
 {
-    "latestId": 55,
+    "latestId": 57,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -446,6 +446,22 @@
             "suggestion": "Maybe make <#973438217196040242> keep at least 5 messages in it? It gets very eerie when no one has posted any meme in the past hour. Also, maybe don\u2019t delete messages that make it into the starboard - if the server deems them worthy they should get to stay, no?",
             "sid": 55,
             "message": 980770177132159046,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 701834982947029125,
+            "suggestion": "Make the Rainbow a bit brighter, you have to really look to see half the colors cause it blends too much",
+            "sid": 56,
+            "message": 981634063200837733,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 703637781246771202,
+            "suggestion": "Rework servers system for something like Scrap mechanic , Raft , etc bc these multi system doesnt need port foward, maybe you ask why ? because amount of servers will go stonks",
+            "sid": 57,
+            "message": 981989684391608350,
             "status": "open",
             "note": ""
         }

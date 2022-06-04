@@ -1,5 +1,5 @@
 {
-    "latestId": 216,
+    "latestId": 224,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1734,6 +1734,70 @@
             "suggestion": "mod that makes points earned from titans in attrition/bounty hunt proportional to damage done to the titan. eg tone has 12500 hp divided by ten would mean for every 1250 damage done to her you would gain a point.",
             "sid": 216,
             "message": 980862386917482496,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 959359781460643840,
+            "suggestion": "maybe a queue option to join full servers? gets annoying constantly refreshing, waiting for a spot in a server that you want to join",
+            "sid": 217,
+            "message": 981430463002476604,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 104117150683250688,
+            "suggestion": "multi-team skirmish. 3v3v3 4v4v4 etc",
+            "sid": 218,
+            "message": 981664427931746334,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 817091236934189067,
+            "suggestion": "replace original tone's voice with glados",
+            "sid": 219,
+            "message": 981670270785974312,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 377839452095250432,
+            "suggestion": "replace Grapple Pilot Helmet with Gates's Helmet",
+            "sid": 220,
+            "message": 981710386971693056,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 363231490277900288,
+            "suggestion": "Legend Titan Voices",
+            "sid": 221,
+            "message": 981951627105804288,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 363231490277900288,
+            "suggestion": "Game Mode: Disruption",
+            "sid": 222,
+            "message": 981962199130067014,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 698152784461037658,
+            "suggestion": "im an xbox player and i cant use this but some apps like persay expasion for explorer allow modding of some games but not titanfall 2 and so it would be awesome if you made a way on xbox to use northstar",
+            "sid": 223,
+            "message": 981989209252458606,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 293948527589982210,
+            "suggestion": "making executions that spawn a pilot model use it's POV instead of the titan's, IE the way battety thief works for the player performing it",
+            "sid": 224,
+            "message": 982025469778079784,
             "status": "open",
             "note": ""
         }
