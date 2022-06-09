@@ -30,32 +30,39 @@ class InfoCommands(commands.Cog, name="Informational"):
 
     @bridge.bridge_command(name="userinfo")
     @commands.cooldown(1, 10, commands.BucketType.user)
-    @commands.guild_only()
     async def userinfo(self, ctx, user: Optional[discord.Member]):
         """Shows you information about users"""
         user = user or ctx.author
-        date = [utils.iso8601_to_epoch(user.joined_at.isoformat(
-        )), utils.iso8601_to_epoch(user.created_at.isoformat())]
+        date_registered = utils.iso8601_to_epoch(user.created_at.isoformat())
         e = discord.Embed(color=0xdfa3ff, description=user.mention)
         e.set_author(name=str(user), icon_url=user.avatar.url)
         e.set_thumbnail(url=user.avatar.url)
         e.add_field(
-            name="Joined",
-            value=f"<t:{date[0]}:f> (<t:{date[0]}:R>)", inline=False)
-        members = sorted(ctx.guild.members, key=lambda m: m.joined_at)
-        e.add_field(
             name="Registered",
-            value=f"<t:{date[1]}:f> (<t:{date[1]}:R>)", inline=False)
-        e.add_field(
-            name="Join position",
-            value=str(members.index(user)+1))
-        if len(user.roles) > 1:
-            role_string = ' '.join([r.mention for r in user.roles][1:])
-            e.add_field(
-                name="Roles [{}]".format(
-                    len(user.roles)-1),
-                value=role_string,
-                inline=False)
+            value=f"<t:{date_registered}:f> (<t:{date_registered}:R>)", inline=False)
+        if isinstance(ctx.channel.type, discord.DMChannel) == False:
+            try:
+                date_joined = utils.iso8601_to_epoch(
+                    user.joined_at.isoformat())
+                members = sorted(ctx.guild.members, key=lambda m: m.joined_at)
+                e.add_field(
+                    name="Joined",
+                    value=f"<t:{date_joined}:f> (<t:{date_joined}:R>)", inline=False)
+                e.add_field(
+                    name="Join position",
+                    value=str(members.index(user)+1))
+                if len(user.roles) > 1:
+                    role_string = ' '.join([r.mention for r in user.roles][1:])
+                    if len(role_string) < 1024:
+                        e.add_field(
+                            name=f"Roles [{len(user.roles)-1}]",
+                            value=role_string,
+                            inline=False)
+                    else:
+                        e.add_field(name=f"Roles [{len(user.roles)-1}]",
+                                    value="Too many roles, can't display")
+            except:
+                pass
         # perm_string = ', '.join([str(p[0]).replace("_", " ").title() for p in user.guild_permissions if p[1]])
         # e.add_field(
         # name="Guild permissions",
@@ -66,7 +73,6 @@ class InfoCommands(commands.Cog, name="Informational"):
 
     @bridge.bridge_command(name="pfp")
     @commands.cooldown(1, 10, commands.BucketType.user)
-    @commands.guild_only()
     async def pfp(self, ctx, user: Optional[discord.Member]):
         """Shows you an users profile picture"""
         user = user or ctx.author
