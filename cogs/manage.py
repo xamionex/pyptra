@@ -101,9 +101,9 @@ class ManageCommands(commands.Cog, name="Manage"):
     async def prefix(self, ctx, prefix=None):
         """Shows or changes prefix"""
         if prefix is not None:
-            prefixes = self.ctx.prefixes
-            prefixes[str(ctx.guild.id)] = prefix
-            configs.save(self.ctx.prefixes_path, "w", prefixes)
+            self.ctx.guild_prefixes[str(ctx.guild.id)] = prefix
+            configs.save(self.ctx.guild_prefixes_path,
+                         "w", self.ctx.guild_prefixes)
             await utils.sendembed(ctx, discord.Embed(description=f'Prefix changed to: {prefix}'), False, 3, 5)
         else:
             await utils.sendembed(ctx, discord.Embed(description=f'My prefix is `{self.ctx.guild_prefixes[str(ctx.guild.id)]}` or {self.ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!'), False, 3, 20)
