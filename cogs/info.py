@@ -126,7 +126,7 @@ class InfoCommands(commands.Cog, name="Informational"):
             await ctx.send(embed=e[1])
             await ctx.send(embed=e[2])
 
-    def get_pages_help():
+    def get_pages_help(self):
         pages = [
             discord.Embed(
                 title="Useful wiki help",
@@ -142,7 +142,7 @@ class InfoCommands(commands.Cog, name="Informational"):
             inline=False)
         return pages
 
-    def get_pages_manual():
+    def get_pages_manual(self):
         pages = [
             discord.Embed(
                 title="Manual Installation for Northstar",
@@ -162,7 +162,7 @@ class InfoCommands(commands.Cog, name="Informational"):
             inline=False)
         return pages
 
-    def get_pages_automatic():
+    def get_pages_automatic(self):
         pages = [
             discord.Embed(
                 title="Automatic Installation for Northstar",

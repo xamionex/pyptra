@@ -1,5 +1,5 @@
 {
-    "latestId": 57,
+    "latestId": 63,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -438,7 +438,7 @@
             "suggestion": "There's a grammatical error in the servers's description: \"...A community made mod for Titanfall 2 which __makes__ __enables__ you to host servers.\"",
             "sid": 54,
             "message": 980748421700911115,
-            "status": "open",
+            "status": "approved",
             "note": ""
         },
         {
@@ -462,6 +462,54 @@
             "suggestion": "Rework servers system for something like Scrap mechanic , Raft , etc bc these multi system doesnt need port foward, maybe you ask why ? because amount of servers will go stonks",
             "sid": 57,
             "message": 981989684391608350,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 840599795655376927,
+            "suggestion": "make content creator role have a cool yt icon or something",
+            "sid": 58,
+            "message": 982671470247424030,
+            "status": "approved",
+            "note": ""
+        },
+        {
+            "user": 829694789833457684,
+            "suggestion": "make a cosplay chat and cosplay faq, many people here (including me) want to make cosplay and stuff feom Titanfall and its universe, having a FAQ about it as well with stuff like materials and/or suff like 3D files youd need to wither port to paper or use a 3D printer and stuff",
+            "sid": 59,
+            "message": 983681145499697222,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 950559713211346944,
+            "suggestion": "there should be a \"racer\" gamemode someone is constantly stimmed and has a head-start. The enemy(ies) has to melee kill the the \"runner\"",
+            "sid": 60,
+            "message": 983876165221638215,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 755499635833045132,
+            "suggestion": "just update <#942476037634293770> pls it's so outdated and missing tons of roles & channels",
+            "sid": 61,
+            "message": 983944346388795393,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 755499635833045132,
+            "suggestion": "pls get more ppl looking at the modding docs who can push prs and review stuff. The average pr takes like 1-2 weeks before anybody even looks at it and it gets really annoying (I suggest uniboi as he's pretty active there : )",
+            "sid": 62,
+            "message": 984124044628598844,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 296358394355253258,
+            "suggestion": "maybe you should make a list like this: there were exploits like this in vanilla 1. 2. 3 etc and we fixed them. blabla exploits were created using northstar and we fixed them too etc. you can also add currently suspected vulnerabilities, if there are some. a channel would be nice for people questioning the northstar's safety to see",
+            "sid": 63,
+            "message": 984190269316542474,
             "status": "open",
             "note": ""
         }

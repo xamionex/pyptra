@@ -34,13 +34,15 @@ class Events(commands.Cog, name="Events"):
 
     @commands.Cog.listener("on_application_command_error")
     async def slash_command_error(self, ctx: discord.ApplicationContext, error):
-        channel = self.ctx.get_channel(980964223121256529)
-        print(ctx.interaction.data)
-        e = discord.Embed(title=ctx.interaction.data.get(
-            "name"), description=f"{ctx.author.mention} `❌` {error}")
-        for i in ctx.interaction.data.get("options"):
-            e.add_field(name=i["name"], value=i["value"])
-        await channel.send(embed=e)
+        try:
+            channel = self.ctx.get_channel(980964223121256529)
+            e = discord.Embed(title=ctx.interaction.data.get(
+                "name"), description=f"{ctx.author.mention} `❌` {error}")
+            for i in ctx.interaction.data.get("options"):
+                e.add_field(name=i["name"], value=i["value"])
+            await channel.send(embed=e)
+        except:
+            pass
         if isinstance(error, commands.BotMissingPermissions):
             raise error
         elif isinstance(error, commands.CommandOnCooldown):

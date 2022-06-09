@@ -1,5 +1,5 @@
 {
-    "latestId": 224,
+    "latestId": 232,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1798,6 +1798,70 @@
             "suggestion": "making executions that spawn a pilot model use it's POV instead of the titan's, IE the way battety thief works for the player performing it",
             "sid": 224,
             "message": 982025469778079784,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 381485392324591616,
+            "suggestion": "Ronin sword but every time it connects it plays a random sound effect from Ed Edd N Eddy. Also Sword Core plays either \u201cyou dare mock the son of a shepherd\u201d, the Subuluwa clip, or \u201cprepare for the almighty three show beating!\u201d on startup.",
+            "sid": 225,
+            "message": 982550446138867742,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 528830566590578699,
+            "suggestion": "gives a 1/4 chance for grunts to spawn with shields (like in campaign and frontier defence)",
+            "sid": 226,
+            "message": 982694166435889152,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "when titan gets doomed the little color phase thing that blurs you, make it happen forever when ur doomed instead of 1 sec",
+            "sid": 227,
+            "message": 982854890231570472,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 255935440744480768,
+            "suggestion": "change Sword Core Audio both default and prime Ronin to \"Its Morbing Time\", cus why the fck not",
+            "sid": 228,
+            "message": 983099945932427424,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 441896260086005770,
+            "suggestion": "alt +f4 mod",
+            "sid": 229,
+            "message": 983747122149072947,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 293948527589982210,
+            "suggestion": "making the titan arms in first person show damage taken the way it looks on the actual model with the hull plating breaking off with enough damage/being on fire while doomed",
+            "sid": 230,
+            "message": 984165500256931881,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 842740137740861440,
+            "suggestion": "Mod where you can customize loading screens",
+            "sid": 231,
+            "message": 984198598453506089,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 712127862844686357,
+            "suggestion": "cooper grapple skin when",
+            "sid": 232,
+            "message": 984272756025749564,
             "status": "open",
             "note": ""
         }
