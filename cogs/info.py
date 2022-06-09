@@ -34,20 +34,21 @@ class InfoCommands(commands.Cog, name="Informational"):
     async def userinfo(self, ctx, user: Optional[discord.Member]):
         """Shows you information about users"""
         user = user or ctx.author
-        date_format = "%a, %d %b %Y %I:%M %p"
+        date = [utils.iso8601_to_epoch(user.joined_at.isoformat(
+        )), utils.iso8601_to_epoch(user.created_at.isoformat())]
         e = discord.Embed(color=0xdfa3ff, description=user.mention)
         e.set_author(name=str(user), icon_url=user.avatar.url)
         e.set_thumbnail(url=user.avatar.url)
         e.add_field(
             name="Joined",
-            value=user.joined_at.strftime(date_format))
+            value=f"<t:{date[0]}:f> (<t:{date[0]}:R>)", inline=False)
         members = sorted(ctx.guild.members, key=lambda m: m.joined_at)
+        e.add_field(
+            name="Registered",
+            value=f"<t:{date[1]}:f> (<t:{date[1]}:R>)", inline=False)
         e.add_field(
             name="Join position",
             value=str(members.index(user)+1))
-        e.add_field(
-            name="Registered",
-            value=user.created_at.strftime(date_format))
         if len(user.roles) > 1:
             role_string = ' '.join([r.mention for r in user.roles][1:])
             e.add_field(
@@ -61,6 +62,17 @@ class InfoCommands(commands.Cog, name="Informational"):
         # value=perm_string,
         # inline=False) # way too big for my liking tbh
         e.set_footer(text='ID: ' + str(user.id))
+        await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
+
+    @bridge.bridge_command(name="pfp")
+    @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.guild_only()
+    async def pfp(self, ctx, user: Optional[discord.Member]):
+        """Shows you an users profile picture"""
+        user = user or ctx.author
+        e = discord.Embed(
+            color=0xdfa3ff, description=f'{user.mention} - [Link to profile picture]({user.avatar.url})')
+        e.set_image(url=user.avatar.url)
         await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
 
     @bridge.bridge_command(name="ping")
