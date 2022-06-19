@@ -1,5 +1,5 @@
 {
-    "latestId": 232,
+    "latestId": 245,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1862,6 +1862,110 @@
             "suggestion": "cooper grapple skin when",
             "sid": 232,
             "message": 984272756025749564,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 293948527589982210,
+            "suggestion": "we have the prime sword to regular ronin sword mod already BUT WHY NOT THE REVERSE? I WANT THE GOOD LOOKING SWORD ON THE GOOD LOOKING TITAN MODEL DAMNIT >:(",
+            "sid": 233,
+            "message": 984665953155547197,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 764475767508959243,
+            "suggestion": "Implement Hardcore mode. Weapons have a high spread from the hip, melee doesn't kill with one hit, enemies aren't outlined in red, NPCs are more dangerous, there is weak friendly fire",
+            "sid": 234,
+            "message": 985283772159234072,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 817091236934189067,
+            "suggestion": "i dont know if it is possible but make the ronin melee's effect be red instead of blue\nIf it isnt possible sorry i didnt know ive read faq but im not good with english",
+            "sid": 235,
+            "message": 985530555288408104,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 764475767508959243,
+            "suggestion": "1 - Possibility to saddle your titan. 2 - Allied titans can be saddled by more than one pilot (2-3, on the sides or from the rear) + animations are needed, they cannot be implemented yet. 3- Ability to allow friends on the party to pilot your Titan?",
+            "sid": 236,
+            "message": 985842586168213504,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 447270154301341696,
+            "suggestion": "Ramiel OS for our beloved Ion Titan. :)",
+            "sid": 237,
+            "message": 986131675140472852,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 764475767508959243,
+            "suggestion": "Reverse animations and shooting sounds + phase shift. Now it's TENET",
+            "sid": 238,
+            "message": 986349504695504927,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 508119480140824577,
+            "suggestion": "A mod to replace the Titanfall 2 H-Cog with the Titanfall 1 H-Cog",
+            "sid": 239,
+            "message": 986487254023303198,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 625796609804075070,
+            "suggestion": "make car shoot slightly below the cross hair and change the gravity of kraber shots.",
+            "sid": 240,
+            "message": 986785213554245703,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 755499635833045132,
+            "suggestion": "neofetch in console",
+            "sid": 241,
+            "message": 986798293319290912,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 457360894100242452,
+            "suggestion": "mod that switches around the pilot models with the tacticals, EX: A cloak pilot looks like a holo pilot but is a cloak pilot, idc what gets switched with what",
+            "sid": 242,
+            "message": 987143828572082247,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 397841716947845122,
+            "suggestion": "A mod to replace the new Pilot/Grunt/Stalker models with the ones from Titanfall 1",
+            "sid": 243,
+            "message": 987166661629055036,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 753497353113174086,
+            "suggestion": "A music based mod like Tetris Effect. Kills, swapping weapons, streaks would all cause play a music note. Music in background gets more intense with each kill. Dying would cause song to end and next to play.",
+            "sid": 244,
+            "message": 987501075105984532,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 326355636101316609,
+            "suggestion": "Some sort of server history, i.e. a list that would allow you to see the servers you\u2019ve played in recently. This would help form communities around servers, and also solve the common problem seen in  <#937922165163065384>, where people keep forgetting which server they were on. Maybe turn it into a part of the client, not necessarily a mod.",
+            "sid": 245,
+            "message": 988068570158227566,
             "status": "open",
             "note": ""
         }

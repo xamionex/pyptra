@@ -95,6 +95,12 @@
         "wb_alert": true,
         "wb_alert_dm": false
     },
+    "275676668012658689": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
     "278073569177632769": {
         "afk_alert": true,
         "afk_alert_dm": false,
@@ -143,6 +149,12 @@
         "wb_alert": true,
         "wb_alert_dm": false
     },
+    "319401422477197313": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
     "326355636101316609": {
         "afk_alert": true,
         "afk_alert_dm": false,
@@ -150,6 +162,12 @@
         "wb_alert_dm": false
     },
     "331890486262628352": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
+    "344605488442245122": {
         "afk_alert": true,
         "afk_alert_dm": false,
         "wb_alert": true,
@@ -179,6 +197,12 @@
         "wb_alert": true,
         "wb_alert_dm": false
     },
+    "372598463545737216": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
     "375616010402922498": {
         "afk_alert": true,
         "afk_alert_dm": false,
@@ -198,6 +222,12 @@
         "wb_alert_dm": false
     },
     "392337045055471618": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
+    "397841716947845122": {
         "afk_alert": true,
         "afk_alert_dm": false,
         "wb_alert": true,
@@ -251,6 +281,12 @@
         "wb_alert": true,
         "wb_alert_dm": false
     },
+    "459766305931657217": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
     "465408580938498058": {
         "afk_alert": true,
         "afk_alert_dm": false,
@@ -299,6 +335,18 @@
         "wb_alert": true,
         "wb_alert_dm": false
     },
+    "558690387620003861": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
+    "565903981008912385": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
     "576606744445190149": {
         "afk_alert": true,
         "afk_alert_dm": false,
@@ -336,6 +384,12 @@
         "wb_alert_dm": false
     },
     "625796609804075070": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
+    "632177643290361877": {
         "afk_alert": true,
         "afk_alert_dm": false,
         "wb_alert": true,
@@ -497,7 +551,19 @@
         "wb_alert": true,
         "wb_alert_dm": false
     },
+    "817091236934189067": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
     "829694789833457684": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
+    "831938597544132699": {
         "afk_alert": true,
         "afk_alert_dm": false,
         "wb_alert": true,
@@ -527,6 +593,24 @@
         "wb_alert": true,
         "wb_alert_dm": false
     },
+    "893446867537506374": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
+    "922274710207737940": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
+    "938101231891673188": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
     "949269806824181770": {
         "afk_alert": true,
         "afk_alert_dm": false,
@@ -540,7 +624,7 @@
         "wb_alert_dm": false
     },
     "959359781460643840": {
-        "afk_alert": false,
+        "afk_alert": true,
         "afk_alert_dm": false,
         "wb_alert": true,
         "wb_alert_dm": false

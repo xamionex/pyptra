@@ -1,5 +1,5 @@
 {
-    "latestId": 63,
+    "latestId": 70,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -510,6 +510,62 @@
             "suggestion": "maybe you should make a list like this: there were exploits like this in vanilla 1. 2. 3 etc and we fixed them. blabla exploits were created using northstar and we fixed them too etc. you can also add currently suspected vulnerabilities, if there are some. a channel would be nice for people questioning the northstar's safety to see",
             "sid": 63,
             "message": 984190269316542474,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 296358394355253258,
+            "suggestion": "faky made a simple guide in #volunteer-announcements but it would be great if there was another read-only channel which contains common issues and their fixes. or if someone expands that guide a bit more idk. helpers know most things but not everyone with ticket permission is as knowledgeable as they are",
+            "sid": 64,
+            "message": 984565719310143518,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 764475767508959243,
+            "suggestion": "TF1 style mode. Reduced image contrast, no sliding. (Rodeo TF1, Titans TF1, FP landing in a titan already exists, but rarely used at the same time)",
+            "sid": 65,
+            "message": 985286374867488788,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 829694789833457684,
+            "suggestion": "make <#924277135366053941>  be used by basically mods only, if you want to add something to it you ask to the mods and they either say not this was already added etc. or they accepty to add it, why? because it seems people dont understand whats iits supposed to be used for and just use it for stuff that they could easly be answered in other channels and faster",
+            "sid": 66,
+            "message": 985607410712465499,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 595647336797962266,
+            "suggestion": "beeing abele to mark servers as favort",
+            "sid": 67,
+            "message": 985655680935534633,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 190082056439463936,
+            "suggestion": "Team mixing between games in order to balance teams (with respect to friends groups).",
+            "sid": 68,
+            "message": 986346968479596564,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 755499635833045132,
+            "suggestion": "have dyno auto delete messages in <#937922165163065384> that don't contain an image/embed (aka proof)\nOr make <#937922165163065384> work like suggestions and have a bot cmd to do it",
+            "sid": 69,
+            "message": 986510899617599498,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 755499635833045132,
+            "suggestion": "fsr content creators don't  get their own spot on the ppl list\nalso They get image perms in general but modder/Skin maker don't <:rockeyebrow:925219663842017291>",
+            "sid": 70,
+            "message": 987601429994831944,
             "status": "open",
             "note": ""
         }
