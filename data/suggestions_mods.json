@@ -1,5 +1,5 @@
 {
-    "latestId": 245,
+    "latestId": 253,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -1966,6 +1966,70 @@
             "suggestion": "Some sort of server history, i.e. a list that would allow you to see the servers you\u2019ve played in recently. This would help form communities around servers, and also solve the common problem seen in  <#937922165163065384>, where people keep forgetting which server they were on. Maybe turn it into a part of the client, not necessarily a mod.",
             "sid": 245,
             "message": 988068570158227566,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 397841716947845122,
+            "suggestion": "A sound replacement to replace the Titanfall 2 kill sound (the ching) with the Titanfall 1 kill sound",
+            "sid": 246,
+            "message": 988283684035629137,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 268996803582492672,
+            "suggestion": "try decrease size of CrashDumps 461MB in size each for some reason. I suggest everyone checks their C:\\Users\\NAME\\AppData\\Local\\CrashDumps",
+            "sid": 247,
+            "message": 988450401001021450,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 256158358430547968,
+            "suggestion": "Make a mod to ignore players both in chat and voice chat.",
+            "sid": 248,
+            "message": 988500002466852894,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 431810203990622218,
+            "suggestion": "Custom reload animations for weapons equipped with Speedloader",
+            "sid": 249,
+            "message": 988732661893828618,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 500427471204778006,
+            "suggestion": "make the server browser automatically update its status like what map it's on or how many players are in it without the user having to spam refresh.. or maybe add a \"que\" option where players can wait for an open spot in a server",
+            "sid": 250,
+            "message": 988817966869131374,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 104117150683250688,
+            "suggestion": "Not exactly a northstar client mod, but a 3rd party application/script that can extract every in-game chat message from Northstar logs and make it presentable.",
+            "sid": 251,
+            "message": 988829793556520980,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 328904090916618240,
+            "suggestion": "titanfall but ratz instagip. wingman, no reload, one shot, short delay after each shot",
+            "sid": 252,
+            "message": 989029972947648572,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 817091236934189067,
+            "suggestion": "my suggestion is:\nmake scorch able to wallrun",
+            "sid": 253,
+            "message": 989219396494950430,
             "status": "open",
             "note": ""
         }
