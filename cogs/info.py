@@ -35,8 +35,11 @@ class InfoCommands(commands.Cog, name="Informational"):
         user = user or ctx.author
         date_registered = utils.iso8601_to_epoch(user.created_at.isoformat())
         e = discord.Embed(color=0xdfa3ff, description=user.mention)
-        e.set_author(name=str(user), icon_url=user.avatar.url)
-        e.set_thumbnail(url=user.avatar.url)
+        try:
+            e.set_author(name=str(user), icon_url=user.avatar.url)
+            e.set_thumbnail(url=user.avatar.url)
+        except:
+            e.set_author(name=f"{str(user)} - Couldn't get avatar")
         e.add_field(
             name="Registered",
             value=f"<t:{date_registered}:f> (<t:{date_registered}:R>)", inline=False)
