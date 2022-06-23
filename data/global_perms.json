@@ -527,6 +527,12 @@
         "wb_alert": true,
         "wb_alert_dm": false
     },
+    "774259103224692786": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
     "775530980026351736": {
         "afk_alert": true,
         "afk_alert_dm": false,

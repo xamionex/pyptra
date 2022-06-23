@@ -34,6 +34,14 @@ class Events(commands.Cog, name="Events"):
 
     @commands.Cog.listener("on_application_command_error")
     async def slash_command_error(self, ctx: discord.ApplicationContext, error):
+        if isinstance(error, commands.BotMissingPermissions):
+            raise error
+        elif isinstance(error, commands.CommandOnCooldown):
+            e = discord.Embed(description=f"`❌` {error}", color=0xFF6969)
+            await utils.sendembed(ctx, e, show_all=False)
+        elif isinstance(error, discord.ApplicationCommandError):
+            e = discord.Embed(description=f"`❌` {error}", color=0xFF6969)
+            await ctx.respond(embed=e, ephemeral=True)
         try:
             channel = self.ctx.get_channel(980964223121256529)
             e = discord.Embed(title=ctx.interaction.data.get(
@@ -43,35 +51,30 @@ class Events(commands.Cog, name="Events"):
             await channel.send(embed=e)
         except:
             pass
-        if isinstance(error, commands.BotMissingPermissions):
-            raise error
-        elif isinstance(error, commands.CommandOnCooldown):
-            e = discord.Embed(description=f"`❌` {error}", color=0xFF6969)
-            await utils.sendembed(ctx, e, show_all=False)
-        elif isinstance(error, discord.ApplicationCommandError):
-            e = discord.Embed(description=f"`❌` {error}", color=0xFF6969)
-            await utils.sendembed(ctx, e, show_all=False)
         raise error
 
     @commands.Cog.listener("on_command_error")
     async def command_error(self, ctx, error):
-        channel = self.ctx.get_channel(980964223121256529)
-        msg = ctx.message.content.split(" ")
-        e = discord.Embed(
-            title=msg[0], description=f"{ctx.author.mention} `❌` {error}")
-        msg.remove(str(msg[0]))
-        c = 0
-        for i in msg:
-            c += 1
-            e.add_field(name=f"Arg {c}", value=i)
-        await channel.send(embed=e)
         if isinstance(error, commands.CommandNotFound):
             raise error
         elif isinstance(error, commands.BotMissingPermissions):
             raise error
         elif isinstance(error, commands.CommandError):
             e = discord.Embed(description=f"`❌` {error}", color=0xFF6969)
-            await utils.sendembed(ctx, e, delete=3)
+            await ctx.send(ctx.author.mention, embed=e, delete_after=5)
+        try:
+            channel = self.ctx.get_channel(980964223121256529)
+            msg = ctx.message.content.split(" ")
+            e = discord.Embed(
+                title=msg[0], description=f"{ctx.author.mention} `❌` {error}")
+            msg.remove(str(msg[0]))
+            c = 0
+            for i in msg:
+                c += 1
+                e.add_field(name=f"Arg {c}", value=i)
+            await channel.send(embed=e)
+        except:
+            pass
         raise error
 
     @commands.Cog.listener("on_member_join")

@@ -17,23 +17,50 @@ class OtherCommands(commands.Cog, name="Other Commands"):
     @commands.command(hidden=True, name="echo")
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
-    async def say(self, ctx, *, message=None):
+    async def echo(self, ctx, *, message=None):
         """Echoes the message you send."""
         await utils.delete_message(ctx)
         await ctx.send(message)
 
+    @commands.command(hidden=True, name="free")
+    @commands.is_owner()
+    @commands.guild_only()
+    async def free(self, ctx, title, description, price, unix, rating, platform, game_link, imagelink):
+        """Sends a freestuff bot-like embed (used by petar mostly)."""
+        await utils.delete_message(ctx)
+        platforms = {
+            "gog": "https://cdn.discordapp.com/attachments/764940369367662622/989443585533440020/unknown.png",
+            "epic": "https://cdn.discordapp.com/attachments/764940369367662622/989443614130192474/unknown.png",
+            "steam": "https://cdn.discordapp.com/attachments/764940369367662622/989443638989828136/unknown.png",
+            "itchio": "https://cdn.discordapp.com/attachments/764940369367662622/989443462673883156/unknown.png",
+        }
+        for name, link in platforms.items():
+            if str(platform) == str(name):
+                platform = str(link)
+                break
+        e = discord.Embed(
+            title=title, description=f"""
+            > {description}\n
+            ~~€{price}~~ **Free** until <t:{unix}:d> ᲼ ᲼ {rating} ★\n
+            **[Get it for free]({game_link})**
+            """)
+        e.set_thumbnail(url=platform)
+        e.set_image(url=imagelink)
+        e.set_footer(text=f"Sent from {ctx.author}")
+        #channel = self.ctx.get_channel(935685344010047519)
+        await ctx.send(embed=e)
+
     @commands.command(hidden=True, name="echoembed")
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
-    async def Say(self, ctx, *, message=None):
+    async def echoembed(self, ctx, description=None):
         """Echos the message you put in, was used for testing."""
         await utils.delete_message(ctx)
-        embed = discord.Embed(color=ctx.author.color,
-                              timestamp=ctx.message.created_at)
-        embed.set_author(name="Announcement!", icon_url=ctx.author.avatar.url)
-        embed.add_field(
-            name=f"Sent by {ctx.message.author}", value=str(message))
-        await ctx.send(embed=embed)
+        if description is None:
+            await utils.senderror(ctx, "No message attached")
+        e = discord.Embed(description=description)
+        #channel = self.ctx.get_channel(935685344010047519)
+        await ctx.send(embed=e)
 
     @commands.command(hidden=True, name="reply")
     @commands.has_permissions(administrator=True)
