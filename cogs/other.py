@@ -23,7 +23,7 @@ class OtherCommands(commands.Cog, name="Other Commands"):
         await ctx.send(message)
 
     @commands.command(hidden=True, name="free")
-    @commands.is_owner()
+    @commands.has_permissions(administrator=True)
     @commands.guild_only()
     async def free(self, ctx, title, description, price, unix, rating, platform, game_link, imagelink):
         """Sends a freestuff bot-like embed (used by petar mostly)."""

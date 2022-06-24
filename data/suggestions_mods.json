@@ -1,5 +1,5 @@
 {
-    "latestId": 253,
+    "latestId": 255,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -2030,6 +2030,22 @@
             "suggestion": "my suggestion is:\nmake scorch able to wallrun",
             "sid": 253,
             "message": 989219396494950430,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 558409598956994563,
+            "suggestion": "Allow campaign maps for use in multiplayer, hopefully with editable out-of-bounds areas (so you aren't allowed to use the WHOLE area) and a larger player count. Even better if you could include a hide-and-seek mode like infection, except hiders cannot fight back.",
+            "sid": 254,
+            "message": 989641518266593340,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 558409598956994563,
+            "suggestion": "A gamemode called \"Target Practice\" where 1 player is given unlimited phase dashes",
+            "sid": 255,
+            "message": 989684406019043378,
             "status": "open",
             "note": ""
         }
