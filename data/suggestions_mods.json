@@ -1,5 +1,5 @@
 {
-    "latestId": 255,
+    "latestId": 256,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -2046,6 +2046,14 @@
             "suggestion": "A gamemode called \"Target Practice\" where 1 player is given unlimited phase dashes",
             "sid": 255,
             "message": 989684406019043378,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 721799550733385992,
+            "suggestion": "Grunt Mode. Its where pilots are like grunts, No jumpkit. Normal Jump , No Wallrun , Weaker Punches ETC",
+            "sid": 256,
+            "message": 990236085554667521,
             "status": "open",
             "note": ""
         }
