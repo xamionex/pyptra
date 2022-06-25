@@ -71,7 +71,7 @@ class Events(commands.Cog, name="Events"):
             raise error
         elif isinstance(error, commands.CommandError):
             e = discord.Embed(description=f"`❌` {error}", color=0xFF6969)
-            await utils.sendembed(ctx, e, delete=3)
+            await utils.sendembed(ctx, e, delete=3, delete_speed=15)
         raise error
 
     @commands.Cog.listener("on_member_join")
