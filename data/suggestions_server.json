@@ -1,5 +1,5 @@
 {
-    "latestId": 70,
+    "latestId": 73,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -566,6 +566,30 @@
             "suggestion": "fsr content creators don't  get their own spot on the ppl list\nalso They get image perms in general but modder/Skin maker don't <:rockeyebrow:925219663842017291>",
             "sid": 70,
             "message": 987601429994831944,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 268996803582492672,
+            "suggestion": "try decrease size/not in appdata. i have roughly 3gb of crash files. 461MB in size each for some reason. I suggest everyone checks their C:\\Users\\NAME\\AppData\\Local\\CrashDumps",
+            "sid": 71,
+            "message": 988449929510936627,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 328904090916618240,
+            "suggestion": "titanfall but ratz instagip. wingman, no reload, one shot, short delay after each shot",
+            "sid": 72,
+            "message": 988926880604381214,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 522189453553434645,
+            "suggestion": "end me",
+            "sid": 73,
+            "message": 988966122588082226,
             "status": "open",
             "note": ""
         }
