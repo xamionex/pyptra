@@ -39,33 +39,37 @@ class SteamCommands(commands.Cog, name="Steam Commands"):
     @commands.command()
     async def gamenews(self, ctx, *, game):
         """Get the Latest news for a game"""
-        message = await ctx.send("Contacting Steam API", delete_after=30)
-        if game != int:
-            game = await Utils.gametoid(game)
-        if not game:
-            await message.delete()
-            await utils.senderror(ctx, "I couldn't find what you were looking for, try searching for it's [id here](https://steamdb.info/search/).")
-        news = requests.get("https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?count=1&appid=" + str(game[0]))
-        print(f"Check: {game[0]} - {game[1]}")
         try:
-            news = news.json()['appnews']['newsitems'][0]
-            author = news['author']
-            e = discord.Embed(title=news['title'], url=news['url'], color=0x1d3a89)
-            e.add_field(name="Posted On", value=f"<t:{news['date']}:F> (<t:{news['date']}:R>)", inline=False)
-            if author:
-                e.set_footer(text=f"Written/Posted by {author}")
-            try:
-                content = news['contents']
-                if len(content) > 4096:
-                    e.description = "Too big to display."
-                else:
-                    e.description = news['contents']
-                await message.edit("Info Found! Sending full info in DM")
-                await ctx.author.send(embed=e)
-            except:
-                await message.edit("Info Found! Couldn't send in DM. Contents removed", embed=e)
+            message = await ctx.author.send("Contacting Steam API")
+            messagedm = True
         except:
-            await message.edit("No news found")
+            message = await ctx.send("Contacting Steam API", delete_after=30)
+            messagedm = False
+        finally:
+            game = await Utils.gametoid(game)
+            if not game:
+                await message.delete()
+                await utils.senderror(ctx, "I couldn't find what you were looking for, try searching for it's [id here](https://steamdb.info/search/).")
+            news = requests.get("https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?count=1&appid=" + str(game[0]))
+            print(f"Check: {game[0]} - {game[1]}")
+            try:
+                news = news.json()['appnews']['newsitems'][0]
+                author = news['author']
+                e = discord.Embed(title=news['title'], url=news['url'], color=0x1d3a89)
+                e.add_field(name="Posted On", value=f"<t:{news['date']}:F> (<t:{news['date']}:R>)", inline=False)
+                if author:
+                    e.set_footer(text=f"Written/Posted by {author}")
+                if messagedm:
+                    content = news['contents']
+                    if len(content) > 4096:
+                        e.description = "Too big to display."
+                    else:
+                        e.description = news['contents']
+                    await message.edit("Info Found! Sending full info in DM", embed=e)
+                else:
+                    await message.edit("Info Found! Couldn't send in DM. Contents removed", embed=e)
+            except:
+                await message.edit("No news found")
 
 
 class Utils:
