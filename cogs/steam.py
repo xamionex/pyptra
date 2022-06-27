@@ -146,7 +146,7 @@ class Utils:
             elif re.search(game, item['name'], re.IGNORECASE):
                 temp = Utils.setgame(item)
                 othergames[temp[0]] = temp[1]
-                if item['name'].casefold() == game.casefold():
+                if str(item['name']).casefold() == str(game).casefold():
                     gamedata = Utils.setgame(item)
                     break
         await session.close()
