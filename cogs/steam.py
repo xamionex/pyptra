@@ -130,9 +130,9 @@ class Utils:
         if len(keys) > 1:
             for key in keys:
                 c += 1
-                e.add_field(name=f"Part {c}", value=f"[Search Results]({str(url) + str(key)})")
+                e.add_field(name=f"Part {c}", value=f"[Search Results]({url + str(key)})")
         else:
-            e.url = f"{keys[0]}"
+            e.url = f"{url + str(keys[0])}"
         return e
 
     def setgame(item):
