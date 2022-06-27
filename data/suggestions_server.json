@@ -1,5 +1,5 @@
 {
-    "latestId": 75,
+    "latestId": 76,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -606,6 +606,14 @@
             "suggestion": "make every server (or at least some) have team scramble or auto balance by default, even if it was something that activated after an end of a metch it would stil be very very greatful to have, or at least have the players vote if they want to scramble, justpleace add something like this <:dread:924060954348642424>",
             "sid": 75,
             "message": 990767713548906496,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 362052478243438603,
+            "suggestion": "To have seperate chats for weapon, pilot, and titan skins",
+            "sid": 76,
+            "message": 990832209269252156,
             "status": "open",
             "note": ""
         }

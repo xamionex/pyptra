@@ -18,11 +18,11 @@ class SteamCommands(commands.Cog, name="Steam Commands"):
     def __init__(self, ctx):
         self.ctx = ctx
 
-    @commands.command()
-    @commands.cooldown(1, 120, commands.BucketType.user)
+    @commands.command(name="game", aliases=["gameinfo", "gamesearch"])
+    @commands.cooldown(1, 60, commands.BucketType.user)
     async def gameinfo(self, ctx, *, game):
         """Convert game name to ID"""
-        message = await ctx.reply("Contacting Steam API", delete_after=120)
+        message = await ctx.reply("Contacting Steam API")
         gamedata = await Utils.gametoid(game)
         game = gamedata[0]
         other = gamedata[1]
@@ -30,25 +30,8 @@ class SteamCommands(commands.Cog, name="Steam Commands"):
         e.set_footer(text=f"Hint: use the \"{main.get_prefix(self.ctx, ctx.message)}gamenews\" command for the latest news from the game")
         e.color = 0x42a6cc
         if not game:
-            e.title = "Search Results"
-            if len(other.items()) > 5:
-                content = "\n"
-                for appid, title in other.items():
-                    content = content + f"ID: `{appid}`\nTITLE: `{title}`\n\n"
-                post = await utils.post(content)
-                e.url = post
-                e.description = "If you still can't find your game try searching for it's [id here](https://steamdb.info/search/)"
-                await message.edit("I coudn't find what you were looking for, but I found these", embed=e)
-                return
-            elif len(other.items()) > 0:
-                for title, appid in other.items():
-                    e.add_field(name=title, value=appid)
-                e.description = "If you still can't find your game try searching for it's [id here](https://steamdb.info/search/)"
-                await message.edit("I coudn't find what you were looking for, but I found these", embed=e)
-                return
-            else:
-                await message.delete()
-                await utils.senderror(ctx, "I couldn't find what you were looking for, try searching for it's [id here](https://steamdb.info/search/).")
+            await Utils.search_results(e, other, message)
+            return
         e.title = str(game[1])
         e.url = f"https://s.team/a/{str(game[0])}"
         e.add_field(name="AppID", value=str(game[0]), inline=True)
@@ -56,15 +39,15 @@ class SteamCommands(commands.Cog, name="Steam Commands"):
         e.add_field(name="Open in Steam Client", value=f"steam://store/{str(game[0])}", inline=True)
         await message.edit("Info Found!", embed=e)
 
-    @commands.command()
-    @commands.cooldown(1, 120, commands.BucketType.user)
+    @commands.command(name="news", aliases=["gamenews"])
+    @commands.cooldown(1, 60, commands.BucketType.user)
     async def gamenews(self, ctx, *, game):
         """Get the Latest news for a game"""
         try:
             message = await ctx.author.send("Contacting Steam API")
             messagedm = True
         except:
-            message = await ctx.reply("Contacting Steam API", delete_after=120)
+            message = await ctx.reply("Contacting Steam API")
             messagedm = False
         finally:
             gamedata = await Utils.gametoid(game)
@@ -73,25 +56,8 @@ class SteamCommands(commands.Cog, name="Steam Commands"):
             e = discord.Embed()
             e.color = 0x42a6cc
             if not game:
-                e.title = "Search Results"
-                if len(other.items()) > 5:
-                    content = "\n"
-                    for appid, title in other.items():
-                        content = content + f"ID: `{appid}`\nTITLE: `{title}`\n\n"
-                    post = await utils.post(content)
-                    e.url = post
-                    e.description = "If you still can't find your game try searching for it's [id here](https://steamdb.info/search/)"
-                    await message.edit("I coudn't find what you were looking for, but I found these", embed=e)
-                    return
-                elif len(other.items()) > 0:
-                    for title, appid in other.items():
-                        e.add_field(name=title, value=appid)
-                    e.description = "If you still can't find your game try searching for it's [id here](https://steamdb.info/search/)"
-                    await message.edit("I coudn't find what you were looking for, but I found these", embed=e)
-                    return
-                else:
-                    await message.delete()
-                    await utils.senderror(ctx, "I couldn't find what you were looking for, try searching for it's [id here](https://steamdb.info/search/).")
+                await Utils.search_results(e, other, message)
+                return
             news = requests.get("https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?count=1&appid=" + str(game[0]))
             try:
                 news = news.json()['appnews']['newsitems'][0]
@@ -108,7 +74,7 @@ class SteamCommands(commands.Cog, name="Steam Commands"):
                         e.description = "Too big to display."
                     else:
                         e.description = news['contents']
-                    await message.edit("Info Found! Sending full info in DM", embed=e)
+                    await message.edit("Info Found!", embed=e)
                 else:
                     await message.edit("Info Found! Couldn't send in DM. Contents removed", embed=e)
             except:
@@ -127,6 +93,48 @@ class Utils:
         await session.close()
         return resjson['response']['steamid']
 
+    async def search_results(e, games, message):
+        e.title = "Search Results"
+        if len(games.items()) > 6:
+            e = await Utils.add_url(e, games)
+            e.description = "If you still can't find your game try searching for it's [id here](https://steamdb.info/search/)"
+            await message.edit("I coudn't find what you were looking for, but I found these", embed=e)
+            return
+        elif len(games.items()) > 1:
+            for appid, title in games.items():
+                e.add_field(name=appid, value=f"{title}\nClient: steam://store/{str(appid)}\n[[Browser]](https://s.team/a/{str(appid)}) - [[SteamDB]](https://steamdb.info/app/{str(appid)})")
+            e.description = "If you still can't find your game try searching for it's [id here](https://steamdb.info/search/)"
+            await message.edit("I coudn't find what you were looking for, but I found these", embed=e)
+            return
+        elif len(games.items()) == 1:
+            for appid, title in games.items():
+                e.title = str(title)
+                e.url = f"https://s.team/a/{str(appid)}"
+                e.add_field(name="AppID", value=str(appid), inline=True)
+                e.add_field(name="Open in SteamDB", value=f"[Open Link](https://steamdb.info/app/{str(appid)})", inline=True)
+                e.add_field(name="Open in Steam Client", value=f"steam://store/{str(appid)}", inline=True)
+            e.description = "If you still can't find your game try searching for it's [id here](https://steamdb.info/search/)"
+            await message.edit("I coudn't find what you were looking for, but I found this", embed=e)
+            return
+        else:
+            await message.edit("I couldn't find what you were looking for, try searching for it's id here: <https://steamdb.info/search/>")
+            return
+
+    async def add_url(e, games):
+        content = "\n"
+        for appid, title in games.items():
+            content = content + f"ID: `{appid}`\nTITLE: `{title}`\n\n"
+        url = "https://www.toptal.com/developers/hastebin/raw/"
+        keys = await utils.post(content)
+        c = 0
+        if len(keys) > 1:
+            for key in keys:
+                c += 1
+                e.add_field(name=f"Part {c}", value=f"[Search Results]({str(url) + str(key)})")
+        else:
+            e.url = f"{keys[0]}"
+        return e
+
     def setgame(item):
         gameid = item['appid']
         gamename = item['name']
@@ -140,7 +148,8 @@ class Utils:
         gamedata = False
         othergames = {}
         for item in response['applist']['apps']:
-            if item['appid'] == ''.join(re.findall('\d+', game)):
+            gameint = ''.join(re.findall('\d+', game))
+            if item['appid'] == gameint and gameint == game:
                 gamedata = Utils.setgame(item)
                 break
             elif re.search(game, item['name'], re.IGNORECASE):

@@ -266,12 +266,11 @@ def iso8601_to_epoch(datestring):
 
 
 async def post(content):
-    async with aiohttp.ClientSession() as session:
-        async with session.post("https://www.toptal.com/developers/hastebin/documents", data=content.encode('utf-8')) as post:
-            post = await post.json()
-            return "https://www.toptal.com/developers/hastebin/{}".format(post['key'])
-
-
-def post1(content):
-    post = requests.post("https://www.toptal.com/developers/hastebin/documents", data=content.encode('utf-8'))
-    return "https://www.toptal.com/developers/hastebin/" + post.json()["key"]
+    split_strings = [content[i:i+390000] for i in range(0, len(content), 390000)]
+    keys = []
+    for string in split_strings:
+        async with aiohttp.ClientSession() as session:
+            async with session.post("https://www.toptal.com/developers/hastebin/documents", data=string.encode('utf-8')) as post:
+                post = await post.json()
+                keys.append(post['key'])
+    return keys

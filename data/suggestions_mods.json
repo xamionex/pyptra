@@ -1,5 +1,5 @@
 {
-    "latestId": 258,
+    "latestId": 260,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -2070,6 +2070,22 @@
             "suggestion": "Pilot and Titan executions except every hit plays a Vine boom (and an extra crunchy Vine boom for the killing blow)",
             "sid": 258,
             "message": 990766354233704469,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 609540346304659477,
+            "suggestion": "a \"push the payload\" mode, similar to that in overwatch. Team a has to contest the payload to keep it moving to the objective. Team b has to contest it to slow the movement and perhaps even reverse it slowly if they are the only people near. Swap sides and roles at halftime.",
+            "sid": 259,
+            "message": 990953168064118804,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 360076580896243712,
+            "suggestion": "There's a stormtrooper skin for the grapple pilot recently added in <#928269014977892383>, was just wondering if there was a way to bring that over to the other pilots? Specifically the stim pilot or the cloak pilot.",
+            "sid": 260,
+            "message": 991054550515453992,
             "status": "open",
             "note": ""
         }
