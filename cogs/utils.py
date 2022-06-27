@@ -1,3 +1,5 @@
+import requests
+import aiohttp
 import calendar
 from datetime import datetime
 import json
@@ -261,3 +263,15 @@ def iso8601_to_epoch(datestring):
     1341872870
     """
     return calendar.timegm(datetime.strptime(datestring, "%Y-%m-%dT%H:%M:%S.%f%z").timetuple())
+
+
+async def post(content):
+    async with aiohttp.ClientSession() as session:
+        async with session.post("https://www.toptal.com/developers/hastebin/documents", data=content.encode('utf-8')) as post:
+            post = await post.json()
+            return "https://www.toptal.com/developers/hastebin/{}".format(post['key'])
+
+
+def post1(content):
+    post = requests.post("https://www.toptal.com/developers/hastebin/documents", data=content.encode('utf-8'))
+    return "https://www.toptal.com/developers/hastebin/" + post.json()["key"]

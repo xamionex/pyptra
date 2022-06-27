@@ -1,5 +1,5 @@
 {
-    "latestId": 257,
+    "latestId": 258,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -2062,6 +2062,14 @@
             "suggestion": "gamemode where each team gets a boss titan to protect (worse bosses like ash get maybe more health or more dmg cus they ass) u lose when the apex predator is dead",
             "sid": 257,
             "message": 990454199240253510,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 914985034845417534,
+            "suggestion": "Pilot and Titan executions except every hit plays a Vine boom (and an extra crunchy Vine boom for the killing blow)",
+            "sid": 258,
+            "message": 990766354233704469,
             "status": "open",
             "note": ""
         }

@@ -1,5 +1,5 @@
 {
-    "latestId": 74,
+    "latestId": 75,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -598,6 +598,14 @@
             "suggestion": "Fractions chat. Maybe we could do something like a channel to discord servers with little bit more closed community, so for example if you are from Mexico, you can find other players and play with them on other servers. Of course servers should be in the thematic of Titanfall 2 Northstar. Something like a fractions wall",
             "sid": 74,
             "message": 990354585854029934,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 829694789833457684,
+            "suggestion": "make every server (or at least some) have team scramble or auto balance by default, even if it was something that activated after an end of a metch it would stil be very very greatful to have, or at least have the players vote if they want to scramble, justpleace add something like this <:dread:924060954348642424>",
+            "sid": 75,
+            "message": 990767713548906496,
             "status": "open",
             "note": ""
         }

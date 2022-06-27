@@ -2,11 +2,9 @@ import re
 import discord
 from discord.ext import commands, bridge
 import aiohttp
-import asyncio
-import async_timeout
 import requests
-import time
 from cogs import utils
+import main
 
 
 def setup(bot):
@@ -15,47 +13,92 @@ def setup(bot):
 
 class SteamCommands(commands.Cog, name="Steam Commands"):
     """Steam commands, information about games."""
-    COG_EMOJI = "👤"
+    COG_EMOJI = "♨️"
 
     def __init__(self, ctx):
         self.ctx = ctx
 
     @commands.command()
-    async def gameinfo(self, ctx, *, gamename):
+    @commands.cooldown(1, 120, commands.BucketType.user)
+    async def gameinfo(self, ctx, *, game):
         """Convert game name to ID"""
-        message = await ctx.send("Contacting Steam API", delete_after=30)
-        game = await Utils.gametoid(gamename)
+        message = await ctx.reply("Contacting Steam API", delete_after=120)
+        gamedata = await Utils.gametoid(game)
+        game = gamedata[0]
+        other = gamedata[1]
+        e = discord.Embed()
+        e.set_footer(text=f"Hint: use the \"{main.get_prefix(self.ctx, ctx.message)}gamenews\" command for the latest news from the game")
+        e.color = 0x42a6cc
         if not game:
-            await message.delete()
-            await utils.senderror(ctx, "I couldn't find what you were looking for, try searching for it's [id here](https://steamdb.info/search/).")
-        embed = discord.Embed(title="Steam Game Information", url="https://store.steampowered.com/app/" + str(game[0]),
-                              description="Info for Requested Game", color=0x42a6cc)
-        embed.add_field(name="Steam Game ID", value=game[0], inline=True)
-        embed.add_field(name="Steam Game Name", value=game[1], inline=True)
-        embed.set_footer(
-            text="Hint: use the \"gamenews\" command for the latest news from the game")
-        await message.edit("Info Found!", embed=embed)
+            e.title = "Search Results"
+            if len(other.items()) > 5:
+                content = "\n"
+                for appid, title in other.items():
+                    content = content + f"ID: `{appid}`\nTITLE: `{title}`\n\n"
+                post = await utils.post(content)
+                e.url = post
+                e.description = "If you still can't find your game try searching for it's [id here](https://steamdb.info/search/)"
+                await message.edit("I coudn't find what you were looking for, but I found these", embed=e)
+                return
+            elif len(other.items()) > 0:
+                for title, appid in other.items():
+                    e.add_field(name=title, value=appid)
+                e.description = "If you still can't find your game try searching for it's [id here](https://steamdb.info/search/)"
+                await message.edit("I coudn't find what you were looking for, but I found these", embed=e)
+                return
+            else:
+                await message.delete()
+                await utils.senderror(ctx, "I couldn't find what you were looking for, try searching for it's [id here](https://steamdb.info/search/).")
+        e.title = str(game[1])
+        e.url = f"https://s.team/a/{str(game[0])}"
+        e.add_field(name="AppID", value=str(game[0]), inline=True)
+        e.add_field(name="Open in SteamDB", value=f"[Open Link](https://steamdb.info/app/{str(game[0])})", inline=True)
+        e.add_field(name="Open in Steam Client", value=f"steam://store/{str(game[0])}", inline=True)
+        await message.edit("Info Found!", embed=e)
 
     @commands.command()
+    @commands.cooldown(1, 120, commands.BucketType.user)
     async def gamenews(self, ctx, *, game):
         """Get the Latest news for a game"""
         try:
             message = await ctx.author.send("Contacting Steam API")
             messagedm = True
         except:
-            message = await ctx.send("Contacting Steam API", delete_after=30)
+            message = await ctx.reply("Contacting Steam API", delete_after=120)
             messagedm = False
         finally:
-            game = await Utils.gametoid(game)
+            gamedata = await Utils.gametoid(game)
+            game = gamedata[0]
+            other = gamedata[1]
+            e = discord.Embed()
+            e.color = 0x42a6cc
             if not game:
-                await message.delete()
-                await utils.senderror(ctx, "I couldn't find what you were looking for, try searching for it's [id here](https://steamdb.info/search/).")
+                e.title = "Search Results"
+                if len(other.items()) > 5:
+                    content = "\n"
+                    for appid, title in other.items():
+                        content = content + f"ID: `{appid}`\nTITLE: `{title}`\n\n"
+                    post = await utils.post(content)
+                    e.url = post
+                    e.description = "If you still can't find your game try searching for it's [id here](https://steamdb.info/search/)"
+                    await message.edit("I coudn't find what you were looking for, but I found these", embed=e)
+                    return
+                elif len(other.items()) > 0:
+                    for title, appid in other.items():
+                        e.add_field(name=title, value=appid)
+                    e.description = "If you still can't find your game try searching for it's [id here](https://steamdb.info/search/)"
+                    await message.edit("I coudn't find what you were looking for, but I found these", embed=e)
+                    return
+                else:
+                    await message.delete()
+                    await utils.senderror(ctx, "I couldn't find what you were looking for, try searching for it's [id here](https://steamdb.info/search/).")
             news = requests.get("https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?count=1&appid=" + str(game[0]))
-            print(f"Check: {game[0]} - {game[1]}")
             try:
                 news = news.json()['appnews']['newsitems'][0]
                 author = news['author']
-                e = discord.Embed(title=news['title'], url=news['url'], color=0x1d3a89)
+                e.title = news['title']
+                e.url = news['url']
+                e.color = 0x1d3a89
                 e.add_field(name="Posted On", value=f"<t:{news['date']}:F> (<t:{news['date']}:R>)", inline=False)
                 if author:
                     e.set_footer(text=f"Written/Posted by {author}")
@@ -95,20 +138,19 @@ class Utils:
         async with session.get("https://api.steampowered.com/ISteamApps/GetAppList/v2/") as r:
             response = await r.json()
         gamedata = False
-        try:
-            for item in response['applist']['apps']:
-                try:
-                    if item['appid'] == int(''.join(re.findall('\d+', game))):
-                        gamedata = Utils.setgame(item)
-                        break
-                except:
-                    if item['name'].casefold() == game.casefold():
-                        gamedata = Utils.setgame(item)
-                        break
-        except:
-            pass
+        othergames = {}
+        for item in response['applist']['apps']:
+            if item['appid'] == ''.join(re.findall('\d+', game)):
+                gamedata = Utils.setgame(item)
+                break
+            elif re.search(game, item['name'], re.IGNORECASE):
+                temp = Utils.setgame(item)
+                othergames[temp[0]] = temp[1]
+                if item['name'] == game:
+                    gamedata = Utils.setgame(item)
+                    break
         await session.close()
-        return gamedata
+        return gamedata, othergames
 
     async def idtogame(gameid):
         """Convert game ID to game name"""
