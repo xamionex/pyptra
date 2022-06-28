@@ -42,6 +42,7 @@ class FunCommands(commands.Cog, name="Fun"):
         """Make a caption on a gif"""
         caption = caption or "sample text"
         caption = utils.remove_newlines(caption)
+        url = None
         if len(caption) > 1 and caption.startswith("http"):
             caption = caption.split(" ")
             url = caption[0]
@@ -178,15 +179,14 @@ class FunCommands(commands.Cog, name="Fun"):
             # Saving the image without 'save_all' will turn it into a single frame image, and we can then re-open it
             # To be efficient, we will save it to a buffer, rather than to file
             buffer_old, buffer_new = BytesIO(), BytesIO()
-            frame.save(buffer_old, format="GIF")  # save current frame to 1st buffer
+            frame.save(buffer_old, format="PNG")  # save current frame to 1st buffer
             if text is not None:
                 editor = Editor(text, buffer_old)  # put old buffer through editor with text
             else:
                 editor = Editor(None, buffer_old)  # put old buffer through editor without text
             img = editor.draw()  # user editor's draw func to get the finished result
-            if img.mode in ("RGBA", "P"):  # without this the code can break sometimes
-                img = img.convert("RGB")
-            img.save(buffer_new, "gif")  # Save with some image optimization # save finished result in new buffer
+            img = img.convert(mode='RGBA')
+            img.save(buffer_new, "GIF", optimization=True, quality=80)  # Save with some image optimization # save finished result in new buffer
             frames.append(Image.open(buffer_new))  # Then append the single frame image to the list of frames
         return frames
 
