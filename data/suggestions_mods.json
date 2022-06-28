@@ -1,5 +1,5 @@
 {
-    "latestId": 260,
+    "latestId": 261,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -2086,6 +2086,14 @@
             "suggestion": "There's a stormtrooper skin for the grapple pilot recently added in <#928269014977892383>, was just wondering if there was a way to bring that over to the other pilots? Specifically the stim pilot or the cloak pilot.",
             "sid": 260,
             "message": 991054550515453992,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 163890325469921280,
+            "suggestion": "dash mechanic for every pilot? dashing a finite distance with a lengthy cooldown and can dash in mid air but limited to only one dash at a time to increase th emind games and allow even more mobility?",
+            "sid": 261,
+            "message": 991151537227313182,
             "status": "open",
             "note": ""
         }

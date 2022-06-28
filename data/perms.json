@@ -1,5 +1,20 @@
 {
-    "196573388423168000": {},
+    "196573388423168000": {
+        "139095725110722560": {
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "967602886609633360": {
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        }
+    },
     "920776187884732556": {
         "104117150683250688": {
             "blacklist": false,
@@ -819,6 +834,13 @@
             "weird": false
         },
         "271698083685990401": {
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+        "272722196986593280": {
             "blacklist": false,
             "joke": false,
             "pet": false,
@@ -5157,7 +5179,7 @@
         "949269806824181770": {
             "blacklist": false,
             "joke": false,
-            "pet": true,
+            "pet": false,
             "ping": false,
             "weird": false
         },
