@@ -35,30 +35,40 @@ class FunCommands(commands.Cog, name="Fun"):
             await utils.senderror(ctx, f"This person has disallowed me from using them in commands.")
 
     @bridge.bridge_command(name="gif")
-    @commands.has_permissions(manage_messages=True)
-    @commands.guild_only()
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def gif(self, ctx, member: Optional[discord.member.Member], emoji: Optional[discord.PartialEmoji], *, caption: str = None):
         """Make a caption on a gif"""
+        msg = await ctx.respond("Creating...")
+        dm = False
+        if msg.channel.type == discord.ChannelType.private:
+            dm = True
+        elif not ctx.author.guild_permissions.manage_messages:
+            await msg.delete()
+            await utils.senderror(ctx, "You are missing Manage Messages permission(s) to run this command. (DM me to use this command freely.)")
+            return
         caption = caption or "sample text"
         caption = utils.remove_newlines(caption)
         url = None
-        if len(caption) > 1 and caption.startswith("http"):
+        if len(caption) > 1 and caption.startswith("http") or caption.startswith("<http"):
             caption = caption.split(" ")
             url = caption[0]
-            caption = "sample text!gif https://cdn.discordapp.com/attachments/890335827459211305/991374747239731230/catcube.gif ".join(caption[1:])
-        elif len(caption) == 1 and caption.startswith("http"):
+            caption = " ".join(caption[1:])
+        elif len(caption) == 1 and caption.startswith("http") or caption.startswith("<http"):
             url = caption
             caption = "sample text"
         if len(caption) == 0:
             caption = "sample text"
+        if url is not None:
+            keys = ["<", ">"]
+            for key in keys:
+                url = url.replace(key, "")
         attachment = None
         try:
             attachment = ctx.message.attachments[0]
         except:
             pass
         image = member or emoji or attachment or url or ctx.author
-        image, what = await FunCommands.get_url(self, ctx, image)
+        image, what = await FunCommands.get_url(self, ctx, image, dm)
         frames = FunCommands.set_frames(image, caption)
         # file-like container to hold the image in memory
         img = BytesIO()  # sets image as "img"
@@ -70,9 +80,9 @@ class FunCommands(commands.Cog, name="Fun"):
         e = discord.Embed(description=f"{ctx.author.mention} made a caption on {what}")
         e.set_image(url=f"attachment://caption.gif")
         if await utils.CheckInstance(ctx):
-            await ctx.respond(embed=e, file=file, mention_author=False)
+            await msg.edit(embed=e, file=file)
         else:
-            await ctx.respond(embed=e, file=file)
+            await msg.edit_original_message(embed=e, file=file)
 
     @bridge.bridge_command(hidden=True, name="combinegif")
     @commands.is_owner()
@@ -115,15 +125,35 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def pet(self, ctx, member: Optional[discord.member.Member], emoji: Optional[discord.PartialEmoji], url=None):
         """Pet someone :D"""
-        await FunCommands.checkperm(self, ctx, "pet")
+        msg = await ctx.respond("Creating...")
+        if msg.channel.type == discord.ChannelType.private:
+            dm = True
+        elif commands.has_permissions(manage_messages=True):
+            dm = False
+        caption = caption or "sample text"
+        caption = utils.remove_newlines(caption)
+        url = None
+        if len(caption) > 1 and caption.startswith("http") or caption.startswith("<http"):
+            caption = caption.split(" ")
+            url = caption[0]
+            caption = " ".join(caption[1:])
+        elif len(caption) == 1 and caption.startswith("http") or caption.startswith("<http"):
+            url = caption
+            caption = "sample text"
+        if len(caption) == 0:
+            caption = "sample text"
+        if url is not None:
+            keys = ["<", ">"]
+            for key in keys:
+                url = url.replace(key, "")
         attachment = None
         try:
             attachment = ctx.message.attachments[0]
         except:
             pass
         image = member or emoji or attachment or url or ctx.author
-        image, what = await FunCommands.get_url(self, ctx, image)
-        frames = FunCommands.set_frames(image)
+        image, what = await FunCommands.get_url(self, ctx, image, dm)
+        frames = FunCommands.set_frames(image, caption)
         # file-like container to hold the image in memory
         source = BytesIO()  # sets image as "source"
         # Save the frames as a new image
@@ -137,11 +167,11 @@ class FunCommands(commands.Cog, name="Fun"):
         e = discord.Embed(description=f"{ctx.author.mention} has pet {what}")
         e.set_image(url=f"attachment://petpet.gif")
         if await utils.CheckInstance(ctx):
-            await ctx.respond(embed=e, file=file, mention_author=False)
+            await msg.edit(embed=e, file=file)
         else:
-            await ctx.respond(embed=e, file=file)
+            await msg.edit_original_message(embed=e, file=file)
 
-    async def get_url(self, ctx, image):
+    async def get_url(self, ctx, image, dm=False):
         # retrieve the image url
         what = "an image"
         if type(image) == discord.PartialEmoji:
@@ -150,8 +180,9 @@ class FunCommands(commands.Cog, name="Fun"):
         elif type(image) == discord.Attachment:
             what = "an attachment"
             image = image.url
-        elif type(image) == discord.member.Member:
-            await self.checkping(ctx, image)
+        elif type(image) == discord.member.Member or type(image) == discord.user.User:
+            if not dm:
+                await self.checkping(ctx, image)
             what = image.mention
             try:
                 image = image.avatar.url
