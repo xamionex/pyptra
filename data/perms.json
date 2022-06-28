@@ -7,6 +7,16 @@
             "ping": false,
             "weird": false
         },
+<<<<<<< HEAD
+=======
+        "756088095476154400": {
+            "blacklist": false,
+            "joke": false,
+            "pet": false,
+            "ping": false,
+            "weird": false
+        },
+>>>>>>> 17812ea37db3e00c24f64c668a407d5f561de2cc
         "967602886609633360": {
             "blacklist": false,
             "joke": false,
