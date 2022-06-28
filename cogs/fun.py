@@ -35,6 +35,7 @@ class FunCommands(commands.Cog, name="Fun"):
             await utils.senderror(ctx, f"This person has disallowed me from using them in commands.")
 
     @bridge.bridge_command(name="gif")
+    @commands.has_permissions(manage_messages=True)
     @commands.guild_only()
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def gif(self, ctx, member: Optional[discord.member.Member], emoji: Optional[discord.PartialEmoji], *, caption: str = None):
