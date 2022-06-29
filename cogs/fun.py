@@ -55,10 +55,15 @@ class FunCommands(commands.Cog, name="Fun"):
             caption = caption.replace(key, '')
         caption = utils.remove_newlines(caption)
         url = None
+        textposition = None
         if len(caption) > 1 and caption.startswith("http") or caption.startswith("<http"):
             caption = caption.split(" ")
             url = caption[0]
-            caption = " ".join(caption[1:])
+            if caption[1].startswith("pos="):
+                textposition = caption[1].replace('pos=', '')
+                caption = " ".join(caption[2:])
+            else:
+                caption = " ".join(caption[1:])
         elif len(caption) == 1 and caption.startswith("http") or caption.startswith("<http"):
             url = caption
             caption = "sample text"
@@ -75,7 +80,7 @@ class FunCommands(commands.Cog, name="Fun"):
             pass
         image = member or emoji or attachment or url or ctx.author
         image, what = await FunCommands.get_url(self, ctx, image, dm)
-        frames = FunCommands.set_frames(image, caption)
+        frames = await FunCommands.set_frames(self, ctx, image, caption, textposition)
         # file-like container to hold the image in memory
         img = BytesIO()  # sets image as "img"
         # Save the frames as a new image
@@ -85,6 +90,10 @@ class FunCommands(commands.Cog, name="Fun"):
         file = discord.File(img, filename="caption.gif")
         e = discord.Embed(description=f"{ctx.author.mention} made a caption on {what}")
         e.set_image(url=f"attachment://caption.gif")
+        if random.choice([1, 2]) > 1:
+            e.set_footer(text="Protip: use pos=top (or center) before your text to display it at the top!")
+        else:
+            e.set_footer(text="Protip: you can enter a link before your text to use that instead!")
         if await utils.CheckInstance(ctx):
             await msg.edit(embed=e, file=file)
         else:
@@ -105,8 +114,8 @@ class FunCommands(commands.Cog, name="Fun"):
         image2 = link2 or None
         image1, what1 = await FunCommands.get_url(self, ctx, image1)
         image2, what2 = await FunCommands.get_url(self, ctx, image2)
-        frames1 = FunCommands.set_frames(image1)
-        frames2 = FunCommands.set_frames(image2)
+        frames1 = await FunCommands.set_frames(self, ctx, image1)
+        frames2 = await FunCommands.set_frames(self, ctx, image2)
         for i in range(len(frames1)):
             try:
                 Image.Image.paste(frames1[i], frames2[i])
@@ -154,7 +163,7 @@ class FunCommands(commands.Cog, name="Fun"):
             pass
         image = member or emoji or attachment or url or ctx.author
         image, what = await FunCommands.get_url(self, ctx, image, dm)
-        frames = FunCommands.set_frames(image)
+        frames = await FunCommands.set_frames(self, ctx, image)
         # file-like container to hold the image in memory
         source = BytesIO()  # sets image as "source"
         # Save the frames as a new image
@@ -198,8 +207,11 @@ class FunCommands(commands.Cog, name="Fun"):
                     await session.close()
         return image, what
 
-    def set_frames(image: str, text=None):
+    async def set_frames(self, ctx, image: str, text=None, textposition=None):
         """get frames from gif (url) and apply text (if present)"""
+        if textposition is not None:
+            if textposition not in ["top", "bottom", "center"]:
+                await utils.senderror(ctx, "Text position has to be either top bottom or center")
         im = Image.open(requests.get(image, stream=True).raw)
         # A list of the frames to be outputted
         frames = []
@@ -213,9 +225,9 @@ class FunCommands(commands.Cog, name="Fun"):
             buffer_old, buffer_new = BytesIO(), BytesIO()
             frame.quantize(254, dither=Image.FLOYDSTEINBERG).save(buffer_old, format="PNG", optimization=True, quality=80)  # save current frame to 1st buffer
             if text is not None:
-                editor = Editor(text, buffer_old)  # put old buffer through editor with text
+                editor = Editor(text, buffer_old, textposition)  # put old buffer through editor with text
             else:
-                editor = Editor(None, buffer_old)  # put old buffer through editor without text
+                editor = Editor(None, buffer_old, textposition)  # put old buffer through editor without text
             img = editor.draw()  # user editor's draw func to get the finished result
             img = img.convert(mode='RGBA')
             img.save(buffer_new, "GIF")  # Save with some image optimization # save finished result in new buffer
@@ -321,15 +333,19 @@ class Editor:
     lineSpacing = 10  # Space between lines
     stroke_width = 9  # How thick the outline of the text is
     fontfile = './data/impact.ttf'
+    trig_top = ["top"]
+    trig_middle = ["center", "middle"]
+    trigs = trig_top + trig_middle
 
-    def __init__(self, caption, image):
+    def __init__(self, caption, image, textposition=None):
         self.img = self.createImage(image)
         self.d = ImageDraw.Draw(self.img)
         self.caption = caption
+        self.txtpos = textposition
         if caption:
             self.splitCaption = textwrap.wrap(caption, width=20)  # The text can be wider than the img. If thats the case split the text into multiple lines
-            self.splitCaption.reverse()                           # Draw the lines of text from the bottom up
-
+            if textposition not in self.trigs:
+                self.splitCaption.reverse()                           # Draw the lines of text from the bottom up
             fontSize = self.fontBase+10 if len(self.splitCaption) <= 1 else self.fontBase  # If there is only one line, make the text a bit larger
             self.font = ImageFont.truetype(font=self.fontfile, size=fontSize)
             # self.shadowFont = ImageFont.truetype(font='./impact.ttf', size=fontSize+10)
@@ -342,14 +358,25 @@ class Editor:
         (iw, ih) = self.img.size
         if self.caption is not None:
             (_, th) = self.d.textsize(self.splitCaption[0], font=self.font)  # Height of the text
-            y = (ih - (ih / 10)) - (th / 2)  # The starting y position to draw the last line of text. Text in drawn from the bottom line up
-
+            if self.txtpos in self.trig_top:
+                # y is (img height - img height/10) - (text height / 2)
+                y = 20  # The starting y position to draw the last line of text. Text in drawn from the bottom line up
+            elif self.txtpos in self.trig_middle:
+                y = (ih - (ih / 2)) - (th / 2)  # The starting y position to draw the last line of text. Text in drawn from the bottom line up
+            else:
+                y = (ih - (ih / 10)) - (th / 2)  # The starting y position to draw the last line of text. Text in drawn from the bottom line up
+            print(y, ih, th)
             for cap in self.splitCaption:  # For each line of text
                 (tw, _) = self.d.textsize(cap, font=self.font)  # Getting the position of the text
                 x = ((iw - tw) - (len(cap) * self.letSpacing))/2  # Center the text and account for the spacing between letters
 
                 self.drawLine(x=x, y=y, caption=cap)
-                y = y - th - self.lineSpacing  # Next block of text is higher up
+                if self.txtpos in self.trig_top:
+                    y = y + th + self.lineSpacing  # Next block of text is higher up
+                elif self.txtpos in self.trig_middle:
+                    y = y + th + self.lineSpacing  # Next block of text is higher up
+                else:
+                    y = y - th - self.lineSpacing  # Next block of text is higher up
 
         wpercent = ((self.basewidth/2) / float(self.img.size[0]))
         hsize = int((float(self.img.size[1]) * float(wpercent)))
