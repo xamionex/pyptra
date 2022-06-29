@@ -1,5 +1,5 @@
 {
-    "latestId": 76,
+    "latestId": 77,
     "suggestions": [
         {
             "user": 275215231918276608,
@@ -614,6 +614,14 @@
             "suggestion": "To have seperate chats for weapon, pilot, and titan skins",
             "sid": 76,
             "message": 990832209269252156,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 418041140512555027,
+            "suggestion": "pilots vs pilots but everyone is a holo pilot with only the thunderbolt and nades",
+            "sid": 77,
+            "message": 991598290527322172,
             "status": "open",
             "note": ""
         }

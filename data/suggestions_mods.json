@@ -1,5 +1,5 @@
 {
-    "latestId": 261,
+    "latestId": 262,
     "suggestions": [
         {
             "user": 941423832613417021,
@@ -2094,6 +2094,14 @@
             "suggestion": "dash mechanic for every pilot? dashing a finite distance with a lengthy cooldown and can dash in mid air but limited to only one dash at a time to increase th emind games and allow even more mobility?",
             "sid": 261,
             "message": 991151537227313182,
+            "status": "open",
+            "note": ""
+        },
+        {
+            "user": 787150557332111380,
+            "suggestion": "Icepick compativble with northstar. An sandbox menu that lets you spawn props and entities. Custom weapons.  and more.",
+            "sid": 262,
+            "message": 991555592193835028,
             "status": "open",
             "note": ""
         }

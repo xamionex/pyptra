@@ -26,7 +26,7 @@ class FunCommands(commands.Cog, name="Fun"):
 
     async def checkperm(self, ctx, perm):
         if await block.BlockCommands.get_perm(self, ctx, perm, ctx.author) or ctx.author.guild_permissions.administrator:
-            return
+            return True
         else:
             await utils.senderror(ctx, f"{ctx.author.mention}, You aren\'t allowed to use this")
 
@@ -43,10 +43,16 @@ class FunCommands(commands.Cog, name="Fun"):
         if msg.channel.type == discord.ChannelType.private:
             dm = True
         elif not ctx.author.guild_permissions.manage_messages:
-            await msg.delete()
+            try:
+                await msg.delete()
+            except:
+                await msg.delete_original_message()
             await utils.senderror(ctx, "You are missing Manage Messages permission(s) to run this command. (DM me to use this command freely.)")
             return
         caption = caption or "sample text"
+        keys = ["`", "\\"]
+        for key in keys:
+            caption = caption.replace(key, '')
         caption = utils.remove_newlines(caption)
         url = None
         if len(caption) > 1 and caption.startswith("http") or caption.startswith("<http"):
@@ -73,7 +79,7 @@ class FunCommands(commands.Cog, name="Fun"):
         # file-like container to hold the image in memory
         img = BytesIO()  # sets image as "img"
         # Save the frames as a new image
-        frames[0].save(img, "gif", save_all=True, append_images=frames[1:])
+        frames[0].save(img, "gif", save_all=True, append_images=frames[1:], loop=0)
         # set the file pointer back to the beginning so it doesn't upload a blank file.
         img.seek(0)
         file = discord.File(img, filename="caption.gif")
@@ -126,22 +132,17 @@ class FunCommands(commands.Cog, name="Fun"):
     async def pet(self, ctx, member: Optional[discord.member.Member], emoji: Optional[discord.PartialEmoji], url=None):
         """Pet someone :D"""
         msg = await ctx.respond("Creating...")
+        dm = False
         if msg.channel.type == discord.ChannelType.private:
             dm = True
-        elif commands.has_permissions(manage_messages=True):
-            dm = False
-        caption = caption or "sample text"
-        caption = utils.remove_newlines(caption)
+        elif not self.checkperm(ctx, "pet"):
+            try:
+                await msg.delete()
+            except:
+                await msg.delete_original_message()
+            await utils.senderror(ctx, "You are missing Pet permission to run this command. (DM me to use this command freely.)")
+            return
         url = None
-        if len(caption) > 1 and caption.startswith("http") or caption.startswith("<http"):
-            caption = caption.split(" ")
-            url = caption[0]
-            caption = " ".join(caption[1:])
-        elif len(caption) == 1 and caption.startswith("http") or caption.startswith("<http"):
-            url = caption
-            caption = "sample text"
-        if len(caption) == 0:
-            caption = "sample text"
         if url is not None:
             keys = ["<", ">"]
             for key in keys:
@@ -153,11 +154,11 @@ class FunCommands(commands.Cog, name="Fun"):
             pass
         image = member or emoji or attachment or url or ctx.author
         image, what = await FunCommands.get_url(self, ctx, image, dm)
-        frames = FunCommands.set_frames(image, caption)
+        frames = FunCommands.set_frames(image)
         # file-like container to hold the image in memory
         source = BytesIO()  # sets image as "source"
         # Save the frames as a new image
-        frames[0].save(source, "gif", save_all=True, append_images=frames[1:])
+        frames[0].save(source, "gif", save_all=True, append_images=frames[1:], loop=0)
         dest = BytesIO()  # container to store the petpet gif in memory
         # takes source (image) and makes pet-pet and puts into memory
         petpet.make(source, dest)
@@ -210,14 +211,14 @@ class FunCommands(commands.Cog, name="Fun"):
             # Saving the image without 'save_all' will turn it into a single frame image, and we can then re-open it
             # To be efficient, we will save it to a buffer, rather than to file
             buffer_old, buffer_new = BytesIO(), BytesIO()
-            frame.save(buffer_old, format="PNG")  # save current frame to 1st buffer
+            frame.quantize(254, dither=Image.FLOYDSTEINBERG).save(buffer_old, format="PNG", optimization=True, quality=80)  # save current frame to 1st buffer
             if text is not None:
                 editor = Editor(text, buffer_old)  # put old buffer through editor with text
             else:
                 editor = Editor(None, buffer_old)  # put old buffer through editor without text
             img = editor.draw()  # user editor's draw func to get the finished result
             img = img.convert(mode='RGBA')
-            img.save(buffer_new, "GIF", optimization=True, quality=80)  # Save with some image optimization # save finished result in new buffer
+            img.save(buffer_new, "GIF")  # Save with some image optimization # save finished result in new buffer
             frames.append(Image.open(buffer_new))  # Then append the single frame image to the list of frames
         return frames
 
