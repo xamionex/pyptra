@@ -203,6 +203,20 @@ async def delete_message(ctx, delete_speed=None):
         return
 
 
+async def edit_msg(self, ctx, message, edit):
+    if await CheckInstance(ctx):
+        await message.edit(edit)
+    else:
+        await message.edit_original_message(content=edit)
+
+
+async def delete_msg(self, ctx, message):
+    if await CheckInstance(ctx):
+        await message.delete()
+    else:
+        await message.delete_original_message()
+
+
 async def senderror(ctx, cerror):
     #e = discord.Embed(description=cerror, color=0xFF6969)
     # await sendembed(ctx, e, False)
@@ -214,7 +228,7 @@ async def senderror(ctx, cerror):
 
 def extensions():
     extensions = []
-    skip_list = ["utils"]
+    skip_list = ["utils", "suggestions"]
     for module in next(os.walk("cogs"), (None, None, []))[2]:  # [] if no file
         module = module.replace('.py', '')
         if module not in skip_list:
