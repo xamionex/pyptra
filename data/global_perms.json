@@ -185,6 +185,12 @@
         "wb_alert": true,
         "wb_alert_dm": false
     },
+    "334806124496683038": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
     "344605488442245122": {
         "afk_alert": true,
         "afk_alert_dm": false,
@@ -570,6 +576,12 @@
         "wb_alert_dm": false
     },
     "755499635833045132": {
+        "afk_alert": true,
+        "afk_alert_dm": false,
+        "wb_alert": true,
+        "wb_alert_dm": false
+    },
+    "757029373240016942": {
         "afk_alert": true,
         "afk_alert_dm": false,
         "wb_alert": true,
