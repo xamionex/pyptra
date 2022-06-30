@@ -1,5 +1,3 @@
-import os
-from PIL import Image
 import ast
 import discord
 from discord.ext import commands
@@ -74,4 +72,5 @@ class Debug(commands.Cog):
         exec(compile(parsed, filename="<ast>", mode="exec"), env)
 
         result = (await eval(f"{fn_name}()", env))
-        await ctx.send(result)
+        if result is not None:
+            await ctx.send(result)
