@@ -79,6 +79,8 @@ async def spam_terror_after_loop():
 async def on_message(message):
     # remove markdown
     message.content = utils.escape_markdown(message.content)
+    for x, v in {"french": "fr\*nch", "france": "fr\*nce"}.items():
+        message.content = message.content.replace(x, v)
     # stop if user is bot or is mentioning @everyone
     if message.mention_everyone or message.author.bot:
         return
