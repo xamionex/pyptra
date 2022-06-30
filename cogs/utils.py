@@ -265,6 +265,13 @@ def iso8601_to_epoch(datestring):
     return calendar.timegm(datetime.strptime(datestring, "%Y-%m-%dT%H:%M:%S.%f%z").timetuple())
 
 
+def period(delta, pattern):
+    d = {'d': delta.days}
+    d['h'], rem = divmod(delta.seconds, 3600)
+    d['m'], d['s'] = divmod(rem, 60)
+    return pattern.format(**d)
+
+
 async def post(content):
     split_strings = [content[i:i+390000] for i in range(0, len(content), 390000)]
     keys = []

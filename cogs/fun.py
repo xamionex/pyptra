@@ -1,5 +1,6 @@
-import textwrap
+import datetime
 import time
+import textwrap
 import requests
 from PIL import Image, ImageDraw, ImageSequence, ImageFont
 from typing import Optional
@@ -39,7 +40,7 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def gif(self, ctx, member: Optional[discord.member.Member], emoji: Optional[discord.PartialEmoji], *, caption: str = None):
         """Make a caption on a gif"""
-        starttime = int(time.time())
+        start_time = int(time.time())
         msg = await ctx.respond("Trying to create...")
         dm = False
         if msg.channel.type == discord.ChannelType.private:
@@ -71,10 +72,11 @@ class FunCommands(commands.Cog, name="Fun"):
             e.set_footer(text="Protip: use pos=top (or center) before your text to display it at the top!")
         else:
             e.set_footer(text="Protip: you can enter a link before your text to use that instead!")
+        counter = ''.join([x for x in utils.period(datetime.timedelta(seconds=round(int(time.time()) - start_time)), "{d}d {h}h {m}m {s}s").split(" ") if not x.startswith("0") if x not in "s"])
         if await utils.CheckInstance(ctx):
-            await msg.edit(f"Done in {int(time.time())-starttime}s", embed=e, file=file)
+            await msg.edit(f"Done in {counter}", embed=e, file=file)
         else:
-            await msg.edit_original_message(content=f"Done in {int(time.time())-starttime}s", embed=e, file=file)
+            await msg.edit_original_message(content=f"Done in {counter}", embed=e, file=file)
 
     @bridge.bridge_command(hidden=True, name="combinegif")
     @commands.is_owner()
@@ -117,7 +119,7 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def pet(self, ctx, member: Optional[discord.member.Member], emoji: Optional[discord.PartialEmoji], *, caption: str = None):
         """Pet someone :D"""
-        starttime = int(time.time())
+        start_time = int(time.time())
         msg = await ctx.respond("Trying to create...")
         dm = False
         if msg.channel.type == discord.ChannelType.private:
@@ -147,10 +149,11 @@ class FunCommands(commands.Cog, name="Fun"):
         file = discord.File(dest, filename="petpet.gif")
         e = discord.Embed(description=f"{ctx.author.mention} has pet {what}")
         e.set_image(url=f"attachment://petpet.gif")
+        counter = ''.join([x for x in utils.period(datetime.timedelta(seconds=round(int(time.time()) - start_time)), "{d}d {h}h {m}m {s}s").split(" ") if not x.startswith("0") if x not in "s"])
         if await utils.CheckInstance(ctx):
-            await msg.edit(f"Done in {int(time.time())-starttime}s", embed=e, file=file)
+            await msg.edit(f"Done in {counter}", embed=e, file=file)
         else:
-            await msg.edit_original_message(content=f"Done in {int(time.time())-starttime}s", embed=e, file=file)
+            await msg.edit_original_message(content=f"Done in {counter}", embed=e, file=file)
 
     async def get_image(self, ctx, member, emoji, caption, dm):
         self.ctx.get_image_error = None

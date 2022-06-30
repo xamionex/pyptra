@@ -139,20 +139,16 @@ class Events(commands.Cog, name="Events"):
                 reason = self.ctx.afk[f'{member.id}']['reason']
 
                 # gets unix time
-                unix_time = int(time.time()) - \
-                    int(self.ctx.afk[f'{member.id}']['time'])
+                unix_time = int(time.time()) - int(self.ctx.afk[f'{member.id}']['time'])
 
                 # user was afk for time.now() - time
-                afktime = humanize.naturaltime(
-                    datetime.datetime.now() - datetime.timedelta(seconds=unix_time))
+                counter = humanize.naturaltime(datetime.datetime.now() - datetime.timedelta(seconds=unix_time))
 
                 # add embed
-                afk_alert.add_field(
-                    name=f"{member.display_name.replace('[AFK]', '')} - {afktime}", value=f"\"{reason}\"", inline=True)
+                afk_alert.add_field(name=f"{member.display_name.replace('[AFK]', '')} - {counter}", value=f"\"{reason}\"", inline=True)
 
                 # plus 1 time mentioned in afk.json
-                self.ctx.afk[f'{member.id}']['mentions'] = int(
-                    self.ctx.afk[f'{member.id}']['mentions']) + 1
+                self.ctx.afk[f'{member.id}']['mentions'] = int(self.ctx.afk[f'{member.id}']['mentions']) + 1
 
                 # save json
                 configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
@@ -162,13 +158,8 @@ class Events(commands.Cog, name="Events"):
         await users.UserCommands.update_data(self, self.ctx.afk, message.author)
         # if message's author is afk continue
         if list(message.content.split(" "))[0] != f'{prefix}afk' and self.ctx.afk[f'{message.author.id}']['AFK']:
-            # unix now - unix since afk
-            timeafk = int(time.time()) - \
-                int(self.ctx.afk[f'{message.author.id}']['time'])
-
-            # make time readable for user
-            afktime = users.UserCommands.period(datetime.timedelta(
-                seconds=round(timeafk)), "{d}d {h}h {m}m {s}s")
+            # counter = unix now - unix since afk in format 0d 0h 0m 0s and if any of them except seconds are 0 remove them
+            counter = ''.join([x for x in utils.period(datetime.timedelta(seconds=round(int(time.time()) - int(self.ctx.afk[f'{message.author.id}']['time']))), "{d}d {h}h {m}m {s}s").split(" ") if not x.startswith("0") if x not in "s"])
 
             # get mentions
             mentionz = self.ctx.afk[f'{message.author.id}']['mentions']
@@ -176,7 +167,7 @@ class Events(commands.Cog, name="Events"):
             # make embed
             welcome_back = discord.Embed(
                 description=f"**Welcome back {message.author.mention}!**")
-            welcome_back.add_field(name="Afk for", value=afktime, inline=True)
+            welcome_back.add_field(name="Afk for", value=counter, inline=True)
             welcome_back.add_field(
                 name="Mentioned", value=f"{mentionz} time(s)", inline=True)
             welcome_back.set_footer(
@@ -292,8 +283,7 @@ class Loops(commands.Cog):
             raise commands.CommandError(
                 "time is a required argument that is missing")
 
-        seconds = int(match.groups()[0]) * \
-            multiplier.get(str(match.groups()[1]))
+        seconds = int(match.groups()[0]) * multiplier.get(str(match.groups()[1]))
 
         input_spam = [channel, seconds, message]
 

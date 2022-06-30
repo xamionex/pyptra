@@ -203,12 +203,6 @@ class UserCommands(commands.Cog, name="User Commands"):
             afk[f'{user.id}'] = {}
             afk[f'{user.id}']['AFK'] = False
 
-    def period(delta, pattern):
-        d = {'d': delta.days}
-        d['h'], rem = divmod(delta.seconds, 3600)
-        d['m'], d['s'] = divmod(rem, 60)
-        return pattern.format(**d)
-
     async def sendafk(self, ctx, perm, e):
         if await block.BlockCommands.get_global_perm(self, ctx, perm[0], ctx.author):
             if await block.BlockCommands.get_global_perm(self, ctx, perm[1], ctx.author):
