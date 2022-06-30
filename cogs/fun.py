@@ -1,4 +1,5 @@
 import textwrap
+import time
 import requests
 from PIL import Image, ImageDraw, ImageSequence, ImageFont
 from typing import Optional
@@ -38,7 +39,8 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def gif(self, ctx, member: Optional[discord.member.Member], emoji: Optional[discord.PartialEmoji], *, caption: str = None):
         """Make a caption on a gif"""
-        msg = await ctx.respond("Creating...")
+        starttime = int(time.time())
+        msg = await ctx.respond("Trying to create...")
         dm = False
         if msg.channel.type == discord.ChannelType.private:
             dm = True
@@ -49,42 +51,17 @@ class FunCommands(commands.Cog, name="Fun"):
                 await msg.delete_original_message()
             await utils.senderror(ctx, "You are missing Manage Messages permission(s) to run this command. (DM me to use this command freely.)")
             return
-        caption = caption or "sample text"
-        keys = ["`", "\\"]
-        for key in keys:
-            caption = caption.replace(key, '')
-        caption = utils.remove_newlines(caption)
-        url = None
-        textposition = None
-        if len(caption) > 1 and caption.startswith("http") or caption.startswith("<http"):
-            caption = caption.split(" ")
-            url = caption[0]
-            if caption[1].startswith("pos="):
-                textposition = caption[1].replace('pos=', '')
-                caption = " ".join(caption[2:])
+        what, frames, duration = await FunCommands.get_image(self, ctx, member, emoji, caption, dm)
+        if self.ctx.get_image_error is not None:
+            if await utils.CheckInstance(ctx):
+                await msg.edit(f"Failed due to error: {self.ctx.get_image_error}")
             else:
-                caption = " ".join(caption[1:])
-        elif len(caption) == 1 and caption.startswith("http") or caption.startswith("<http"):
-            url = caption
-            caption = "sample text"
-        if len(caption) == 0:
-            caption = "sample text"
-        if url is not None:
-            keys = ["<", ">"]
-            for key in keys:
-                url = url.replace(key, "")
-        attachment = None
-        try:
-            attachment = ctx.message.attachments[0]
-        except:
-            pass
-        image = member or emoji or attachment or url or ctx.author
-        image, what = await FunCommands.get_url(self, ctx, image, dm)
-        frames = await FunCommands.set_frames(self, ctx, image, caption, textposition)
+                await msg.edit_original_message(content=f"Failed due to error: {self.ctx.get_image_error}")
+            return
         # file-like container to hold the image in memory
         img = BytesIO()  # sets image as "img"
         # Save the frames as a new image
-        frames[0].save(img, "gif", save_all=True, append_images=frames[1:], loop=0)
+        frames[0].save(img, "gif", save_all=True, append_images=frames[1:], duration=duration, loop=0)
         # set the file pointer back to the beginning so it doesn't upload a blank file.
         img.seek(0)
         file = discord.File(img, filename="caption.gif")
@@ -95,9 +72,9 @@ class FunCommands(commands.Cog, name="Fun"):
         else:
             e.set_footer(text="Protip: you can enter a link before your text to use that instead!")
         if await utils.CheckInstance(ctx):
-            await msg.edit(embed=e, file=file)
+            await msg.edit(f"Done in {int(time.time())-starttime}s", embed=e, file=file)
         else:
-            await msg.edit_original_message(embed=e, file=file)
+            await msg.edit_original_message(content=f"Done in {int(time.time())-starttime}s", embed=e, file=file)
 
     @bridge.bridge_command(hidden=True, name="combinegif")
     @commands.is_owner()
@@ -138,9 +115,10 @@ class FunCommands(commands.Cog, name="Fun"):
     @bridge.bridge_command(name="pet")
     @commands.guild_only()
     @commands.cooldown(1, 30, commands.BucketType.user)
-    async def pet(self, ctx, member: Optional[discord.member.Member], emoji: Optional[discord.PartialEmoji], url=None):
+    async def pet(self, ctx, member: Optional[discord.member.Member], emoji: Optional[discord.PartialEmoji], *, caption: str = None):
         """Pet someone :D"""
-        msg = await ctx.respond("Creating...")
+        starttime = int(time.time())
+        msg = await ctx.respond("Trying to create...")
         dm = False
         if msg.channel.type == discord.ChannelType.private:
             dm = True
@@ -151,24 +129,17 @@ class FunCommands(commands.Cog, name="Fun"):
                 await msg.delete_original_message()
             await utils.senderror(ctx, "You are missing Pet permission to run this command. (DM me to use this command freely.)")
             return
-        url = None
-        if url is not None:
-            keys = ["<", ">"]
-            for key in keys:
-                url = url.replace(key, "")
-        attachment = None
-        try:
-            attachment = ctx.message.attachments[0]
-        except:
-            pass
-        image = member or emoji or attachment or url or ctx.author
-        image, what = await FunCommands.get_url(self, ctx, image, dm)
-        frames = await FunCommands.set_frames(self, ctx, image)
+        what, frames, duration = await FunCommands.get_image(self, ctx, member, emoji, caption, dm)
+        if self.ctx.get_image_error is not None:
+            if await utils.CheckInstance(ctx):
+                await msg.edit(f"Failed due to error: {self.ctx.get_image_error}")
+            else:
+                await msg.edit_original_message(content=f"Failed due to error: {self.ctx.get_image_error}")
+            return
         # file-like container to hold the image in memory
-        source = BytesIO()  # sets image as "source"
-        # Save the frames as a new image
-        frames[0].save(source, "gif", save_all=True, append_images=frames[1:], loop=0)
-        dest = BytesIO()  # container to store the petpet gif in memory
+        source, dest = BytesIO(), BytesIO()  # sets image as "source" and container to store the petpet gif in memory
+        # Save the frames into source
+        frames[0].save(source, "gif", save_all=True, append_images=frames[1:], duration=duration, loop=0)
         # takes source (image) and makes pet-pet and puts into memory
         petpet.make(source, dest)
         # set the file pointer back to the beginning so it doesn't upload a blank file.
@@ -177,9 +148,65 @@ class FunCommands(commands.Cog, name="Fun"):
         e = discord.Embed(description=f"{ctx.author.mention} has pet {what}")
         e.set_image(url=f"attachment://petpet.gif")
         if await utils.CheckInstance(ctx):
-            await msg.edit(embed=e, file=file)
+            await msg.edit(f"Done in {int(time.time())-starttime}s", embed=e, file=file)
         else:
-            await msg.edit_original_message(embed=e, file=file)
+            await msg.edit_original_message(content=f"Done in {int(time.time())-starttime}s", embed=e, file=file)
+
+    async def get_image(self, ctx, member, emoji, caption, dm):
+        self.ctx.get_image_error = None
+        caption, text, textposition, url, attachment = await FunCommands.caption_args(self, ctx, caption)
+        image = member or emoji or attachment or url or ctx.author
+        image, what = await FunCommands.get_url(self, ctx, image, dm)
+        if self.ctx.get_image_error is not None:
+            return None, None, None
+        if text:
+            frames, duration = await FunCommands.set_frames(self, ctx, image, caption, textposition)
+        else:
+            frames, duration = await FunCommands.set_frames(self, ctx, image)
+        if self.ctx.get_image_error is not None:
+            return None, None, None
+        return what, frames, duration
+
+    async def caption_args(self, ctx, caption):
+        textposition, url = None, None
+        if caption is not None:
+            keys = ["`", "\\"]
+            for key in keys:
+                caption = caption.replace(key, '')
+            caption = utils.remove_newlines(caption)
+            caption = caption.split(" ")
+            rem = []
+            for item in caption:
+                if item.startswith("pos="):
+                    rem.append(item)
+                    item = item.replace("pos=", "")
+                    if item in Editor.trigs:
+                        textposition = item
+                    break
+            for trigger in ["http", "<http"]:
+                for item in caption:
+                    if trigger in item:
+                        rem.append(item)
+                        url = item
+                        keys = ["<", ">"]
+                        for key in keys:
+                            url = url.replace(key, "")
+                        break
+                break
+            caption = " ".join(caption[0:])
+            for item in rem:
+                caption = caption.replace(item, "")
+            if len(caption) == 0:
+                text = False
+            else:
+                text = True
+        else:
+            text = False
+        try:
+            attachment = ctx.message.attachments[0]
+        except:
+            attachment = None
+        return caption, text, textposition, url, attachment
 
     async def get_url(self, ctx, image, dm=False):
         # retrieve the image url
@@ -197,12 +224,14 @@ class FunCommands(commands.Cog, name="Fun"):
             try:
                 image = image.avatar.url
             except:
-                await utils.senderror(ctx, "Could not get users avatar.")
+                self.ctx.get_image_error = "Could not get users avatar."
+                return None, None
         elif type(image) == str:
             async with aiohttp.ClientSession() as session:
                 async with session.get(image) as url:
                     if url.status != 200:
-                        await utils.senderror(ctx, "Could not download file")
+                        self.ctx.get_image_error = "Could not download file"
+                        return None, None
                     image = url.url
                     await session.close()
         return image, what
@@ -211,10 +240,18 @@ class FunCommands(commands.Cog, name="Fun"):
         """get frames from gif (url) and apply text (if present)"""
         if textposition is not None:
             if textposition not in ["top", "bottom", "center"]:
-                await utils.senderror(ctx, "Text position has to be either top bottom or center")
+                self.ctx.get_image_error = "Text position has to be either top bottom or center"
+                return None, None
         im = Image.open(requests.get(image, stream=True).raw)
+        if im.n_frames >= 60:
+            self.ctx.get_image_error = f"Too many frames in gif. ({im.n_frames})"
+            return None, None
         # A list of the frames to be outputted
         frames = []
+        try:
+            duration = im.info['duration']
+        except:
+            duration = 1
         # Loop over each frame in the animated image
         for frame in ImageSequence.Iterator(im):
             # However, 'frame' is still the animated image with many frames
@@ -223,7 +260,7 @@ class FunCommands(commands.Cog, name="Fun"):
             # Saving the image without 'save_all' will turn it into a single frame image, and we can then re-open it
             # To be efficient, we will save it to a buffer, rather than to file
             buffer_old, buffer_new = BytesIO(), BytesIO()
-            frame.quantize(254, dither=Image.FLOYDSTEINBERG).save(buffer_old, format="PNG", optimization=True, quality=80)  # save current frame to 1st buffer
+            frame.quantize(254, dither=Image.FLOYDSTEINBERG).save(buffer_old, format="PNG")  # save current frame to 1st buffer
             if text is not None:
                 editor = Editor(text, buffer_old, textposition)  # put old buffer through editor with text
             else:
@@ -232,7 +269,7 @@ class FunCommands(commands.Cog, name="Fun"):
             img = img.convert(mode='RGBA')
             img.save(buffer_new, "GIF")  # Save with some image optimization # save finished result in new buffer
             frames.append(Image.open(buffer_new))  # Then append the single frame image to the list of frames
-        return frames
+        return frames, duration
 
     @commands.command(hidden=True, name="hug")
     @commands.guild_only()
@@ -365,7 +402,6 @@ class Editor:
                 y = (ih - (ih / 2)) - (th / 2)  # The starting y position to draw the last line of text. Text in drawn from the bottom line up
             else:
                 y = (ih - (ih / 10)) - (th / 2)  # The starting y position to draw the last line of text. Text in drawn from the bottom line up
-            print(y, ih, th)
             for cap in self.splitCaption:  # For each line of text
                 (tw, _) = self.d.textsize(cap, font=self.font)  # Getting the position of the text
                 x = ((iw - tw) - (len(cap) * self.letSpacing))/2  # Center the text and account for the spacing between letters

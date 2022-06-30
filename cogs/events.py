@@ -61,7 +61,7 @@ class Events(commands.Cog, name="Events"):
             raise error
         elif isinstance(error, commands.CommandError):
             e = discord.Embed(description=f"`❌` {error}", color=0xFF6969)
-            await ctx.send(ctx.author.mention, embed=e, delete_after=5)
+            await ctx.send(ctx.author.mention, embed=e)
         try:
             channel = self.ctx.get_channel(980964223121256529)
             msg = ctx.message.content.split(" ")
