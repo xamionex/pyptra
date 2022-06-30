@@ -1,11 +1,8 @@
 import datetime
-import json
 from typing import Optional
 import discord
-import os
-import sys
 from discord.ext import commands
-from cogs import utils, configs, users
+from cogs import utils, configs
 
 extensions = utils.extensions()
 

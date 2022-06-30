@@ -1,4 +1,3 @@
-import requests
 import aiohttp
 import calendar
 from datetime import datetime
