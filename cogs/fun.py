@@ -1,9 +1,12 @@
+import re
+from emoji import EMOJI_UNICODE
 import datetime
 import time
 import textwrap
 import requests
 from PIL import Image, ImageDraw, ImageSequence, ImageFont
-from typing import Optional
+from pilmoji import Pilmoji
+from typing import Final, Optional
 import discord
 from discord.ext import commands, bridge
 from cogs import block, utils
@@ -372,7 +375,7 @@ class Editor:
     stroke_fill = (0, 0, 0)  # Color of the text outline
     lineSpacing = 10  # Space between lines
     stroke_width = 9  # How thick the outline of the text is
-    fontfile = './data/impact.ttf'
+    fontfile = './data/seguiemj.ttf'
     trig_top = ["top"]
     trig_middle = ["center", "middle"]
     trigs = trig_top + trig_middle
@@ -382,13 +385,29 @@ class Editor:
         self.d = ImageDraw.Draw(self.img)
         self.caption = caption
         self.txtpos = textposition
+        UNICODE_EMOJI_REGEX = '|'.join(map(re.escape, sorted(EMOJI_UNICODE['en'].values(), key=len, reverse=True)))
+        DISCORD_EMOJI_REGEX = '<a?:[a-zA-Z0-9_]{2,32}:[0-9]{17,22}>'
+        EMOJI_REGEX: Final[re.Pattern[str]] = re.compile(f'({UNICODE_EMOJI_REGEX}|{DISCORD_EMOJI_REGEX})')
+        self.emojis = []
+        self.splitCaption = []
         if caption:
-            self.splitCaption = textwrap.wrap(caption, width=20)  # The text can be wider than the img. If thats the case split the text into multiple lines
-            if textposition not in self.trigs:
-                self.splitCaption.reverse()                           # Draw the lines of text from the bottom up
-            fontSize = self.fontBase+10 if len(self.splitCaption) <= 1 else self.fontBase  # If there is only one line, make the text a bit larger
-            self.font = ImageFont.truetype(font=self.fontfile, size=fontSize)
-            # self.shadowFont = ImageFont.truetype(font='./impact.ttf', size=fontSize+10)
+            capts = caption.split(" ")
+            for cap in capts:
+                for i, chunk in enumerate(EMOJI_REGEX.split(cap)):
+                    if not chunk or not i % 2:
+                        continue
+                    emoji = chunk
+                    self.emojis.append(emoji)
+                if cap not in self.emojis:
+                    [self.splitCaption.append(x) for x in textwrap.wrap(cap, width=20)]  # The text can be wider than the img. If thats the case split the text into multiple lines
+                else:
+                    self.splitCaption.append(cap)
+                if textposition not in self.trigs:
+                    self.splitCaption.reverse()                           # Draw the lines of text from the bottom up
+                fontSize = self.fontBase+10 if len(self.splitCaption) <= 1 else self.fontBase  # If there is only one line, make the text a bit larger
+                self.font = ImageFont.truetype(font=self.fontfile, size=fontSize, layout_engine=ImageFont.LAYOUT_RAQM)
+                # self.shadowFont = ImageFont.truetype(font='./impact.ttf', size=fontSize+10)
+            print(self.emojis)
 
     def draw(self):
         '''
@@ -408,8 +427,12 @@ class Editor:
             for cap in self.splitCaption:  # For each line of text
                 (tw, _) = self.d.textsize(cap, font=self.font)  # Getting the position of the text
                 x = ((iw - tw) - (len(cap) * self.letSpacing))/2  # Center the text and account for the spacing between letters
-
-                self.drawLine(x=x, y=y, caption=cap)
+                if cap in self.emojis:
+                    w, h = self.font.getsize("<")  # width and height of the letter
+                    Pilmoji(self.img).text((int(x), int(y)), cap, self.fill, self.font, stroke_width=self.stroke_width, stroke_fill=self.stroke_fill)  # Drawing the text character by character. This way spacing can be added between letters
+                    x += w + self.letSpacing  # The next character must be drawn at an x position more to the right
+                else:
+                    self.drawLine(x=x, y=y, caption=cap)
                 if self.txtpos in self.trig_top:
                     y = y + th + self.lineSpacing  # Next block of text is higher up
                 elif self.txtpos in self.trig_middle:
@@ -443,12 +466,5 @@ class Editor:
         for idx in range(0, len(caption)):  # For each letter in the line of text
             char = caption[idx]
             w, h = self.font.getsize(char)  # width and height of the letter
-            self.d.text(
-                (x, y),
-                char,
-                fill=self.fill,
-                stroke_width=self.stroke_width,
-                font=self.font,
-                stroke_fill=self.stroke_fill
-            )  # Drawing the text character by character. This way spacing can be added between letters
+            Pilmoji(self.img).text((int(x), int(y)), char, self.fill, self.font, stroke_width=self.stroke_width, stroke_fill=self.stroke_fill)  # Drawing the text character by character. This way spacing can be added between letters
             x += w + self.letSpacing  # The next character must be drawn at an x position more to the right
