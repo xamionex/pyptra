@@ -161,7 +161,7 @@ class FunCommands(commands.Cog, name="Fun"):
     async def get_image(self, ctx, member, emoji, caption, dm):
         self.ctx.get_image_error = None
         caption, text, textposition, url, attachment = await FunCommands.caption_args(self, ctx, caption)
-        image = member or emoji or attachment or url or ctx.author
+        image = attachment or member or emoji or url or ctx.author
         image, what = await FunCommands.get_url(self, ctx, image, dm)
         if self.ctx.get_image_error is not None:
             return None, None, None
@@ -266,15 +266,20 @@ class FunCommands(commands.Cog, name="Fun"):
             # Saving the image without 'save_all' will turn it into a single frame image, and we can then re-open it
             # To be efficient, we will save it to a buffer, rather than to file
             buffer_old, buffer_new = BytesIO(), BytesIO()
-            frame.quantize(254, dither=Image.FLOYDSTEINBERG).save(buffer_old, format="PNG")  # save current frame to 1st buffer
+
+            # save current frame to 1st buffer
+            frame.quantize(254, dither=Image.FLOYDSTEINBERG).save(buffer_old, format="PNG")
+
             if text is not None:
-                editor = Editor(text, buffer_old, textposition)  # put old buffer through editor with text
+                # put old buffer through editor with text
+                editor = Editor(text, buffer_old, textposition)
             else:
-                editor = Editor(None, buffer_old, textposition)  # put old buffer through editor without text
-            img = editor.draw()  # user editor's draw func to get the finished result
-            img = img.convert(mode='RGBA')
-            img.save(buffer_new, "GIF")  # Save with some image optimization # save finished result in new buffer
-            frames.append(Image.open(buffer_new))  # Then append the single frame image to the list of frames
+                # put old buffer through editor without text
+                editor = Editor(None, buffer_old, textposition)
+
+            # Then append the single frame image to the list of frames
+            editor.draw().convert(mode='RGBA').save(buffer_new, "GIF")
+            frames.append(Image.open(buffer_new))
         return frames, duration
 
     @commands.command(hidden=True, name="hug")
@@ -388,26 +393,18 @@ class Editor:
         UNICODE_EMOJI_REGEX = '|'.join(map(re.escape, sorted(EMOJI_UNICODE['en'].values(), key=len, reverse=True)))
         DISCORD_EMOJI_REGEX = '<a?:[a-zA-Z0-9_]{2,32}:[0-9]{17,22}>'
         EMOJI_REGEX: Final[re.Pattern[str]] = re.compile(f'({UNICODE_EMOJI_REGEX}|{DISCORD_EMOJI_REGEX})')
-        self.emojis = []
-        self.splitCaption = []
+        self.splitCaption, self.emojis = [], []
         if caption:
-            capts = caption.split(" ")
-            for cap in capts:
-                for i, chunk in enumerate(EMOJI_REGEX.split(cap)):
-                    if not chunk or not i % 2:
-                        continue
-                    emoji = chunk
-                    self.emojis.append(emoji)
-                if cap not in self.emojis:
-                    [self.splitCaption.append(x) for x in textwrap.wrap(cap, width=20)]  # The text can be wider than the img. If thats the case split the text into multiple lines
+            for i, chunk in enumerate(EMOJI_REGEX.split(caption)):
+                if not chunk or not i % 2:
+                    [self.splitCaption.append(x) for x in textwrap.wrap(chunk, width=20)]
                 else:
-                    self.splitCaption.append(cap)
-                if textposition not in self.trigs:
-                    self.splitCaption.reverse()                           # Draw the lines of text from the bottom up
-                fontSize = self.fontBase+10 if len(self.splitCaption) <= 1 else self.fontBase  # If there is only one line, make the text a bit larger
-                self.font = ImageFont.truetype(font=self.fontfile, size=fontSize, layout_engine=ImageFont.LAYOUT_RAQM)
-                # self.shadowFont = ImageFont.truetype(font='./impact.ttf', size=fontSize+10)
-            print(self.emojis)
+                    self.emojis.append(chunk)
+                    self.splitCaption.append(chunk)
+            [self.splitCaption.reverse() if textposition not in self.trigs else None]  # Draw the lines of text from the bottom up
+            fontSize = self.fontBase+10 if len(self.splitCaption) <= 1 else self.fontBase  # If there is only one line, make the text a bit larger
+            self.font = ImageFont.truetype(font=self.fontfile, size=fontSize, layout_engine=ImageFont.LAYOUT_RAQM)
+            # self.shadowFont = ImageFont.truetype(font='./impact.ttf', size=fontSize+10)
 
     def draw(self):
         '''
