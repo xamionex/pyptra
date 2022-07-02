@@ -17,16 +17,16 @@ def get_prefix(bot, msg):
     with open("./data/prefixes.json", "r") as f:
         prefixes = json.load(f)
         try:
-            prefix = prefixes[msg.guild.id]
-        except AttributeError:
+            prefix = prefixes[str(msg.guild.id)]
+        except:
             prefix = "-"
     return prefix
 
 
 def when_mentioned_or_function(func):
     def inner(bot, msg):
-        r = list(func(bot, msg))
-        r = commands.when_mentioned(bot, msg) + r
+        r = commands.when_mentioned(bot, msg)
+        r.append(func(bot, msg))
         return r
     return inner
 
