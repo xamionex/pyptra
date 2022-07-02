@@ -150,12 +150,6 @@ async def addnote(ctx: discord.ApplicationContext, domain: str, sid: str, note: 
         await ctx.send(f"You don't have permission to do that.")
 
 
-async def ping(ctx):
-    e = discord.Embed(title=f"Pong! `{round(bot.latency * 1000)}ms`")
-    e.set_image(url="https://c.tenor.com/LqNPvLVdzHoAAAAC/cat-ping.gif")
-    return e
-
-
 async def CheckInstance(ctx):
     if isinstance(ctx, bridge.BridgeExtContext):
         return True  # prefix returns true

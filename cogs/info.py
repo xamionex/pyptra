@@ -88,7 +88,8 @@ class InfoCommands(commands.Cog, name="Informational"):
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def ping(self, ctx):
         """Tells you the bot's ping."""
-        e = await utils.ping(ctx)
+        e = discord.Embed(title=f"Pong! `{round(self.ctx.latency * 1000)}ms`")
+        e.set_image(url="https://c.tenor.com/LqNPvLVdzHoAAAAC/cat-ping.gif")
         await utils.sendembed(ctx, e, show_all=False, delete=3)
 
     @bridge.bridge_command(name="installation")

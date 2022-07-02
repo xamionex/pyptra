@@ -17,7 +17,7 @@ def get_prefix(bot, msg):
     with open("./data/prefixes.json", "r") as f:
         prefixes = json.load(f)
         try:
-            prefix = prefixes.get(str(msg.guild.id))
+            prefix = prefixes[msg.guild.id]
         except AttributeError:
             prefix = "-"
     return prefix
