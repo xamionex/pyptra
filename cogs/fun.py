@@ -33,7 +33,7 @@ class FunCommands(commands.Cog, name="Fun"):
         if await block.BlockCommands.get_perm(self, ctx, perm, ctx.author) or ctx.author.guild_permissions.administrator:
             return True
         else:
-            await utils.senderror(ctx, f"{ctx.author.mention}, You aren\'t allowed to use this")
+            return False
 
     async def checkping(self, ctx, member):
         if await block.BlockCommands.get_perm(self, ctx, "ping", member):
@@ -127,13 +127,13 @@ class FunCommands(commands.Cog, name="Fun"):
         dm = False
         if msg.channel.type == discord.ChannelType.private:
             dm = True
-        elif not self.checkperm(ctx, "pet"):
-            try:
-                await msg.delete()
-            except:
-                await msg.delete_original_message()
-            await utils.senderror(ctx, "You are missing Pet permission to run this command. (DM me to use this command freely.)")
-            return
+        elif not dm:
+            if not await FunCommands.checkperm(self, ctx, "pet"):
+                try:
+                    await msg.delete()
+                except:
+                    await msg.delete_original_message()
+                await utils.senderror(ctx, "You are missing Pet permission to run this command. (DM me to use this command freely.)")
         what, frames, duration = await FunCommands.get_image(self, ctx, member, emoji, caption, dm)
         if self.ctx.get_image_error is not None:
             if await utils.CheckInstance(ctx):
@@ -287,7 +287,8 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def hug(self, ctx, *, member: Optional[discord.Member]):
         """Hug someone :O"""
-        await FunCommands.checkperm(self, ctx, "weird")
+        if not await FunCommands.checkperm(self, ctx, "weird"):
+            await utils.senderror(ctx, "You are missing \"weird\" permission to run this command. (DM me to use this command freely.)")
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(self.ctx.hug_words_bot))} me!", color=0x0690FF)
@@ -303,7 +304,8 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def kiss(self, ctx, *, member: Optional[discord.Member]):
         """Kiss someone :O"""
-        await FunCommands.checkperm(self, ctx, "weird")
+        if not await FunCommands.checkperm(self, ctx, "weird"):
+            await utils.senderror(ctx, "You are missing \"weird\" permission to run this command. (DM me to use this command freely.)")
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(self.ctx.kiss_words_bot))} me!", color=0x0690FF)
@@ -319,7 +321,8 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def fall(self, ctx, *, member: Optional[discord.Member]):
         """Make someone fall >:)"""
-        await FunCommands.checkperm(self, ctx, "joke")
+        if not await FunCommands.checkperm(self, ctx, "joke"):
+            await utils.senderror(ctx, "You are missing \"joke\" permission to run this command. (DM me to use this command freely.)")
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} you fell", color=0xFF6969)
@@ -335,7 +338,8 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.has_permissions(administrator=True)
     async def promote(self, ctx, member: discord.Member, *, message=None):
         """Promote someone :D"""
-        await FunCommands.checkperm(self, ctx, "joke")
+        if not await FunCommands.checkperm(self, ctx, "joke"):
+            await utils.senderror(ctx, "You are missing \"joke\" permission to run this command. (DM me to use this command freely.)")
         if member == ctx.author:
             e = discord.Embed(
                 description=f"{ctx.author.mention} promoted themselves to {message}", color=0xFF6969)
