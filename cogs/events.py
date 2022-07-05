@@ -139,10 +139,10 @@ class Events(commands.Cog, name="Events"):
                 reason = self.ctx.afk[f'{member.id}']['reason']
 
                 # gets unix time
-                unix_time = int(time.time()) - int(self.ctx.afk[f'{member.id}']['time'])
+                unix_time = utils.current_milli_time() - self.ctx.afk[f'{member.id}']['time']
 
                 # user was afk for time.now() - time
-                counter = humanize.naturaltime(datetime.datetime.now() - datetime.timedelta(seconds=unix_time))
+                counter = humanize.naturaltime(datetime.datetime.now() - datetime.timedelta(seconds=unix_time // 1000))
 
                 # add embed
                 afk_alert.add_field(name=f"{member.display_name.replace('[AFK]', '')} - {counter}", value=f"\"{reason}\"", inline=True)
@@ -159,7 +159,7 @@ class Events(commands.Cog, name="Events"):
         # if message's author is afk continue
         if list(message.content.split(" "))[0] != f'{prefix}afk' and self.ctx.afk[f'{message.author.id}']['AFK']:
             # counter = unix now - unix since afk in format 0d 0h 0m 0s and if any of them except seconds are 0 remove them
-            counter = ''.join([x for x in utils.period(datetime.timedelta(seconds=round(int(time.time()) - int(self.ctx.afk[f'{message.author.id}']['time']))), "{d}d {h}h {m}m {s}s").split(" ") if not x.startswith("0") if x not in "s"])
+            counter = utils.display_time(utils.current_milli_time() - self.ctx.afk[f'{message.author.id}']['time'])
 
             # get mentions
             mentionz = self.ctx.afk[f'{message.author.id}']['mentions']
@@ -227,8 +227,8 @@ class Events(commands.Cog, name="Events"):
     async def purger(self):
         for guild in self.ctx.timed_purge.items():
             for channel, timed in self.ctx.timed_purge[str(guild[0])].items():
-                current_time = int(time.time())
-                delay = int(timed[0])
+                current_time = utils.current_milli_time()
+                delay = timed[0]
                 send_time = delay + timed[1] < current_time
                 if send_time:
                     try:

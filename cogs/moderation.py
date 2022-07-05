@@ -74,7 +74,7 @@ class ModerationCommands(commands.Cog, name="Moderation"):
         if self.ctx.timed_purge[str(ctx.guild.id)]:
             e = discord.Embed(title="Listing all timed purges:")
             for channel, timed in self.ctx.timed_purge[str(ctx.guild.id)].items():
-                counter = ''.join([x for x in utils.period(datetime.timedelta(seconds=round(timed[0])), "{d}d {h}h {m}m {s}s").split(" ") if not x.startswith("0") if x not in "s"])
+                counter = utils.display_time(timed[0])
                 e.add_field(
                     name=f"Channel #{self.ctx.get_channel(int(channel)).name}", value=f"Occurs every\n{counter}")
             await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=15)

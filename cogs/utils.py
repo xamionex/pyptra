@@ -1,3 +1,4 @@
+import time
 import aiohttp
 import calendar
 from datetime import datetime
@@ -272,11 +273,28 @@ def iso8601_to_epoch(datestring):
     return calendar.timegm(datetime.strptime(datestring, "%Y-%m-%dT%H:%M:%S.%f%z").timetuple())
 
 
-def period(delta, pattern):
-    d = {'d': delta.days}
-    d['h'], rem = divmod(delta.seconds, 3600)
-    d['m'], d['s'] = divmod(rem, 60)
-    return pattern.format(**d)
+intervals = (
+    ('w', 6.048e+8),  # 60 * 60 * 24 * 7
+    ('d', 8.64e+7),   # 60 * 60 * 24
+    ('h', 3.6e+6),    # 60 * 60
+    ('m', 60000),
+    ('s', 1000),
+    ('ms', 1),
+)
+
+
+def display_time(milliseconds, granularity=2):
+    result = []
+    for name, count in intervals:
+        value = milliseconds // count
+        if value:
+            milliseconds -= value * count
+            result.append(f"{int(value)}{name}")
+    return ', '.join(result[:granularity])
+
+
+def current_milli_time():
+    return round(time.time() * 1000)
 
 
 async def post(content):

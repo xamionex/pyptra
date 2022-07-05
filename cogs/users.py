@@ -186,7 +186,7 @@ class UserCommands(commands.Cog, name="User Commands"):
                 description=f"Goodbye {ctx.author.mention}, Updated alert to \"{reason}\"")
         else:
             afk[f'{ctx.author.id}']['AFK'] = True
-            afk[f'{ctx.author.id}']['time'] = int(time.time())
+            afk[f'{ctx.author.id}']['time'] = utils.current_milli_time()
             afk[f'{ctx.author.id}']['mentions'] = 0
             rply = discord.Embed(
                 description=f"Goodbye {ctx.author.mention}, Set alert to \"{reason}\"")

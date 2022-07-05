@@ -43,7 +43,7 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def gif(self, ctx, member: Optional[discord.member.Member], emoji: Optional[discord.PartialEmoji], *, caption: str = None):
         """Make a caption on a gif"""
-        start_time = int(time.time())
+        start_time = utils.current_milli_time()
         msg = await ctx.respond("Trying to create...")
         dm = False
         if msg.channel.type == discord.ChannelType.private:
@@ -75,7 +75,7 @@ class FunCommands(commands.Cog, name="Fun"):
             e.set_footer(text="Protip: use pos=top (or center) before your text to display it at the top!")
         else:
             e.set_footer(text="Protip: you can enter a link before your text to use that instead!")
-        counter = ''.join([x for x in utils.period(datetime.timedelta(seconds=round(int(time.time()) - start_time)), "{d}d {h}h {m}m {s}s").split(" ") if not x.startswith("0") if x not in "s"])
+        counter = utils.display_time(utils.current_milli_time() - start_time)
         if await utils.CheckInstance(ctx):
             await msg.edit(f"Done in {counter}", embed=e, file=file)
         else:
@@ -122,7 +122,7 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def pet(self, ctx, member: Optional[discord.member.Member], emoji: Optional[discord.PartialEmoji], *, caption: str = None):
         """Pet someone :D"""
-        start_time = int(time.time())
+        start_time = utils.current_milli_time()
         msg = await ctx.respond("Trying to create...")
         dm = False
         if msg.channel.type == discord.ChannelType.private:
@@ -152,7 +152,7 @@ class FunCommands(commands.Cog, name="Fun"):
         file = discord.File(dest, filename="petpet.gif")
         e = discord.Embed(description=f"{ctx.author.mention} has pet {what}")
         e.set_image(url=f"attachment://petpet.gif")
-        counter = ''.join([x for x in utils.period(datetime.timedelta(seconds=round(int(time.time()) - start_time)), "{d}d {h}h {m}m {s}s").split(" ") if not x.startswith("0") if x not in "s"])
+        counter = utils.display_time(utils.current_milli_time() - start_time)
         if await utils.CheckInstance(ctx):
             await msg.edit(f"Done in {counter}", embed=e, file=file)
         else:
@@ -160,13 +160,13 @@ class FunCommands(commands.Cog, name="Fun"):
 
     async def get_image(self, ctx, member, emoji, caption, dm):
         self.ctx.get_image_error = None
-        caption, text, textposition, url, attachment = await FunCommands.caption_args(self, ctx, caption)
+        caption, text, textposition, textcolor, url, attachment = await FunCommands.caption_args(self, ctx, caption)
         image = attachment or member or emoji or url or ctx.author
         image, what = await FunCommands.get_url(self, ctx, image, dm)
         if self.ctx.get_image_error is not None:
             return None, None, None
         if text:
-            frames, duration = await FunCommands.set_frames(self, ctx, image, caption, textposition)
+            frames, duration = await FunCommands.set_frames(self, ctx, image, caption, textposition, textcolor)
         else:
             frames, duration = await FunCommands.set_frames(self, ctx, image)
         if self.ctx.get_image_error is not None:
@@ -174,7 +174,7 @@ class FunCommands(commands.Cog, name="Fun"):
         return what, frames, duration
 
     async def caption_args(self, ctx, caption):
-        textposition, url = None, None
+        textposition, url, textcolor = None, None, None
         if caption is not None:
             keys = ["`", "\\"]
             for key in keys:
@@ -188,7 +188,12 @@ class FunCommands(commands.Cog, name="Fun"):
                     item = item.replace("pos=", "")
                     if item in Editor.trigs:
                         textposition = item
-                    break
+                if item.startswith("color="):
+                    rem.append(item)
+                    item = item.replace("color=", "")
+                    for name, hx in Editor.colors.items():
+                        if item == name:
+                            textcolor = hx
             for trigger in ["http", "<http"]:
                 for item in caption:
                     if trigger in item:
@@ -199,20 +204,20 @@ class FunCommands(commands.Cog, name="Fun"):
                             url = url.replace(key, "")
                         break
                 break
-            caption = " ".join(caption[0:])
             for item in rem:
-                caption = caption.replace(item, "")
-            if len(caption) == 0:
-                text = False
-            else:
+                caption.remove(item)
+            caption = " ".join(caption[0:])
+            if len(caption) > 0:
                 text = True
+            else:
+                text = None
         else:
-            text = False
+            text = None
         try:
             attachment = ctx.message.attachments[0]
         except:
             attachment = None
-        return caption, text, textposition, url, attachment
+        return caption, text, textposition, textcolor, url, attachment
 
     async def get_url(self, ctx, image, dm=False):
         # retrieve the image url
@@ -242,7 +247,7 @@ class FunCommands(commands.Cog, name="Fun"):
                     await session.close()
         return image, what
 
-    async def set_frames(self, ctx, image: str, text=None, textposition=None):
+    async def set_frames(self, ctx, image: str, text=None, textposition=None, textcolor=None):
         """get frames from gif (url) and apply text (if present)"""
         if textposition is not None:
             if textposition not in ["top", "bottom", "center"]:
@@ -272,13 +277,13 @@ class FunCommands(commands.Cog, name="Fun"):
 
             if text is not None:
                 # put old buffer through editor with text
-                editor = Editor(text, buffer_old, textposition)
+                editor = Editor(text, buffer_old, textposition, textcolor)
             else:
                 # put old buffer through editor without text
-                editor = Editor(None, buffer_old, textposition)
+                editor = Editor(None, buffer_old)
 
             # Then append the single frame image to the list of frames
-            editor.draw().convert(mode='RGBA').save(buffer_new, "GIF")
+            editor.draw().save(buffer_new, "GIF")
             frames.append(Image.open(buffer_new))
         return frames, duration
 
@@ -380,20 +385,30 @@ class Editor:
     basewidth = 1200  # Width to make the editor
     fontBase = 100  # Font size
     letSpacing = 9  # Space between letters
-    fill = (255, 255, 255)  # TextColor
     stroke_fill = (0, 0, 0)  # Color of the text outline
     lineSpacing = 10  # Space between lines
     stroke_width = 9  # How thick the outline of the text is
-    fontfile = './data/seguiemj.ttf'
+    #fontfile = './data/seguiemj.ttf'
+    fontfile = "./data/fonts/arial-unicode-ms.ttf"
     trig_top = ["top"]
     trig_middle = ["center", "middle"]
     trigs = trig_top + trig_middle
+    colors = {
+        "blue": (0, 0, 255),
+        "green": (0, 255, 0),
+        "red": (255, 0, 0),
+        "cyan": (0, 255, 255),
+        "magenta": (255, 0, 255),
+        "yellow": (255, 255, 0),
+        "black": (1, 1, 1)
+    }
 
-    def __init__(self, caption, image, textposition=None):
-        self.img = self.createImage(image)
+    def __init__(self, caption, image, textposition=None, textcolor=(255, 255, 255)):
+        self.img = self.createImage(image).convert("RGBA")
         self.d = ImageDraw.Draw(self.img)
         self.caption = caption
         self.txtpos = textposition
+        self.fill = textcolor
         UNICODE_EMOJI_REGEX = '|'.join(map(re.escape, sorted(EMOJI_UNICODE['en'].values(), key=len, reverse=True)))
         DISCORD_EMOJI_REGEX = '<a?:[a-zA-Z0-9_]{2,32}:[0-9]{17,22}>'
         EMOJI_REGEX: Final[re.Pattern[str]] = re.compile(f'({UNICODE_EMOJI_REGEX}|{DISCORD_EMOJI_REGEX})')
@@ -407,8 +422,8 @@ class Editor:
                     self.splitCaption.append(chunk)
             [self.splitCaption.reverse() if textposition not in self.trigs else None]  # Draw the lines of text from the bottom up
             fontSize = self.fontBase+10 if len(self.splitCaption) <= 1 else self.fontBase  # If there is only one line, make the text a bit larger
-            self.font = ImageFont.truetype(font=self.fontfile, size=fontSize, layout_engine=ImageFont.LAYOUT_RAQM)
-            # self.shadowFont = ImageFont.truetype(font='./impact.ttf', size=fontSize+10)
+            self.font = ImageFont.truetype(font=self.fontfile, size=fontSize, layout_engine=ImageFont.LAYOUT_RAQM, encoding="unic")
+            #self.shadowFont = ImageFont.truetype(font=self.fontfile, size=fontSize+10, layout_engine=ImageFont.LAYOUT_RAQM, encoding="unic")
 
     def draw(self):
         '''
@@ -430,7 +445,7 @@ class Editor:
                 x = ((iw - tw) - (len(cap) * self.letSpacing))/2  # Center the text and account for the spacing between letters
                 if cap in self.emojis:
                     w, h = self.font.getsize("<")  # width and height of the letter
-                    Pilmoji(self.img).text((int(x), int(y)), cap, self.fill, self.font, stroke_width=self.stroke_width, stroke_fill=self.stroke_fill)  # Drawing the text character by character. This way spacing can be added between letters
+                    Pilmoji(self.img).text((int(x), int(y)), cap, font=self.font)  # Drawing the text character by character. This way spacing can be added between letters
                     x += w + self.letSpacing  # The next character must be drawn at an x position more to the right
                 else:
                     self.drawLine(x=x, y=y, caption=cap)
