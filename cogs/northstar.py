@@ -12,7 +12,7 @@ def setup(bot):
 
 class NorthstarCommands(commands.Cog, name="Northstar commands"):
     """Northstar commands, information about Northstar servers."""
-    COG_EMOJI = "♨️"
+    COG_EMOJI = "💫"
 
     def __init__(self, ctx):
         self.ctx = ctx
