@@ -211,8 +211,6 @@ class ManageCommands(commands.Cog, name="Manage"):
     async def addtrigger(self, ctx, trigger: str, reply: str, type: str):
         triggers = await self.define_triggers(ctx)
         triggers_list = triggers[str(ctx.guild.id)][type]["triggers"]
-        if type == "regex":
-            trigger = trigger.replace("_", " ")
         e = discord.Embed(title=f"🛠️ Trying to add trigger:", color=0x66FF99)
         old_reply = None
         try:
@@ -232,18 +230,11 @@ class ManageCommands(commands.Cog, name="Manage"):
     async def removetrigger(self, ctx, trigger: str, type: str):
         triggers = await self.define_triggers(ctx)
         triggers_list = triggers[str(ctx.guild.id)][type]["triggers"]
-        trigger = trigger.split(" ")
-        e = discord.Embed(
-            title=f"🛠️ Trying to remove triggers:", color=0x66FF99)
-        for item in trigger:
-            try:
-                if type == "regex":
-                    item = item.replace("_", " ")
-                reply = triggers_list[str(item)]
-                triggers_list.pop(str(item))
-                e.add_field(
-                    name=f"✅ Removed {item.replace(' ', '_')}", value=f"`{reply}`")
-            except:
-                e.add_field(name="❌ Couldn't find", value=f"`{item}`")
+        try:
+            reply = triggers_list[str(trigger)]
+            triggers_list.pop(str(trigger))
+            e = discord.Embed(title=f"✅ Removed {trigger}", description=f"`{reply}`", color=0x66FF99)
+        except:
+            e = discord.Embed(title=f"❌ Couldn't find", description=f"`{trigger}`", color=0xFF6969)
         await utils.sendembed(ctx, e, False)
         configs.save(self.ctx.triggers_path, "w", triggers)

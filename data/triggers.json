@@ -1,8 +1,20 @@
 {
     "196573388423168000": {
         "match": {
+            "toggle": true,
+            "triggers": {}
+        },
+        "regex": {
             "toggle": false,
             "triggers": {}
+        }
+    },
+    "920776187884732556": {
+        "match": {
+            "toggle": true,
+            "triggers": {
+                "June is over|Pride month is over": "\"Thank you for your suggestion. We have taken your feedback into consideration and based on it decided to extend the duration for which we use the fabulous Northstar icon.\n\nIn fact, we will increase its lifespan by one day every time somone asks to change it back to the blue version.\n\nBest regards\n~The Northstar moderation team.\""
+            }
         },
         "regex": {
             "toggle": false,

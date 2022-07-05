@@ -201,25 +201,24 @@ class Events(commands.Cog, name="Events"):
 
     @commands.Cog.listener("on_message")
     async def word_triggers(self, message):
-        if message.author.bot or isinstance(message.channel, discord.DMChannel):
-            return
-        await self.trigger(message, "match")
-        await self.trigger(message, "regex")
+        if not message.author.bot or not isinstance(message.channel, discord.DMChannel):
+            for type in self.ctx.triggers[str(message.guild.id)]:
+                if self.ctx.triggers[str(message.guild.id)][type]['toggle']:
+                    await self.trigger(message, type)
 
     async def trigger(self, message, type: str):
         if type == "regex":
-            msg = message.content.lower()
-        else:
             msg = message.content.split(" ")
+        else:
+            msg = message.content
         try:
-            if self.ctx.triggers[str(message.guild.id)][type]["toggle"]:
-                for trigger, reply in self.ctx.triggers[str(message.guild.id)][type]["triggers"].items():
-                    multi_trigger = list(trigger.split('|'))
-                    for triggers in multi_trigger:
-                        if triggers in msg:
-                            reply = random.choice(list(reply.split('|')))
-                            await message.reply(reply)
-                            break
+            for trigger, reply in self.ctx.triggers[str(message.guild.id)][type]["triggers"].items():
+                multi_trigger = list(trigger.split('|'))
+                for triggers in multi_trigger:
+                    if triggers.casefold() in msg.casefold():
+                        reply = random.choice(list(reply.split('|')))
+                        await message.reply(reply)
+                        break
         except:
             pass
 
