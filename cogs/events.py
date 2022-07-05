@@ -227,7 +227,7 @@ class Events(commands.Cog, name="Events"):
     async def purger(self):
         for guild in self.ctx.timed_purge.items():
             for channel, timed in self.ctx.timed_purge[str(guild[0])].items():
-                current_time = utils.current_milli_time()
+                current_time = utils.current_time()
                 delay = timed[0]
                 send_time = delay + timed[1] < current_time
                 if send_time:

@@ -273,7 +273,7 @@ def iso8601_to_epoch(datestring):
     return calendar.timegm(datetime.strptime(datestring, "%Y-%m-%dT%H:%M:%S.%f%z").timetuple())
 
 
-intervals = (
+intervals_milliseconds = (
     ('w', 6.048e+8),  # 60 * 60 * 24 * 7
     ('d', 8.64e+7),   # 60 * 60 * 24
     ('h', 3.6e+6),    # 60 * 60
@@ -285,7 +285,7 @@ intervals = (
 
 def display_time(milliseconds, granularity=2):
     result = []
-    for name, count in intervals:
+    for name, count in intervals_milliseconds:
         value = milliseconds // count
         if value:
             milliseconds -= value * count
@@ -293,8 +293,32 @@ def display_time(milliseconds, granularity=2):
     return ', '.join(result[:granularity])
 
 
+intervals_seconds = (
+    ('weeks', 604800),  # 60 * 60 * 24 * 7
+    ('days', 86400),    # 60 * 60 * 24
+    ('hours', 3600),    # 60 * 60
+    ('minutes', 60),
+    ('seconds', 1),
+)
+
+
+def display_time_s(seconds, granularity=2):
+    result = []
+
+    for name, count in intervals_seconds:
+        value = seconds // count
+        if value:
+            seconds -= value * count
+            if value == 1:
+                name = name.rstrip('s')
+            result.append(f"{int(value)}{name}")
+    return ', '.join(result[:granularity])
+
+
 def current_milli_time():
     return round(time.time() * 1000)
+def current_time():
+    return round(time.time())
 
 
 async def post(content):
