@@ -2,9 +2,8 @@ import discord
 import os
 import sys
 from discord.ext import commands
-from cogs import utils, configs
-
-extensions = utils.extensions()
+from cogs import configs
+from cogs.utils import Utils
 
 
 def setup(bot):
@@ -29,7 +28,7 @@ class ManageCommands(commands.Cog, name="Manage"):
         else:
             find = getattr(getattr(self, args[1]), args[2])
         print(find)
-        await utils.sendembed(ctx, discord.Embed(description=find), show_all=False, delete=3, delete_speed=5)
+        await Utils.sendembed(ctx, discord.Embed(description=find), show_all=False, delete=3, delete_speed=5)
 
     @commands.command(hidden=True, name="load")
     @commands.is_owner()
@@ -39,12 +38,12 @@ class ManageCommands(commands.Cog, name="Manage"):
             description=f"Trying to load modules \"{module}\"", color=0x69FF69)
         module = module.split(sep=" ")
         for cog in module:
-            if cog in extensions[0]:
+            if cog in self.ctx.extensions_list:
                 self.ctx.load_extension(f"cogs.{cog}")
                 e.add_field(name=f"{cog}", value="`✅` Success")
             else:
                 e.add_field(name=f"{cog}", value="`❌` Not found")
-        await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=5)
+        await Utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=5)
 
     @commands.command(hidden=True, name="unload")
     @commands.is_owner()
@@ -54,12 +53,12 @@ class ManageCommands(commands.Cog, name="Manage"):
             description=f"Trying to unload modules \"{module}\"", color=0x69FF69)
         module = module.split(sep=" ")
         for cog in module:
-            if cog in extensions[0]:
+            if cog in self.ctx.extensions_list:
                 self.ctx.unload_extension(f"cogs.{cog}")
                 e.add_field(name=f"{cog}", value="`✅` Success")
             else:
                 e.add_field(name=f"{cog}", value="`❌` Not found")
-        await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=5)
+        await Utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=5)
 
     @commands.command(hidden=True, name="reload")
     @commands.is_owner()
@@ -69,32 +68,32 @@ class ManageCommands(commands.Cog, name="Manage"):
             description=f"Trying to reload modules \"{module}\"", color=0x69FF69)
         module = module.split(sep=" ")
         for cog in module:
-            if cog in extensions[0]:
+            if cog in self.ctx.extensions_list:
                 self.ctx.reload_extension(f"cogs.{cog}")
                 e.add_field(name=f"{cog}", value="`✅` Success")
             elif cog == "all":
-                for cog in extensions[0]:
+                for cog in self.ctx.extensions_list:
                     self.ctx.reload_extension(f"cogs.{cog}")
                     e.add_field(name=f"{cog}", value="`✅` Success")
             else:
                 e.add_field(name=f"{cog}", value="`❌` Not found")
-        await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=5)
+        await Utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=5)
 
     @commands.command(hidden=True, name="restart")
     @commands.is_owner()
     async def restart(self, ctx):
         """Restarts the bot"""
-        await utils.delete_message(ctx)
+        await Utils.delete_message(ctx)
         os.execv(sys.executable, ['python'] + sys.argv)
 
     @commands.command(hidden=True, name="modules")
     @commands.is_owner()
     async def modules(self, ctx):
         """Lists modules"""
-        modules = ", ".join(extensions[0])
+        modules = ", ".join(self.ctx.extensions_list)
         e = discord.Embed(title=f'Modules found:',
                           description=modules, color=0x69FF69)
-        await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=5)
+        await Utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=5)
 
     @commands.command(hidden=True, name="prefix")
     @commands.has_permissions(administrator=True)
@@ -104,21 +103,21 @@ class ManageCommands(commands.Cog, name="Manage"):
             self.ctx.guild_prefixes[str(ctx.guild.id)] = prefix
             configs.save(self.ctx.guild_prefixes_path,
                          "w", self.ctx.guild_prefixes)
-            await utils.sendembed(ctx, discord.Embed(description=f'Prefix changed to: {prefix}'), False, 3, 5)
+            await Utils.sendembed(ctx, discord.Embed(description=f'Prefix changed to: {prefix}'), False, 3, 5)
         else:
-            await utils.sendembed(ctx, discord.Embed(description=f'My prefix is `{self.ctx.guild_prefixes[str(ctx.guild.id)]}` or {self.ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!'), False, 3, 20)
+            await Utils.sendembed(ctx, discord.Embed(description=f'My prefix is `{self.ctx.guild_prefixes[str(ctx.guild.id)]}` or {self.ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!'), False, 3, 20)
 
     @commands.group(hidden=True, name="triggers", invoke_without_command=True)
     @commands.has_permissions(administrator=True)
     async def triggers(self, ctx):
         """Triggers that reply whenever someone mentions a trigger"""
-        await utils.senderror(ctx, f"No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help triggers for more info")
+        await Utils.senderror(ctx, f"No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help triggers for more info")
 
     @triggers.group(hidden=True, name="match", invoke_without_command=True)
     @commands.has_permissions(administrator=True)
     async def match(self, ctx):
         """Text triggers that have a match in one of the user's words"""
-        await utils.senderror(ctx, f"No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help triggers match for more info")
+        await Utils.senderror(ctx, f"No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help triggers match for more info")
 
     @match.command(hidden=True, name="toggle")
     @commands.has_permissions(administrator=True)
@@ -148,7 +147,7 @@ class ManageCommands(commands.Cog, name="Manage"):
     @commands.has_permissions(administrator=True)
     async def regex(self, ctx):
         """Text triggers that have a regex match in one of the user's words"""
-        await utils.senderror(ctx, f"No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help triggers regex for more info")
+        await Utils.senderror(ctx, f"No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help triggers regex for more info")
 
     @regex.command(hidden=True, name="toggle")
     @commands.has_permissions(administrator=True)
@@ -190,10 +189,10 @@ class ManageCommands(commands.Cog, name="Manage"):
         triggers = await self.define_triggers(ctx)
         if triggers[str(ctx.guild.id)][type]["toggle"]:
             triggers[str(ctx.guild.id)][type]["toggle"] = False
-            await utils.sendembed(ctx, discord.Embed(description=f"❌ Disabled {type} triggers", color=0xFF6969), False)
+            await Utils.sendembed(ctx, discord.Embed(description=f"❌ Disabled {type} triggers", color=0xFF6969), False)
         else:
             triggers[str(ctx.guild.id)][type]["toggle"] = True
-            await utils.sendembed(ctx, discord.Embed(description=f"✅ Enabled {type} triggers", color=0x66FF99), False)
+            await Utils.sendembed(ctx, discord.Embed(description=f"✅ Enabled {type} triggers", color=0x66FF99), False)
         configs.save(self.ctx.triggers_path, "w", triggers)
 
     async def listtriggers(self, ctx, type: str):
@@ -204,9 +203,9 @@ class ManageCommands(commands.Cog, name="Manage"):
                 if type == "regex":
                     trigger = trigger.replace(" ", "_")
                 e.add_field(name=trigger, value=reply)
-            await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
+            await Utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
         else:
-            await utils.senderror(ctx, "No triggers found")
+            await Utils.senderror(ctx, "No triggers found")
 
     async def addtrigger(self, ctx, trigger: str, reply: str, type: str):
         triggers = await self.define_triggers(ctx)
@@ -224,7 +223,7 @@ class ManageCommands(commands.Cog, name="Manage"):
         else:
             e.add_field(
                 name=f"Trigger: {', '.join(trigger.split('|'))}", value=f"**Reply:** `{reply}`")
-        await utils.sendembed(ctx, e, False)
+        await Utils.sendembed(ctx, e, False)
         configs.save(self.ctx.triggers_path, "w", triggers)
 
     async def removetrigger(self, ctx, trigger: str, type: str):
@@ -236,5 +235,5 @@ class ManageCommands(commands.Cog, name="Manage"):
             e = discord.Embed(title=f"✅ Removed {trigger}", description=f"`{reply}`", color=0x66FF99)
         except:
             e = discord.Embed(title=f"❌ Couldn't find", description=f"`{trigger}`", color=0xFF6969)
-        await utils.sendembed(ctx, e, False)
+        await Utils.sendembed(ctx, e, False)
         configs.save(self.ctx.triggers_path, "w", triggers)

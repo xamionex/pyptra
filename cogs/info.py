@@ -1,7 +1,7 @@
 from typing import Optional
 import discord
 from discord.ext import commands, pages, bridge
-from cogs import utils
+from cogs.utils import Utils
 
 installation_options = [
     discord.OptionChoice(name="help",
@@ -33,7 +33,7 @@ class InfoCommands(commands.Cog, name="Informational"):
     async def userinfo(self, ctx, user: Optional[discord.Member]):
         """Shows you information about users"""
         user = user or ctx.author
-        date_registered = utils.iso8601_to_epoch(user.created_at.isoformat())
+        date_registered = Utils.iso8601_to_epoch(user.created_at.isoformat())
         e = discord.Embed(color=0xdfa3ff, description=user.mention)
         try:
             e.set_author(name=str(user), icon_url=user.avatar.url)
@@ -45,7 +45,7 @@ class InfoCommands(commands.Cog, name="Informational"):
             value=f"<t:{date_registered}:f> (<t:{date_registered}:R>)", inline=False)
         if isinstance(ctx.channel.type, discord.DMChannel) == False:
             try:
-                date_joined = utils.iso8601_to_epoch(
+                date_joined = Utils.iso8601_to_epoch(
                     user.joined_at.isoformat())
                 members = sorted(ctx.guild.members, key=lambda m: m.joined_at)
                 e.add_field(
@@ -72,7 +72,7 @@ class InfoCommands(commands.Cog, name="Informational"):
         # value=perm_string,
         # inline=False) # way too big for my liking tbh
         e.set_footer(text='ID: ' + str(user.id))
-        await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
+        await Utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
 
     @bridge.bridge_command(name="pfp")
     @commands.cooldown(1, 10, commands.BucketType.user)
@@ -82,7 +82,7 @@ class InfoCommands(commands.Cog, name="Informational"):
         e = discord.Embed(
             color=0xdfa3ff, description=f'{user.mention} - [Link to profile picture]({user.avatar.url})')
         e.set_image(url=user.avatar.url)
-        await utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
+        await Utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=20)
 
     @bridge.bridge_command(name="ping")
     @commands.cooldown(1, 10, commands.BucketType.user)
@@ -90,7 +90,7 @@ class InfoCommands(commands.Cog, name="Informational"):
         """Tells you the bot's ping."""
         e = discord.Embed(title=f"Pong! `{round(self.ctx.latency * 1000)}ms`")
         e.set_image(url="https://c.tenor.com/LqNPvLVdzHoAAAAC/cat-ping.gif")
-        await utils.sendembed(ctx, e, show_all=False, delete=3)
+        await Utils.sendembed(ctx, e, show_all=False, delete=3)
 
     @bridge.bridge_command(name="installation")
     @commands.cooldown(1, 10, commands.BucketType.user)
@@ -118,12 +118,12 @@ class InfoCommands(commands.Cog, name="Informational"):
             show_menu=True,
             show_indicator=False,
             show_disabled=False)
-        if await utils.CheckInstance(ctx):
+        if await Utils.CheckInstance(ctx):
             try:
                 await paginator.send(ctx, target=ctx.author)
                 await ctx.reply("Check your DMs!", mention_author=False)
             except:
-                await utils.senderror(ctx, "I couldn't DM you!")
+                await Utils.senderror(ctx, "I couldn't DM you!")
         else:
             await paginator.respond(ctx.interaction, ephemeral=True)
 
@@ -137,7 +137,7 @@ class InfoCommands(commands.Cog, name="Informational"):
              self.get_pages_automatic()[0],
              discord.Embed(description=f"{ctx.author.mention} just updated the installation embeds in <#922662496588943430>")]
         if option is not None:
-            await utils.sendembed(ctx, e[3], show_all=False, delete=3, delete_speed=20)
+            await Utils.sendembed(ctx, e[3], show_all=False, delete=3, delete_speed=20)
             channel = ctx.guild.get_channel(922662496588943430)
             msg = [await channel.fetch_message(968179173753516112), await channel.fetch_message(968179174407831556), await channel.fetch_message(968179175729012736)]
             await msg[0].edit(embed=e[0])

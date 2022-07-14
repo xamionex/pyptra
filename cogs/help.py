@@ -1,5 +1,5 @@
 from typing import Optional
-from cogs import utils
+from cogs.utils import Utils
 import discord
 from discord.ext import commands
 
@@ -160,7 +160,7 @@ class MyHelpCommand(commands.MinimalHelpCommand):
 
     async def finally_send_embed(self):
         ctx = self.context
-        if await utils.CheckInstance(ctx) and ctx.guild:
+        if await Utils.CheckInstance(ctx) and ctx.guild:
             await ctx.reply("Check your DMs!", mention_author=False)
 
     async def filter_commands(self, commands, *, sort=False, key=None, show_hidden=False):

@@ -1,11 +1,13 @@
 import asyncio
 import json
+import os
 import discord
 import random
 from discord.ext import commands, bridge, tasks
 # cogs
 import secrets
-from cogs import block, utils
+from cogs import block
+from cogs.utils import Utils
 
 intents = discord.Intents.default()
 intents.members = True
@@ -78,19 +80,30 @@ async def spam_terror_after_loop():
 @bot.event
 async def on_message(message):
     # remove markdown
-    message.content = utils.escape_markdown(message.content)
+    message.content = Utils.escape_markdown(message.content)
     for x, v in {"french": "fr\*nch", "france": "fr\*nce"}.items():
         message.content = message.content.replace(x, v)
     # stop if user is bot or is mentioning @everyone
     if message.mention_everyone or message.author.bot:
         return
 
-extensions = utils.extensions()
-for module in extensions[0]:
+
+def extensions():
+    extensions = []
+    skip = ["suggestions"]
+    for module in next(os.walk("cogs"), (None, None, []))[2]:  # [] if no file
+        module = module.replace('.py', '')
+        if module not in skip:
+            extensions.append(module)
+    bot.extensions_list, bot.skip_list = extensions, skip
+    return extensions
+
+
+for module in extensions():
     bot.load_extension(f"cogs.{module}")
 print("Found", end=" ")
-print(*extensions[0], sep=', ')
+print(*bot.extensions_list, sep=', ')
 print("Ignored", end=" ")
-print(*extensions[1], sep=', ')
+print(*bot.skip_list, sep=', ')
 spam_terror.start()
 bot.run(secrets.secret)

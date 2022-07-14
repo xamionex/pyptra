@@ -1,14 +1,11 @@
-import asyncio
-import threading
 import main
 import discord
 from discord.ext import commands, tasks
 # data
-import time
 import random
-import re
 # cogs
-from cogs import utils, users, configs
+from cogs import users, configs
+from cogs.utils import Utils
 # afk command data
 import datetime
 import humanize
@@ -38,7 +35,7 @@ class Events(commands.Cog, name="Events"):
             raise error
         elif isinstance(error, commands.CommandOnCooldown):
             e = discord.Embed(description=f"`❌` {error}", color=0xFF6969)
-            await utils.sendembed(ctx, e, show_all=False)
+            await Utils.sendembed(ctx, e, show_all=False)
         elif isinstance(error, discord.ApplicationCommandError):
             e = discord.Embed(description=f"`❌` {error}", color=0xFF6969)
             await ctx.respond(embed=e, ephemeral=True)
@@ -139,7 +136,7 @@ class Events(commands.Cog, name="Events"):
                 reason = self.ctx.afk[f'{member.id}']['reason']
 
                 # gets unix time
-                unix_time = utils.current_milli_time() - self.ctx.afk[f'{member.id}']['time']
+                unix_time = Utils.current_milli_time() - self.ctx.afk[f'{member.id}']['time']
 
                 # user was afk for time.now() - time
                 counter = humanize.naturaltime(datetime.datetime.now() - datetime.timedelta(seconds=unix_time // 1000))
@@ -159,7 +156,7 @@ class Events(commands.Cog, name="Events"):
         # if message's author is afk continue
         if list(message.content.split(" "))[0] != f'{prefix}afk' and self.ctx.afk[f'{message.author.id}']['AFK']:
             # counter = unix now - unix since afk in format 0d 0h 0m 0s and if any of them except seconds are 0 remove them
-            counter = utils.display_time(utils.current_milli_time() - self.ctx.afk[f'{message.author.id}']['time'])
+            counter = Utils.display_time(Utils.current_milli_time() - self.ctx.afk[f'{message.author.id}']['time'])
 
             # get mentions
             mentionz = self.ctx.afk[f'{message.author.id}']['mentions']
@@ -201,7 +198,7 @@ class Events(commands.Cog, name="Events"):
 
     @commands.Cog.listener("on_message")
     async def word_triggers(self, message):
-        if not message.author.bot or not isinstance(message.channel, discord.DMChannel):
+        if not message.author.bot and not message.channel.type == discord.ChannelType.private:
             for type in self.ctx.triggers[str(message.guild.id)]:
                 if self.ctx.triggers[str(message.guild.id)][type]['toggle']:
                     await self.trigger(message, type)
@@ -226,15 +223,14 @@ class Events(commands.Cog, name="Events"):
     async def purger(self):
         for guild in self.ctx.timed_purge.items():
             for channel, timed in self.ctx.timed_purge[str(guild[0])].items():
-                current_time = utils.current_time()
+                current_time = Utils.current_time()
                 delay = timed[0]
                 send_time = delay + timed[1] < current_time
                 if send_time:
                     try:
                         timed[1] = current_time
                         await self.ctx.get_channel(int(channel)).purge(limit=999999)
-                        configs.save(self.ctx.timed_purge_path,
-                                     "w", self.ctx.timed_purge)
+                        configs.save(self.ctx.timed_purge_path, "w", self.ctx.timed_purge)
                     except:
                         pass
 
@@ -287,14 +283,14 @@ class Loops(commands.Cog):
         input_spam = [channel, seconds, message]
 
         if await EventUtils.get_channel_bool(self, ctx, input_spam):
-            await utils.senderror(ctx, f"Channel already has repeating message.")
+            await Utils.senderror(ctx, f"Channel already has repeating message.")
         else:
             await EventUtils.add_channel(self, ctx, input_spam)
             e = discord.Embed(title="Repeating message made:")
             e.add_field(name="Message", value=message)
             e.add_field(name="Repeats each", value=f"{seconds}s")
             e.add_field(name="In channel", value=channel.mention)
-            await utils.sendembed(ctx, e)
+            await Utils.sendembed(ctx, e)
             await EventUtils.add_channel(self, ctx, input_spam)
 
     @channels.command()
@@ -302,9 +298,9 @@ class Loops(commands.Cog):
         spam = self.ctx.spam
         if str(channel.id) in spam[str(channel.guild.id)]:
             spam[str(channel.guild.id)].pop(str(channel.id))
-            await utils.sendembed(ctx, e=discord.Embed(description=f"Removed {channel.mention}", color=0x66FF99))
+            await Utils.sendembed(ctx, e=discord.Embed(description=f"Removed {channel.mention}", color=0x66FF99))
         else:
-            await utils.senderror(ctx, f"{channel.mention} isn't in data")
+            await Utils.senderror(ctx, f"{channel.mention} isn't in data")
 
     @channels.command()
     async def list(self, ctx):
@@ -314,7 +310,7 @@ class Loops(commands.Cog):
             for id, value in data.items():
                 e.add_field(
                     name=f"{id} - every {value[1]}s", value=f"{value[0]}")
-        await utils.sendembed(ctx, e)
+        await Utils.sendembed(ctx, e)
 
 
 class EventUtils():

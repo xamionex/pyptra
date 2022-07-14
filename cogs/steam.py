@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands, bridge
 import aiohttp
 import requests
-from cogs import utils
+from cogs.utils import Utils as utils
 import main
 
 

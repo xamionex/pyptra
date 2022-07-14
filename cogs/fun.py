@@ -1,7 +1,5 @@
 import re
 from emoji import EMOJI_UNICODE
-import datetime
-import time
 import textwrap
 import requests
 from PIL import Image, ImageDraw, ImageSequence, ImageFont
@@ -9,7 +7,8 @@ from pilmoji import Pilmoji
 from typing import Final, Optional
 import discord
 from discord.ext import commands, bridge
-from cogs import block, utils
+from cogs import block
+from cogs.utils import Utils
 import random
 # get image from url
 import aiohttp
@@ -37,31 +36,20 @@ class FunCommands(commands.Cog, name="Fun"):
 
     async def checkping(self, ctx, member):
         if await block.BlockCommands.get_perm(self, ctx, "ping", member):
-            await utils.senderror(ctx, f"This person has disallowed me from using them in commands.")
+            await Utils.senderror(ctx, f"This person has disallowed me from using them in commands.")
 
     @bridge.bridge_command(name="gif")
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def gif(self, ctx, member: Optional[discord.member.Member], emoji: Optional[discord.PartialEmoji], *, caption: str = None):
         """Make a caption on a gif"""
-        start_time = utils.current_milli_time()
-        msg = await ctx.respond("Trying to create...")
+        start_time = Utils.current_milli_time()
+        self.msg = await ctx.respond("Trying to create...")
         dm = False
-        if msg.channel.type == discord.ChannelType.private:
+        if self.msg.channel.type == discord.ChannelType.private:
             dm = True
         elif not ctx.author.guild_permissions.manage_messages:
-            try:
-                await msg.delete()
-            except:
-                await msg.delete_original_message()
-            await utils.senderror(ctx, "You are missing Manage Messages permission(s) to run this command. (DM me to use this command freely.)")
-            return
+            await Utils.senderror(ctx, "You are missing Manage Messages permission(s) to run this command. (DM me to use this command freely.)", self.msg)
         what, frames, duration = await FunCommands.get_image(self, ctx, member, emoji, caption, dm)
-        if self.ctx.get_image_error is not None:
-            if await utils.CheckInstance(ctx):
-                await msg.edit(f"Failed due to error: {self.ctx.get_image_error}")
-            else:
-                await msg.edit_original_message(content=f"Failed due to error: {self.ctx.get_image_error}")
-            return
         # file-like container to hold the image in memory
         img = BytesIO()  # sets image as "img"
         # Save the frames as a new image
@@ -75,11 +63,11 @@ class FunCommands(commands.Cog, name="Fun"):
             e.set_footer(text="Protip: use pos=top (or center) before your text to display it at the top!")
         else:
             e.set_footer(text="Protip: you can enter a link before your text to use that instead!")
-        counter = utils.display_time(utils.current_milli_time() - start_time)
-        if await utils.CheckInstance(ctx):
-            await msg.edit(f"Done in {counter}", embed=e, file=file)
+        counter = Utils.display_time(Utils.current_milli_time() - start_time)
+        if await Utils.CheckInstance(ctx):
+            await self.msg.edit(f"Done in {counter}", embed=e, file=file)
         else:
-            await msg.edit_original_message(content=f"Done in {counter}", embed=e, file=file)
+            await self.msg.edit_original_message(content=f"Done in {counter}", embed=e, file=file)
 
     @bridge.bridge_command(hidden=True, name="combinegif")
     @commands.is_owner()
@@ -87,8 +75,8 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def combine(self, ctx, link1, link2):
         """Combine two gifs"""
-        link1 = utils.remove_newlines(link1)
-        link2 = utils.remove_newlines(link2)
+        link1 = Utils.remove_newlines(link1)
+        link2 = Utils.remove_newlines(link2)
         keys = ["<", ">"]
         for key in keys:
             link1, link2 = link1.replace(key, ''), link2.replace(key, '')
@@ -112,7 +100,7 @@ class FunCommands(commands.Cog, name="Fun"):
         file = discord.File(img, filename="combine.gif")
         e = discord.Embed(description=f"{ctx.author.mention} combined {what1} with {what2}")
         e.set_image(url=f"attachment://combine.gif")
-        if await utils.CheckInstance(ctx):
+        if await Utils.CheckInstance(ctx):
             await ctx.respond(embed=e, file=file, mention_author=False)
         else:
             await ctx.respond(embed=e, file=file)
@@ -122,25 +110,15 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def pet(self, ctx, member: Optional[discord.member.Member], emoji: Optional[discord.PartialEmoji], *, caption: str = None):
         """Pet someone :D"""
-        start_time = utils.current_milli_time()
-        msg = await ctx.respond("Trying to create...")
+        start_time = Utils.current_milli_time()
+        self.msg = await ctx.respond("Trying to create...")
         dm = False
-        if msg.channel.type == discord.ChannelType.private:
+        if self.msg.channel.type == discord.ChannelType.private:
             dm = True
         elif not dm:
             if not await FunCommands.checkperm(self, ctx, "pet"):
-                try:
-                    await msg.delete()
-                except:
-                    await msg.delete_original_message()
-                await utils.senderror(ctx, "You are missing Pet permission to run this command. (DM me to use this command freely.)")
+                await Utils.senderror(ctx, "You are missing Pet permission to run this command. (DM me to use this command freely.)", self.msg)
         what, frames, duration = await FunCommands.get_image(self, ctx, member, emoji, caption, dm)
-        if self.ctx.get_image_error is not None:
-            if await utils.CheckInstance(ctx):
-                await msg.edit(f"Failed due to error: {self.ctx.get_image_error}")
-            else:
-                await msg.edit_original_message(content=f"Failed due to error: {self.ctx.get_image_error}")
-            return
         # file-like container to hold the image in memory
         source, dest = BytesIO(), BytesIO()  # sets image as "source" and container to store the petpet gif in memory
         # Save the frames into source
@@ -152,25 +130,21 @@ class FunCommands(commands.Cog, name="Fun"):
         file = discord.File(dest, filename="petpet.gif")
         e = discord.Embed(description=f"{ctx.author.mention} has pet {what}")
         e.set_image(url=f"attachment://petpet.gif")
-        counter = utils.display_time(utils.current_milli_time() - start_time)
-        if await utils.CheckInstance(ctx):
-            await msg.edit(f"Done in {counter}", embed=e, file=file)
+        counter = Utils.display_time(Utils.current_milli_time() - start_time)
+        if await Utils.CheckInstance(ctx):
+            await self.msg.edit(f"Done in {counter}", embed=e, file=file)
         else:
-            await msg.edit_original_message(content=f"Done in {counter}", embed=e, file=file)
+            await self.msg.edit_original_message(content=f"Done in {counter}", embed=e, file=file)
 
     async def get_image(self, ctx, member, emoji, caption, dm):
         self.ctx.get_image_error = None
         caption, text, textposition, textcolor, url, attachment = await FunCommands.caption_args(self, ctx, caption)
         image = attachment or member or emoji or url or ctx.author
         image, what = await FunCommands.get_url(self, ctx, image, dm)
-        if self.ctx.get_image_error is not None:
-            return None, None, None
         if text:
             frames, duration = await FunCommands.set_frames(self, ctx, image, caption, textposition, textcolor)
         else:
             frames, duration = await FunCommands.set_frames(self, ctx, image)
-        if self.ctx.get_image_error is not None:
-            return None, None, None
         return what, frames, duration
 
     async def caption_args(self, ctx, caption):
@@ -179,7 +153,7 @@ class FunCommands(commands.Cog, name="Fun"):
             keys = ["`", "\\"]
             for key in keys:
                 caption = caption.replace(key, '')
-            caption = utils.remove_newlines(caption)
+            caption = Utils.remove_newlines(caption)
             caption = caption.split(" ")
             rem = []
             for item in caption:
@@ -235,14 +209,12 @@ class FunCommands(commands.Cog, name="Fun"):
             try:
                 image = image.avatar.url
             except:
-                self.ctx.get_image_error = "Could not get users avatar."
-                return None, None
+                await Utils.senderror(ctx, "Could not get users avatar.", self.msg)
         elif type(image) == str:
             async with aiohttp.ClientSession() as session:
                 async with session.get(image) as url:
                     if url.status != 200:
-                        self.ctx.get_image_error = "Could not download file"
-                        return None, None
+                        await Utils.senderror(ctx, "Could not download file", self.msg)
                     image = url.url
                     await session.close()
         return image, what
@@ -251,12 +223,11 @@ class FunCommands(commands.Cog, name="Fun"):
         """get frames from gif (url) and apply text (if present)"""
         if textposition is not None:
             if textposition not in ["top", "bottom", "center"]:
-                self.ctx.get_image_error = "Text position has to be either top bottom or center"
-                return None, None
+                await Utils.senderror(ctx, "Text position has to be either top bottom or center", self.msg)
         im = Image.open(requests.get(image, stream=True).raw)
-        if im.n_frames >= 60:
-            self.ctx.get_image_error = f"Too many frames in gif. ({im.n_frames})"
-            return None, None
+        frames = im.n_frames or None
+        if frames is not None and frames >= 60:
+            await Utils.senderror(ctx, f"Too many frames in gif. ({im.n_frames})", self.msg)
         # A list of the frames to be outputted
         frames = []
         try:
@@ -273,7 +244,7 @@ class FunCommands(commands.Cog, name="Fun"):
             buffer_old, buffer_new = BytesIO(), BytesIO()
 
             # save current frame to 1st buffer
-            frame.quantize(254, dither=Image.FLOYDSTEINBERG).save(buffer_old, format="PNG")
+            frame.convert("RGBA").quantize(254, dither=Image.FLOYDSTEINBERG).save(buffer_old, format="PNG")
 
             if text is not None:
                 # put old buffer through editor with text
@@ -293,7 +264,7 @@ class FunCommands(commands.Cog, name="Fun"):
     async def hug(self, ctx, *, member: Optional[discord.Member]):
         """Hug someone :O"""
         if not await FunCommands.checkperm(self, ctx, "weird"):
-            await utils.senderror(ctx, "You are missing \"weird\" permission to run this command. (DM me to use this command freely.)")
+            await Utils.senderror(ctx, "You are missing \"weird\" permission to run this command. (DM me to use this command freely.)")
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(self.ctx.hug_words_bot))} me!", color=0x0690FF)
@@ -302,7 +273,7 @@ class FunCommands(commands.Cog, name="Fun"):
             e = discord.Embed(
                 description=f"{ctx.author.mention} {(random.choice(self.ctx.hug_words))} {member.mention}", color=0x0690FF)
         e.set_image(url=(random.choice(self.ctx.hug_gifs)))
-        await utils.sendembed(ctx, e)
+        await Utils.sendembed(ctx, e)
 
     @commands.command(hidden=True, name="kiss")
     @commands.guild_only()
@@ -310,7 +281,7 @@ class FunCommands(commands.Cog, name="Fun"):
     async def kiss(self, ctx, *, member: Optional[discord.Member]):
         """Kiss someone :O"""
         if not await FunCommands.checkperm(self, ctx, "weird"):
-            await utils.senderror(ctx, "You are missing \"weird\" permission to run this command. (DM me to use this command freely.)")
+            await Utils.senderror(ctx, "You are missing \"weird\" permission to run this command. (DM me to use this command freely.)")
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(self.ctx.kiss_words_bot))} me!", color=0x0690FF)
@@ -319,7 +290,7 @@ class FunCommands(commands.Cog, name="Fun"):
             e = discord.Embed(
                 description=f"{ctx.author.mention} {(random.choice(self.ctx.kiss_words))} {member.mention}", color=0x0690FF)
         e.set_image(url=(random.choice(self.ctx.kiss_gifs)))
-        await utils.sendembed(ctx, e)
+        await Utils.sendembed(ctx, e)
 
     @commands.command(hidden=True, name="fall")
     @commands.guild_only()
@@ -327,7 +298,7 @@ class FunCommands(commands.Cog, name="Fun"):
     async def fall(self, ctx, *, member: Optional[discord.Member]):
         """Make someone fall >:)"""
         if not await FunCommands.checkperm(self, ctx, "joke"):
-            await utils.senderror(ctx, "You are missing \"joke\" permission to run this command. (DM me to use this command freely.)")
+            await Utils.senderror(ctx, "You are missing \"joke\" permission to run this command. (DM me to use this command freely.)")
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} you fell", color=0xFF6969)
@@ -336,7 +307,7 @@ class FunCommands(commands.Cog, name="Fun"):
                 description=f"{ctx.author.mention} made {member.mention} fall!", color=0xFF6969)
         e.set_thumbnail(url=(
             "https://media.discordapp.net/attachments/854984817862508565/883437876493307924/image0-2.gif"))
-        await utils.sendembed(ctx, e)
+        await Utils.sendembed(ctx, e)
 
     @commands.command(hidden=True, name="promote")
     @commands.guild_only()
@@ -344,14 +315,14 @@ class FunCommands(commands.Cog, name="Fun"):
     async def promote(self, ctx, member: discord.Member, *, message=None):
         """Promote someone :D"""
         if not await FunCommands.checkperm(self, ctx, "joke"):
-            await utils.senderror(ctx, "You are missing \"joke\" permission to run this command. (DM me to use this command freely.)")
+            await Utils.senderror(ctx, "You are missing \"joke\" permission to run this command. (DM me to use this command freely.)")
         if member == ctx.author:
             e = discord.Embed(
                 description=f"{ctx.author.mention} promoted themselves to {message}", color=0xFF6969)
         else:
             e = discord.Embed(
                 description=f"{ctx.author.mention} promoted {member.mention} to {message}", color=0xFF6969)
-        await utils.sendembed(ctx, e)
+        await Utils.sendembed(ctx, e)
 
     @commands.command(hidden=True, name="noclip")
     @commands.guild_only()
@@ -362,7 +333,7 @@ class FunCommands(commands.Cog, name="Fun"):
             description=f"{ctx.author.mention} is going rogue..", color=0xff0000)
         e.set_image(
             url=("https://c.tenor.com/xnQ97QtwQGkAAAAC/mm2roblox-fly-and-use-noclip.gif"))
-        await utils.sendembed(ctx, e)
+        await Utils.sendembed(ctx, e)
 
     @commands.command(hidden=True, name="abuse")
     @commands.guild_only()
@@ -377,7 +348,7 @@ class FunCommands(commands.Cog, name="Fun"):
                 description=f"{ctx.author.mention} is going to abuse {member.mention} 😈", color=0xff0000)
         e.set_image(
             url=("https://i.pinimg.com/originals/e3/15/55/e31555da640e9f8afe59239ee1c2fc37.gif"))
-        await utils.sendembed(ctx, e)
+        await Utils.sendembed(ctx, e)
 
 
 class Editor:

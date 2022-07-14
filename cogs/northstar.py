@@ -2,7 +2,7 @@ import re
 import discord
 from discord.ext import commands
 import aiohttp
-from cogs import utils
+from cogs.utils import Utils as utils
 import urllib.parse
 
 
