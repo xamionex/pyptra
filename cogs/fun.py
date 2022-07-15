@@ -225,15 +225,11 @@ class FunCommands(commands.Cog, name="Fun"):
             if textposition not in ["top", "bottom", "center"]:
                 await Utils.senderror(ctx, "Text position has to be either top bottom or center", self.msg)
         im = Image.open(requests.get(image, stream=True).raw)
-        frames = im.n_frames or None
-        if frames is not None and frames >= 60:
-            await Utils.senderror(ctx, f"Too many frames in gif. ({im.n_frames})", self.msg)
+        [await Utils.senderror(ctx, f"Too many frames in gif. ({im.n_frames})", self.msg) if im.n_frames is not None and im.n_frames >= 60 else None]
+        # set the duration of the new gif to the same as the old one else 1 (because sometimes it's not a gif, so no duration)
+        duration = [im.info['duration'] if 'duration' in im.info else 1][0]
         # A list of the frames to be outputted
         frames = []
-        try:
-            duration = im.info['duration']
-        except:
-            duration = 1
         # Loop over each frame in the animated image
         for frame in ImageSequence.Iterator(im):
             # However, 'frame' is still the animated image with many frames
@@ -241,21 +237,14 @@ class FunCommands(commands.Cog, name="Fun"):
             # For our list of frames, we only want the current frame
             # Saving the image without 'save_all' will turn it into a single frame image, and we can then re-open it
             # To be efficient, we will save it to a buffer, rather than to file
-            buffer_old, buffer_new = BytesIO(), BytesIO()
-
+            buffer = [BytesIO(), BytesIO()]
             # save current frame to 1st buffer
-            frame.convert("RGBA").quantize(254, dither=Image.FLOYDSTEINBERG).save(buffer_old, format="PNG")
-
-            if text is not None:
-                # put old buffer through editor with text
-                editor = Editor(text, buffer_old, textposition, textcolor)
-            else:
-                # put old buffer through editor without text
-                editor = Editor(None, buffer_old)
-
-            # Then append the single frame image to the list of frames
-            editor.draw().save(buffer_new, "GIF")
-            frames.append(Image.open(buffer_new))
+            frame.convert("RGBA").quantize(254, dither=Image.FLOYDSTEINBERG).save(buffer[0], format="PNG")
+            # if text is used, add it, else skip text
+            # then add the frame which is edited to the 2nd buffer
+            [Editor(text, buffer[0], textposition, textcolor) if text is not None else Editor(None, buffer[0])][0].draw().save(buffer[1], "GIF")
+            # finally add the finished frame from the 2nd buffer to the frame list
+            frames.append(Image.open(buffer[1]))
         return frames, duration
 
     @commands.command(hidden=True, name="hug")
