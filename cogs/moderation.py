@@ -19,20 +19,17 @@ class ModerationCommands(commands.Cog, name="Moderation"):
     @commands.command(hidden=True, name="purge")
     @commands.has_permissions(administrator=True)
     @commands.bot_has_permissions(manage_messages=True)
-    async def purge(self, ctx, channel: Optional[discord.TextChannel], user: Optional[discord.Member], amount: int = None):
+    async def purge(self, ctx, channel: Optional[discord.TextChannel], user: Optional[discord.Member], amount: int):
         """Purge a channel or user"""
         await Utils.delete_command_message(ctx)
-        if amount:
-            if channel and user:
-                await channel.purge(limit=amount, check=lambda m: m.author == user)
-            elif channel:
-                await channel.purge(limit=amount)
-            elif user:
-                await ctx.channel.purge(limit=amount, check=lambda m: m.author == user)
-            else:
-                await ctx.channel.purge(limit=amount)
+        if channel and user:
+            await channel.purge(limit=amount, check=lambda m: m.author == user and not m.pinned)
+        elif channel:
+            await channel.purge(limit=amount, check=lambda m: not m.pinned)
+        elif user:
+            await ctx.channel.purge(limit=amount, check=lambda m: m.author == user and not m.pinned)
         else:
-            await Utils.send_error(ctx, "Specify amount of messages to delete")
+            await ctx.channel.purge(limit=amount, check=lambda m: not m.pinned)
 
     @commands.group(hidden=True, name="timedpurge", invoke_without_command=True)
     @commands.has_permissions(administrator=True)

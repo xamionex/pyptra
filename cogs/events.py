@@ -220,6 +220,7 @@ class Events(commands.Cog, name="Events"):
 
     @tasks.loop()
     async def purger(self):
+        rem = [False, None, None]
         for guild in self.ctx.timed_purge.items():
             for channel, timed in self.ctx.timed_purge[str(guild[0])].items():
                 # sets the current time
@@ -229,11 +230,14 @@ class Events(commands.Cog, name="Events"):
                     # sets current time in list
                     timed[1] = current_time
                     chnl = self.ctx.get_channel(int(channel))
-                    if type(chnl) is not None:
-                        await chnl.purge(limit=999999)
+                    if chnl is not None:
+                        await chnl.purge(limit=None, check=lambda m: not m.pinned)
                     else:
-                        self.ctx.timed_purge[str(guild[0])].pop(str(channel))
+                        rem = [True, str(guild[0]), str(channel)]
                     configs.save(self.ctx.timed_purge_path, "w", self.ctx.timed_purge)
+        if rem[0]:
+            self.ctx.timed_purge[rem[1]].pop(rem[2])
+            configs.save(self.ctx.timed_purge_path, "w", self.ctx.timed_purge)
 
     @purger.before_loop
     async def purger_before_loop(self):
