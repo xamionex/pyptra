@@ -17,6 +17,7 @@ class ModerationCommands(commands.Cog, name="Moderation"):
         self.ctx = ctx
 
     @commands.command(hidden=True, name="purge")
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     @commands.bot_has_permissions(manage_messages=True)
     async def purge(self, ctx, channel: Optional[discord.TextChannel], user: Optional[discord.Member], amount: int):
@@ -32,6 +33,7 @@ class ModerationCommands(commands.Cog, name="Moderation"):
             await ctx.channel.purge(limit=amount, check=lambda m: not m.pinned)
 
     @commands.group(hidden=True, name="timedpurge", invoke_without_command=True)
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     @commands.bot_has_permissions(manage_messages=True)
     async def timed_purge(self, ctx):
@@ -39,7 +41,9 @@ class ModerationCommands(commands.Cog, name="Moderation"):
         await Utils.send_error(ctx, f"No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help timedpurge for more info")
 
     @timed_purge.command(name="add")
-    @commands.cooldown(1, 300, commands.BucketType.user)
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    @commands.bot_has_permissions(manage_messages=True)
     async def add_purge(self, ctx, channel: Optional[discord.TextChannel], interval: int = None):
         """Add a purge to a channel that happens in intervals"""
         timed_purge = self.ctx.timed_purge
@@ -52,18 +56,37 @@ class ModerationCommands(commands.Cog, name="Moderation"):
         configs.save(self.ctx.timed_purge_path, "w", timed_purge)
 
     @timed_purge.command(name="rem")
-    @commands.cooldown(1, 300, commands.BucketType.user)
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    @commands.bot_has_permissions(manage_messages=True)
     async def rem_purge(self, ctx, channel: Optional[discord.TextChannel]):
         """Remove a purge from a channel"""
-        timed_purge = self.ctx.timed_purge
-        try:
-            timed_purge[str(ctx.guild.id)].pop(str(channel.id))
+        channels = self.ctx.timed_purge[str(ctx.guild.id)]
+        if str(channel.id) in channels:
+            channels.pop(str(channel.id))
             await Utils.send_embed(ctx, discord.Embed(description=f"Removed {channel.mention} from timed purges"), False)
-        except:
+        else:
             await Utils.send_error(ctx, "That channel doesn't have a timed purge")
-        configs.save(self.ctx.timed_purge_path, "w", timed_purge)
+        configs.save(self.ctx.timed_purge_path, "w", channels)
+
+    @timed_purge.command(name="reset")
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    @commands.bot_has_permissions(manage_messages=True)
+    async def reset_purge(self, ctx, channel: Optional[discord.TextChannel]):
+        """Reset a purge in a channel"""
+        channels = self.ctx.timed_purge[str(ctx.guild.id)]
+        if str(channel.id) in channels:
+            channels[(str(channel.id))][1] = 0
+            await Utils.send_embed(ctx, discord.Embed(description=f"Reset {channel.mention}'s timed purge"), False)
+        else:
+            await Utils.send_error(ctx, "That channel doesn't have a timed purge")
+        configs.save(self.ctx.timed_purge_path, "w", channels)
 
     @timed_purge.command(name="list")
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    @commands.bot_has_permissions(manage_messages=True)
     async def list_purges(self, ctx):
         """List all timed purges"""
         if self.ctx.timed_purge[str(ctx.guild.id)]:
