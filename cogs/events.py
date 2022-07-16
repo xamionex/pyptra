@@ -221,22 +221,15 @@ class Events(commands.Cog, name="Events"):
 
     @tasks.loop()
     async def purger(self):
-        for guild in self.ctx.timed_purge.items():
-            for id, timed in self.ctx.timed_purge[str(guild[0])].items():
+        ctx = self.ctx
+        for guild in ctx.timed_purge.items():
+            for channel, timed in ctx.timed_purge[str(guild[0])].items():
                 current_time = Utils.current_time()
-                delay = timed[0]
-                send_time = delay + timed[1] < current_time
+                send_time = timed[0] + timed[1] < current_time
                 if send_time:
-                    try:
-                        timed[1] = current_time
-                        channel = await self.ctx.get_channel(int(id))
-                        if channel is not None:
-                            channel.purge(limit=999999)
-                        else:
-                            self.ctx.timed_purge[str(guild[0])].pop(str(channel))
-                        configs.save(self.ctx.timed_purge_path, "w", self.ctx.timed_purge)
-                    except:
-                        pass
+                    chnl = ctx.get_channel(int(channel))
+                    [await chnl.purge(limit=999999) if chnl is not None else ctx.timed_purge[str(guild[0])].pop(str(channel))]
+                    configs.save(ctx.timed_purge_path, "w", ctx.timed_purge)
 
     @purger.before_loop
     async def purger_before_loop(self):
