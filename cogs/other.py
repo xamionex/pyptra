@@ -29,7 +29,7 @@ class OtherCommands(commands.Cog, name="Other Commands"):
     @commands.guild_only()
     async def poll(self, ctx, title: str, option1: str, option2: str, option3: str = None, option4: str = None, option5: str = None, option6: str = None, option7: str = None, option8: str = None, option9: str = None, option10: str = None):
         """Makes a poll with your choices."""
-        e = discord.Embed(title=title, description="\n", timestamp=datetime.datetime.now())
+        e = discord.Embed(description=f"**{title}**\n", timestamp=datetime.datetime.now())
         e.set_footer(text=f"Poll by {ctx.author}")
         options = {
             "1️⃣": option1,
