@@ -50,7 +50,6 @@ class OtherCommands(commands.Cog, name="Other Commands"):
                 choice = Utils.remove_newlines(choice)
                 e.description = e.description + f"\n{number} {str(choice)}"
                 reactions.append(number)
-                print(f"{choice} - {number}")
         msg = await ctx.send(embed=e)
         for reaction in reactions:
             await msg.add_reaction(reaction)
