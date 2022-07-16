@@ -161,7 +161,7 @@ class MyHelpCommand(commands.MinimalHelpCommand):
     async def finally_send_embed(self):
         ctx = self.context
         if await Utils.CheckInstance(ctx) and ctx.guild:
-            await ctx.reply("Check your DMs!", mention_author=False)
+            await ctx.reply("Check your DMs!")
 
     async def filter_commands(self, commands, *, sort=False, key=None, show_hidden=False):
         if sort and key is None:

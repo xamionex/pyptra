@@ -26,34 +26,20 @@ class Utils(commands.Cog, name="Utils"):
         elif isinstance(ctx, bridge.BridgeApplicationContext):
             return False  # slash returns false
 
-    async def sendembed(ctx, e, show_all=True, delete=1, delete_speed=5):
-        if await Utils.CheckInstance(ctx):  # checks if command is slash or not
-            if delete == 0:
-                await ctx.respond(embed=e, mention_author=False, delete_after=delete_speed)
-            elif delete == 1:
-                await ctx.respond(embed=e, mention_author=False)
-            elif delete == 2:
-                await ctx.respond(embed=e, mention_author=False)
-                await Utils.delete_message(ctx, delete_speed)
-            else:
-                await ctx.respond(embed=e, delete_after=delete_speed, mention_author=False)
-                await Utils.delete_message(ctx, delete_speed)
-                # 0 deletes bots reply, 1 doesnt delete, 2 deletes only cause, 3 deletes all
-        else:
-            if show_all:
-                await ctx.respond(embed=e)
-            else:
-                await ctx.respond(embed=e, ephemeral=True)
-            # true shows in chat, false shows to user only
+    async def send_embed(ctx, e, ephemeral=True, mention_author=True):
+        [await ctx.respond(embed=e, mention_author=mention_author) if await Utils.CheckInstance(ctx) else await ctx.respond(embed=e, ephemeral=ephemeral)]
 
-    async def senddmembed(ctx, e, delete=False, delete_speed=5):
+    async def send_message(ctx, text, ephemeral=True, mention_author=False):
+        [await ctx.respond(text, mention_author=mention_author) if await Utils.CheckInstance(ctx) else await ctx.respond(text, ephemeral=ephemeral)]
+
+    async def send_embed_dm(ctx, e, delete=False, delete_speed=5):
         if delete:
             await ctx.author.send(embed=e, delete_after=delete_speed)
         else:
             await ctx.author.send(embed=e)
             # False doesnt delete, True deletes bot's msg
 
-    async def delete_message(ctx, delete_speed=None):
+    async def delete_command_message(ctx, delete_speed=None):
         try:
             if delete_speed is None:
                 await ctx.message.delete()
@@ -62,13 +48,13 @@ class Utils(commands.Cog, name="Utils"):
         except Exception:
             return
 
-    async def edit_msg(ctx, message, text=MISSING, embed=MISSING, file=MISSING):
+    async def edit_message(ctx, message, text=MISSING, embed=MISSING, file=MISSING):
         if await Utils.CheckInstance(ctx):
             await message.edit(text, embed=embed, file=file)
         else:
             await message.edit_original_message(content=text, embed=embed, file=file)
 
-    async def delete_msg(ctx, message):
+    async def delete_message(ctx, message):
         try:
             if await Utils.CheckInstance(ctx):
                 await message.delete()
@@ -77,11 +63,9 @@ class Utils(commands.Cog, name="Utils"):
         except Exception:
             return
 
-    async def senderror(ctx, error, msg=None):
-        #e = discord.Embed(description=cerror, color=0xFF6969)
-        # await sendembed(ctx, e, False)
+    async def send_error(ctx, error, msg=None):
         if msg is not None:
-            await Utils.delete_msg(ctx, msg)
+            await Utils.delete_message(ctx, msg)
         if await Utils.CheckInstance(ctx):
             raise commands.CommandError(error)
         else:

@@ -21,7 +21,7 @@ class ModerationCommands(commands.Cog, name="Moderation"):
     @commands.bot_has_permissions(manage_messages=True)
     async def purge(self, ctx, channel: Optional[discord.TextChannel], user: Optional[discord.Member], amount: int = None):
         """Purge a channel or user"""
-        await Utils.delete_message(ctx)
+        await Utils.delete_command_message(ctx)
         if amount:
             if channel and user:
                 await channel.purge(limit=amount, check=lambda m: m.author == user)
@@ -32,14 +32,14 @@ class ModerationCommands(commands.Cog, name="Moderation"):
             else:
                 await ctx.channel.purge(limit=amount)
         else:
-            await Utils.senderror(ctx, "Specify amount of messages to delete")
+            await Utils.send_error(ctx, "Specify amount of messages to delete")
 
     @commands.group(hidden=True, name="timedpurge", invoke_without_command=True)
     @commands.has_permissions(administrator=True)
     @commands.bot_has_permissions(manage_messages=True)
     async def timed_purge(self, ctx):
         """Purge a channel in intervals"""
-        await Utils.senderror(ctx, f"No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help timedpurge for more info")
+        await Utils.send_error(ctx, f"No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help timedpurge for more info")
 
     @timed_purge.command(name="add")
     @commands.cooldown(1, 300, commands.BucketType.user)
@@ -51,7 +51,7 @@ class ModerationCommands(commands.Cog, name="Moderation"):
         except KeyError:
             timed_purge[str(ctx.guild.id)] = {}
             timed_purge[str(ctx.guild.id)][str(channel.id)] = [interval, 0]
-        await Utils.sendembed(ctx, discord.Embed(description=f"Added {channel.mention} to timed purges"), show_all=False, delete=3, delete_speed=15)
+        await Utils.send_embed(ctx, discord.Embed(description=f"Added {channel.mention} to timed purges"), False)
         configs.save(self.ctx.timed_purge_path, "w", timed_purge)
 
     @timed_purge.command(name="rem")
@@ -61,9 +61,9 @@ class ModerationCommands(commands.Cog, name="Moderation"):
         timed_purge = self.ctx.timed_purge
         try:
             timed_purge[str(ctx.guild.id)].pop(str(channel.id))
-            await Utils.sendembed(ctx, discord.Embed(description=f"Removed {channel.mention} from timed purges"), show_all=False, delete=3, delete_speed=15)
+            await Utils.send_embed(ctx, discord.Embed(description=f"Removed {channel.mention} from timed purges"), False)
         except:
-            await Utils.senderror(ctx, "That channel doesn't have a timed purge")
+            await Utils.send_error(ctx, "That channel doesn't have a timed purge")
         configs.save(self.ctx.timed_purge_path, "w", timed_purge)
 
     @timed_purge.command(name="list")
@@ -79,6 +79,6 @@ class ModerationCommands(commands.Cog, name="Moderation"):
                 counter = Utils.display_time_s(timed[0])
                 e.add_field(
                     name=channel, value=f"Occurs every\n{counter}")
-            await Utils.sendembed(ctx, e, show_all=False, delete=3, delete_speed=15)
+            await Utils.send_embed(ctx, e, False)
         else:
-            await Utils.senderror(ctx, "This guild doesn't have timed purges")
+            await Utils.send_error(ctx, "This guild doesn't have timed purges")

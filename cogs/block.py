@@ -3,6 +3,7 @@ from discord.ext import commands, bridge
 from cogs import configs
 from cogs.utils import Utils
 
+
 def setup(bot):
     bot.add_cog(BlockCommands(bot))
 
@@ -23,9 +24,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
             await ctx.reply("The person is already blacklisted.")
         else:
             await BlockCommands.add_perm(self, "blacklist", user)
-            e = discord.Embed(
-                description=f"{ctx.author.mention} has blacklisted {user.mention} for: {reason}", color=0xFF6969)
-            await Utils.sendembed(ctx, e, False)
+            await Utils.send_embed(ctx, discord.Embed(description=f"{ctx.author.mention} has blacklisted {user.mention} for: {reason}", color=0xFF6969), False)
 
     @commands.command(hidden=True, name="unblock")
     @commands.has_permissions(administrator=True)
@@ -36,9 +35,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
             await ctx.reply("The person is already unblacklisted.")
         else:
             await BlockCommands.remove_perm(self, "blacklist", user)
-            e = discord.Embed(
-                description=f"{ctx.author.mention} has unblacklisted {user.mention}", color=0x66FF99)
-            await Utils.sendembed(ctx, e, False)
+            await Utils.send_embed(ctx, discord.Embed(description=f"{ctx.author.mention} has unblacklisted {user.mention}", color=0x66FF99), False)
 
     @bridge.bridge_command(name="introvert")
     @commands.guild_only()
@@ -57,7 +54,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
         if await Utils.can_dm_user(ctx.author):
             await BlockCommands.switch_global_perm(self, ctx, "afk_alert_dm", "AFK Alerts in DMs instead")
         else:
-            await Utils.senderror(ctx, "I can't DM you! Try unblocking me or enabling your DMs.")
+            await Utils.send_error(ctx, "I can't DM you! Try unblocking me or enabling your DMs.")
 
     @bridge.bridge_command(name="wbalerts")
     async def wbalerts(self, ctx):
@@ -70,35 +67,31 @@ class BlockCommands(commands.Cog, name="Permissions"):
         if await Utils.can_dm_user(ctx.author):
             await BlockCommands.switch_global_perm(self, ctx, "wb_alert_dm", "Welcome Back message in DMs instead")
         else:
-            await Utils.senderror(ctx, "I can't DM you! Try unblocking me or enabling your DMs.")
+            await Utils.send_error(ctx, "I can't DM you! Try unblocking me or enabling your DMs.")
 
     @commands.command(hidden=True, name="give")
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
     async def give(self, ctx, user: discord.Member):
-        """Give a permission to a user (use -permslist)"""
+        """Give a permission to a user (use permslist command)"""
         perm = await BlockCommands.check_perm_arg(self, ctx)
         if await BlockCommands.get_perm(self, ctx, perm, user):
-            await Utils.senderror(ctx, f"Nothing was changed.")
+            await Utils.send_error(ctx, f"Nothing was changed.")
         else:
             await BlockCommands.add_perm(self, ctx, perm, user)
-            e = discord.Embed(
-                description=f"Gave {perm} to {user.mention}", color=0xFF6969)
-            await Utils.sendembed(ctx, e, False)
+            await Utils.send_embed(ctx, discord.Embed(description=f"Gave {perm} to {user.mention}", color=0xFF6969), False)
 
     @commands.command(hidden=True, name="remove")
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
     async def remove(self, ctx, user: discord.Member):
-        """Remove a permission from a user (use -permslist)"""
+        """Remove a permission from a user (use permslist command)"""
         perm = await BlockCommands.check_perm_arg(self, ctx)
         if await BlockCommands.get_perm(self, ctx, perm, user) == False:
-            await Utils.senderror(ctx, f"Nothing was changed.")
+            await Utils.send_error(ctx, f"Nothing was changed.")
         else:
             await BlockCommands.remove_perm(self, ctx, perm, user)
-            e = discord.Embed(
-                description=f"Removed {perm} from {user.mention}", color=0x66FF99)
-            await Utils.sendembed(ctx, e, False)
+            await Utils.send_embed(ctx, discord.Embed(description=f"Removed {perm} from {user.mention}", color=0x66FF99), False)
 
     @commands.command(hidden=True, name="permslist")
     @commands.has_permissions(administrator=True)
@@ -109,7 +102,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
             description=f"All available permissions", color=0x66FF99)
         for perm, perm_desc in self.ctx.perm_list.items():
             e.add_field(name=f"{perm}", value=f"{perm_desc}", inline=False)
-        await Utils.sendembed(ctx, e, False)
+        await Utils.send_embed(ctx, e)
 
     @commands.command(hidden=True, name="reset")
     @commands.has_permissions(administrator=True)
@@ -121,11 +114,11 @@ class BlockCommands(commands.Cog, name="Permissions"):
             perms[str(user.guild.id)].pop(str(user.id))
             yn = await BlockCommands.set_member_perms(self, ctx, perms, user)
             if yn:
-                await Utils.sendembed(ctx, e=discord.Embed(description=f"Successfully reset {user.mention}", color=0x66FF99))
+                await Utils.send_embed(ctx, discord.Embed(description=f"Successfully reset {user.mention}", color=0x66FF99), False)
             else:
-                await Utils.senderror(ctx, f"Couldn't reset {user.mention}")
+                await Utils.send_error(ctx, f"Couldn't reset {user.mention}")
         else:
-            await Utils.senderror(ctx, "User isn't in data")
+            await Utils.send_error(ctx, "User isn't in data")
 
     async def open_member_perms(self, ctx, user):
         perms = self.ctx.perms
@@ -165,15 +158,15 @@ class BlockCommands(commands.Cog, name="Permissions"):
         if msg in perms_list:
             return msg
         else:
-            await Utils.senderror(ctx, f"{ctx.author.mention}, I couldn't find that permission.")
+            await Utils.send_error(ctx, f"{ctx.author.mention}, I couldn't find that permission.")
 
     async def switch_perm(self, ctx, perm, message):
         if await BlockCommands.get_perm(self, ctx, perm, ctx.author):
             await BlockCommands.remove_perm(self, ctx, perm, ctx.author)
-            await Utils.sendembed(ctx, discord.Embed(description=f"✅ Enabled {message}", color=0x66FF99), False)
+            await Utils.send_embed(ctx, discord.Embed(description=f"✅ Enabled {message}", color=0x66FF99))
         else:
             await BlockCommands.add_perm(self, ctx, perm, ctx.author)
-            await Utils.sendembed(ctx, discord.Embed(description=f"❌ Disabled {message}", color=0xFF6969), False)
+            await Utils.send_embed(ctx, discord.Embed(description=f"❌ Disabled {message}", color=0xFF6969))
 
     async def open_global_member_perms(self, ctx, user):
         perms = self.ctx.global_perms
@@ -212,7 +205,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
     async def switch_global_perm(self, ctx, perm, message):
         if await BlockCommands.get_global_perm(self, ctx, perm, ctx.author):
             await BlockCommands.remove_global_perm(self, ctx, perm, ctx.author)
-            await Utils.sendembed(ctx, discord.Embed(description=f"❌ Disabled {message}", color=0xFF6969), False)
+            await Utils.send_embed(ctx, discord.Embed(description=f"❌ Disabled {message}", color=0xFF6969))
         else:
             await BlockCommands.add_global_perm(self, ctx, perm, ctx.author)
-            await Utils.sendembed(ctx, discord.Embed(description=f"✅ Enabled {message}", color=0x66FF99), False)
+            await Utils.send_embed(ctx, discord.Embed(description=f"✅ Enabled {message}", color=0x66FF99))

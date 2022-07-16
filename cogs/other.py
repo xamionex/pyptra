@@ -20,7 +20,7 @@ class OtherCommands(commands.Cog, name="Other Commands"):
     @commands.guild_only()
     async def echo(self, ctx, *, message=None):
         """Echoes the message you send."""
-        await Utils.delete_message(ctx)
+        await Utils.delete_command_message(ctx)
         await ctx.send(message)
 
     @commands.command(name="poll")
@@ -59,7 +59,7 @@ class OtherCommands(commands.Cog, name="Other Commands"):
     @commands.guild_only()
     async def free(self, ctx, title, description, price, unix, rating, platform, game_link, imagelink):
         """Sends a freestuff bot-like embed (used by petar mostly)."""
-        await Utils.delete_message(ctx)
+        await Utils.delete_command_message(ctx)
         platforms = {
             "gog": "https://cdn.discordapp.com/attachments/764940369367662622/989443585533440020/unknown.png",
             "epic": "https://cdn.discordapp.com/attachments/764940369367662622/989443614130192474/unknown.png",
@@ -87,9 +87,9 @@ class OtherCommands(commands.Cog, name="Other Commands"):
     @commands.guild_only()
     async def echoembed(self, ctx, description=None):
         """Echos the message you put in, was used for testing."""
-        await Utils.delete_message(ctx)
+        await Utils.delete_command_message(ctx)
         if description is None:
-            await Utils.senderror(ctx, "No message attached")
+            await Utils.send_error(ctx, "No message attached")
         e = discord.Embed(description=description)
         # channel = self.ctx.get_channel(935685344010047519)
         await ctx.send(embed=e)
@@ -103,7 +103,7 @@ class OtherCommands(commands.Cog, name="Other Commands"):
         if reference is None:
             return await ctx.reply(f"{ctx.author.mention} You didn't reply to any message.")
         await reference.resolved.reply(message)
-        await Utils.delete_message(ctx)
+        await Utils.delete_command_message(ctx)
 
     @commands.command(hidden=True, name="namedm")
     @commands.has_permissions(administrator=True)
@@ -112,7 +112,7 @@ class OtherCommands(commands.Cog, name="Other Commands"):
         """DM someone with the message saying your name"""
         message = f"From {ctx.author.mention}: {message}" or f"{ctx.author.mention} sent you a message but it was empty"
         await user.send(message)
-        await Utils.delete_message(ctx)
+        await Utils.delete_command_message(ctx)
 
     @commands.command(hidden=True, name="dm")
     @commands.has_permissions(administrator=True)
@@ -121,7 +121,7 @@ class OtherCommands(commands.Cog, name="Other Commands"):
         """DM someone without the message saying your name"""
         message = message or "Someone sent you a message but it was empty"
         await user.send(message)
-        await Utils.delete_message(ctx)
+        await Utils.delete_command_message(ctx)
 
     @commands.command(hidden=True, name="nick")
     @commands.has_permissions(administrator=True)
@@ -130,4 +130,4 @@ class OtherCommands(commands.Cog, name="Other Commands"):
         """Changes a users nickname, mostly for testing purposes :)"""
         nick = nick or ""
         await member.edit(nick=nick)
-        await Utils.delete_message(ctx)
+        await Utils.delete_command_message(ctx)

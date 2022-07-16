@@ -31,13 +31,12 @@ class Events(commands.Cog, name="Events"):
 
     @commands.Cog.listener("on_application_command_error")
     async def slash_command_error(self, ctx: discord.ApplicationContext, error):
+        e = discord.Embed(description=f"`❌` {error}", color=0xFF6969)
         if isinstance(error, commands.BotMissingPermissions):
             raise error
         elif isinstance(error, commands.CommandOnCooldown):
-            e = discord.Embed(description=f"`❌` {error}", color=0xFF6969)
-            await Utils.sendembed(ctx, e, show_all=False)
+            await ctx.respond(embed=e, ephemeral=True)
         elif isinstance(error, discord.ApplicationCommandError):
-            e = discord.Embed(description=f"`❌` {error}", color=0xFF6969)
             await ctx.respond(embed=e, ephemeral=True)
         try:
             channel = self.ctx.get_channel(980964223121256529)
@@ -52,12 +51,12 @@ class Events(commands.Cog, name="Events"):
 
     @commands.Cog.listener("on_command_error")
     async def command_error(self, ctx, error):
+        e = discord.Embed(description=f"`❌` {error}", color=0xFF6969)
         if isinstance(error, commands.CommandNotFound):
             raise error
         elif isinstance(error, commands.BotMissingPermissions):
             raise error
         elif isinstance(error, commands.CommandError):
-            e = discord.Embed(description=f"`❌` {error}", color=0xFF6969)
             await ctx.send(ctx.author.mention, embed=e)
         try:
             channel = self.ctx.get_channel(980964223121256529)
@@ -285,14 +284,14 @@ class Loops(commands.Cog):
         input_spam = [channel, seconds, message]
 
         if await EventUtils.get_channel_bool(self, ctx, input_spam):
-            await Utils.senderror(ctx, f"Channel already has repeating message.")
+            await Utils.send_error(ctx, f"Channel already has repeating message.")
         else:
             await EventUtils.add_channel(self, ctx, input_spam)
             e = discord.Embed(title="Repeating message made:")
             e.add_field(name="Message", value=message)
             e.add_field(name="Repeats each", value=f"{seconds}s")
             e.add_field(name="In channel", value=channel.mention)
-            await Utils.sendembed(ctx, e)
+            await Utils.send_embed(ctx, e)
             await EventUtils.add_channel(self, ctx, input_spam)
 
     @channels.command()
@@ -300,9 +299,9 @@ class Loops(commands.Cog):
         spam = self.ctx.spam
         if str(channel.id) in spam[str(channel.guild.id)]:
             spam[str(channel.guild.id)].pop(str(channel.id))
-            await Utils.sendembed(ctx, e=discord.Embed(description=f"Removed {channel.mention}", color=0x66FF99))
+            await Utils.send_embed(ctx, e=discord.Embed(description=f"Removed {channel.mention}", color=0x66FF99))
         else:
-            await Utils.senderror(ctx, f"{channel.mention} isn't in data")
+            await Utils.send_error(ctx, f"{channel.mention} isn't in data")
 
     @channels.command()
     async def list(self, ctx):
@@ -312,7 +311,7 @@ class Loops(commands.Cog):
             for id, value in data.items():
                 e.add_field(
                     name=f"{id} - every {value[1]}s", value=f"{value[0]}")
-        await Utils.sendembed(ctx, e)
+        await Utils.send_embed(ctx, e)
 
 
 class EventUtils():
