@@ -72,5 +72,5 @@ class Debug(commands.Cog):
         exec(compile(parsed, filename="<ast>", mode="exec"), env)
 
         result = (await eval(f"{fn_name}()", env))
-        if result is not None:
-            await ctx.send(result)
+        # if result is not None:
+        # await ctx.send(result)
