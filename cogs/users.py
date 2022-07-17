@@ -207,7 +207,7 @@ class UserCommands(commands.Cog, name="User Commands"):
             if await block.BlockCommands.get_global_perm(self, ctx, perm[1], ctx.author):
                 await Utils.send_embed_dm(ctx, e)
             else:
-                await Utils.send_embed_dm(ctx, e)
+                await Utils.send_embed(ctx, e)
 
     def rep_embed(self, ctx, type):
         e = discord.Embed(title=f"{self.ctx.guild_prefixes[str(ctx.guild.id)]}rep {type} <mention> <type>",
