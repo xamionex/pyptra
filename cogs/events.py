@@ -4,7 +4,7 @@ from discord.ext import commands, tasks
 # data
 import random
 # cogs
-from cogs import users, configs
+from cogs import users, configs, block
 from cogs.utils import Utils
 # afk command data
 import datetime
@@ -181,10 +181,12 @@ class Events(commands.Cog, name="Events"):
                 nick = message.author.display_name.replace('[AFK]', '')
                 await message.author.edit(nick=nick)
             except:
-                print(
-                    f'I wasnt able to edit [{message.author} / {message.author.id}].')
-
-            await users.UserCommands.sendafk(self, message, ["wb_alert", "wb_alert_dm"], welcome_back)
+                pass
+            if await block.BlockCommands.get_global_perm(self, message, "wb_alert", message.author):
+                if await block.BlockCommands.get_global_perm(self, message, "wb_alert_dm", message.author):
+                    await message.author.send(embed=welcome_back)
+                else:
+                    await message.reply(embed=welcome_back)
         configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
 
     @commands.Cog.listener("on_message")
