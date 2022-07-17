@@ -45,11 +45,11 @@ class ModerationCommands(commands.Cog, name="Moderation"):
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
     @commands.bot_has_permissions(manage_messages=True)
-    async def add_purge(self, ctx, channel: Optional[discord.TextChannel], interval: int = None):
+    async def add_purge(self, ctx, channel: Optional[discord.TextChannel], interval: int):
         """Add a purge to a channel that happens in intervals"""
-        interval = int(''.join(re.findall('\d+', interval)))
-        if interval <= 4:
-            await Utils.send_error(ctx, "Minimum interval is 5 seconds.")
+        interval = int(''.join(re.findall('\d+', str(interval))))
+        if interval <= 9:
+            await Utils.send_error(ctx, "Minimum interval is 10 seconds.")
         timed_purge = self.ctx.timed_purge
         try:
             timed_purge[str(ctx.guild.id)][str(channel.id)] = [interval, 0]

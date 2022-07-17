@@ -1,3 +1,4 @@
+import asyncio
 import main
 import discord
 from discord.ext import commands, tasks
@@ -233,6 +234,8 @@ class Events(commands.Cog, name="Events"):
                     timed[1] = current_time
                     chnl = self.ctx.get_channel(int(channel))
                     if chnl is not None:
+                        await chnl.send(f"Purging <t:{Utils.current_time() + 9}:R>...")
+                        await asyncio.sleep(9)
                         await chnl.purge(limit=None, check=lambda m: not m.pinned)
                         await chnl.send(embed=discord.Embed(description=f"**You ({chnl.mention}) have been purged.**").set_image(url=random.choice(["https://cdn.discordapp.com/attachments/920776187884732559/998236527714906172/PTRA_Purge.gif", "https://cdn.discordapp.com/attachments/967897893413462027/998047629139259402/3Tt5.gif", "https://c.tenor.com/giN2CZ60D70AAAAC/explosion-mushroom-cloud.gif"])).set_footer(text=f"Occurs every {Utils.display_time_s(timed[0])}"))
                     else:
