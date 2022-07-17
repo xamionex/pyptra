@@ -186,7 +186,7 @@ class Events(commands.Cog, name="Events"):
                 if await block.BlockCommands.get_global_perm(self, message, "wb_alert_dm", message.author):
                     await message.author.send(embed=welcome_back)
                 else:
-                    await message.reply(embed=welcome_back)
+                    await message.reply(embed=welcome_back, delete_after=30)
         configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
 
     @commands.Cog.listener("on_message")
