@@ -1,3 +1,4 @@
+import re
 from typing import Optional
 import discord
 from discord.ext import commands
@@ -46,6 +47,9 @@ class ModerationCommands(commands.Cog, name="Moderation"):
     @commands.bot_has_permissions(manage_messages=True)
     async def add_purge(self, ctx, channel: Optional[discord.TextChannel], interval: int = None):
         """Add a purge to a channel that happens in intervals"""
+        interval = int(''.join(re.findall('\d+', interval)))
+        if interval <= 4:
+            await Utils.send_error(ctx, "Minimum interval is 5 seconds.")
         timed_purge = self.ctx.timed_purge
         try:
             timed_purge[str(ctx.guild.id)][str(channel.id)] = [interval, 0]

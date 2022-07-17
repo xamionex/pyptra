@@ -193,7 +193,7 @@ class Events(commands.Cog, name="Events"):
     async def help_check(self, message):
         # check if user's message is only bot ping and reply with help, if not process commands
         if message.author.bot == False and self.ctx.user.mentioned_in(message) and len(message.content) == len(self.ctx.user.mention):
-            await message.reply(embed=discord.Embed(description=f'My prefix is `{self.ctx.guild_prefixes[str(message.guild.id)]}` or {self.ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!'), delete_after=20, mention_author=False)
+            await message.reply(embed=discord.Embed(description=f'My prefix is `{self.ctx.guild_prefixes[str(message.guild.id)]}` or {self.ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!'))
         else:
             await self.ctx.process_commands(message)
 
@@ -220,7 +220,7 @@ class Events(commands.Cog, name="Events"):
         except:
             pass
 
-    @tasks.loop()
+    @tasks.loop(seconds=5)
     async def purger(self):
         rem = [False, None, None]
         for guild in self.ctx.timed_purge.items():
@@ -234,6 +234,7 @@ class Events(commands.Cog, name="Events"):
                     chnl = self.ctx.get_channel(int(channel))
                     if chnl is not None:
                         await chnl.purge(limit=None, check=lambda m: not m.pinned)
+                        await chnl.send(embed=discord.Embed(description=f"**You ({chnl.mention}) have been purged.**").set_image(url=random.choice(["https://cdn.discordapp.com/attachments/920776187884732559/998236527714906172/PTRA_Purge.gif", "https://cdn.discordapp.com/attachments/967897893413462027/998047629139259402/3Tt5.gif", "https://c.tenor.com/giN2CZ60D70AAAAC/explosion-mushroom-cloud.gif"])).set_footer(text=f"Occurs every {Utils.display_time_s(timed[0])}"))
                     else:
                         rem = [True, str(guild[0]), str(channel)]
                     configs.save(self.ctx.timed_purge_path, "w", self.ctx.timed_purge)

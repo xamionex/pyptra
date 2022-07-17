@@ -128,11 +128,11 @@ class Utils(commands.Cog, name="Utils"):
         return ', '.join(result[:granularity])
 
     intervals_seconds = (
-        ('weeks', 604800),  # 60 * 60 * 24 * 7
-        ('days', 86400),    # 60 * 60 * 24
-        ('hours', 3600),    # 60 * 60
-        ('minutes', 60),
-        ('seconds', 1),
+        (' weeks', 604800),  # 60 * 60 * 24 * 7
+        (' days', 86400),    # 60 * 60 * 24
+        (' hours', 3600),    # 60 * 60
+        (' minutes', 60),
+        (' seconds', 1),
     )
 
     def display_time_s(seconds, granularity=2):
