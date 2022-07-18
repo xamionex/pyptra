@@ -151,7 +151,11 @@ class Events(commands.Cog, name="Events"):
                 configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
 
         if send:
-            await users.UserCommands.sendafk(self, message, ["afk_alert", "afk_alert_dm"], afk_alert)
+            if await block.BlockCommands.get_global_perm(self, message, "afk_alert", message.author):
+                if await block.BlockCommands.get_global_perm(self, message, "afk_alert_dm", message.author):
+                    await Utils.send_embed_dm(message, afk_alert)
+                else:
+                    await message.reply(embed=afk_alert)
         await users.UserCommands.update_data(self, self.ctx.afk, message.author)
         # if message's author is afk continue
         if list(message.content.split(" "))[0] != f'{prefix}afk' and self.ctx.afk[f'{message.author.id}']['AFK']:
