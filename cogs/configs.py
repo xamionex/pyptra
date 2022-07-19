@@ -58,6 +58,18 @@ class Configs(commands.Cog, name="Configs"):
                         "https://media1.tenor.com/images/bb841fad2c0e549c38d8ae15f4ef1209/tenor.gif",
                         "https://media1.tenor.com/images/234d471b1068bc25d435c607224454c9/tenor.gif",
                         "https://media1.tenor.com/images/de06f8f71eb9f7ac2aa363277bb15fee/tenor.gif"]
+        ctx.purge_gifs = ["https://c.tenor.com/8wy7H4h5IVcAAAAd/asuka-langley-asuka.gif",
+                          "https://c.tenor.com/OfqLXcy4EjwAAAAS/evangelion-lights.gif",
+                          "https://c.tenor.com/ai947c7pFIMAAAAC/brick.gif",
+                          "https://c.tenor.com/sLG8KOwLkukAAAAd/mgr-metal-gear-rising.gif",
+                          "https://c.tenor.com/Ki3S5xrrY9wAAAAd/discord-discord-drama.gif",
+                          "https://c.tenor.com/s0M5P7zXmuQAAAAC/metal-gear-rising-jetstream-sam.gif",
+                          "https://c.tenor.com/poJ6qSHNhR0AAAAd/jetstream-sam-grass.gif",
+                          "https://c.tenor.com/bnHxeEogbq8AAAAC/metal-gear-rising.gif",
+                          "https://cdn.discordapp.com/attachments/920776187884732559/998236527714906172/PTRA_Purge.gif",
+                          "https://cdn.discordapp.com/attachments/967897893413462027/998047629139259402/3Tt5.gif",
+                          "https://c.tenor.com/giN2CZ60D70AAAAC/explosion-mushroom-cloud.gif"
+                          ]
         ctx.hug_words = ["hugged",
                          "cuddled",
                          "embraced",
