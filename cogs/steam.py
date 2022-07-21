@@ -4,7 +4,6 @@ from discord.ext import commands, bridge
 import aiohttp
 import requests
 from cogs.utils import Utils as utils
-import main
 
 
 def setup(bot):
@@ -27,7 +26,7 @@ class SteamCommands(commands.Cog, name="Steam Commands"):
         game = gamedata[0]
         other = gamedata[1]
         e = discord.Embed()
-        e.set_footer(text=f"Hint: use the \"{main.get_prefix(self.ctx, ctx.message)}gamenews\" command for the latest news from the game")
+        e.set_footer(text=f"Hint: use the \"{self.ctx.settings[str(ctx.guild.id)]['prefix']}gamenews\" command for the latest news from the game")
         e.color = 0x42a6cc
         if not game:
             await Utils.search_results(e, other, message)
