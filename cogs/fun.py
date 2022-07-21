@@ -37,8 +37,7 @@ class FunCommands(commands.Cog, name="Fun"):
         dm = False
         if self.msg.channel.type == discord.ChannelType.private:
             dm = True
-        elif not ctx.author.guild_permissions.manage_messages:
-            await BlockCommands.check_perm(self, ctx, "gif")
+        await BlockCommands.check_perm(self, ctx, "gif")
         what, frames, duration = await FunCommands.get_image(self, ctx, member, emoji, caption, dm)
         # file-like container to hold the image in memory
         img = BytesIO()  # sets image as "img"

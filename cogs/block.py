@@ -121,7 +121,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
             await Utils.send_error(ctx, f"Couldn't reset {user.mention}")
 
     async def check_perm(self, ctx, permission, msg=None, dm=True):
-        if ctx.author.guild_permissions.administrator:
+        if ctx.author.guild_permissions.administrator or await self.ctx.is_owner(ctx.author):
             return
         perm = await BlockCommands.get_perm(self, ctx, permission, ctx.author)
         if permission not in self.ctx.perm_ignore_invert:
