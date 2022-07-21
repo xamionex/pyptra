@@ -127,14 +127,14 @@ class UserCommands(commands.Cog, name="User Commands"):
     @bridge.bridge_command(name="hex", aliases=["color", "colour"])
     @commands.guild_only()
     @commands.bot_has_permissions(manage_roles=True)
-    @commands.has_permissions(manage_nicknames=True)
     async def color(self, ctx, hex):
         """Gives you a color based on the hex you gave."""
         await BlockCommands.check_perm(self, ctx, "hex", dm=False)
-        hex = ''.join(re.findall('\d+', str(hex)))
+        hex = hex.replace("0x", "", 1) if hex.startswith("0x") else hex
+        hex = ''.join(re.findall("[\da-f]+", str(hex), re.IGNORECASE))
         if len(hex) < 6:
             await Utils.send_error(ctx, "Please enter a six digit hex number. (ex. #133769)")
-        hex = int(hex[0:6])
+        hex = hex[0:6]
         rolename = f"#{hex}"
         rolecolor = discord.Colour(int(f"0x{hex}", 16))
         for role in ctx.author.roles:
@@ -153,7 +153,6 @@ class UserCommands(commands.Cog, name="User Commands"):
                     found = False
             if not found:
                 role = await ctx.guild.create_role(name=rolename, color=rolecolor)
-                print(ctx.guild.get_member(self.ctx.user.id).top_role.position)
                 await role.edit(position=ctx.guild.get_member(self.ctx.user.id).top_role.position - 1)
                 await ctx.author.add_roles(role)
                 await Utils.send_embed(ctx, discord.Embed(description=f"`✅` Added {role.name}", color=rolecolor))
