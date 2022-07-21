@@ -27,6 +27,12 @@ class Utils(commands.Cog, name="Utils"):
         elif isinstance(ctx, bridge.BridgeApplicationContext):
             return False  # slash returns false
 
+    def is_reply(msg):
+        # if it's a reply and not a system message return True else False
+        if msg.reference is not None and not msg.is_system:
+            return True
+        return False
+
     async def send_embed(ctx, e, ephemeral=True, mention_author=True):
         [await ctx.respond(embed=e, mention_author=mention_author) if await Utils.CheckInstance(ctx) else await ctx.respond(embed=e, ephemeral=ephemeral)]
 
