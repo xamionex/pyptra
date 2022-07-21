@@ -90,12 +90,16 @@ class BlockCommands(commands.Cog, name="Permissions"):
     async def invertperms(self, ctx):
         """Inverts all permissions (Whether perms block or allow)"""
         settings = self.ctx.settings[str(ctx.guild.id)]
+        e = discord.Embed(description=f"Perms now act as Allowances.", color=0xFF6969).set_footer(text=f"Note that perms {', '.join(self.ctx.perm_ignore_invert)} ignore this")
         if settings["invertperms"]:
             settings["invertperms"] = False
-            await Utils.send_embed(ctx, discord.Embed(description=f"Perms now act as Blockades.", color=0xFF6969).set_footer(text=f"Note that perms {', '.join(self.ctx.perm_ignore_invert)} ignore this"))
+            e.description = "Perms now act as Allowances"
+            e.color = 0x66FF99
         else:
             settings["invertperms"] = True
-            await Utils.send_embed(ctx, discord.Embed(description=f"Perms now act as Allowances.", color=0x66FF99).set_footer(text=f"Note that perms {', '.join(self.ctx.perm_ignore_invert)} ignore this"))
+            e.description = "Perms now act as Blockades"
+            e.color = 0xFF6969
+        await Utils.send_embed(ctx, e)
         configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     @commands.command(hidden=True, name="reset")
@@ -103,21 +107,18 @@ class BlockCommands(commands.Cog, name="Permissions"):
     @commands.guild_only()
     async def reset(self, ctx, user: discord.Member):
         """Reset a user's permissions in the bot"""
-        perms = self.ctx.settings[str(ctx.guild.id)]["perms"]
-        if str(user.id) in perms:
-            perms.pop(str(user.id))
-            ping = perms[str(user.id)]["ping"]
-            try:
-                perms[str(user.id)] = {}
-                for value in self.ctx.perms_list:
-                    perms[str(user.id)][value] = False
-                perms[str(user.id)]["ping"] = ping
-                configs.save(self.ctx.settings_path, "w", self.ctx.settings)
-                await Utils.send_embed(ctx, discord.Embed(description=f"Successfully reset {user.mention}", color=0x66FF99), False)
-            except:
-                await Utils.send_error(ctx, f"Couldn't reset {user.mention}")
-        else:
-            await Utils.send_error(ctx, "User isn't in data")
+        perms = await BlockCommands.open_perms(self, ctx, user)
+        ping = perms[str(user.id)]["ping"]
+        perms.pop(str(user.id))
+        try:
+            perms[str(user.id)] = {}
+            for value in self.ctx.perms_list:
+                perms[str(user.id)][value] = False
+            perms[str(user.id)]["ping"] = ping
+            configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+            await Utils.send_embed(ctx, discord.Embed(description=f"Successfully reset {user.mention}", color=0x66FF99), False)
+        except:
+            await Utils.send_error(ctx, f"Couldn't reset {user.mention}")
 
     async def check_perm(self, ctx, permission, msg=None, dm=True):
         if ctx.author.guild_permissions.administrator:

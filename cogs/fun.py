@@ -38,7 +38,7 @@ class FunCommands(commands.Cog, name="Fun"):
         if self.msg.channel.type == discord.ChannelType.private:
             dm = True
         elif not ctx.author.guild_permissions.manage_messages:
-            await Utils.send_error(ctx, "You are missing Manage Messages permission(s) to run this command. (DM me to use this command freely.)", self.msg)
+            await BlockCommands.check_perm(self, ctx, "gif")
         what, frames, duration = await FunCommands.get_image(self, ctx, member, emoji, caption, dm)
         # file-like container to hold the image in memory
         img = BytesIO()  # sets image as "img"

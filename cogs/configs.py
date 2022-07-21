@@ -34,6 +34,7 @@ class Configs(commands.Cog, name="Configs"):
                           "weird": "Allows -hug -kiss",
                           "ping": "Denies pinging user in -hug -kiss -pet",
                           "pet": "Allows petting users/images/emojis",
+                          "gif": "Allows making gifs of users/images/emojis",
                           "hex": "Grants users to add colors to their name with a command",
                           "joke": "Allows using -fall -promote"}
         ctx.perm_ignore_invert = ["blacklist", "hex", "ping"]
