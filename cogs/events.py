@@ -5,11 +5,10 @@ from discord.ext import commands, tasks
 # data
 import random
 # cogs
-from cogs import users, configs, block
+from cogs import configs
 from cogs.utils import Utils
-# afk command data
-import datetime
-import humanize
+from cogs.block import BlockCommands
+from cogs.users import UserCommands
 
 
 def setup(bot):
@@ -77,7 +76,7 @@ class Events(commands.Cog, name="Events"):
     @commands.Cog.listener("on_member_join")
     async def member_data(self, member):
         afk = self.ctx.afk
-        await users.UserCommands.update_data(self, afk, member)
+        await UserCommands.update_data(self, afk, member)
         configs.save(self.ctx.afk_path, "w", afk)
 
     @commands.Cog.listener("on_guild_join")
@@ -107,32 +106,19 @@ class Events(commands.Cog, name="Events"):
     @commands.Cog.listener("on_message")
     async def afk_check(self, message):
         # check if user is afk or members in message
-        prefix = main.get_prefix(self.ctx, message)
-        send = False
-        afk_alert = discord.Embed(
-            title=f"Members in your message are afk:")
-        afk_alert.set_footer(
-            text=f"Toggle: {prefix}alerts\nDMs Toggle: {prefix}dmalerts")
+        prefix = self.ctx.settings[str(message.guild.id)]['prefix']
         if message.author.bot:
             return
-
+        send = {}
         for member in message.mentions:
             if member.bot or member.id == message.author.id:
                 return
             if self.ctx.afk[f'{member.id}']['AFK']:
-                send = True
-
                 # gets afk message
-                reason = self.ctx.afk[f'{member.id}']['reason']
-
-                # gets unix time
-                unix_time = Utils.current_milli_time() - self.ctx.afk[f'{member.id}']['time']
-
-                # user was afk for time.now() - time
-                counter = humanize.naturaltime(datetime.datetime.now() - datetime.timedelta(seconds=unix_time // 1000))
-
-                # add embed
-                afk_alert.add_field(name=f"{member.display_name.replace('[AFK]', '')} - {counter}", value=f"\"{reason}\"", inline=True)
+                # gets unix time for when user went afk
+                # add data to list
+                send[str(member.id)] = {round(self.ctx.afk[f'{member.id}']['time']/1000): self.ctx.afk[f'{member.id}']['reason']}
+                #afk_alert.add_field(name=f"{member.display_name.replace('[AFK]', '')} - <t:{time}:R>", value=f"\"{reason}\"", inline=True)
 
                 # plus 1 time mentioned in afk.json
                 self.ctx.afk[f'{member.id}']['mentions'] = int(self.ctx.afk[f'{member.id}']['mentions']) + 1
@@ -140,13 +126,23 @@ class Events(commands.Cog, name="Events"):
                 # save json
                 configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
 
-        if send:
-            if await block.BlockCommands.get_global_perm(self, message, "afk_alert", message.author):
-                if await block.BlockCommands.get_global_perm(self, message, "afk_alert_dm", message.author):
+        afk_alert = discord.Embed(title=f"Members in your message are afk:").set_footer(text=f"Toggle: {prefix}alerts\nDMs Toggle: {prefix}dmalerts")
+        if len(send) > 0:
+            if len(send) == 1:
+                for member in send.items():
+                    for time, reason in member[1].items():
+                        afk_alert.title = f"{message.guild.get_member(int(member[0])).display_name.replace('[AFK]', '')}"
+                        afk_alert.description = f"\"{reason}\"\n<t:{time}:R>"
+            elif len(send) > 1:
+                for member in send.items():
+                    for time, reason in member[1].items():
+                        afk_alert.add_field(name=f"{message.guild.get_member(int(member[0])).display_name.replace('[AFK]', '')}", value=f"\"{reason}\"\n<t:{time}:R>")
+            if await BlockCommands.get_global_perm(self, message, "afk_alert", message.author):
+                if await BlockCommands.get_global_perm(self, message, "afk_alert_dm", message.author):
                     await Utils.send_embed_dm(message, afk_alert)
                 else:
-                    await message.reply(embed=afk_alert)
-        await users.UserCommands.update_data(self, self.ctx.afk, message.author)
+                    await message.reply(embed=afk_alert, delete_after=30)
+        await UserCommands.update_data(self, self.ctx.afk, message.author)
         # if message's author is afk continue
         if list(message.content.split(" "))[0] != f'{prefix}afk' and self.ctx.afk[f'{message.author.id}']['AFK']:
             # counter = unix now - unix since afk in format 0d 0h 0m 0s and if any of them except seconds are 0 remove them
@@ -177,8 +173,8 @@ class Events(commands.Cog, name="Events"):
                 await message.author.edit(nick=nick)
             except:
                 pass
-            if await block.BlockCommands.get_global_perm(self, message, "wb_alert", message.author):
-                if await block.BlockCommands.get_global_perm(self, message, "wb_alert_dm", message.author):
+            if await BlockCommands.get_global_perm(self, message, "wb_alert", message.author):
+                if await BlockCommands.get_global_perm(self, message, "wb_alert_dm", message.author):
                     await message.author.send(embed=welcome_back)
                 else:
                     await message.reply(embed=welcome_back, delete_after=30)
@@ -187,8 +183,8 @@ class Events(commands.Cog, name="Events"):
     @commands.Cog.listener("on_message")
     async def help_check(self, message):
         # check if user's message is only bot ping and reply with help, if not process commands
-        if message.author.bot == False and self.ctx.user.mentioned_in(message) and len(message.content) == len(self.ctx.user.mention):
-            await message.reply(embed=discord.Embed(description=f'My prefix is `{self.ctx.guild_prefixes[str(message.guild.id)]}` or {self.ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!'))
+        if message.author.bot == False and self.ctx.user.mentioned_in(message) and len(message.content) == len(self.ctx.user.mention) and not Utils.is_reply(message):
+            await message.reply(embed=discord.Embed(description=f"My prefix is `{self.ctx.settings[str(message.guild.id)]['prefix']}` or {self.ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!"))
         else:
             await self.ctx.process_commands(message)
 
