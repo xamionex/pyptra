@@ -19,10 +19,10 @@ class NorthstarCommands(commands.Cog, name="Northstar commands"):
 
     @commands.command(name="server", aliases=["serverinfo", "serversearch"])
     @commands.cooldown(1, 60, commands.BucketType.user)
-    async def server(self, ctx, *, game):
+    async def server(self, ctx, *, server):
         """Search for a server"""
         message = await ctx.reply("Contacting Northstar API")
-        gamedata = await Utils.search(game)
+        gamedata = await Utils.search(server)
         game = gamedata[0]
         other = gamedata[1]
         e = discord.Embed()
