@@ -69,7 +69,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
         else:
             await Utils.send_error(ctx, "I can't DM you! Try unblocking me or enabling your DMs.")
 
-    @commands.command(hidden=True, name="give")
+    @commands.command(hidden=True, name="give", alias=["add"])
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
     async def give(self, ctx, user: discord.Member):
@@ -79,9 +79,13 @@ class BlockCommands(commands.Cog, name="Permissions"):
             await Utils.send_error(ctx, f"Nothing was changed.")
         else:
             await BlockCommands.add_perm(self, ctx, perm, user)
-            await Utils.send_embed(ctx, discord.Embed(description=f"Gave {perm} to {user.mention}", color=0xFF6969), False)
+            if self.ctx.settings[str(ctx.guild.id)]["invertperms"]:
+                string = f"Gave {perm} permission to {user.mention}"
+            else:
+                string = f"Unblocked {user.mention} from using {perm} commands"
+            await Utils.send_embed(ctx, discord.Embed(description=string, color=0xFF6969), False)
 
-    @commands.command(hidden=True, name="remove")
+    @commands.command(hidden=True, name="take", alias=["remove", "rem"])
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
     async def remove(self, ctx, user: discord.Member):
@@ -91,7 +95,11 @@ class BlockCommands(commands.Cog, name="Permissions"):
             await Utils.send_error(ctx, f"Nothing was changed.")
         else:
             await BlockCommands.remove_perm(self, ctx, perm, user)
-            await Utils.send_embed(ctx, discord.Embed(description=f"Removed {perm} from {user.mention}", color=0x66FF99), False)
+            if self.ctx.settings[str(ctx.guild.id)]["invertperms"]:
+                string = f"Took {perm} permission from {user.mention}"
+            else:
+                string = f"Blocked {user.mention} from using {perm} commands"
+            await Utils.send_embed(ctx, discord.Embed(description=string, color=0x66FF99), False)
 
     @commands.command(hidden=True, name="permslist")
     @commands.has_permissions(administrator=True)
@@ -100,18 +108,32 @@ class BlockCommands(commands.Cog, name="Permissions"):
         """Lists all available permissions"""
         e = discord.Embed(
             description=f"All available permissions", color=0x66FF99)
-        for perm, perm_desc in self.ctx.perm_list.items():
+        for perm, perm_desc in self.ctx.perms_list.items():
             e.add_field(name=f"{perm}", value=f"{perm_desc}", inline=False)
         await Utils.send_embed(ctx, e)
+
+    @commands.command(hidden=True, name="invertperms")
+    @commands.has_permissions(administrator=True)
+    @commands.guild_only()
+    async def invertperms(self, ctx):
+        """Inverts all permissions (Whether perms block or allow)"""
+        settings = self.ctx.settings[str(ctx.guild.id)]
+        if settings["invertperms"]:
+            settings["invertperms"] = False
+            await Utils.send_embed(ctx, discord.Embed(description="Perms now act as Blockades.", color=0xFF6969))
+        else:
+            settings["invertperms"] = True
+            await Utils.send_embed(ctx, discord.Embed(description="Perms now act as Allowances.", color=0x66FF99))
+        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     @commands.command(hidden=True, name="reset")
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
     async def reset(self, ctx, user: discord.Member):
         """Reset a user's permissions in the bot"""
-        perms = self.ctx.perms
-        if str(user.id) in perms[str(user.guild.id)]:
-            perms[str(user.guild.id)].pop(str(user.id))
+        perms = self.ctx.settings[str(ctx.guild.id)]["perms"]
+        if str(user.id) in perms:
+            perms.pop(str(user.id))
             yn = await BlockCommands.set_member_perms(self, ctx, perms, user)
             if yn:
                 await Utils.send_embed(ctx, discord.Embed(description=f"Successfully reset {user.mention}", color=0x66FF99), False)
@@ -120,41 +142,61 @@ class BlockCommands(commands.Cog, name="Permissions"):
         else:
             await Utils.send_error(ctx, "User isn't in data")
 
+    async def check_perm(self, ctx, permission, msg=None, dm=True):
+        if ctx.author.guild_permissions.administrator:
+            return
+        perm = await BlockCommands.get_perm(self, ctx, permission, ctx.author)
+        if self.ctx.settings[str(ctx.guild.id)]["invertperms"]:
+            perm = [True if not perm else False][0]
+        else:
+            perm = [True if perm else False][0]
+        if perm:
+            string = [f"You are missing {permission} permission to run this command." if self.ctx.settings[str(ctx.guild.id)]["invertperms"] else f"You are blocked from using {permission} commands."][0]
+            string = [f"{string} (DM me to use this command freely.)" if dm else string][0]
+            await Utils.send_error(ctx, string, msg)
+
+    async def check_ping(self, ctx, member, msg=None):
+        if await BlockCommands.get_perm(self, ctx, "ping", member):
+            await Utils.send_error(ctx, f"This person has disallowed me from using them in commands.", msg)
+
     async def open_member_perms(self, ctx, user):
-        perms = self.ctx.perms
-        if str(user.id) in perms[str(user.guild.id)]:
-            return False
+        perms = self.ctx.settings[str(ctx.guild.id)]["perms"]
+        if str(user.id) in perms:
+            return perms
         else:
             await BlockCommands.set_member_perms(self, ctx, perms, user)
 
     async def open_perms(self, ctx, user):
         await BlockCommands.open_member_perms(self, ctx, user)
-        return self.ctx.perms
+        return self.ctx.settings[str(ctx.guild.id)]["perms"]
 
     async def set_member_perms(self, ctx, perms, user):
-        perms[str(user.guild.id)][str(user.id)] = {}
+        perms[str(user.id)] = {}
         for value in self.ctx.perms_list:
-            perms[str(user.guild.id)][str(user.id)][value] = False
-        configs.save(self.ctx.perms_path, "w", self.ctx.perms)
+            perms[str(user.id)][value] = False
+        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
         return True
 
     async def get_perm(self, ctx, perm, user):
         perms = await BlockCommands.open_perms(self, ctx, user)
-        return perms[str(user.guild.id)][str(user.id)][str(perm)]
+        return perms[str(user.id)][str(perm)]
 
     async def add_perm(self, ctx, perm, user):
         perms = await BlockCommands.open_perms(self, ctx, user)
-        perms[str(user.guild.id)][str(user.id)][str(perm)] = True
-        configs.save(self.ctx.perms_path, "w", self.ctx.perms)
+        perms[str(user.id)][str(perm)] = True
+        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     async def remove_perm(self, ctx, perm, user):
         perms = await BlockCommands.open_perms(self, ctx, user)
-        perms[str(user.guild.id)][str(user.id)][str(perm)] = False
-        configs.save(self.ctx.perms_path, "w", self.ctx.perms)
+        perms[str(user.id)][str(perm)] = False
+        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     async def check_perm_arg(self, ctx):
         perms_list = self.ctx.perms_list
-        msg = ctx.message.content.split(" ")[2]
+        try:
+            msg = ctx.message.content.split(" ")[2]
+        except:
+            await Utils.send_error(ctx, "Specify a permission to change.")
         if msg in perms_list:
             return msg
         else:
@@ -171,7 +213,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
     async def open_global_member_perms(self, ctx, user):
         perms = self.ctx.global_perms
         if str(user.id) in perms:
-            return False
+            return perms
         else:
             await BlockCommands.set_global_member_perms(self, ctx, perms, user)
 
@@ -181,7 +223,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
             perms[str(user.id)][value] = True
         for value in self.ctx.global_perms_list_false:
             perms[str(user.id)][value] = False
-        configs.save(self.ctx.global_perms_path, "w", perms)
+        configs.save(self.ctx.global_perms_path, "w", self.ctx.global_perms)
         return True
 
     async def get_global_perm(self, ctx, perm, user):
@@ -191,12 +233,12 @@ class BlockCommands(commands.Cog, name="Permissions"):
     async def add_global_perm(self, ctx, perm, user):
         perms = await BlockCommands.open_global_perm(self, ctx, user)
         perms[str(user.id)][str(perm)] = True
-        configs.save(self.ctx.global_perms_path, "w", perms)
+        configs.save(self.ctx.global_perms_path, "w", self.ctx.global_perms)
 
     async def remove_global_perm(self, ctx, perm, user):
         perms = await BlockCommands.open_global_perm(self, ctx, user)
         perms[str(user.id)][str(perm)] = False
-        configs.save(self.ctx.global_perms_path, "w", perms)
+        configs.save(self.ctx.global_perms_path, "w", self.ctx.global_perms)
 
     async def open_global_perm(self, ctx, user):
         await BlockCommands.open_global_member_perms(self, ctx, user)

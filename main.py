@@ -16,10 +16,10 @@ intents.guilds = True
 
 
 def get_prefix(bot, msg):
-    with open("./data/prefixes.json", "r") as f:
+    with open("./data/settings.json", "r") as f:
         prefixes = json.load(f)
         try:
-            prefix = prefixes[str(msg.guild.id)]
+            prefix = prefixes[str(msg.guild.id)]["prefix"]
         except:
             prefix = "-"
     return prefix

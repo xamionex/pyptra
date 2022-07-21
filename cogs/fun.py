@@ -7,7 +7,7 @@ from pilmoji import Pilmoji
 from typing import Final, Optional
 import discord
 from discord.ext import commands, bridge
-from cogs import block
+from cogs.block import BlockCommands
 from cogs.utils import Utils
 import random
 # get image from url
@@ -27,16 +27,6 @@ class FunCommands(commands.Cog, name="Fun"):
 
     def __init__(self, ctx):
         self.ctx = ctx
-
-    async def checkperm(self, ctx, perm):
-        if await block.BlockCommands.get_perm(self, ctx, perm, ctx.author) or ctx.author.guild_permissions.administrator:
-            return True
-        else:
-            return False
-
-    async def checkping(self, ctx, member):
-        if await block.BlockCommands.get_perm(self, ctx, "ping", member):
-            await Utils.send_error(ctx, f"This person has disallowed me from using them in commands.")
 
     @bridge.bridge_command(name="gif")
     @commands.cooldown(1, 30, commands.BucketType.user)
@@ -116,8 +106,7 @@ class FunCommands(commands.Cog, name="Fun"):
         if self.msg.channel.type == discord.ChannelType.private:
             dm = True
         elif not dm:
-            if not await FunCommands.checkperm(self, ctx, "pet"):
-                await Utils.send_error(ctx, "You are missing Pet permission to run this command. (DM me to use this command freely.)", self.msg)
+            await BlockCommands.check_perm(self, ctx, "pet", self.msg)
         what, frames, duration = await FunCommands.get_image(self, ctx, member, emoji, caption, dm)
         # file-like container to hold the image in memory
         source, dest = BytesIO(), BytesIO()  # sets image as "source" and container to store the petpet gif in memory
@@ -137,7 +126,6 @@ class FunCommands(commands.Cog, name="Fun"):
             await self.msg.edit_original_message(content=f"Done in {counter}", embed=e, file=file)
 
     async def get_image(self, ctx, member, emoji, caption, dm):
-        self.ctx.get_image_error = None
         caption, text, textposition, textcolor, url, attachment = await FunCommands.caption_args(self, ctx, caption)
         image = attachment or member or emoji or url or ctx.author
         image, what = await FunCommands.get_url(self, ctx, image, dm)
@@ -204,7 +192,7 @@ class FunCommands(commands.Cog, name="Fun"):
             image = image.url
         elif type(image) == discord.member.Member or type(image) == discord.user.User:
             if not dm:
-                await self.checkping(ctx, image)
+                await BlockCommands.check_ping(self, ctx, image, self.msg)
             what = image.mention
             try:
                 image = image.avatar.url
@@ -252,13 +240,12 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def hug(self, ctx, *, member: Optional[discord.Member]):
         """Hug someone :O"""
-        if not await FunCommands.checkperm(self, ctx, "weird"):
-            await Utils.send_error(ctx, "You are missing \"weird\" permission to run this command. (DM me to use this command freely.)")
+        await BlockCommands.check_perm(self, ctx, "pet")
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(self.ctx.hug_words_bot))} me!", color=0x0690FF)
         else:
-            await self.checkping(ctx, member)
+            await BlockCommands.check_ping(self, ctx, member)
             e = discord.Embed(
                 description=f"{ctx.author.mention} {(random.choice(self.ctx.hug_words))} {member.mention}", color=0x0690FF)
         e.set_image(url=(random.choice(self.ctx.hug_gifs)))
@@ -269,13 +256,12 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def kiss(self, ctx, *, member: Optional[discord.Member]):
         """Kiss someone :O"""
-        if not await FunCommands.checkperm(self, ctx, "weird"):
-            await Utils.send_error(ctx, "You are missing \"weird\" permission to run this command. (DM me to use this command freely.)")
+        await BlockCommands.check_perm(self, ctx, "pet")
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(self.ctx.kiss_words_bot))} me!", color=0x0690FF)
         else:
-            await self.checkping(ctx, member)
+            await BlockCommands.check_ping(self, ctx, member)
             e = discord.Embed(
                 description=f"{ctx.author.mention} {(random.choice(self.ctx.kiss_words))} {member.mention}", color=0x0690FF)
         e.set_image(url=(random.choice(self.ctx.kiss_gifs)))
@@ -286,8 +272,7 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def fall(self, ctx, *, member: Optional[discord.Member]):
         """Make someone fall >:)"""
-        if not await FunCommands.checkperm(self, ctx, "joke"):
-            await Utils.send_error(ctx, "You are missing \"joke\" permission to run this command. (DM me to use this command freely.)")
+        await BlockCommands.check_perm(self, ctx, "pet")
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} you fell", color=0xFF6969)
@@ -303,8 +288,7 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.has_permissions(administrator=True)
     async def promote(self, ctx, member: discord.Member, *, message=None):
         """Promote someone :D"""
-        if not await FunCommands.checkperm(self, ctx, "joke"):
-            await Utils.send_error(ctx, "You are missing \"joke\" permission to run this command. (DM me to use this command freely.)")
+        await BlockCommands.check_perm(self, ctx, "pet")
         if member == ctx.author:
             e = discord.Embed(
                 description=f"{ctx.author.mention} promoted themselves to {message}", color=0xFF6969)

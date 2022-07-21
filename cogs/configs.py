@@ -14,11 +14,7 @@ class Configs(commands.Cog, name="Configs"):
         paths = {"./data/afk.json": "afk",
                  "./data/global_perms.json": "global_perms",
                  "./data/reputation.json": "reputation",
-                 "./data/perms.json": "perms",
-                 "./data/triggers.json": "triggers",
-                 "./data/timed_purge.json": "timed_purge",
-                 "./data/spam.json": "spam",
-                 "./data/prefixes.json": "guild_prefixes"}
+                 "./data/settings.json": "settings"}
         for path, name in paths.items():
             with open(path, "r") as f:
                 setattr(ctx, str(name), json.loads(f.read()))
@@ -38,6 +34,7 @@ class Configs(commands.Cog, name="Configs"):
                           "weird": "Allows -hug -kiss",
                           "ping": "Denies pinging user in -hug -kiss -pet",
                           "pet": "Allows petting users/images/emojis",
+                          "hex": "Grants users to add colors to their name with a command",
                           "joke": "Allows using -fall -promote"}
         ctx.global_perms_list_false = {"wb_alert_dm": "Disables/Enables welcome back embed sending in DM instead",
                                        "afk_alert_dm": "Disables/Enables AFK alerts sending in DM instead"}

@@ -82,37 +82,27 @@ class Events(commands.Cog, name="Events"):
 
     @commands.Cog.listener("on_guild_join")
     async def guild_add_data(self, guild):
-        prefixes = self.ctx.guild_prefixes
-        prefixes[str(guild.id)] = '-'
-        configs.save(self.ctx.guild_prefixes_path, "w", prefixes)
-
-        perms = self.ctx.perms
-        perms[str(guild.id)] = {}
-        configs.save(self.ctx.perms_path, "w", perms)
-
-        triggers = self.ctx.triggers
-        triggers[str(guild.id)] = {}
-        triggers[str(guild.id)]["regex"] = {}
-        triggers[str(guild.id)]["regex"]["toggle"] = False
-        triggers[str(guild.id)]["regex"]["triggers"] = {}
-        triggers[str(guild.id)]["match"] = {}
-        triggers[str(guild.id)]["match"]["toggle"] = False
-        triggers[str(guild.id)]["match"]["triggers"] = {}
-        configs.save(self.ctx.triggers_path, "w", triggers)
+        self.ctx.settings[str(guild.id)] = {
+            "perms": {},
+            "prefix": "-",
+            "triggers": {
+                "match": {
+                    "toggle": False,
+                    "triggers": {}
+                },
+                "regex": {
+                    "toggle": False,
+                    "triggers": {}
+                }
+            },
+            "purges": {},
+            "invertperms": False
+        }
+        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     @commands.Cog.listener("on_guild_remove")
     async def guild_remove_data(self, guild):
-        prefixes = self.ctx.guild_prefixes
-        prefixes.pop(str(guild.id))
-        configs.save(self.ctx.guild_prefixes_path, "w", prefixes)
-
-        perms = self.ctx.perms
-        perms.pop(str(guild.id))
-        configs.save(self.ctx.perms_path, "w", perms)
-
-        triggers = self.ctx.triggers
-        triggers.pop(str(guild.id))
-        configs.save(self.ctx.triggers_path, "w", triggers)
+        configs.save(self.ctx.settings_path, "w", self.ctx.settings.pop(str(guild.id)))
 
     @commands.Cog.listener("on_message")
     async def afk_check(self, message):
@@ -205,8 +195,8 @@ class Events(commands.Cog, name="Events"):
     @commands.Cog.listener("on_message")
     async def word_triggers(self, message):
         if not message.author.bot and not message.channel.type == discord.ChannelType.private:
-            for type in self.ctx.triggers[str(message.guild.id)]:
-                if self.ctx.triggers[str(message.guild.id)][type]['toggle']:
+            for type in self.ctx.settings[str(message.guild.id)]["triggers"]:
+                if self.ctx.settings[str(message.guild.id)]["triggers"][type]['toggle']:
                     await self.trigger(message, type)
 
     async def trigger(self, message, type: str):
@@ -215,7 +205,7 @@ class Events(commands.Cog, name="Events"):
         else:
             msg = message.content
         try:
-            for trigger, reply in self.ctx.triggers[str(message.guild.id)][type]["triggers"].items():
+            for trigger, reply in self.ctx.settings[str(message.guild.id)]["triggers"][type]["triggers"].items():
                 multi_trigger = list(trigger.split('|'))
                 for triggers in multi_trigger:
                     if triggers.casefold() in msg.casefold():
@@ -228,8 +218,8 @@ class Events(commands.Cog, name="Events"):
     @tasks.loop(seconds=5)
     async def purger(self):
         rem = [False, None, None]
-        for guild in self.ctx.timed_purge.items():
-            for channel, timed in self.ctx.timed_purge[str(guild[0])].items():
+        for guild in self.ctx.settings.items():
+            for channel, timed in self.ctx.settings[str(guild[0])]["purges"].items():
                 # sets the current time
                 current_time = Utils.current_time()
                 # checks list if the interval + time of last purge are lower than current time
@@ -244,10 +234,10 @@ class Events(commands.Cog, name="Events"):
                         await chnl.send(embed=discord.Embed(description=f"**You ({chnl.mention}) have been purged.**").set_image(url=random.choice(self.ctx.purge_gifs)).set_footer(text=f"Occurs every {Utils.display_time_s(timed[0])}"))
                     else:
                         rem = [True, str(guild[0]), str(channel)]
-                    configs.save(self.ctx.timed_purge_path, "w", self.ctx.timed_purge)
+                    configs.save(self.ctx.settings_path, "w", self.ctx.settings)
         if rem[0]:
-            self.ctx.timed_purge[rem[1]].pop(rem[2])
-            configs.save(self.ctx.timed_purge_path, "w", self.ctx.timed_purge)
+            self.ctx.settings[rem[1]]["purges"].pop(rem[2])
+            configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     @purger.before_loop
     async def purger_before_loop(self):

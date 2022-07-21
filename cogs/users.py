@@ -1,7 +1,9 @@
 import json
+import re
 import discord
 from discord.ext import commands, bridge
-from cogs import block, configs
+from cogs import configs
+from cogs.block import BlockCommands
 from cogs.utils import Utils
 
 
@@ -19,7 +21,7 @@ class UserCommands(commands.Cog, name="User Commands"):
     @commands.group(hidden=True, name="rep", invoke_without_command=True)
     async def rep(self, ctx):
         """Reputation commands for users"""
-        await Utils.send_error(ctx, f"No command specified, do {self.ctx.guild_prefixes[str(ctx.guild.id)]}help rep for more info")
+        await Utils.send_error(ctx, f"No command specified, do {self.ctx.settings[str(ctx.guild.id)]['prefix']}help rep for more info")
 
     @rep.command(name="give")
     @commands.cooldown(1, 120, commands.BucketType.user)
@@ -122,6 +124,45 @@ class UserCommands(commands.Cog, name="User Commands"):
         e = await UserCommands.setafk(self, ctx, reason)
         await UserCommands.sendafk(self, ctx, ["afk_alert", "afk_alert_dm"], e)
 
+    @bridge.bridge_command(name="hex", aliases=["color", "colour"])
+    @commands.guild_only()
+    @commands.bot_has_permissions(manage_roles=True)
+    @commands.has_permissions(manage_nicknames=True)
+    async def color(self, ctx, hex):
+        """Gives you a color based on the hex you gave."""
+        await BlockCommands.check_perm(self, ctx, "hex", dm=False)
+        hex = ''.join(re.findall('\d+', str(hex)))
+        if len(hex) < 6:
+            await Utils.send_error(ctx, "Please enter a six digit hex number. (ex. #133769)")
+        hex = int(hex[0:6])
+        rolename = f"#{hex}"
+        rolecolor = discord.Colour(int(f"0x{hex}", 16))
+        for role in ctx.author.roles:
+            if rolename == role.name:
+                has_already = True
+                break
+            else:
+                has_already = False
+        if not has_already:
+            for role in ctx.guild.roles:
+                if rolename == role.name:
+                    found = True
+                    await ctx.author.add_roles(role)
+                    break
+                else:
+                    found = False
+            if not found:
+                role = await ctx.guild.create_role(name=rolename, color=rolecolor)
+                print(ctx.guild.get_member(self.ctx.user.id).top_role.position)
+                await role.edit(position=ctx.guild.get_member(self.ctx.user.id).top_role.position - 1)
+                await ctx.author.add_roles(role)
+                await Utils.send_embed(ctx, discord.Embed(description=f"`✅` Added {role.name}", color=rolecolor))
+        else:
+            for role in ctx.guild.roles:
+                if rolename == role.name:
+                    await ctx.author.remove_roles(role)
+                    await Utils.send_embed(ctx, discord.Embed(description=f"`❌` Removed {role.name}", color=rolecolor))
+
     @bridge.bridge_command(name="gn")
     async def gn(self, ctx):
         """Sets your AFK to `Sleeping 💤`"""
@@ -155,7 +196,7 @@ class UserCommands(commands.Cog, name="User Commands"):
     async def change_rep(self, ctx, change, user):
         rep = await UserCommands.open_rep(self, ctx, user)
         if str(ctx.author.id) in rep[str(user.id)][change]:
-            await Utils.send_error(ctx, f"You already gave this person {change} rep\nIf you want to remove it take a look at {self.ctx.guild_prefixes[str(ctx.guild.id)]}help rep")
+            await Utils.send_error(ctx, f"You already gave this person {change} rep\nIf you want to remove it take a look at {self.ctx.settings[str(ctx.guild.id)]['prefix']}help rep")
         else:
             rep[str(user.id)][change].append(str(ctx.author.id))
         configs.save(self.ctx.reputation_path, "w", rep)
@@ -203,19 +244,19 @@ class UserCommands(commands.Cog, name="User Commands"):
             afk[f'{user.id}']['AFK'] = False
 
     async def sendafk(self, ctx, perm, e):
-        if await block.BlockCommands.get_global_perm(self, ctx, perm[0], ctx.author):
-            if await block.BlockCommands.get_global_perm(self, ctx, perm[1], ctx.author):
+        if await BlockCommands.get_global_perm(self, ctx, perm[0], ctx.author):
+            if await BlockCommands.get_global_perm(self, ctx, perm[1], ctx.author):
                 await Utils.send_embed_dm(ctx, e)
             else:
                 await Utils.send_embed(ctx, e)
 
     def rep_embed(self, ctx, type):
-        e = discord.Embed(title=f"{self.ctx.guild_prefixes[str(ctx.guild.id)]}rep {type} <mention> <type>",
+        e = discord.Embed(title=f"{self.ctx.settings[str(ctx.guild.id)]['prefix']}rep {type} <mention> <type>",
                           description="`❌` **You must mention someone and pick one of these for the type of rep:**", color=0xFF6969)
         e.add_field(
             name="Positive", value=f"`{'`, `'.join(self.ctx.rep_type_positive)}`")
         e.add_field(
             name="Negative", value=f"`{'`, `'.join(self.ctx.rep_type_negative)}`")
         e.set_footer(
-            text=f"For stats type {self.ctx.guild_prefixes[str(ctx.guild.id)]}showrep @user or {self.ctx.guild_prefixes[str(ctx.guild.id)]}showreps")
+            text=f"For stats type {self.ctx.settings[str(ctx.guild.id)]['prefix']}showrep @user or {self.ctx.settings[str(ctx.guild.id)]['prefix']}showreps")
         return e
