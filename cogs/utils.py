@@ -1,3 +1,4 @@
+import unicodedata
 import time
 import aiohttp
 import calendar
@@ -162,3 +163,10 @@ class Utils(commands.Cog, name="Utils"):
                     post = await post.json()
                     keys.append(post['key'])
         return keys
+
+    def strip_accents(text):
+        try:
+            text = str(text, 'utf-8')
+        except:  # unicode is a default on python 3
+            pass
+        return str(unicodedata.normalize('NFD', text).encode('ascii', 'ignore').decode("utf-8"))

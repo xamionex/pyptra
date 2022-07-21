@@ -90,13 +90,11 @@ class UserCommands(commands.Cog, name="User Commands"):
     @rep.command(name="everyone")
     async def showall(self, ctx):
         """Shows global reputation of users"""
-        f = 0
-        p = 0
-        n = 0
+        p, n = 0, 0
         for user in self.ctx.reputation.items():
             p += len(user[1]["positive"])
             n += len(user[1]["negative"])
-            f += p - n
+        f = p - n
         e = discord.Embed(description=f"**Global reputation:**")
         e.add_field(name="Final Reputation", value=f, inline=False)
         e.add_field(name="Positive Reputation", value=p, inline=False)
@@ -127,11 +125,11 @@ class UserCommands(commands.Cog, name="User Commands"):
     @bridge.bridge_command(name="hex", aliases=["color", "colour"])
     @commands.guild_only()
     @commands.bot_has_permissions(manage_roles=True)
-    async def color(self, ctx, hex):
+    async def color(self, ctx, *, hex):
         """Gives you a color based on the hex you gave."""
         await BlockCommands.check_perm(self, ctx, "hex", dm=False)
         hex = hex.replace("0x", "", 1) if hex.startswith("0x") else hex
-        hex = ''.join(re.findall("[\da-f]+", str(hex), re.IGNORECASE))
+        hex = ''.join(re.findall("[\da-f]+", Utils.strip_accents(hex), re.IGNORECASE))
         if len(hex) < 6:
             await Utils.send_error(ctx, "Please enter a six digit hex number. (ex. #133769)")
         hex = hex[0:6]
@@ -257,5 +255,5 @@ class UserCommands(commands.Cog, name="User Commands"):
         e.add_field(
             name="Negative", value=f"`{'`, `'.join(self.ctx.rep_type_negative)}`")
         e.set_footer(
-            text=f"For stats type {self.ctx.settings[str(ctx.guild.id)]['prefix']}showrep @user or {self.ctx.settings[str(ctx.guild.id)]['prefix']}showreps")
+            text=f"For stats type {self.ctx.settings[str(ctx.guild.id)]['prefix']}show @user or {self.ctx.settings[str(ctx.guild.id)]['prefix']}rep everyone")
         return e
