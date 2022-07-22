@@ -102,6 +102,26 @@ class BlockCommands(commands.Cog, name="Permissions"):
         await Utils.send_embed(ctx, e)
         configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
+    @commands.command(hidden=True, name="toggleperm", aliases=["permtoggle"])
+    @commands.has_permissions(administrator=True)
+    @commands.guild_only()
+    async def toggleperm(self, ctx, perm):
+        """Unlocks any command which requires a permission to everyone, be careful."""
+        settings = self.ctx.settings[str(ctx.guild.id)]
+        e = discord.Embed().set_footer(text=f"Note that perms {', '.join(self.ctx.perm_ignore_invert)} ignore this")
+        if perm not in self.ctx.perms_list:
+            await Utils.send_error(ctx, f"I couldn't find that permission.")
+        if perm in self.ctx.perms_list_deny_change:
+            await Utils.send_error(ctx, f"Changing this permission is not allowed.")
+        if perm in settings["unlockedperms"]:
+            settings["unlockedperms"].remove(perm)
+            e.description, e.color = f"{perm} is now restricted to permissions.", 0x66FF99
+        else:
+            settings["unlockedperms"].append(perm)
+            e.description, e.color = f"{perm} is no longer restricted to permissions.", 0xFF6969
+        await Utils.send_embed(ctx, e)
+        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+
     @commands.command(hidden=True, name="reset")
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
@@ -121,7 +141,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
             await Utils.send_error(ctx, f"Couldn't reset {user.mention}")
 
     async def check_perm(self, ctx, permission, msg=None, dm=True):
-        if ctx.author.guild_permissions.administrator or await self.ctx.is_owner(ctx.author):
+        if ctx.author.guild_permissions.administrator or await self.ctx.is_owner(ctx.author) or permission in self.ctx.settings[str(ctx.guild.id)]['unlockedperms']:
             return
         perm = await BlockCommands.get_perm(self, ctx, permission, ctx.author)
         if permission not in self.ctx.perm_ignore_invert:
@@ -174,8 +194,8 @@ class BlockCommands(commands.Cog, name="Permissions"):
             msg = ctx.message.content.split(" ")[2]
         except:
             await Utils.send_error(ctx, "Specify a permission to change.")
-        if msg == "ping":
-            await Utils.send_error(ctx, "Changing ping toggle on users is a violation of their privacy.")
+        if msg in self.ctx.perms_list_deny_change:
+            await Utils.send_error(ctx, "Changing this permission is not allowed.")
         elif msg in perms_list:
             return msg
         else:

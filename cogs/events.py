@@ -95,6 +95,7 @@ class Events(commands.Cog, name="Events"):
                 }
             },
             "purges": {},
+            "unlockedperms": [],
             "invertperms": False
         }
         configs.save(self.ctx.settings_path, "w", self.ctx.settings)
