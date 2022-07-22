@@ -249,7 +249,10 @@ class UserCommands(commands.Cog, name="User Commands"):
     async def sendafk(self, ctx, perm, e):
         if await BlockCommands.get_global_perm(self, ctx, perm[0], ctx.author):
             if await BlockCommands.get_global_perm(self, ctx, perm[1], ctx.author):
-                await Utils.send_embed_dm(ctx, e)
+                try:
+                    await Utils.send_embed_dm(ctx, e)
+                except:
+                    await Utils.send_embed(ctx, e)
             else:
                 await Utils.send_embed(ctx, e)
 
