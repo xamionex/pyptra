@@ -1,6 +1,6 @@
 import datetime
 import discord
-from discord.ext import commands
+from discord.ext import commands, bridge
 from cogs.utils import Utils
 
 
@@ -15,13 +15,18 @@ class OtherCommands(commands.Cog, name="Other Commands"):
     def __init__(self, ctx):
         self.ctx = ctx
 
-    @commands.command(hidden=True, name="echo")
+    @bridge.bridge_command(hidden=True, name="echo")
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
-    async def echo(self, ctx, *, message=None):
+    async def echo(self, ctx, *, message):
         """Echoes the message you send."""
-        await Utils.delete_command_message(ctx)
-        await ctx.send(message)
+        if await Utils.CheckInstance(ctx):
+            await Utils.delete_command_message(ctx)
+            await ctx.send(message)
+        else:
+            msg = await ctx.respond("Sending...", ephemeral=True)
+            await ctx.send(message)
+            await Utils.edit_message(ctx, msg, "Sent!")
 
     @commands.command(name="poll")
     @commands.cooldown(60, 1, commands.BucketType.user)
@@ -85,7 +90,7 @@ class OtherCommands(commands.Cog, name="Other Commands"):
     @commands.command(hidden=True, name="echoembed")
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
-    async def echoembed(self, ctx, description=None):
+    async def echoembed(self, ctx, description):
         """Echos the message you put in with an embed."""
         await Utils.delete_command_message(ctx)
         if description is None:
@@ -97,13 +102,26 @@ class OtherCommands(commands.Cog, name="Other Commands"):
     @commands.command(hidden=True, name="reply")
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
-    async def reply(self, ctx, *, message=None):
+    async def reply(self, ctx, *, message):
         """Reply to someone's message with this command, It'll reply with the bot"""
         reference = ctx.message.reference
         if reference is None:
             await Utils.send_error(ctx, f"You didn't reply to any message.")
         await reference.resolved.reply(message)
         await Utils.delete_command_message(ctx)
+
+    @commands.slash_command(hidden=True, name="reply")
+    @commands.has_permissions(administrator=True)
+    @commands.guild_only()
+    async def slash_reply(self, ctx, message_id: int, *, message):
+        """Reply to someone's message with this command, It'll reply with the bot"""
+        smsg = await ctx.respond("Sending...", ephemeral=True)
+        try:
+            msg = await ctx.fetch_message(message_id)
+            await msg.reply(message)
+        except:
+            await Utils.send_error(ctx, "Couldn't reply to message")
+        await Utils.edit_message(ctx, smsg, "Sent!")
 
     @commands.command(hidden=True, name="dm")
     @commands.has_permissions(administrator=True)
