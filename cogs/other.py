@@ -55,10 +55,10 @@ class OtherCommands(commands.Cog, name="Other Commands"):
             await msg.add_reaction(reaction)
 
     @commands.command(hidden=True, name="free")
-    @commands.has_permissions(administrator=True)
+    @commands.is_owner()
     @commands.guild_only()
     async def free(self, ctx, title, description, price, unix, rating, platform, game_link, imagelink):
-        """Sends a freestuff bot-like embed (used by petar mostly)."""
+        """Sends a freestuff bot-like embed (can be used by petar only)."""
         await Utils.delete_command_message(ctx)
         platforms = {
             "gog": "https://cdn.discordapp.com/attachments/764940369367662622/989443585533440020/unknown.png",
@@ -86,7 +86,7 @@ class OtherCommands(commands.Cog, name="Other Commands"):
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
     async def echoembed(self, ctx, description=None):
-        """Echos the message you put in, was used for testing."""
+        """Echos the message you put in with an embed."""
         await Utils.delete_command_message(ctx)
         if description is None:
             await Utils.send_error(ctx, "No message attached")
@@ -101,33 +101,23 @@ class OtherCommands(commands.Cog, name="Other Commands"):
         """Reply to someone's message with this command, It'll reply with the bot"""
         reference = ctx.message.reference
         if reference is None:
-            return await ctx.reply(f"{ctx.author.mention} You didn't reply to any message.")
+            await Utils.send_error(ctx, f"You didn't reply to any message.")
         await reference.resolved.reply(message)
-        await Utils.delete_command_message(ctx)
-
-    @commands.command(hidden=True, name="namedm")
-    @commands.has_permissions(administrator=True)
-    @commands.guild_only()
-    async def namedm(self, ctx, user: discord.User, *, message=None):
-        """DM someone with the message saying your name"""
-        message = f"From {ctx.author.mention}: {message}" or f"{ctx.author.mention} sent you a message but it was empty"
-        await user.send(message)
         await Utils.delete_command_message(ctx)
 
     @commands.command(hidden=True, name="dm")
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
-    async def dm(self, ctx, user: discord.User, *, message=None):
+    async def dm(self, ctx, user: discord.User, *, message):
         """DM someone without the message saying your name"""
-        message = message or "Someone sent you a message but it was empty"
-        await user.send(message)
+        await user.send(embed=discord.Embed(title=f"Sent from {ctx.guild.name}", description=message))
         await Utils.delete_command_message(ctx)
 
     @commands.command(hidden=True, name="nick")
-    @commands.has_permissions(administrator=True)
+    @commands.has_permissions(manage_nicknames=True)
+    @commands.bot_has_permissions(manage_nicknames=True)
     @commands.guild_only()
-    async def nick(self, ctx, member: discord.Member, *, nick=None):
-        """Changes a users nickname, mostly for testing purposes :)"""
-        nick = nick or ""
+    async def nick(self, ctx, member: discord.Member, *, nick):
+        """Changes a users nickname"""
         await member.edit(nick=nick)
         await Utils.delete_command_message(ctx)
