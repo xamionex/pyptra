@@ -33,11 +33,11 @@ class Utils(commands.Cog, name="Utils"):
             return True
         return False
 
-    async def send_embed(ctx, e, ephemeral=True, mention_author=True):
-        [await ctx.respond(embed=e, mention_author=mention_author) if await Utils.CheckInstance(ctx) else await ctx.respond(embed=e, ephemeral=ephemeral)]
+    async def send_embed(ctx, e, ephemeral=True, mention_author=True, delete_after=MISSING):
+        [await ctx.respond(embed=e, mention_author=mention_author, delete_after=delete_after) if await Utils.CheckInstance(ctx) else await ctx.respond(embed=e, ephemeral=ephemeral)]
 
-    async def send_message(ctx, text, ephemeral=True, mention_author=False):
-        [await ctx.respond(text, mention_author=mention_author) if await Utils.CheckInstance(ctx) else await ctx.respond(text, ephemeral=ephemeral)]
+    async def send_message(ctx, text, ephemeral=True, mention_author=False, delete_after=MISSING):
+        [await ctx.respond(text, mention_author=mention_author, delete_after=delete_after) if await Utils.CheckInstance(ctx) else await ctx.respond(text, ephemeral=ephemeral)]
 
     async def send_embed_dm(ctx, e, delete=False, delete_speed=5):
         if delete:
