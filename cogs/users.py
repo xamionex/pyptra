@@ -153,12 +153,18 @@ class UserCommands(commands.Cog, name="User Commands"):
                 role = await ctx.guild.create_role(name=rolename, color=rolecolor)
                 await role.edit(position=ctx.guild.get_member(self.ctx.user.id).top_role.position - 1)
                 await ctx.author.add_roles(role)
-                await Utils.send_embed(ctx, discord.Embed(description=f"`✅` Added {role.name}", color=rolecolor))
+                await Utils.send_embed(ctx, discord.Embed(description=f"`✅` Added {role.name} and gave it to {ctx.author.mention}", color=rolecolor))
+            elif found:
+                await Utils.send_embed(ctx, discord.Embed(description=f"`✅` Gave {role.name} to {ctx.author.mention}", color=rolecolor))
         else:
             for role in ctx.guild.roles:
                 if rolename == role.name:
                     await ctx.author.remove_roles(role)
-                    await Utils.send_embed(ctx, discord.Embed(description=f"`❌` Removed {role.name}", color=rolecolor))
+                    if len(role.members) == 0:
+                        await role.delete(reason="No-one had the role assigned anymore")
+                        await Utils.send_embed(ctx, discord.Embed(description=f"`❌` Deleted {role.name} as no-one was using it now", color=rolecolor))
+                    else:
+                        await Utils.send_embed(ctx, discord.Embed(description=f"`❌` Took {role.name} from {ctx.author.mention}", color=rolecolor))
 
     @bridge.bridge_command(name="gn")
     async def gn(self, ctx):
