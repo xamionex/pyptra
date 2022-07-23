@@ -38,6 +38,8 @@ class Events(commands.Cog, name="Events"):
             err = error.__cause__
         except:
             err = error
+        if err is None:
+            err = error
         e = discord.Embed(description=f"`❌` {err}", color=0xFF6969)
         await Events.log_error(self, ctx, e.description, ctx.interaction.data)
         if send:
@@ -52,6 +54,8 @@ class Events(commands.Cog, name="Events"):
         try:
             err = error.__cause__
         except:
+            err = error
+        if err is None:
             err = error
         e = discord.Embed(description=f"`❌` {err}", color=0xFF6969)
         await Events.log_error(self, ctx, e.description, ctx.message.content)
