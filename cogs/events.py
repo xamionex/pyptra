@@ -107,9 +107,9 @@ class Events(commands.Cog, name="Events"):
     @commands.Cog.listener("on_message")
     async def afk_check(self, message):
         # check if user is afk or members in message
-        prefix = self.ctx.settings[str(message.guild.id)]['prefix']
         if message.author.bot:
             return
+        prefix = self.ctx.settings[str(message.guild.id)]['prefix']
         send = {}
         for member in message.mentions:
             if member.bot or member.id == message.author.id:
