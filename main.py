@@ -1,9 +1,9 @@
-import asyncio
 import json
 import os
 import discord
-import random
-from discord.ext import commands, bridge, tasks
+#import asyncio
+#import random
+from discord.ext import commands, bridge  # , tasks
 # cogs
 import secrets
 from cogs import block
@@ -58,9 +58,8 @@ async def on_command(ctx):
         pass
 
 
-@tasks.loop(minutes=random.randrange(0, 10, 1), count=3)
+"""@tasks.loop(minutes=random.randrange(0, 10, 1), count=3)
 async def spam_terror():
-    """A background task that gets invoked every 10 minutes."""
     channel = bot.get_channel(
         947548676870524968)  # Get the channel, the id has to be an int
     await channel.send('Message to update last message timestamp (Discord allows you to see that without seeing the channel for some reason)', delete_after=60)
@@ -74,7 +73,7 @@ async def spam_terror_before_loop():
 @spam_terror.after_loop
 async def spam_terror_after_loop():
     await asyncio.sleep(random.randrange(1800, 3600, 200))
-    spam_terror.start()
+    spam_terror.start()"""
 
 
 @bot.event
@@ -105,5 +104,5 @@ print("Found", end=" ")
 print(*bot.extensions_list, sep=', ')
 print("Ignored", end=" ")
 print(*bot.skip_list, sep=', ')
-spam_terror.start()
+# spam_terror.start()
 bot.run(secrets.secret)
