@@ -29,12 +29,12 @@ class UserCommands(commands.Cog, name="User Commands"):
         """Give reputation to a user."""
         if user is None:
             e = self.rep_embed(ctx, "give")
-            await Utils.send_embed(ctx, e)
+            await ctx.respond(embed=e)
             ctx.command.reset_cooldown(ctx)
             return
         if type not in self.ctx.rep_type_combined:
             e = self.rep_embed(ctx, "give")
-            await Utils.send_embed(ctx, e)
+            await ctx.respond(embed=e)
             ctx.command.reset_cooldown(ctx)
             return
         elif type in self.ctx.rep_type_positive:
@@ -42,25 +42,25 @@ class UserCommands(commands.Cog, name="User Commands"):
                 await Utils.send_error(ctx, "You can't give rep to yourself")
             else:
                 await self.change_rep(ctx, "positive", user)
-                await Utils.send_embed(ctx, discord.Embed(description=f"`➕` Giving {user.mention} positive rep"))
+                await ctx.respond(embed=discord.Embed(description=f"`➕` Giving {user.mention} positive rep"))
         elif type in self.ctx.rep_type_negative:
             if user.id == ctx.author.id:
                 await Utils.send_error(ctx, "You can't give rep to yourself")
             else:
                 await self.change_rep(ctx, "negative", user)
-                await Utils.send_embed(ctx, discord.Embed(description=f"`➖` Giving {user.mention} negative rep"))
+                await ctx.respond(embed=discord.Embed(description=f"`➖` Giving {user.mention} negative rep"))
 
     @rep.command(name="take")
     async def take(self, ctx, user: discord.Member = None, type=None):
         """Remove reputation from a user."""
         if user is None:
             e = self.rep_embed(ctx, "take")
-            await Utils.send_embed(ctx, e)
+            await ctx.respond(embed=e)
             ctx.command.reset_cooldown(ctx)
             return
         if type not in self.ctx.rep_type_combined:
             e = self.rep_embed(ctx, "take")
-            await Utils.send_embed(ctx, e)
+            await ctx.respond(embed=e)
             ctx.command.reset_cooldown(ctx)
             return
         elif type in self.ctx.rep_type_positive:
@@ -68,13 +68,13 @@ class UserCommands(commands.Cog, name="User Commands"):
                 await Utils.send_error(ctx, "You can't give rep to yourself")
             else:
                 await self.rem_rep(ctx, "positive", user)
-                await Utils.send_embed(ctx, discord.Embed(description=f"`➕` Removing your positive rep from {user.mention}"))
+                await ctx.respond(embed=discord.Embed(description=f"`➕` Removing your positive rep from {user.mention}"))
         elif type in self.ctx.rep_type_negative:
             if user.id == ctx.author.id:
                 await Utils.send_error(ctx, "You can't give rep to yourself")
             else:
                 await self.rem_rep(ctx, "negative", user)
-                await Utils.send_embed(ctx, discord.Embed(description=f"`➖` Removing your negative rep from {user.mention}"))
+                await ctx.respond(embed=discord.Embed(description=f"`➖` Removing your negative rep from {user.mention}"))
 
     @rep.command(name="show")
     async def show(self, ctx, user: discord.Member = None):
@@ -85,7 +85,7 @@ class UserCommands(commands.Cog, name="User Commands"):
         e.add_field(name="Final Reputation", value=rep[0], inline=False)
         e.add_field(name="Positive Reputation", value=rep[1], inline=False)
         e.add_field(name="Negative Reputation", value=rep[2], inline=False)
-        await Utils.send_embed(ctx, e)
+        await ctx.respond(embed=e)
 
     @rep.command(name="everyone")
     async def showall(self, ctx):
@@ -99,7 +99,7 @@ class UserCommands(commands.Cog, name="User Commands"):
         e.add_field(name="Final Reputation", value=f, inline=False)
         e.add_field(name="Positive Reputation", value=p, inline=False)
         e.add_field(name="Negative Reputation", value=n, inline=False)
-        await Utils.send_embed(ctx, e)
+        await ctx.respond(embed=e)
 
     @commands.command(hidden=True, name="resetrep")
     @commands.is_owner()
@@ -110,7 +110,7 @@ class UserCommands(commands.Cog, name="User Commands"):
         rep.pop(str(user.id))
         try:
             await self.set_rep(ctx, rep, user)
-            await Utils.send_embed(ctx, e=discord.Embed(description=f"Successfully reset {user.mention}", color=0x66FF99))
+            await ctx.respond(embed=discord.Embed(description=f"Successfully reset {user.mention}", color=0x66FF99))
         except:
             await Utils.send_error(ctx, f"Couldn't reset {user.mention}")
 
@@ -153,18 +153,18 @@ class UserCommands(commands.Cog, name="User Commands"):
                 role = await ctx.guild.create_role(name=rolename, color=rolecolor)
                 await role.edit(position=ctx.guild.get_member(self.ctx.user.id).top_role.position - 1)
                 await ctx.author.add_roles(role)
-                await Utils.send_embed(ctx, discord.Embed(description=f"`✅` Added {role.name} and gave it to {ctx.author.mention}", color=rolecolor))
+                await ctx.respond(embed=discord.Embed(description=f"`✅` Added {role.name} and gave it to {ctx.author.mention}", color=rolecolor))
             elif found:
-                await Utils.send_embed(ctx, discord.Embed(description=f"`✅` Gave {role.name} to {ctx.author.mention}", color=rolecolor))
+                await ctx.respond(embed=discord.Embed(description=f"`✅` Gave {role.name} to {ctx.author.mention}", color=rolecolor))
         else:
             for role in ctx.guild.roles:
                 if rolename == role.name:
                     await ctx.author.remove_roles(role)
                     if len(role.members) == 0:
                         await role.delete(reason="No-one had the role assigned anymore")
-                        await Utils.send_embed(ctx, discord.Embed(description=f"`❌` Deleted {role.name} as no-one was using it now", color=rolecolor))
+                        await ctx.respond(embed=discord.Embed(description=f"`❌` Deleted {role.name} as no-one was using it now", color=rolecolor))
                     else:
-                        await Utils.send_embed(ctx, discord.Embed(description=f"`❌` Took {role.name} from {ctx.author.mention}", color=rolecolor))
+                        await ctx.respond(embed=discord.Embed(description=f"`❌` Took {role.name} from {ctx.author.mention}", color=rolecolor))
 
     @bridge.bridge_command(name="gn")
     async def gn(self, ctx):
@@ -250,11 +250,11 @@ class UserCommands(commands.Cog, name="User Commands"):
         if await BlockCommands.get_global_perm(self, ctx, perm[0], ctx.author):
             if await BlockCommands.get_global_perm(self, ctx, perm[1], ctx.author):
                 try:
-                    await Utils.send_embed_dm(ctx, e)
+                    await ctx.author.send(embed=e)
                 except:
-                    await Utils.send_embed(ctx, e)
+                    await ctx.respond(embed=e)
             else:
-                await Utils.send_embed(ctx, e)
+                await ctx.respond(embed=e)
 
     def rep_embed(self, ctx, type):
         e = discord.Embed(title=f"{self.ctx.settings[str(ctx.guild.id)]['prefix']}rep {type} <mention> <type>",

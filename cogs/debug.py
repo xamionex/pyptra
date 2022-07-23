@@ -1,6 +1,6 @@
 import ast
 import discord
-from discord.ext import commands
+from discord.ext import commands, bridge
 
 
 def setup(bot):
@@ -24,6 +24,11 @@ def insert_returns(body):
 
 
 class Debug(commands.Cog):
+    @bridge.bridge_command(name="error")
+    @commands.is_owner()
+    async def error(self, ctx, *, cmd):
+        raise discord.DiscordException(cmd)
+
     @commands.command(name="eval")
     @commands.is_owner()
     async def eval_fn(self, ctx, *, cmd):

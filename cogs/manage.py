@@ -30,7 +30,7 @@ class ManageCommands(commands.Cog, name="Manage"):
                 e.add_field(name=f"{cog}", value="`✅` Success")
             else:
                 e.add_field(name=f"{cog}", value="`❌` Not found")
-        await Utils.send_embed(ctx, e)
+        await ctx.respond(embed=e)
 
     @commands.command(hidden=True, name="unload")
     @commands.is_owner()
@@ -45,7 +45,7 @@ class ManageCommands(commands.Cog, name="Manage"):
                 e.add_field(name=f"{cog}", value="`✅` Success")
             else:
                 e.add_field(name=f"{cog}", value="`❌` Not found")
-        await Utils.send_embed(ctx, e)
+        await ctx.respond(embed=e)
 
     @commands.command(hidden=True, name="reload")
     @commands.is_owner()
@@ -64,7 +64,7 @@ class ManageCommands(commands.Cog, name="Manage"):
                     e.add_field(name=f"{cog}", value="`✅` Success")
             else:
                 e.add_field(name=f"{cog}", value="`❌` Not found")
-        await Utils.send_embed(ctx, e)
+        await ctx.respond(embed=e)
 
     @commands.command(hidden=True, name="restart")
     @commands.is_owner()
@@ -79,7 +79,7 @@ class ManageCommands(commands.Cog, name="Manage"):
         """Lists modules"""
         modules = ", ".join(self.ctx.extensions_list)
         e = discord.Embed(title=f'Modules found:', description=modules, color=0x69FF69)
-        await Utils.send_embed(ctx, e)
+        await ctx.respond(embed=e)
 
     @commands.command(hidden=True, name="prefix")
     @commands.has_permissions(administrator=True)
@@ -88,9 +88,9 @@ class ManageCommands(commands.Cog, name="Manage"):
         if prefix is not None:
             self.ctx.settings[str(ctx.guild.id)]["prefix"] = prefix
             configs.save(self.ctx.settings_path, "w", self.ctx.settings)
-            await Utils.send_embed(ctx, discord.Embed(description=f"Prefix changed to: {prefix}"))
+            await ctx.respond(embed=discord.Embed(description=f"Prefix changed to: {prefix}"))
         else:
-            await Utils.send_embed(ctx, discord.Embed(description=f"My prefix is `{self.ctx.settings[str(ctx.guild.id)]['prefix']}` or {self.ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!"))
+            await ctx.respond(embed=discord.Embed(description=f"My prefix is `{self.ctx.settings[str(ctx.guild.id)]['prefix']}` or {self.ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!"))
 
     @commands.group(hidden=True, name="triggers", invoke_without_command=True)
     @commands.has_permissions(administrator=True)
@@ -177,10 +177,10 @@ class ManageCommands(commands.Cog, name="Manage"):
         settings = await self.define_triggers(ctx)
         if settings[type]["toggle"]:
             settings[type]["toggle"] = False
-            await Utils.send_embed(ctx, discord.Embed(description=f"❌ Disabled {type} triggers", color=0xFF6969))
+            await ctx.respond(embed=discord.Embed(description=f"❌ Disabled {type} triggers", color=0xFF6969))
         else:
             settings[type]["toggle"] = True
-            await Utils.send_embed(ctx, discord.Embed(description=f"✅ Enabled {type} triggers", color=0x66FF99))
+            await ctx.respond(embed=discord.Embed(description=f"✅ Enabled {type} triggers", color=0x66FF99))
         configs.save(self.ctx.settings, "w", settings)
 
     async def listtriggers(self, ctx, type: str):
@@ -191,7 +191,7 @@ class ManageCommands(commands.Cog, name="Manage"):
                 if type == "regex":
                     trigger = trigger.replace(" ", "_")
                 e.add_field(name=trigger, value=reply)
-            await Utils.send_embed(ctx, e)
+            await ctx.respond(embed=e)
         else:
             await Utils.send_error(ctx, "No triggers found")
 
@@ -211,7 +211,7 @@ class ManageCommands(commands.Cog, name="Manage"):
         else:
             e.add_field(
                 name=f"Trigger: {', '.join(trigger.split('|'))}", value=f"**Reply:** `{reply}`")
-        await Utils.send_embed(ctx, e)
+        await ctx.respond(embed=e)
         configs.save(self.ctx.settings, "w", settings)
 
     async def removetrigger(self, ctx, trigger: str, type: str):
@@ -223,5 +223,5 @@ class ManageCommands(commands.Cog, name="Manage"):
             e = discord.Embed(title=f"✅ Removed {trigger}", description=f"`{reply}`", color=0x66FF99)
         except:
             e = discord.Embed(title=f"❌ Couldn't find", description=f"`{trigger}`", color=0xFF6969)
-        await Utils.send_embed(ctx, e)
+        await ctx.respond(embed=e)
         configs.save(self.ctx.settings, "w", settings)

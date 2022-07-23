@@ -56,7 +56,7 @@ class ModerationCommands(commands.Cog, name="Moderation"):
         except KeyError:
             settings = {}
             settings[str(channel.id)] = [interval, 0]
-        await Utils.send_embed(ctx, discord.Embed(description=f"Added {channel.name} to timed purges which occurs every {Utils.display_time_s(interval)}"), False)
+        await ctx.respond(embed=discord.Embed(description=f"Added {channel.name} to timed purges which occurs every {Utils.display_time_s(interval)}"), ephermeral=False)
         configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     @timed_purge.command(name="rem")
@@ -69,7 +69,7 @@ class ModerationCommands(commands.Cog, name="Moderation"):
         if str(channel.id) in settings:
             interval = settings[str(channel.id)][0]
             settings.pop(str(channel.id))
-            await Utils.send_embed(ctx, discord.Embed(description=f"Removed repeating purge of {Utils.display_time_s(interval)} from {channel.name}"), False)
+            await ctx.respond(embed=discord.Embed(description=f"Removed repeating purge of {Utils.display_time_s(interval)} from {channel.name}"), ephermeral=False)
         else:
             await Utils.send_error(ctx, "That channel doesn't have a timed purge")
         configs.save(self.ctx.settings_path, "w", self.ctx.settings)
@@ -83,7 +83,7 @@ class ModerationCommands(commands.Cog, name="Moderation"):
         settings = self.ctx.settings[str(ctx.guild.id)]["purges"]
         if str(channel.id) in settings:
             settings[(str(channel.id))][1] = Utils.current_time() + settings[(str(channel.id))][0]
-            await Utils.send_embed(ctx, discord.Embed(description=f"Reset {channel.mention}'s timed purge, it will happen in <t:{Utils.current_time() + settings[(str(channel.id))][0]}:R>"), False)
+            await ctx.respond(embed=discord.Embed(description=f"Reset {channel.mention}'s timed purge, it will happen in <t:{Utils.current_time() + settings[(str(channel.id))][0]}:R>"), ephermeral=False)
         else:
             await Utils.send_error(ctx, "That channel doesn't have a timed purge")
         configs.save(self.ctx.settings_path, "w", self.ctx.settings)
@@ -107,6 +107,6 @@ class ModerationCommands(commands.Cog, name="Moderation"):
                     pop_list.append(set_channel)
             for pop in pop_list:
                 self.ctx.settings[str(ctx.guild.id)]["purges"].pop(str(pop))
-            await Utils.send_embed(ctx, e, False)
+            await ctx.respond(embed=e, ephemeral=False)
         else:
             await Utils.send_error(ctx, "This guild doesn't have timed purges")

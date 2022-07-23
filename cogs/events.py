@@ -30,48 +30,49 @@ class Events(commands.Cog, name="Events"):
         print("------")
 
     @commands.Cog.listener("on_application_command_error")
-    async def slash_command_error(self, ctx: discord.ApplicationContext, error):
-        e = discord.Embed(description=f"`❌` {error}", color=0xFF6969)
+    async def slash_command_error(self, ctx, error):
+        send = True
         if isinstance(error, commands.BotMissingPermissions):
-            raise error
-        elif isinstance(error, commands.CommandOnCooldown):
-            await ctx.respond(embed=e, ephemeral=True)
-        elif isinstance(error, discord.ApplicationCommandError):
-            await ctx.respond(embed=e, ephemeral=True)
+            send = False
         try:
-            channel = self.ctx.get_channel(980964223121256529)
-            e = discord.Embed(title=ctx.interaction.data.get(
-                "name"), description=f"{ctx.author.mention} `❌` {error}")
-            for i in ctx.interaction.data.get("options"):
-                e.add_field(name=i["name"], value=i["value"])
-            await channel.send(embed=e)
+            err = error.__cause__
         except:
-            pass
+            err = error
+        e = discord.Embed(description=f"`❌` {err}", color=0xFF6969)
+        await Events.log_error(self, ctx, e.description, ctx.interaction.data)
+        if send:
+            await ctx.respond(embed=e, ephemeral=True)
         raise error
 
     @commands.Cog.listener("on_command_error")
     async def command_error(self, ctx, error):
-        e = discord.Embed(description=f"`❌` {error}", color=0xFF6969)
+        send = True
         if isinstance(error, commands.CommandNotFound):
-            raise error
-        elif isinstance(error, commands.BotMissingPermissions):
-            raise error
-        elif isinstance(error, commands.CommandError):
-            await ctx.send(ctx.author.mention, embed=e)
+            send = False
         try:
-            channel = self.ctx.get_channel(980964223121256529)
-            msg = ctx.message.content.split(" ")
-            e = discord.Embed(
-                title=msg[0], description=f"{ctx.author.mention} `❌` {error}")
-            msg.remove(str(msg[0]))
-            c = 0
-            for i in msg:
-                c += 1
-                e.add_field(name=f"Arg {c}", value=i)
-            await channel.send(embed=e)
+            err = error.__cause__
+        except:
+            err = error
+        e = discord.Embed(description=f"`❌` {err}", color=0xFF6969)
+        await Events.log_error(self, ctx, e.description, ctx.message.content)
+        if send:
+            await ctx.send(ctx.author.mention, embed=e)
+        raise error
+
+    async def log_error(self, ctx, error, text):
+        try:
+            if error == "`❌` None":
+                error = "No error message"
+            e = discord.Embed(description=f"{ctx.author.mention}: {error}")
+            if not await Utils.CheckInstance(ctx):
+                text = f"/{text.get('name')} {' '.join([f'''{i['name']}:{i['value']}''' for i in text.get('options')])}"
+            part = 0
+            for add in [text[i:i+2048] for i in range(0, len(text), 2048)]:
+                part += 1
+                e.add_field(name=f"Part {part}", value=add)
+            await self.ctx.get_channel(980964223121256529).send(embed=e)
         except:
             pass
-        raise error
 
     @commands.Cog.listener("on_member_join")
     async def member_data(self, member):
@@ -140,9 +141,12 @@ class Events(commands.Cog, name="Events"):
                         afk_alert.add_field(name=f"{message.guild.get_member(int(member[0])).display_name.replace('[AFK]', '')}", value=f"\"{reason}\"\n<t:{time}:R>")
             if await BlockCommands.get_global_perm(self, message, "afk_alert", message.author):
                 if await BlockCommands.get_global_perm(self, message, "afk_alert_dm", message.author):
-                    await Utils.send_embed_dm(message, afk_alert)
+                    try:
+                        await message.author.send(message, embed=afk_alert)
+                    except:
+                        await message.reply(embed=afk_alert, delete_after=30, mention_author=False)
                 else:
-                    await message.reply(embed=afk_alert, delete_after=30)
+                    await message.reply(embed=afk_alert, delete_after=30, mention_author=False)
         await UserCommands.update_data(self, self.ctx.afk, message.author)
         # if message's author is afk continue
         if list(message.content.split(" "))[0] != f'{prefix}afk' and self.ctx.afk[f'{message.author.id}']['AFK']:
@@ -178,7 +182,7 @@ class Events(commands.Cog, name="Events"):
                 if await BlockCommands.get_global_perm(self, message, "wb_alert_dm", message.author):
                     await message.author.send(embed=welcome_back)
                 else:
-                    await message.reply(embed=welcome_back, delete_after=30)
+                    await message.reply(embed=welcome_back, delete_after=30, mention_author=False)
         configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
 
     @commands.Cog.listener("on_message")
@@ -293,7 +297,7 @@ class Loops(commands.Cog):
             e.add_field(name="Message", value=message)
             e.add_field(name="Repeats each", value=f"{seconds}s")
             e.add_field(name="In channel", value=channel.mention)
-            await Utils.send_embed(ctx, e)
+            await ctx.respond(embed=e)
             await EventUtils.add_channel(self, ctx, input_spam)
 
     @channels.command()
@@ -301,7 +305,7 @@ class Loops(commands.Cog):
         spam = self.ctx.spam
         if str(channel.id) in spam[str(channel.guild.id)]:
             spam[str(channel.guild.id)].pop(str(channel.id))
-            await Utils.send_embed(ctx, e=discord.Embed(description=f"Removed {channel.mention}", color=0x66FF99))
+            await ctx.respond(embed=discord.Embed(description=f"Removed {channel.mention}", color=0x66FF99))
         else:
             await Utils.send_error(ctx, f"{channel.mention} isn't in data")
 
@@ -313,7 +317,7 @@ class Loops(commands.Cog):
             for id, value in data.items():
                 e.add_field(
                     name=f"{id} - every {value[1]}s", value=f"{value[0]}")
-        await Utils.send_embed(ctx, e)
+        await ctx.respond(embed=e)
 
 
 class EventUtils():

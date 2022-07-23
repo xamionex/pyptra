@@ -34,16 +34,6 @@ class Utils(commands.Cog, name="Utils"):
             return True
         return False
 
-    async def send_embed(ctx, e, ephemeral=True, mention_author=True, delete_after=None):
-        [await ctx.respond(embed=e, mention_author=mention_author, delete_after=delete_after) if await Utils.CheckInstance(ctx) else await ctx.respond(embed=e, ephemeral=ephemeral)]
-
-    async def send_message(ctx, text, ephemeral=True, mention_author=False, delete_after=None):
-        [await ctx.respond(text, mention_author=mention_author, delete_after=delete_after) if await Utils.CheckInstance(ctx) else await ctx.respond(text, ephemeral=ephemeral)]
-
-    async def send_embed_dm(ctx, e, delete_after=None):
-        await ctx.author.send(embed=e, delete_after=delete_after)
-        # False doesnt delete, True deletes bot's msg
-
     async def delete_command_message(ctx, delete_speed=None):
         try:
             if delete_speed is None:

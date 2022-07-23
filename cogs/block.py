@@ -58,7 +58,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
         else:
             await BlockCommands.add_perm(self, ctx, perm, user)
             string = f"Gave {perm} permission to {user.mention}" if self.ctx.settings[str(ctx.guild.id)]["invertperms"] else f"Unblocked {user.mention} from using {perm} commands" if perm not in self.ctx.perm_ignore_invert else f"Added {perm} to {user.mention}"
-            await Utils.send_embed(ctx, discord.Embed(description=string, color=0xFF6969), False)
+            await ctx.respond(embed=discord.Embed(description=string, color=0xFF6969), ephemeral=False)
 
     @commands.command(hidden=True, name="take", aliases=["remove", "rem"])
     @commands.has_permissions(administrator=True)
@@ -71,7 +71,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
         else:
             await BlockCommands.remove_perm(self, ctx, perm, user)
             string = f"Took {perm} permission from {user.mention}" if self.ctx.settings[str(ctx.guild.id)]["invertperms"] else f"Blocked {user.mention} from using {perm} commands" if perm not in self.ctx.perm_ignore_invert else f"Removed {perm} from {user.mention}"
-            await Utils.send_embed(ctx, discord.Embed(description=string, color=0x66FF99), False)
+            await ctx.respond(embed=discord.Embed(description=string, color=0x66FF99), ephermeral=False)
 
     @commands.command(hidden=True, name="permslist")
     @commands.has_permissions(administrator=True)
@@ -82,7 +82,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
             description=f"All available permissions", color=0x66FF99)
         for perm, perm_desc in self.ctx.perms_list.items():
             e.add_field(name=f"{perm}", value=f"{perm_desc}", inline=False)
-        await Utils.send_embed(ctx, e)
+        await ctx.respond(embed=e)
 
     @commands.command(hidden=True, name="invertperms")
     @commands.has_permissions(administrator=True)
@@ -99,7 +99,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
             settings["invertperms"] = True
             e.description = "Perms now act as Blockades"
             e.color = 0xFF6969
-        await Utils.send_embed(ctx, e)
+        await ctx.respond(embed=e)
         configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     @commands.command(hidden=True, name="toggleperm", aliases=["permtoggle"])
@@ -119,7 +119,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
         else:
             settings["unlockedperms"].append(perm)
             e.description, e.color = f"{perm} is no longer restricted to permissions.", 0xFF6969
-        await Utils.send_embed(ctx, e)
+        await ctx.respond(embed=e)
         configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     @commands.command(hidden=True, name="reset")
@@ -136,7 +136,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
                 perms[str(user.id)][value] = False
             perms[str(user.id)]["ping"] = ping
             configs.save(self.ctx.settings_path, "w", self.ctx.settings)
-            await Utils.send_embed(ctx, discord.Embed(description=f"Successfully reset {user.mention}", color=0x66FF99), False)
+            await ctx.respond(embed=discord.Embed(description=f"Successfully reset {user.mention}", color=0x66FF99), ephermeral=False)
         except:
             await Utils.send_error(ctx, f"Couldn't reset {user.mention}")
 
@@ -204,10 +204,10 @@ class BlockCommands(commands.Cog, name="Permissions"):
     async def switch_perm(self, ctx, perm, message):
         if await BlockCommands.get_perm(self, ctx, perm, ctx.author):
             await BlockCommands.remove_perm(self, ctx, perm, ctx.author)
-            await Utils.send_embed(ctx, discord.Embed(description=f"✅ Enabled {message}", color=0x66FF99))
+            await ctx.respond(embed=discord.Embed(description=f"✅ Enabled {message}", color=0x66FF99))
         else:
             await BlockCommands.add_perm(self, ctx, perm, ctx.author)
-            await Utils.send_embed(ctx, discord.Embed(description=f"❌ Disabled {message}", color=0xFF6969))
+            await ctx.respond(embed=discord.Embed(description=f"❌ Disabled {message}", color=0xFF6969))
 
     async def open_global_member_perms(self, ctx, user):
         perms = self.ctx.global_perms
@@ -246,7 +246,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
     async def switch_global_perm(self, ctx, perm, message):
         if await BlockCommands.get_global_perm(self, ctx, perm, ctx.author):
             await BlockCommands.remove_global_perm(self, ctx, perm, ctx.author)
-            await Utils.send_embed(ctx, discord.Embed(description=f"❌ Disabled {message}", color=0xFF6969))
+            await ctx.respond(embed=discord.Embed(description=f"❌ Disabled {message}", color=0xFF6969))
         else:
             await BlockCommands.add_global_perm(self, ctx, perm, ctx.author)
-            await Utils.send_embed(ctx, discord.Embed(description=f"✅ Enabled {message}", color=0x66FF99))
+            await ctx.respond(embed=discord.Embed(description=f"✅ Enabled {message}", color=0x66FF99))

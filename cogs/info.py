@@ -72,7 +72,7 @@ class InfoCommands(commands.Cog, name="Informational"):
         # value=perm_string,
         # inline=False) # way too big for my liking tbh
         e.set_footer(text='ID: ' + str(user.id))
-        await Utils.send_embed(ctx, e)
+        await ctx.respond(embed=e)
 
     @bridge.bridge_command(name="pfp")
     @commands.cooldown(1, 10, commands.BucketType.user)
@@ -82,13 +82,13 @@ class InfoCommands(commands.Cog, name="Informational"):
         e = discord.Embed(
             color=0xdfa3ff, description=f'{user.mention} - [Link to profile picture]({user.avatar.url})')
         e.set_image(url=user.avatar.url)
-        await Utils.send_embed(ctx, e)
+        await ctx.respond(embed=e)
 
     @bridge.bridge_command(name="ping")
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def ping(self, ctx):
         """Tells you the bot's ping."""
-        await Utils.send_message(ctx, f"Pong! `{round(self.ctx.latency * 1000)}ms`")
+        await ctx.respond(f"Pong! `{round(self.ctx.latency * 1000)}ms`", ephemeral=True)
 
     @bridge.bridge_command(name="installation")
     @commands.cooldown(1, 10, commands.BucketType.user)
@@ -135,7 +135,7 @@ class InfoCommands(commands.Cog, name="Informational"):
              self.get_pages_automatic()[0],
              discord.Embed(description=f"{ctx.author.mention} just updated the installation embeds in <#922662496588943430>")]
         if option is not None:
-            await Utils.send_embed(ctx, e[3])
+            await ctx.respond(embed=e[3])
             channel = ctx.guild.get_channel(922662496588943430)
             msg = [await channel.fetch_message(968179173753516112), await channel.fetch_message(968179174407831556), await channel.fetch_message(968179175729012736)]
             await msg[0].edit(embed=e[0])
