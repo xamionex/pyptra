@@ -45,18 +45,18 @@ class ModerationCommands(commands.Cog, name="Moderation"):
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
     @commands.bot_has_permissions(manage_messages=True)
-    async def add_purge(self, ctx, channel: Optional[discord.TextChannel], interval, *, message=""):
+    async def add_purge(self, ctx, channel: Optional[discord.TextChannel], *, interval):
         """Add a purge to a channel that happens in intervals"""
-        interval, message = Utils.time_from_string_in_seconds(f"{interval} {message}")
+        interval, message = Utils.time_from_string_in_seconds(interval)
         if interval <= 9:
             await Utils.send_error(ctx, "Minimum interval is 10 seconds.")
         settings = self.ctx.settings[str(ctx.guild.id)]["purges"]
         try:
-            settings[str(channel.id)] = [interval, 0, message]
+            settings[str(channel.id)] = [interval, 0]
         except KeyError:
             settings = {}
-            settings[str(channel.id)] = [interval, 0, message]
-        await Utils.send_embed(ctx, discord.Embed(description=f"Added {channel.mention} to timed purges with the message {message} which occurs every {Utils.display_time_s(interval)}"), False)
+            settings[str(channel.id)] = [interval, 0]
+        await Utils.send_embed(ctx, discord.Embed(description=f"Added {channel.name} to timed purges which occurs every {Utils.display_time_s(interval)}"), False)
         configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     @timed_purge.command(name="rem")
@@ -67,8 +67,9 @@ class ModerationCommands(commands.Cog, name="Moderation"):
         """Remove a purge from a channel"""
         settings = self.ctx.settings[str(ctx.guild.id)]["purges"]
         if str(channel.id) in settings:
+            interval = settings[str(channel.id)][0]
             settings.pop(str(channel.id))
-            await Utils.send_embed(ctx, discord.Embed(description=f"Removed {channel.mention} from timed purges"), False)
+            await Utils.send_embed(ctx, discord.Embed(description=f"Removed repeating purge of {Utils.display_time_s(interval)} from {channel.name}"), False)
         else:
             await Utils.send_error(ctx, "That channel doesn't have a timed purge")
         configs.save(self.ctx.settings_path, "w", self.ctx.settings)
