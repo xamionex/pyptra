@@ -12,6 +12,9 @@ def setup(bot):
     bot.add_cog(Utils(bot))
 
 
+MISSING: object() = discord.utils.MISSING
+
+
 class Utils(commands.Cog, name="Utils"):
     """Utility funcs."""
     COG_EMOJI = "⚙️"
@@ -37,12 +40,9 @@ class Utils(commands.Cog, name="Utils"):
     async def send_message(ctx, text, ephemeral=True, mention_author=False, delete_after=None):
         [await ctx.respond(text, mention_author=mention_author, delete_after=delete_after) if await Utils.CheckInstance(ctx) else await ctx.respond(text, ephemeral=ephemeral)]
 
-    async def send_embed_dm(ctx, e, delete=False, delete_speed=5):
-        if delete:
-            await ctx.author.send(embed=e, delete_after=delete_speed)
-        else:
-            await ctx.author.send(embed=e)
-            # False doesnt delete, True deletes bot's msg
+    async def send_embed_dm(ctx, e, delete_after=None):
+        await ctx.author.send(embed=e, delete_after=delete_after)
+        # False doesnt delete, True deletes bot's msg
 
     async def delete_command_message(ctx, delete_speed=None):
         try:
@@ -53,7 +53,7 @@ class Utils(commands.Cog, name="Utils"):
         except Exception:
             return
 
-    async def edit_message(ctx, message, text=None, embed=None, file=None):
+    async def edit_message(ctx, message, text: str, embed=MISSING, file=MISSING):
         if await Utils.CheckInstance(ctx):
             await message.edit(text, embed=embed, file=file)
         else:
