@@ -96,13 +96,17 @@ class ModerationCommands(commands.Cog, name="Moderation"):
         """List all timed purges"""
         if self.ctx.settings[str(ctx.guild.id)]["purges"]:
             e = discord.Embed(title="Listing all timed purges:")
-            for channel, timed in self.ctx.settings[str(ctx.guild.id)]["purges"].items():
-                try:
-                    channel = f"{channel}\n{self.ctx.get_channel(int(channel)).name}"
-                except:
-                    channel = f"{channel}\nCouldn't get name"
-                counter = Utils.display_time_s(timed[0])
-                e.add_field(name=channel, value=f"Occurs every\n{counter}")
+            pop_list = []
+            for set_channel, timed in self.ctx.settings[str(ctx.guild.id)]["purges"].items():
+                channel = self.ctx.get_channel(int(set_channel))
+                if channel is not None:
+                    channel = f"{channel.id}\n{channel.name}"
+                    counter = Utils.display_time_s(timed[0])
+                    e.add_field(name=channel, value=f"Occurs every\n{counter}")
+                else:
+                    pop_list.append(set_channel)
+            for pop in pop_list:
+                self.ctx.settings[str(ctx.guild.id)]["purges"].pop(str(pop))
             await Utils.send_embed(ctx, e, False)
         else:
             await Utils.send_error(ctx, "This guild doesn't have timed purges")

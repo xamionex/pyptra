@@ -3,10 +3,8 @@ import time
 import aiohttp
 import calendar
 from datetime import datetime
-import os
 import re
 import discord
-from discord.utils import MISSING
 from discord.ext import bridge, commands
 
 
@@ -33,10 +31,10 @@ class Utils(commands.Cog, name="Utils"):
             return True
         return False
 
-    async def send_embed(ctx, e, ephemeral=True, mention_author=True, delete_after=MISSING):
+    async def send_embed(ctx, e, ephemeral=True, mention_author=True, delete_after=None):
         [await ctx.respond(embed=e, mention_author=mention_author, delete_after=delete_after) if await Utils.CheckInstance(ctx) else await ctx.respond(embed=e, ephemeral=ephemeral)]
 
-    async def send_message(ctx, text, ephemeral=True, mention_author=False, delete_after=MISSING):
+    async def send_message(ctx, text, ephemeral=True, mention_author=False, delete_after=None):
         [await ctx.respond(text, mention_author=mention_author, delete_after=delete_after) if await Utils.CheckInstance(ctx) else await ctx.respond(text, ephemeral=ephemeral)]
 
     async def send_embed_dm(ctx, e, delete=False, delete_speed=5):
@@ -55,7 +53,7 @@ class Utils(commands.Cog, name="Utils"):
         except Exception:
             return
 
-    async def edit_message(ctx, message, text=MISSING, embed=MISSING, file=MISSING):
+    async def edit_message(ctx, message, text=None, embed=None, file=None):
         if await Utils.CheckInstance(ctx):
             await message.edit(text, embed=embed, file=file)
         else:
