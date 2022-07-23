@@ -188,7 +188,9 @@ class Events(commands.Cog, name="Events"):
     @commands.Cog.listener("on_message")
     async def help_check(self, message):
         # check if user's message is only bot ping and reply with help, if not process commands
-        if message.author.bot == False and self.ctx.user.mentioned_in(message) and len(message.content) == len(self.ctx.user.mention) and not Utils.is_reply(message):
+        if message.is_system():
+            return
+        if message.author.bot == False and self.ctx.user.mentioned_in(message) and len(message.content) == len(self.ctx.user.mention) and message.type != discord.MessageType.reply:
             await message.reply(embed=discord.Embed(description=f"My prefix is `{self.ctx.settings[str(message.guild.id)]['prefix']}` or {self.ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!"))
         else:
             await self.ctx.process_commands(message)

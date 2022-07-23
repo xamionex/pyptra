@@ -28,12 +28,6 @@ class Utils(commands.Cog, name="Utils"):
         elif isinstance(ctx, bridge.BridgeApplicationContext):
             return False  # slash returns false
 
-    def is_reply(msg):
-        # if it's a reply and not a system message return True else False
-        if msg.reference is not None and not msg.is_system:
-            return True
-        return False
-
     async def delete_command_message(ctx, delete_speed=None):
         try:
             if delete_speed is None:
