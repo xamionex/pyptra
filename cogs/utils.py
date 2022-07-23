@@ -117,12 +117,14 @@ class Utils(commands.Cog, name="Utils"):
         return calendar.timegm(datetime.strptime(datestring, "%Y-%m-%dT%H:%M:%S.%f%z").timetuple())
 
     intervals_milliseconds = (
-        ('w', 6.048e+8),  # 60 * 60 * 24 * 7
-        ('d', 8.64e+7),   # 60 * 60 * 24
-        ('h', 3.6e+6),    # 60 * 60
-        ('m', 60000),
-        ('s', 1000),
-        ('ms', 1),
+        ('y', 6.048e+8),    # * 12
+        ('mo', 6.048e+8),   # * 4.34524
+        ('w', 6.048e+8),    # * 7
+        ('d', 8.64e+7),     # * 24
+        ('h', 3.6e+6),      # * 60
+        ('m', 60000),       # * 60
+        ('s', 1000),        # * 1000
+        ('ms', 1),          # * 1
     )
 
     def display_time(milliseconds, granularity=2):
@@ -135,16 +137,17 @@ class Utils(commands.Cog, name="Utils"):
         return ', '.join(result[:granularity])
 
     intervals_seconds = (
-        (' weeks', 604800),  # 60 * 60 * 24 * 7
-        (' days', 86400),    # 60 * 60 * 24
-        (' hours', 3600),    # 60 * 60
-        (' minutes', 60),
-        (' seconds', 1),
+        (' years', 3.154e+7),   # * 12
+        (' months', 2.628e+6),  # * 4.34524
+        (' weeks', 604800),     # * 7
+        (' days', 86400),       # * 24
+        (' hours', 3600),       # * 60
+        (' minutes', 60),       # * 60
+        (' seconds', 1),        # * 1
     )
 
     def display_time_s(seconds, granularity=2):
         result = []
-
         for name, count in Utils.intervals_seconds:
             value = seconds // count
             if value:
@@ -159,6 +162,28 @@ class Utils(commands.Cog, name="Utils"):
 
     def current_time():
         return round(time.time())
+
+    def time_from_string_in_seconds(text):
+        time = re.match(r"^(([0-9])+(y(ear)?|month|w(eek)?|d(ay)?|h(our)?|m(inute)?|s(econd)?)?s? ?)+", text, re.IGNORECASE)[0]
+        text = text.replace(time, "")
+        time = time.replace(" ", "")
+        time_list = {
+            "y(ear)?": 3.154e+7,    # * 12
+            "month": 2.628e+6,      # * 4.34524
+            "w(eek)?": 604800,      # * 7
+            "d(ay)?": 86400,        # * 24
+            "h(our)?": 3600,        # * 60
+            "m(inute)?": 60,        # * 60
+            "s(econd)?": 1          # * 1
+        }
+        seconds = 0
+        for pattern in time_list:
+            match = "".join(re.findall(r"\d+", str(re.findall(rf'([0-9])+{pattern}s?', time, re.IGNORECASE))))
+            match = 0 if match == "" else int(match)
+            seconds += match * time_list[pattern] if match > 0 else 0
+        if seconds == 0 and time.isalnum():
+            seconds = int(time)
+        return round(int(seconds)), text
 
     async def post(content):
         split_strings = [content[i:i+390000] for i in range(0, len(content), 390000)]

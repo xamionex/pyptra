@@ -45,18 +45,18 @@ class ModerationCommands(commands.Cog, name="Moderation"):
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
     @commands.bot_has_permissions(manage_messages=True)
-    async def add_purge(self, ctx, channel: Optional[discord.TextChannel], interval: int):
+    async def add_purge(self, ctx, channel: Optional[discord.TextChannel], interval, *, message=""):
         """Add a purge to a channel that happens in intervals"""
-        interval = int(''.join(re.findall('\d+', str(interval))))
+        interval, message = Utils.time_from_string_in_seconds(f"{interval} {message}")
         if interval <= 9:
             await Utils.send_error(ctx, "Minimum interval is 10 seconds.")
         settings = self.ctx.settings[str(ctx.guild.id)]["purges"]
         try:
-            settings[str(channel.id)] = [interval, 0]
+            settings[str(channel.id)] = [interval, 0, message]
         except KeyError:
             settings = {}
-            settings[str(channel.id)] = [interval, 0]
-        await Utils.send_embed(ctx, discord.Embed(description=f"Added {channel.mention} to timed purges"), False)
+            settings[str(channel.id)] = [interval, 0, message]
+        await Utils.send_embed(ctx, discord.Embed(description=f"Added {channel.mention} to timed purges with the message {message} which occurs every {Utils.display_time_s(interval)}"), False)
         configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     @timed_purge.command(name="rem")

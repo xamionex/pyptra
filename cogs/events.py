@@ -228,7 +228,10 @@ class Events(commands.Cog, name="Events"):
                         await chnl.send(f"Purging <t:{Utils.current_time() + 9}:R>...")
                         await asyncio.sleep(9)
                         await chnl.purge(limit=None, check=lambda m: not m.pinned)
-                        await chnl.send(embed=discord.Embed(description=f"**You ({chnl.mention}) have been purged.**").set_image(url=random.choice(self.ctx.purge_gifs)).set_footer(text=f"Occurs every {Utils.display_time_s(timed[0])}"))
+                        description = f"**You ({chnl.mention}) have been purged.**"
+                        if timed[2] != "":
+                            description = description + f"\n{timed[2]}"
+                        await chnl.send(embed=discord.Embed(description=description).set_image(url=random.choice(self.ctx.purge_gifs)).set_footer(text=f"Occurs every {Utils.display_time_s(timed[0])}"))
                     else:
                         rem = [True, str(guild[0]), str(channel)]
                     configs.save(self.ctx.settings_path, "w", self.ctx.settings)
