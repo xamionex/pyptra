@@ -127,14 +127,14 @@ class Utils(commands.Cog, name="Utils"):
         ('ms', 1),          # * 1
     )
 
-    def display_time(milliseconds, granularity=2):
+    def display_time(milliseconds, granularity=None):
         result = []
         for name, count in Utils.intervals_milliseconds:
-            value = milliseconds // count
+            value = round(milliseconds // count)
             if value:
                 milliseconds -= value * count
                 result.append(f"{int(value)}{name}")
-        return ', '.join(result[:granularity])
+        return ', '.join(result[:granularity]) if granularity is not None else ', '.join(result)
 
     intervals_seconds = (
         (' years', 3.154e+7),   # * 12
@@ -146,16 +146,16 @@ class Utils(commands.Cog, name="Utils"):
         (' seconds', 1),        # * 1
     )
 
-    def display_time_s(seconds, granularity=2):
+    def display_time_s(seconds, granularity=None):
         result = []
         for name, count in Utils.intervals_seconds:
-            value = seconds // count
+            value = round(seconds // count)
             if value:
                 seconds -= value * count
                 if value == 1:
                     name = name.rstrip('s')
-                result.append(f"{int(value)}{name}")
-        return ', '.join(result[:granularity])
+                result.append(f"{value}{name}")
+        return ', '.join(result[:granularity]) if granularity is not None else ', '.join(result)
 
     def current_milli_time():
         return round(time.time() * 1000)
@@ -164,23 +164,24 @@ class Utils(commands.Cog, name="Utils"):
         return round(time.time())
 
     def time_from_string_in_seconds(text):
-        time = re.match(r"^(([0-9])+(y(ear)?|month|w(eek)?|d(ay)?|h(our)?|m(inute)?|s(econd)?)?s? ?)+", text, re.IGNORECASE)[0]
+        time = re.match(r"^(([0-9])+(y(ear)?|mo(nth)?|w(eek)?|d(ay)?|h(our)?|m(in)?(ute)?|s(econd)?)?s? ?)+", text, re.IGNORECASE)[0]
         text = text.replace(time, "")
         time = time.replace(" ", "")
         time_list = {
-            "y(ear)?": 3.154e+7,    # * 12
-            "month": 2.628e+6,      # * 4.34524
-            "w(eek)?": 604800,      # * 7
-            "d(ay)?": 86400,        # * 24
-            "h(our)?": 3600,        # * 60
-            "m(inute)?": 60,        # * 60
-            "s(econd)?": 1          # * 1
+            r"y": 3.154e+7,   # * 12
+            r"mo": 2.628e+6,  # * 4.34524
+            r"w": 604800,     # * 7
+            r"d": 86400,      # * 24
+            r"h": 3600,       # * 60
+            r"m(?!o)": 60,    # * 60
+            r"s": 1           # * 1
         }
         seconds = 0
         for pattern in time_list:
-            match = "".join(re.findall(r"\d+", str(re.findall(rf'([0-9])+{pattern}s?', time, re.IGNORECASE))))
-            match = 0 if match == "" else int(match)
-            seconds += match * time_list[pattern] if match > 0 else 0
+            result = 0
+            for catch in re.findall(fr"[0-9]+{pattern}", time, re.IGNORECASE):
+                result += int(re.search("\d+", catch)[0])
+            seconds += result * time_list[pattern] if result > 0 else 0
         if seconds == 0 and time.isalnum():
             seconds = int(time)
         return round(int(seconds)), text
