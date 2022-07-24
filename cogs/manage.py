@@ -160,7 +160,7 @@ class ManageCommands(commands.Cog, name="Manage"):
 
     async def define_triggers(self, ctx):
         settings = self.ctx.settings[str(ctx.guild.id)]
-        if "triggers" not in settings:
+        if len(settings["triggers"]) <= 0:
             settings["triggers"] = {
                 "match": {
                     "toggle": False,
@@ -171,23 +171,24 @@ class ManageCommands(commands.Cog, name="Manage"):
                     "triggers": {}
                 }
             }
-        return settings
+        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+        return settings["triggers"]
 
     async def toggletriggers(self, ctx, type: str):
-        settings = await self.define_triggers(ctx)
-        if settings[type]["toggle"]:
-            settings[type]["toggle"] = False
+        settings = await ManageCommands.define_triggers(self, ctx)
+        if settings[str(type)]["toggle"]:
+            settings[str(type)]["toggle"] = False
             await ctx.respond(embed=discord.Embed(description=f"❌ Disabled {type} triggers", color=0xFF6969))
         else:
-            settings[type]["toggle"] = True
+            settings[str(type)]["toggle"] = True
             await ctx.respond(embed=discord.Embed(description=f"✅ Enabled {type} triggers", color=0x66FF99))
-        configs.save(self.ctx.settings, "w", settings)
+        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     async def listtriggers(self, ctx, type: str):
-        settings = await self.define_triggers(ctx)
-        if settings[type]["triggers"]:
+        settings = await ManageCommands.define_triggers(self, ctx)
+        if settings[str(type)]["triggers"]:
             e = discord.Embed(description=f"Triggers found:")
-            for trigger, reply in settings[type]["triggers"].items():
+            for trigger, reply in settings[str(type)]["triggers"].items():
                 if type == "regex":
                     trigger = trigger.replace(" ", "_")
                 e.add_field(name=trigger, value=reply)
@@ -196,8 +197,8 @@ class ManageCommands(commands.Cog, name="Manage"):
             await Utils.send_error(ctx, "No triggers found")
 
     async def addtrigger(self, ctx, trigger: str, reply: str, type: str):
-        settings = await self.define_triggers(ctx)
-        triggers_list = settings[type]["triggers"]
+        settings = await ManageCommands.define_triggers(self, ctx)
+        triggers_list = settings[str(type)]["triggers"]
         e = discord.Embed(title=f"🛠️ Trying to add trigger:", color=0x66FF99)
         old_reply = None
         try:
@@ -212,11 +213,11 @@ class ManageCommands(commands.Cog, name="Manage"):
             e.add_field(
                 name=f"Trigger: {', '.join(trigger.split('|'))}", value=f"**Reply:** `{reply}`")
         await ctx.respond(embed=e)
-        configs.save(self.ctx.settings, "w", settings)
+        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     async def removetrigger(self, ctx, trigger: str, type: str):
-        settings = await self.define_triggers(ctx)
-        triggers_list = settings[type]["triggers"]
+        settings = await ManageCommands.define_triggers(self, ctx)
+        triggers_list = settings[str(type)]["triggers"]
         try:
             reply = triggers_list[str(trigger)]
             triggers_list.pop(str(trigger))
@@ -224,4 +225,4 @@ class ManageCommands(commands.Cog, name="Manage"):
         except:
             e = discord.Embed(title=f"❌ Couldn't find", description=f"`{trigger}`", color=0xFF6969)
         await ctx.respond(embed=e)
-        configs.save(self.ctx.settings, "w", settings)
+        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
