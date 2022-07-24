@@ -35,11 +35,13 @@ class Events(commands.Cog, name="Events"):
         if isinstance(error, commands.BotMissingPermissions):
             send = False
         try:
-            err = error.__cause__
+            err = error.__context__
         except:
             err = error
         if err is None:
             err = error
+        if isinstance(err, KeyError):
+            err = "A data error occured, please contact <@139095725110722560> about this."
         e = discord.Embed(description=f"`❌` {err}", color=0xFF6969)
         await Events.log_error(self, ctx, e.description, ctx.interaction.data)
         if send:
@@ -52,11 +54,13 @@ class Events(commands.Cog, name="Events"):
         if isinstance(error, commands.CommandNotFound):
             send = False
         try:
-            err = error.__cause__
+            err = error.__context__
         except:
             err = error
         if err is None:
             err = error
+        if isinstance(err, KeyError):
+            err = "A data error occured, please contact <@139095725110722560> about this."
         e = discord.Embed(description=f"`❌` {err}", color=0xFF6969)
         await Events.log_error(self, ctx, e.description, ctx.message.content)
         if send:
