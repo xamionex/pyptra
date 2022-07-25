@@ -228,7 +228,8 @@ class Events(commands.Cog, name="Events"):
 
     @tasks.loop(seconds=5)
     async def purger(self):
-        rem = [False, None, None]
+        to_purge = {}
+        to_pop = {}
         for guild in self.ctx.settings.items():
             for channel, timed in self.ctx.settings[str(guild[0])]["purges"].items():
                 # sets the current time
@@ -237,19 +238,24 @@ class Events(commands.Cog, name="Events"):
                 if timed[0] + timed[1] < current_time:
                     # sets current time in list
                     timed[1] = current_time
-                    chnl = self.ctx.get_channel(int(channel))
-                    if chnl is not None:
+                    to_purge[guild[0]] = channel
+        if len(to_purge) > 0:
+            for guild, channel in to_purge.items():
+                chnl = self.ctx.get_channel(int(channel))
+                if chnl is not None:
+                    try:
                         await chnl.send(f"Purging <t:{Utils.current_time() + 9}:R>...")
                         await asyncio.sleep(9)
                         await chnl.purge(limit=None, check=lambda m: not m.pinned)
-                        description = f"**You ({chnl.mention}) have been purged.**"
-                        await chnl.send(embed=discord.Embed(description=description).set_image(url=random.choice(self.ctx.purge_gifs)).set_footer(text=f"Occurs every {Utils.display_time_s(timed[0])}"))
-                    else:
-                        rem = [True, str(guild[0]), str(channel)]
-                    configs.save(self.ctx.settings_path, "w", self.ctx.settings)
-        if rem[0]:
-            self.ctx.settings[rem[1]]["purges"].pop(rem[2])
-            configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+                        await chnl.send(embed=discord.Embed(description=f"**You ({chnl.mention}) have been purged.**").set_image(url=random.choice(self.ctx.purge_gifs)).set_footer(text=f"Occurs every {Utils.display_time_s(self.ctx.settings[str(guild)]['purges'][str(channel)][0])}"))
+                    except:
+                        pass
+                else:
+                    to_pop[str(guild)] = str(channel)
+        if len(to_pop) > 0:
+            for guild, channel in to_pop.items():
+                self.ctx.settings[str(guild)]["purges"].pop(str(channel))
+        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     @purger.before_loop
     async def purger_before_loop(self):
