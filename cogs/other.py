@@ -119,7 +119,7 @@ class OtherCommands(commands.Cog, name="Other Commands"):
     async def slash_reply(self, ctx, message_id, *, message):
         """Reply to someone's message with this command, It'll reply with the bot"""
         smsg = await ctx.respond("Sending...", ephemeral=True)
-        message_id = int(re.findall("\d+", message_id))
+        message_id = int(re.findall("\d+", message_id)[0])
         try:
             msg = await ctx.fetch_message(message_id)
             await msg.reply(message)
