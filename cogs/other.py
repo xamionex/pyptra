@@ -1,4 +1,5 @@
 import datetime
+import re
 import discord
 from discord.ext import commands, bridge
 from cogs.utils import Utils
@@ -115,9 +116,10 @@ class OtherCommands(commands.Cog, name="Other Commands"):
     @commands.slash_command(hidden=True, name="reply")
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
-    async def slash_reply(self, ctx, message_id: int, *, message):
+    async def slash_reply(self, ctx, message_id, *, message):
         """Reply to someone's message with this command, It'll reply with the bot"""
         smsg = await ctx.respond("Sending...", ephemeral=True)
+        message_id = int(re.findall("\d+", message_id))
         try:
             msg = await ctx.fetch_message(message_id)
             await msg.reply(message)
