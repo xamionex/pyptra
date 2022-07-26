@@ -34,7 +34,7 @@ class Utils(commands.Cog, name="Utils"):
                 await ctx.message.delete()
             else:
                 await ctx.message.delete(delay=delete_speed)
-        except Exception:
+        except:
             return
 
     async def edit_message(ctx, message, text: str, embed=MISSING, file=MISSING):
