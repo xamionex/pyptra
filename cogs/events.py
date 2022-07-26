@@ -85,7 +85,7 @@ class Events(commands.Cog, name="Events"):
     @commands.Cog.listener("on_member_join")
     async def member_data(self, member):
         afk = self.ctx.afk
-        await UserCommands.update_data(self, afk, member)
+        await UserCommands.open_user(self, afk, member)
         configs.save(self.ctx.afk_path, "w", afk)
 
     @commands.Cog.listener("on_guild_join")
@@ -123,6 +123,7 @@ class Events(commands.Cog, name="Events"):
         for member in message.mentions:
             if member.bot or member.id == message.author.id:
                 return
+            await UserCommands.open_user(self, self.ctx.afk, member)
             if self.ctx.afk[f'{member.id}']['AFK']:
                 # gets afk message
                 # gets unix time for when user went afk
@@ -137,6 +138,7 @@ class Events(commands.Cog, name="Events"):
                 configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
 
         afk_alert = discord.Embed(title=f"Members in your message are afk:").set_footer(text=f"Toggle: {prefix}alerts\nDMs Toggle: {prefix}dmalerts")
+        await UserCommands.open_user(self, self.ctx.afk, message.author)
         if len(send) > 0:
             if len(send) == 1:
                 for member in send.items():
@@ -155,23 +157,18 @@ class Events(commands.Cog, name="Events"):
                         await message.reply(embed=afk_alert, delete_after=30, mention_author=False)
                 else:
                     await message.reply(embed=afk_alert, delete_after=30, mention_author=False)
-        await UserCommands.update_data(self, self.ctx.afk, message.author)
         # if message's author is afk continue
-        if list(message.content.split(" "))[0] != f'{prefix}afk' and self.ctx.afk[f'{message.author.id}']['AFK']:
-            # counter = unix now - unix since afk in format 0d 0h 0m 0s and if any of them except seconds are 0 remove them
-            counter = Utils.display_time(Utils.current_milli_time() - self.ctx.afk[f'{message.author.id}']['time'])
-
-            # get mentions
-            mentionz = self.ctx.afk[f'{message.author.id}']['mentions']
-
-            # make embed
-            welcome_back = discord.Embed(
-                description=f"**Welcome back {message.author.mention}!**")
-            welcome_back.add_field(name="Afk for", value=counter, inline=True)
-            welcome_back.add_field(
-                name="Mentioned", value=f"{mentionz} time(s)", inline=True)
-            welcome_back.set_footer(
-                text=f"Toggle: {prefix}wbalerts\nDMs Toggle: {prefix}wbdmalerts")
+        if not message.content.startswith(f'{prefix}afk') and not message.content.startswith(f'{prefix}gn') and self.ctx.afk[f'{message.author.id}']['AFK']:
+            # counter = unix now - unix since afk
+            # Welcome back <@User>!
+            welcome_back = discord.Embed(description=f"**Welcome back {message.author.mention}!**")
+            # Afk for 2h 2m 2s 2ms
+            welcome_back.add_field(name="Afk for", value=Utils.display_time(Utils.current_milli_time()-self.ctx.afk[f'{message.author.id}']['time']), inline=True)
+            # Mentioned 20 times
+            welcome_back.add_field(name="Mentioned", value=f"{self.ctx.afk[f'{message.author.id}']['mentions']} time(s)", inline=True)
+            # Toggle: -wbalerts
+            # DNs Toggle: -wbdmalerts
+            welcome_back.set_footer(text=f"Toggle: {prefix}wbalerts\nDMs Toggle: {prefix}wbdmalerts")
 
             # reset afk for user
             self.ctx.afk[f'{message.author.id}']['AFK'] = False
