@@ -220,8 +220,8 @@ class UserCommands(commands.Cog, name="User Commands"):
         afk = self.ctx.afk
         if not reason:
             reason = 'AFK'
-        elif reason and len(reason) > 100:
-            await Utils.send_error(ctx, "You went over the 100 character limit")
+        elif reason and len(reason) > 169:
+            await Utils.send_error(ctx, "You went over the 169 character limit")
         await self.open_user(afk, ctx.author)
         afk[f'{ctx.author.id}']['reason'] = f'{reason}'
         if afk[f'{ctx.author.id}']['AFK']:
