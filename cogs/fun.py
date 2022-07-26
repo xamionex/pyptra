@@ -248,7 +248,7 @@ class FunCommands(commands.Cog, name="Fun"):
             e = discord.Embed(
                 description=f"{ctx.author.mention} {(random.choice(self.ctx.hug_words))} {member.mention}", color=0x0690FF)
         e.set_image(url=(random.choice(self.ctx.hug_gifs)))
-        await ctx.respond(embed=e, ephemeral=False,mention_author=False)
+        await ctx.respond(embed=e,mention_author=False)
 
     @commands.command(hidden=True, name="kiss")
     @commands.guild_only()
@@ -264,7 +264,7 @@ class FunCommands(commands.Cog, name="Fun"):
             e = discord.Embed(
                 description=f"{ctx.author.mention} {(random.choice(self.ctx.kiss_words))} {member.mention}", color=0x0690FF)
         e.set_image(url=(random.choice(self.ctx.kiss_gifs)))
-        await ctx.respond(embed=e, ephemeral=False,mention_author=False)
+        await ctx.respond(embed=e,mention_author=False)
 
     @commands.command(hidden=True, name="fall")
     @commands.guild_only()
@@ -280,7 +280,7 @@ class FunCommands(commands.Cog, name="Fun"):
                 description=f"{ctx.author.mention} made {member.mention} fall!", color=0xFF6969)
         e.set_thumbnail(url=(
             "https://media.discordapp.net/attachments/854984817862508565/883437876493307924/image0-2.gif"))
-        await ctx.respond(embed=e, ephemeral=False,mention_author=False)
+        await ctx.respond(embed=e,mention_author=False)
 
     @commands.command(hidden=True, name="promote")
     @commands.guild_only()
@@ -294,7 +294,7 @@ class FunCommands(commands.Cog, name="Fun"):
         else:
             e = discord.Embed(
                 description=f"{ctx.author.mention} promoted {member.mention} to {message}", color=0xFF6969)
-        await ctx.respond(embed=e, ephemeral=False,mention_author=False)
+        await ctx.respond(embed=e,mention_author=False)
 
     @commands.command(hidden=True, name="noclip")
     @commands.guild_only()
@@ -305,7 +305,7 @@ class FunCommands(commands.Cog, name="Fun"):
             description=f"{ctx.author.mention} is going rogue..", color=0xff0000)
         e.set_image(
             url=("https://c.tenor.com/xnQ97QtwQGkAAAAC/mm2roblox-fly-and-use-noclip.gif"))
-        await ctx.respond(embed=e, ephemeral=False,mention_author=False)
+        await ctx.respond(embed=e,mention_author=False)
 
     @commands.command(hidden=True, name="abuse")
     @commands.guild_only()
@@ -320,7 +320,7 @@ class FunCommands(commands.Cog, name="Fun"):
                 description=f"{ctx.author.mention} is going to abuse {member.mention} 😈", color=0xff0000)
         e.set_image(
             url=("https://i.pinimg.com/originals/e3/15/55/e31555da640e9f8afe59239ee1c2fc37.gif"))
-        await ctx.respond(embed=e, ephemeral=False,mention_author=False)
+        await ctx.respond(embed=e,mention_author=False)
 
 
 class Editor:

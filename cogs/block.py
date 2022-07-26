@@ -58,7 +58,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
         else:
             await BlockCommands.add_perm(self, ctx, perm, user)
             string = f"Gave {perm} permission to {user.mention}" if self.ctx.settings[str(ctx.guild.id)]["invertperms"] else f"Unblocked {user.mention} from using {perm} commands" if perm not in self.ctx.perm_ignore_invert else f"Added {perm} to {user.mention}"
-            await ctx.respond(embed=discord.Embed(description=string, color=0xFF6969), ephemeral=False)
+            await ctx.respond(embed=discord.Embed(description=string, color=0xFF6969))
 
     @commands.command(hidden=True, name="take", aliases=["remove", "rem"])
     @commands.has_permissions(administrator=True)
@@ -71,7 +71,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
         else:
             await BlockCommands.remove_perm(self, ctx, perm, user)
             string = f"Took {perm} permission from {user.mention}" if self.ctx.settings[str(ctx.guild.id)]["invertperms"] else f"Blocked {user.mention} from using {perm} commands" if perm not in self.ctx.perm_ignore_invert else f"Removed {perm} from {user.mention}"
-            await ctx.respond(embed=discord.Embed(description=string, color=0x66FF99), ephermeral=False)
+            await ctx.respond(embed=discord.Embed(description=string, color=0x66FF99))
 
     @commands.command(hidden=True, name="permslist")
     @commands.has_permissions(administrator=True)
@@ -136,7 +136,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
                 perms[str(user.id)][value] = False
             perms[str(user.id)]["ping"] = ping
             configs.save(self.ctx.settings_path, "w", self.ctx.settings)
-            await ctx.respond(embed=discord.Embed(description=f"Successfully reset {user.mention}", color=0x66FF99), ephermeral=False)
+            await ctx.respond(embed=discord.Embed(description=f"Successfully reset {user.mention}", color=0x66FF99))
         except:
             await Utils.send_error(ctx, f"Couldn't reset {user.mention}")
 
