@@ -222,7 +222,7 @@ class UserCommands(commands.Cog, name="User Commands"):
             reason = 'AFK'
         elif reason and len(reason) > 100:
             await Utils.send_error(ctx, "You went over the 100 character limit")
-        await self.update_data(afk, ctx.author)
+        await self.open_user(afk, ctx.author)
         afk[f'{ctx.author.id}']['reason'] = f'{reason}'
         if afk[f'{ctx.author.id}']['AFK']:
             rply = discord.Embed(
@@ -241,7 +241,7 @@ class UserCommands(commands.Cog, name="User Commands"):
             json.dump(afk, f, indent=4, sort_keys=True)
         return rply
 
-    async def update_data(self, afk, user):
+    async def open_user(self, afk, user):
         if not f'{user.id}' in afk:
             afk[f'{user.id}'] = {}
             afk[f'{user.id}']['AFK'] = False
