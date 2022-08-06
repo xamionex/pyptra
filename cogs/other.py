@@ -33,10 +33,9 @@ class OtherCommands(commands.Cog, name="Other Commands"):
     @commands.cooldown(60, 1, commands.BucketType.user)
     @commands.has_permissions(manage_messages=True)
     @commands.guild_only()
-    async def poll(self, ctx, title: str, option1: str, option2: str, option3: str = None, option4: str = None, option5: str = None, option6: str = None, option7: str = None, option8: str = None, option9: str = None, option10: str = None):
+    async def poll(self, ctx, title: str, option1: str = None, option2: str = None, option3: str = None, option4: str = None, option5: str = None, option6: str = None, option7: str = None, option8: str = None, option9: str = None, option10: str = None):
         """Makes a poll with your choices."""
         await Utils.delete_command_message(ctx)
-        smsg = await ctx.respond("Sending...", ephemeral=True)
         e = discord.Embed(description=f"**{title}**\n", timestamp=datetime.datetime.now())
         e.set_footer(text=f"Poll by {ctx.author}")
         options = {
@@ -57,8 +56,11 @@ class OtherCommands(commands.Cog, name="Other Commands"):
                 choice = Utils.remove_newlines(choice)
                 e.description = e.description + f"\n{number} {str(choice)}"
                 reactions.append(number)
+        if len(reactions) < 2:
+            await Utils.send_error(ctx, "There needs to be 2 or more choices.")
+        if not await Utils.CheckInstance(ctx):
+            await ctx.respond("Sent!", ephemeral=True)
         msg = await ctx.send(embed=e)
-        await Utils.edit_message(ctx, smsg, "Sent!")
         for reaction in reactions:
             await msg.add_reaction(reaction)
 
