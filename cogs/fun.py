@@ -107,14 +107,10 @@ class FunCommands(commands.Cog, name="Fun"):
         elif not dm:
             await BlockCommands.check_perm(self, ctx, "pet", self.msg)
         what, frames, duration = await FunCommands.get_image(self, ctx, member, emoji, caption, dm)
-        # file-like container to hold the image in memory
         source, dest = BytesIO(), BytesIO()  # sets image as "source" and container to store the petpet gif in memory
-        # Save the frames into source
-        frames[0].save(source, "gif", save_all=True, append_images=frames[1:], duration=duration, loop=0)
-        # takes source (image) and makes pet-pet and puts into memory
-        petpet.make(source, dest)
-        # set the file pointer back to the beginning so it doesn't upload a blank file.
-        dest.seek(0)
+        frames[0].save(source, "gif", save_all=True, append_images=frames[1:], duration=duration, loop=0)  # Save the frames into source
+        petpet.make(source, dest)  # takes source (image) and makes pet-pet and puts into memory
+        dest.seek(0)  # set the file pointer back to the beginning so it doesn't upload a blank file.
         file = discord.File(dest, filename="petpet.gif")
         e = discord.Embed(description=f"{ctx.author.mention} has pet {what}")
         e.set_image(url=f"attachment://petpet.gif")
@@ -212,7 +208,12 @@ class FunCommands(commands.Cog, name="Fun"):
             if textposition not in ["top", "bottom", "center"]:
                 await Utils.send_error(ctx, "Text position has to be either top bottom or center", self.msg)
         im = Image.open(requests.get(image, stream=True).raw)
-        [await Utils.send_error(ctx, f"Too many frames in gif. ({im.n_frames})", self.msg) if im.n_frames is not None and im.n_frames >= 60 else None]
+        try:
+            n_frames = im.frames
+        except:
+            n_frames = None
+        if n_frames is not None:
+            await Utils.send_error(ctx, f"Too many frames in gif. ({n_frames})", self.msg) if n_frames >= 60 else None
         # set the duration of the new gif to the same as the old one else 1 (because sometimes it's not a gif, so no duration)
         duration = [im.info['duration'] if 'duration' in im.info else 1][0]
         # A list of the frames to be outputted
@@ -241,14 +242,12 @@ class FunCommands(commands.Cog, name="Fun"):
         """Hug someone :O"""
         await BlockCommands.check_perm(self, ctx, "pet")
         if member == None:
-            e = discord.Embed(
-                description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(self.ctx.hug_words_bot))} me!", color=0x0690FF)
+            e = discord.Embed(description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(self.ctx.hug_words_bot))} me!", color=0x0690FF)
         else:
             await BlockCommands.check_ping(self, ctx, member)
-            e = discord.Embed(
-                description=f"{ctx.author.mention} {(random.choice(self.ctx.hug_words))} {member.mention}", color=0x0690FF)
+            e = discord.Embed(description=f"{ctx.author.mention} {(random.choice(self.ctx.hug_words))} {member.mention}", color=0x0690FF)
         e.set_image(url=(random.choice(self.ctx.hug_gifs)))
-        await ctx.respond(embed=e,mention_author=False)
+        await ctx.respond(embed=e, mention_author=False)
 
     @commands.command(hidden=True, name="kiss")
     @commands.guild_only()
@@ -264,7 +263,7 @@ class FunCommands(commands.Cog, name="Fun"):
             e = discord.Embed(
                 description=f"{ctx.author.mention} {(random.choice(self.ctx.kiss_words))} {member.mention}", color=0x0690FF)
         e.set_image(url=(random.choice(self.ctx.kiss_gifs)))
-        await ctx.respond(embed=e,mention_author=False)
+        await ctx.respond(embed=e, mention_author=False)
 
     @commands.command(hidden=True, name="fall")
     @commands.guild_only()
@@ -280,7 +279,7 @@ class FunCommands(commands.Cog, name="Fun"):
                 description=f"{ctx.author.mention} made {member.mention} fall!", color=0xFF6969)
         e.set_thumbnail(url=(
             "https://media.discordapp.net/attachments/854984817862508565/883437876493307924/image0-2.gif"))
-        await ctx.respond(embed=e,mention_author=False)
+        await ctx.respond(embed=e, mention_author=False)
 
     @commands.command(hidden=True, name="promote")
     @commands.guild_only()
@@ -294,7 +293,7 @@ class FunCommands(commands.Cog, name="Fun"):
         else:
             e = discord.Embed(
                 description=f"{ctx.author.mention} promoted {member.mention} to {message}", color=0xFF6969)
-        await ctx.respond(embed=e,mention_author=False)
+        await ctx.respond(embed=e, mention_author=False)
 
     @commands.command(hidden=True, name="noclip")
     @commands.guild_only()
@@ -305,7 +304,7 @@ class FunCommands(commands.Cog, name="Fun"):
             description=f"{ctx.author.mention} is going rogue..", color=0xff0000)
         e.set_image(
             url=("https://c.tenor.com/xnQ97QtwQGkAAAAC/mm2roblox-fly-and-use-noclip.gif"))
-        await ctx.respond(embed=e,mention_author=False)
+        await ctx.respond(embed=e, mention_author=False)
 
     @commands.command(hidden=True, name="abuse")
     @commands.guild_only()
@@ -320,7 +319,7 @@ class FunCommands(commands.Cog, name="Fun"):
                 description=f"{ctx.author.mention} is going to abuse {member.mention} 😈", color=0xff0000)
         e.set_image(
             url=("https://i.pinimg.com/originals/e3/15/55/e31555da640e9f8afe59239ee1c2fc37.gif"))
-        await ctx.respond(embed=e,mention_author=False)
+        await ctx.respond(embed=e, mention_author=False)
 
 
 class Editor:
