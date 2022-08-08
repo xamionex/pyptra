@@ -33,42 +33,47 @@ class InfoCommands(commands.Cog, name="Informational"):
     @commands.cooldown(1, 420, commands.BucketType.user)
     async def serverinfo(self, ctx):
         fetch_guild = await self.ctx.fetch_guild(int(ctx.guild.id), with_counts=True)
-        e = discord.Embed(title=ctx.guild.name, color=discord.Colour.blue())
+        e = discord.Embed(title=ctx.guild.name, description="2FA Needed for moderation: " + "✅" if ctx.guild.mfa_level == 1 else "❎", color=discord.Colour.blue())
         e.set_thumbnail(url=ctx.guild.icon.url)
-        e.set_footer(text=f"Server ID: {ctx.guild.id} ¤ Owned by {ctx.guild.owner}")
+        e.set_footer(text=f"Server ID: {ctx.guild.id} ¤ Owned by {ctx.guild.owner} ¤ Language {ctx.guild.preferred_locale if ctx.guild.preferred_locale is not None else 'Not Specified'}")
         registered = Utils.iso8601_to_epoch(ctx.guild.created_at.isoformat())
-        e.add_field(name="Channels", value=f"{len(ctx.guild.text_channels)} Text Channels\n{len(ctx.guild.voice_channels)} Voice Channels\n{len(ctx.guild.forum_channels)} Forum Channels\n{len(ctx.guild.stage_channels)} Stage Channels\n{len(ctx.guild.categories)} Categories\n{len(ctx.guild.threads)} Threads")
-        e.add_field(name="Limits", value=f"{ctx.guild.emoji_limit} Max Emojis\n{ctx.guild.sticker_limit} Max Stickers\n{Utils.convert_size(ctx.guild.bitrate_limit)} Max Bitrate\n{Utils.convert_size(ctx.guild.filesize_limit)} Max Filesize")
-        e.add_field(name="Members", value=f"All: {fetch_guild.approximate_member_count}\nOnline: {fetch_guild.approximate_presence_count}\nMaximum: {ctx.guild.max_members}")
         e.add_field(name="Created", value=f"<t:{registered}:d>\n<t:{registered}:T>\n<t:{registered}:R>")
-        e.add_field(name="2FA", value="Required for moderation" if ctx.guild.mfa_level == 1 else "Not required for moderation")
-        e.add_field(name="Language", value=ctx.guild.preferred_locale if ctx.guild.preferred_locale is not None else "Not Specified")
-        e.add_field(name="Roles", value=len(ctx.guild.roles))
-        e.add_field(name="Emojis", value=len(ctx.guild.emojis))
-        e.add_field(name="Stickers", value=len(ctx.guild.stickers))
+        e.add_field(name="Customs", value=f"{len(ctx.guild.roles)} - Roles\n{len(ctx.guild.emojis)} - Emojis\n{len(ctx.guild.stickers)} - Stickers")
+        e.add_field(name="Members", value=f"All: {fetch_guild.approximate_member_count}\nOnline: {fetch_guild.approximate_presence_count}\nMaximum: {ctx.guild.max_members}")
+        channels_string = ""
+        channels = {
+            "Text Channels": ctx.guild.text_channels,
+            "Voice Chats": ctx.guild.voice_channels,
+            "Forums": ctx.guild.forum_channels,
+            "Stages": ctx.guild.stage_channels,
+            "Categories": ctx.guild.categories,
+            "Threads": ctx.guild.threads
+        }
+        for type, amount in sorted(channels.items()):
+            if len(amount) > 0:
+                channels_string += f"{len(amount)} - {type}\n"
+        e.add_field(name="Channels", value=channels_string)
+        e.add_field(name="Image limits", value=f"{ctx.guild.emoji_limit} Max Emojis\n{ctx.guild.sticker_limit} Max Stickers")
+        e.add_field(name="Bandwidth", value=f"{Utils.convert_size(ctx.guild.bitrate_limit)} Max Bitrate\n{Utils.convert_size(ctx.guild.filesize_limit)} Max Filesize")
         features = {}
         for feature in ctx.guild.features:
             if feature in self.ctx.discord_experiments:
                 features[feature] = self.ctx.discord_experiments[feature]
             else:
                 features[feature] = "Couldn't get meaning"
-        features_string = "\n"
-        for id, name in features.items():
-            features_string = f"{features_string}\n\nID: {id}\nMEANING: {name}"
-        await self.link(e, features_string)
-        await ctx.respond(embed=e)
-
-    async def link(self, e, string):
-        url = "https://hastebin.com/raw/"
-        keys = await Utils.post(string)
+        features_string = ""
+        for id, name in sorted(features.items()):
+            features_string += f"\nID: {id}\nMEANING: {name}\n"
+        urls = await Utils.post(features_string)
         c = 0
-        if len(keys) > 1:
-            for key in keys:
+        if len(urls) > 1:
+            for url in urls:
                 c += 1
-                e.add_field(name=f"Features Part {c}", value=f"[Click here to view]({url + str(key)})")
+                e.add_field(name=f"Features Part {c}", value=f"[Click here to view]({str(url)})")
         else:
-            e.add_field(name=f"Features", value=f"[Click here to view all features]({url + str(keys[0])})")
-        return e
+            e.url = str(urls[0])
+            e.description = "**Click the server name to view all features**\n" + e.description
+        await ctx.respond(embed=e)
 
     @bridge.bridge_command(name="userinfo", aliases=["ui", "uid", "whois", "who"])
     @commands.cooldown(1, 10, commands.BucketType.user)
@@ -97,13 +102,13 @@ class InfoCommands(commands.Cog, name="Informational"):
                         e.add_field(name=f"Roles [{len(user.roles)-1}]", value=role_string, inline=True)
                     else:
                         e.add_field(name=f"Roles [{len(user.roles)-1}]", value="Too many roles, can't display", inline=True)
+                remove_default = ["priority_speaker", "create_instant_invite", "add_reactions", "stream", "view_channel", "send_messages", "send_tts_messages", "embed_links", "attach_files", "read_message_history", "external_emojis", "connect", "speak", "use_voice_activation", "change_nickname", "use_slash_commands", "request_to_speak", "create_public_threads", "create_private_threads", "external_stickers", "send_messages_in_threads", "start_embedded_activities"]
+                perm_string = ', '.join(sorted([str(p[0]).replace("_", " ").title() for p in user.guild_permissions if p[1] and p[0] not in remove_default]))
+                if perm_string:
+                    e.add_field(name="Guild permissions", value=perm_string, inline=True)
+                e.set_footer(text='ID: ' + str(user.id))
             except:
                 pass
-        remove_default = ["priority_speaker", "create_instant_invite", "add_reactions", "stream", "view_channel", "send_messages", "send_tts_messages", "embed_links", "attach_files", "read_message_history", "external_emojis", "connect", "speak", "use_voice_activation", "change_nickname", "use_slash_commands", "request_to_speak", "create_public_threads", "create_private_threads", "external_stickers", "send_messages_in_threads", "start_embedded_activities"]
-        perm_string = ', '.join(sorted([str(p[0]).replace("_", " ").title() for p in user.guild_permissions if p[1] and p[0] not in remove_default]))
-        if perm_string:
-            e.add_field(name="Guild permissions", value=perm_string, inline=True)
-        e.set_footer(text='ID: ' + str(user.id))
         await ctx.respond(embed=e)
 
     @bridge.bridge_command(name="pfp")
@@ -119,7 +124,7 @@ class InfoCommands(commands.Cog, name="Informational"):
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def ping(self, ctx):
         """Tells you the bot's ping."""
-        await ctx.respond(f"Pong! `{round(self.ctx.latency * 1000)}ms`", ephemeral=True)
+        await ctx.respond(f"Pong! `{round(self.ctx.latency * 1000)}ms`")
 
     @bridge.bridge_command(name="installation")
     @commands.cooldown(1, 10, commands.BucketType.user)
