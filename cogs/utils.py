@@ -1,3 +1,8 @@
+import http.cookiejar
+import urllib.parse
+from json import loads as json_loads
+from http.cookies import SimpleCookie
+import urllib.request
 import math
 import unicodedata
 import time
@@ -169,24 +174,12 @@ class Utils(commands.Cog, name="Utils"):
             seconds = int(time)
         return round(int(seconds)), text
 
-    async def post(content):
-        split_strings = [content[i:i+390000] for i in range(0, len(content), 390000)]
-        keys = []
-        for string in split_strings:
-            async with aiohttp.ClientSession() as session:
-                async with session.post("https://hastebin.com/documents", data=string.encode('utf-8')) as post:
-                    post = await post.json()
-                    keys.append(post['key'])
-        return keys
-
     def strip_accents(text):
         try:
             text = str(text, 'utf-8')
         except:  # unicode is a default on python 3
             pass
         return str(unicodedata.normalize('NFD', text).encode('ascii', 'ignore').decode("utf-8"))
-
-
 
     def convert_size(size_bytes):
         if size_bytes == 0:
@@ -196,3 +189,50 @@ class Utils(commands.Cog, name="Utils"):
         p = math.pow(1024, i)
         s = round(size_bytes / p, 2)
         return "%s %s" % (s, size_name[i])
+
+    async def post(text, domain="rentry"):
+        split_strings = [text[i:i+200000] for i in range(0, len(text), 200000)]
+        urls = []
+        if len(split_strings) > 2 or domain == "hastebin":
+            for string in split_strings:
+                async with aiohttp.ClientSession() as session:
+                    async with session.post("https://hastebin.com/documents", data=string.encode('utf-8')) as post:
+                        post = await post.json()
+                        urls.append(post['key'])
+            for key in urls:
+                key = f"https://hastebin.com/{key}"
+        else:
+            for string in split_strings:
+                client, cookie = Utils.UrllibClient(), SimpleCookie()
+                cookie.load(vars(client.get('https://rentry.co'))['headers']['Set-Cookie'])
+                csrftoken = cookie['csrftoken'].value
+                payload = {
+                    'csrfmiddlewaretoken': csrftoken,
+                    'text': string
+                }
+
+                urls.append(json_loads(client.post('https://rentry.co/api/new', payload, headers={"Referer": 'https://rentry.co'}).data)['url'])
+        return urls
+
+    class UrllibClient:
+        """Simple HTTP Session Client, keeps cookies."""
+
+        def __init__(self):
+            self.cookie_jar = http.cookiejar.CookieJar()
+            self.opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(self.cookie_jar))
+            urllib.request.install_opener(self.opener)
+
+        def get(self, url, headers={}):
+            request = urllib.request.Request(url, headers=headers)
+            return self._request(request)
+
+        def post(self, url, data=None, headers={}):
+            postdata = urllib.parse.urlencode(data).encode()
+            request = urllib.request.Request(url, postdata, headers)
+            return self._request(request)
+
+        def _request(self, request):
+            response = self.opener.open(request)
+            response.status_code = response.getcode()
+            response.data = response.read().decode('utf-8')
+            return response

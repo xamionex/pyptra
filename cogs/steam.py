@@ -122,16 +122,15 @@ class Utils:
     async def add_url(e, games):
         content = "\n"
         for appid, title in games.items():
-            content = content + f"ID: `{appid}`\nTITLE: `{title}`\n\n"
-        url = "https://hastebin.com/raw/"
-        keys = await utils.post(content)
+            content = content + f"LINK/ID: [LINK](steam://store/{appid}) - {appid}\nTITLE: `{title}`\n\n"
+        urls = await utils.post(content)
         c = 0
-        if len(keys) > 1:
-            for key in keys:
+        if len(urls) > 1:
+            for url in urls:
                 c += 1
-                e.add_field(name=f"Part {c}", value=f"[Search Results]({url + str(key)})")
+                e.add_field(name=f"Part {c}", value=f"[Search Results]({str(url)})")
         else:
-            e.url = f"{url + str(keys[0])}"
+            e.url = str(urls[0])
         return e
 
     def setgame(item):
