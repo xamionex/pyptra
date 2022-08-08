@@ -1,3 +1,4 @@
+from atexit import register
 from typing import Optional
 import discord
 from discord.ext import commands, pages, bridge
@@ -27,6 +28,47 @@ class InfoCommands(commands.Cog, name="Informational"):
 
     def __init__(self, ctx):
         self.ctx = ctx
+
+    @bridge.bridge_command(name="serverinfo", aliases=["si", "sid"])
+    @commands.cooldown(1, 420, commands.BucketType.user)
+    async def serverinfo(self, ctx):
+        fetch_guild = await self.ctx.fetch_guild(int(ctx.guild.id), with_counts=True)
+        e = discord.Embed(title=ctx.guild.name, color=discord.Colour.blue())
+        e.set_thumbnail(url=ctx.guild.icon.url)
+        e.set_footer(text=f"Server ID: {ctx.guild.id} ¤ Owned by {ctx.guild.owner}")
+        registered = Utils.iso8601_to_epoch(ctx.guild.created_at.isoformat())
+        e.add_field(name="Channels", value=f"{len(ctx.guild.text_channels)} Text Channels\n{len(ctx.guild.voice_channels)} Voice Channels\n{len(ctx.guild.forum_channels)} Forum Channels\n{len(ctx.guild.stage_channels)} Stage Channels\n{len(ctx.guild.categories)} Categories\n{len(ctx.guild.threads)} Threads")
+        e.add_field(name="Limits", value=f"{ctx.guild.emoji_limit} Max Emojis\n{ctx.guild.sticker_limit} Max Stickers\n{Utils.convert_size(ctx.guild.bitrate_limit)} Max Bitrate\n{Utils.convert_size(ctx.guild.filesize_limit)} Max Filesize")
+        e.add_field(name="Members", value=f"All: {fetch_guild.approximate_member_count}\nOnline: {fetch_guild.approximate_presence_count}\nMaximum: {ctx.guild.max_members}")
+        e.add_field(name="Created", value=f"<t:{registered}:d>\n<t:{registered}:T>\n<t:{registered}:R>")
+        e.add_field(name="2FA", value="Required for moderation" if ctx.guild.mfa_level == 1 else "Not required for moderation")
+        e.add_field(name="Language", value=ctx.guild.preferred_locale if ctx.guild.preferred_locale is not None else "Not Specified")
+        e.add_field(name="Roles", value=len(ctx.guild.roles))
+        e.add_field(name="Emojis", value=len(ctx.guild.emojis))
+        e.add_field(name="Stickers", value=len(ctx.guild.stickers))
+        features = {}
+        for feature in ctx.guild.features:
+            if feature in self.ctx.discord_experiments:
+                features[feature] = self.ctx.discord_experiments[feature]
+            else:
+                features[feature] = "Couldn't get meaning"
+        features_string = "\n"
+        for id, name in features.items():
+            features_string = f"{features_string}\n\nID: {id}\nMEANING: {name}"
+        await self.link(e, features_string)
+        await ctx.respond(embed=e)
+
+    async def link(self, e, string):
+        url = "https://hastebin.com/raw/"
+        keys = await Utils.post(string)
+        c = 0
+        if len(keys) > 1:
+            for key in keys:
+                c += 1
+                e.add_field(name=f"Features Part {c}", value=f"[Click here to view]({url + str(key)})")
+        else:
+            e.add_field(name=f"Features", value=f"[Click here to view all features]({url + str(keys[0])})")
+        return e
 
     @bridge.bridge_command(name="userinfo", aliases=["ui", "uid", "whois", "who"])
     @commands.cooldown(1, 10, commands.BucketType.user)
