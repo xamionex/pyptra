@@ -28,7 +28,7 @@ class InfoCommands(commands.Cog, name="Informational"):
     def __init__(self, ctx):
         self.ctx = ctx
 
-    @bridge.bridge_command(name="userinfo")
+    @bridge.bridge_command(name="userinfo", aliases=["ui", "uid", "whois", "who"])
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def userinfo(self, ctx, user: Optional[discord.Member]):
         """Shows you information about users"""
@@ -42,35 +42,25 @@ class InfoCommands(commands.Cog, name="Informational"):
             e.set_author(name=f"{str(user)} - Couldn't get avatar")
         e.add_field(
             name="Registered",
-            value=f"<t:{date_registered}:f> (<t:{date_registered}:R>)", inline=False)
+            value=f"<t:{date_registered}:d>\n<t:{date_registered}:T>\n(<t:{date_registered}:R>)", inline=True)
         if isinstance(ctx.channel.type, discord.DMChannel) == False:
             try:
-                date_joined = Utils.iso8601_to_epoch(
-                    user.joined_at.isoformat())
+                date_joined = Utils.iso8601_to_epoch(user.joined_at.isoformat())
                 members = sorted(ctx.guild.members, key=lambda m: m.joined_at)
-                e.add_field(
-                    name="Joined",
-                    value=f"<t:{date_joined}:f> (<t:{date_joined}:R>)", inline=False)
-                e.add_field(
-                    name="Join position",
-                    value=str(members.index(user)+1))
+                e.add_field(name="Joined", value=f"<t:{date_joined}:d>\n<t:{date_joined}:T>\n(<t:{date_joined}:R>)", inline=True)
+                e.add_field(name="Join position", value="This user created the server." if members.index(user) == 0 else str(members.index(user)+1), inline=True)
                 if len(user.roles) > 1:
-                    role_string = ' '.join([r.mention for r in user.roles][1:])
+                    role_string = ' '.join(reversed([r.mention for r in user.roles][1:]))
                     if len(role_string) < 1024:
-                        e.add_field(
-                            name=f"Roles [{len(user.roles)-1}]",
-                            value=role_string,
-                            inline=False)
+                        e.add_field(name=f"Roles [{len(user.roles)-1}]", value=role_string, inline=True)
                     else:
-                        e.add_field(name=f"Roles [{len(user.roles)-1}]",
-                                    value="Too many roles, can't display")
+                        e.add_field(name=f"Roles [{len(user.roles)-1}]", value="Too many roles, can't display", inline=True)
             except:
                 pass
-        # perm_string = ', '.join([str(p[0]).replace("_", " ").title() for p in user.guild_permissions if p[1]])
-        # e.add_field(
-        # name="Guild permissions",
-        # value=perm_string,
-        # inline=False) # way too big for my liking tbh
+        remove_default = ["priority_speaker", "create_instant_invite", "add_reactions", "stream", "view_channel", "send_messages", "send_tts_messages", "embed_links", "attach_files", "read_message_history", "external_emojis", "connect", "speak", "use_voice_activation", "change_nickname", "use_slash_commands", "request_to_speak", "create_public_threads", "create_private_threads", "external_stickers", "send_messages_in_threads", "start_embedded_activities"]
+        perm_string = ', '.join(sorted([str(p[0]).replace("_", " ").title() for p in user.guild_permissions if p[1] and p[0] not in remove_default]))
+        if perm_string:
+            e.add_field(name="Guild permissions", value=perm_string, inline=True)
         e.set_footer(text='ID: ' + str(user.id))
         await ctx.respond(embed=e)
 
@@ -79,8 +69,7 @@ class InfoCommands(commands.Cog, name="Informational"):
     async def pfp(self, ctx, user: Optional[discord.Member]):
         """Shows you an users profile picture"""
         user = user or ctx.author
-        e = discord.Embed(
-            color=0xdfa3ff, description=f'{user.mention} - [Link to profile picture]({user.avatar.url})')
+        e = discord.Embed(color=0xdfa3ff, description=f'{user.mention} - [Link to profile picture]({user.avatar.url})')
         e.set_image(url=user.avatar.url)
         await ctx.respond(embed=e)
 
