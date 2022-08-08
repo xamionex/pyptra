@@ -123,7 +123,7 @@ class Utils:
         content = "\n"
         for appid, title in games.items():
             content = content + f"ID: `{appid}`\nTITLE: `{title}`\n\n"
-        url = "https://www.toptal.com/developers/hastebin/raw/"
+        url = "https://hastebin.com/raw/"
         keys = await utils.post(content)
         c = 0
         if len(keys) > 1:

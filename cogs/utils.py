@@ -1,3 +1,4 @@
+import math
 import unicodedata
 import time
 import aiohttp
@@ -173,7 +174,7 @@ class Utils(commands.Cog, name="Utils"):
         keys = []
         for string in split_strings:
             async with aiohttp.ClientSession() as session:
-                async with session.post("https://www.toptal.com/developers/hastebin/documents", data=string.encode('utf-8')) as post:
+                async with session.post("https://hastebin.com/documents", data=string.encode('utf-8')) as post:
                     post = await post.json()
                     keys.append(post['key'])
         return keys
@@ -184,3 +185,14 @@ class Utils(commands.Cog, name="Utils"):
         except:  # unicode is a default on python 3
             pass
         return str(unicodedata.normalize('NFD', text).encode('ascii', 'ignore').decode("utf-8"))
+
+
+
+    def convert_size(size_bytes):
+        if size_bytes == 0:
+            return "0B"
+        size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+        i = int(math.floor(math.log(size_bytes, 1024)))
+        p = math.pow(1024, i)
+        s = round(size_bytes / p, 2)
+        return "%s %s" % (s, size_name[i])
