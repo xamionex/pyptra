@@ -251,7 +251,7 @@ class Events(commands.Cog, name="Events"):
                         await chnl.send(f"Purging <t:{Utils.current_time() + 9}:R>...")
                         await asyncio.sleep(9)
                         await chnl.purge(limit=None, check=lambda m: not m.pinned)
-                        await chnl.send(embed=discord.Embed(description=f"**You ({chnl.mention}) have been purged.**").set_image(url=random.choice(self.ctx.purge_gifs)).set_footer(text=f"Occurs every {Utils.display_time_s(self.ctx.settings[str(guild)]['purges'][str(channel)][0])}"))
+                        # await chnl.send(embed=discord.Embed(description=f"**You ({chnl.mention}) have been purged.**").set_image(url=random.choice(self.ctx.purge_gifs)).set_footer(text=f"Occurs every {Utils.display_time_s(self.ctx.settings[str(guild)]['purges'][str(channel)][0])}"))
                     except:
                         pass
                 else:
@@ -261,7 +261,7 @@ class Events(commands.Cog, name="Events"):
                 self.ctx.settings[str(guild)]["purges"].pop(str(channel))
         Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
-    @tasks.loop(seconds=10)
+    @tasks.loop(seconds=30)
     async def info_channel(self):
         to_pop = {}
         for guild in self.ctx.guilds:
@@ -368,10 +368,6 @@ class Events(commands.Cog, name="Events"):
             Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
         except:
             pass
-
-    @purger.before_loop
-    async def purger_before_loop(self):
-        await self.ctx.wait_until_ready()
 
 
 """
