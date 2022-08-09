@@ -24,9 +24,11 @@ class Events(commands.Cog, name="Events"):
 
     @commands.Cog.listener("on_ready")
     async def logged_in(self):
-        self.ctx.events_info = {}
         for guild in self.ctx.guilds:
-            self.ctx.events_info[str(guild.id)] = {"on_ready": Utils.current_time()}
+            try:
+                self.ctx.settings[str(guild.id)]["events"]["on_ready"] = Utils.current_time()
+            except:
+                self.ctx.settings[str(guild.id)]["events"] = {"on_ready": Utils.current_time()}
         print(f"Logged in as {self.ctx.user} (ID: {self.ctx.user.id})")
         print("------")
         self.purger.start()
@@ -94,6 +96,8 @@ class Events(commands.Cog, name="Events"):
     @commands.Cog.listener("on_guild_join")
     async def guild_add_data(self, guild):
         self.ctx.settings[str(guild.id)] = {
+            "infochannel": {},
+            "events": {},
             "perms": {},
             "prefix": "-",
             "triggers": {
@@ -121,24 +125,24 @@ class Events(commands.Cog, name="Events"):
         # check if user is afk or members in message
         if message.author.bot:
             return
-        prefix = self.ctx.settings[str(message.guild.id)]['prefix']
+        prefix = self.ctx.settings[str(message.guild.id)]["prefix"]
         send = {}
         for member in message.mentions:
             if member.bot or member.id == message.author.id:
                 return
             await UserCommands.open_user(self, self.ctx.afk, member)
-            if self.ctx.afk[f'{member.id}']['AFK']:
+            if self.ctx.afk[f"{member.id}"]["AFK"]:
                 # gets afk message
                 # gets unix time for when user went afk
                 # add data to list
-                send[str(member.id)] = {round(self.ctx.afk[f'{member.id}']['time']/1000): self.ctx.afk[f'{member.id}']['reason']}
-                #afk_alert.add_field(name=f"{member.display_name.replace('[AFK]', '')} - <t:{time}:R>", value=f"\"{reason}\"", inline=True)
+                send[str(member.id)] = {round(self.ctx.afk[f"{member.id}"]["time"]/1000): self.ctx.afk[f"{member.id}"]["reason"]}
+                # afk_alert.add_field(name=f"{member.display_name.replace("[AFK]", "")} - <t:{time}:R>", value=f"\"{reason}\"", inline=True)
 
                 # plus 1 time mentioned in afk.json
-                self.ctx.afk[f'{member.id}']['mentions'] = int(self.ctx.afk[f'{member.id}']['mentions']) + 1
+                self.ctx.afk[f"{member.id}"]["mentions"] = int(self.ctx.afk[f"{member.id}"]["mentions"]) + 1
 
                 # save json
-                Configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
+                Configs.save(self.ctx.afk_path, "w", self.ctx.afk)
 
         afk_alert = discord.Embed(title=f"Members in your message are afk:").set_footer(text=f"Toggle: {prefix}alerts\nDMs Toggle: {prefix}dmalerts")
         await UserCommands.open_user(self, self.ctx.afk, message.author)
@@ -160,13 +164,13 @@ class Events(commands.Cog, name="Events"):
                         await message.reply(embed=afk_alert, delete_after=30, mention_author=False)
                 else:
                     await message.reply(embed=afk_alert, delete_after=30, mention_author=False)
-        # if message's author is afk continue
-        if not message.content.startswith(f'{prefix}afk') and not message.content.startswith(f'{prefix}gn') and self.ctx.afk[f'{message.author.id}']['AFK']:
+        # if message"s author is afk continue
+        if not message.content.startswith(f"{prefix}afk") and not message.content.startswith(f"{prefix}gn") and self.ctx.afk[f"{message.author.id}"]["AFK"]:
             # counter = unix now - unix since afk
             # Welcome back <@User>!
             welcome_back = discord.Embed(description=f"**Welcome back {message.author.mention}!**")
             # Afk for 2h 2m 2s 2ms
-            welcome_back.add_field(name="Afk for", value=Utils.display_time(Utils.current_milli_time()-self.ctx.afk[f'{message.author.id}']['time']), inline=True)
+            welcome_back.add_field(name="Afk for", value=Utils.display_time(Utils.current_milli_time()-self.ctx.afk[f"{message.author.id}"]["time"]), inline=True)
             # Mentioned 20 times
             welcome_back.add_field(name="Mentioned", value=f"{self.ctx.afk[f'{message.author.id}']['mentions']} time(s)", inline=True)
             # Toggle: -wbalerts
@@ -174,15 +178,15 @@ class Events(commands.Cog, name="Events"):
             welcome_back.set_footer(text=f"Toggle: {prefix}wbalerts\nDMs Toggle: {prefix}wbdmalerts")
 
             # reset afk for user
-            self.ctx.afk[f'{message.author.id}']['AFK'] = False
-            self.ctx.afk[f'{message.author.id}']['reason'] = 'None'
-            self.ctx.afk[f'{message.author.id}']['time'] = '0'
-            self.ctx.afk[f'{message.author.id}']['mentions'] = 0
-            Configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
+            self.ctx.afk[f"{message.author.id}"]["AFK"] = False
+            self.ctx.afk[f"{message.author.id}"]["reason"] = "None"
+            self.ctx.afk[f"{message.author.id}"]["time"] = "0"
+            self.ctx.afk[f"{message.author.id}"]["mentions"] = 0
+            Configs.save(self.ctx.afk_path, "w", self.ctx.afk)
 
             # try to reset nickname
             try:
-                nick = message.author.display_name.replace('[AFK]', '')
+                nick = message.author.display_name.replace("[AFK]", "")
                 await message.author.edit(nick=nick)
             except:
                 pass
@@ -191,11 +195,11 @@ class Events(commands.Cog, name="Events"):
                     await message.author.send(embed=welcome_back)
                 else:
                     await message.reply(embed=welcome_back, delete_after=30, mention_author=False)
-        Configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
+        Configs.save(self.ctx.afk_path, "w", self.ctx.afk)
 
     @commands.Cog.listener("on_message")
     async def help_check(self, message):
-        # check if user's message is only bot ping and reply with help, if not process commands
+        # check if user"s message is only bot ping and reply with help, if not process commands
         if message.is_system():
             return
         if message.author.bot == False and self.ctx.user.mentioned_in(message) and len(message.content) == len(self.ctx.user.mention) and message.type != discord.MessageType.reply:
@@ -207,7 +211,7 @@ class Events(commands.Cog, name="Events"):
     async def word_triggers(self, message):
         if not message.author.bot and not message.channel.type == discord.ChannelType.private:
             for type in self.ctx.settings[str(message.guild.id)]["triggers"]:
-                if self.ctx.settings[str(message.guild.id)]["triggers"][type]['toggle']:
+                if self.ctx.settings[str(message.guild.id)]["triggers"][type]["toggle"]:
                     await self.trigger(message, type)
 
     async def trigger(self, message, type: str):
@@ -217,10 +221,10 @@ class Events(commands.Cog, name="Events"):
             msg = message.content
         try:
             for trigger, reply in self.ctx.settings[str(message.guild.id)]["triggers"][type]["triggers"].items():
-                multi_trigger = list(trigger.split('|'))
+                multi_trigger = list(trigger.split("|"))
                 for triggers in multi_trigger:
                     if triggers.casefold() in msg.casefold():
-                        reply = random.choice(list(reply.split('|')))
+                        reply = random.choice(list(reply.split("|")))
                         await message.reply(reply)
                         break
         except:
@@ -277,26 +281,30 @@ class Events(commands.Cog, name="Events"):
             string = ""
             for event_name, event_id in data.items():
                 try:
-                    event = self.ctx.events_info[str(guild.id)][str(event_id)]
+                    event = self.ctx.settings[str(guild.id)]["events"][str(event_id)]
                     string += f"\n{event_name}: <t:{event}:R>"
                 except:
                     pass
             try:
-                infochannel = self.ctx.settings[str(guild.id)]['infochannel']
+                infochannel = self.ctx.settings[str(guild.id)]["infochannel"]
             except KeyError:
-                self.ctx.settings[str(guild.id)]['infochannel'] = {}
-                infochannel = self.ctx.settings[str(guild.id)]['infochannel']
+                self.ctx.settings[str(guild.id)]["infochannel"] = {}
+                infochannel = self.ctx.settings[str(guild.id)]["infochannel"]
             if len(infochannel) > 0:
                 for channel_id, message_id in infochannel.items():
                     channel = self.ctx.get_channel(int(channel_id))
                     if channel is not None:
-                        message = self.ctx.get_message(int(message_id))
-                        if message is not None:
+                        try:
+                            message = await channel.fetch_message(int(message_id))
                             await message.edit(string)
-                        else:
+                        except discord.errors.NotFound:
                             msg = await channel.send(string)
                             await msg.pin()
-                            self.ctx.settings[str(guild.id)]['infochannel'][str(channel_id)] = str(msg.id)
+                            self.ctx.settings[str(guild.id)]["infochannel"][str(channel_id)] = str(msg.id)
+                        try:
+                            await channel.purge(limit=None, check=lambda m: not m.pinned)
+                        except:
+                            pass
                     else:
                         to_pop[str(guild.id)] = str(channel)
         if len(to_pop) > 0:
@@ -306,71 +314,48 @@ class Events(commands.Cog, name="Events"):
 
     @commands.Cog.listener("on_invite_create")
     async def invited(self, invite):
-        try:
-            self.ctx.events_info[str(invite.guild.id)]["on_invite_create"] = Utils.current_time()
-        except:
-            pass
+        self.add_event(invite, "on_invite_create")
 
     @commands.Cog.listener("on_member_remove")
     async def left(self, member):
-        try:
-            self.ctx.events_info[str(member.guild.id)]["on_member_remove"] = Utils.current_time()
-        except:
-            pass
+        self.add_event(member, "on_member_remove")
 
     @commands.Cog.listener("on_member_join")
     async def joined(self, member):
-        try:
-            self.ctx.events_info[str(member.guild.id)]["on_member_join"] = Utils.current_time()
-        except:
-            pass
+        self.add_event(member, "on_member_join")
 
     @commands.Cog.listener("on_member_ban")
     async def banned(self, member):
-        try:
-            self.ctx.events_info[str(member.guild.id)]["on_member_ban"] = Utils.current_time()
-        except:
-            pass
+        self.add_event(member, "on_member_ban")
 
     @commands.Cog.listener("on_member_unban")
     async def unbanned(self, member):
-        try:
-            self.ctx.events_info[str(member.guild.id)]["on_member_unban"] = Utils.current_time()
-        except:
-            pass
+        self.add_event(member, "on_member_unban")
 
     @commands.Cog.listener("on_guild_role_create")
     async def rolecreated(self, role):
-        try:
-            self.ctx.events_info[str(role.guild.id)]["on_guild_role_create"] = Utils.current_time()
-        except:
-            pass
+        self.add_event(role, "on_guild_role_create")
 
     @commands.Cog.listener("on_guild_role_delete")
     async def roledeleted(self, role):
-        try:
-            self.ctx.events_info[str(role.guild.id)]["on_guild_role_delete"] = Utils.current_time()
-        except:
-            pass
+        self.add_event(role, "on_guild_role_delete")
 
     @commands.Cog.listener("on_guild_emojis_update")
     async def emojisupdate(self, role):
-        try:
-            self.ctx.events_info[str(role.guild.id)]["on_guild_emojis_update"] = Utils.current_time()
-        except:
-            pass
+        self.add_event(role, "on_guild_emojis_update")
 
     @commands.Cog.listener("on_guild_stickers_update")
     async def stickersupdate(self, role):
-        try:
-            self.ctx.events_info[str(role.guild.id)]["on_guild_stickers_update"] = Utils.current_time()
-        except:
-            pass
+        self.add_event(role, "on_guild_stickers_update")
 
     @commands.Cog.listener("on_message")
     async def messaged(self, message):
+        self.add_event(message, "on_message")
+
+    def add_event(self, object, event):
         try:
-            self.ctx.events_info[str(message.guild.id)]["on_message"] = Utils.current_time()
+            self.ctx.settings[str(object.guild.id)]["events"][str(event)] = Utils.current_time()
+            Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
         except:
             pass
 
@@ -440,7 +425,7 @@ class Loops(commands.Cog):
             spam[str(channel.guild.id)].pop(str(channel.id))
             await ctx.respond(embed=discord.Embed(description=f"Removed {channel.mention}", color=0x66FF99))
         else:
-            await Utils.send_error(ctx, f"{channel.mention} isn't in data")
+            await Utils.send_error(ctx, f"{channel.mention} isn"t in data")
 
     @channels.command()
     async def list(self, ctx):
@@ -496,7 +481,7 @@ class EventUtils():
         await EventUtils.check_channel(self, ctx, [channel])
         spam = self.ctx.spam
         channel_id = spam[str(channel.guild.id)][str(channel.id)]
-        channel_spam = {channel.id: [channel_id['text'], channel_id["time"]]}
+        channel_spam = {channel.id: [channel_id["text"], channel_id["time"]]}
         return channel_spam
 
     async def add_channel(self, ctx, input_spam):
