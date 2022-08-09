@@ -1,7 +1,7 @@
-from atexit import register
 from typing import Optional
 import discord
 from discord.ext import commands, pages, bridge
+from cogs.configs import Configs
 from cogs.utils import Utils
 
 installation_options = [
@@ -32,6 +32,7 @@ class InfoCommands(commands.Cog, name="Informational"):
     @bridge.bridge_command(name="serverinfo", aliases=["si", "sid"])
     @commands.cooldown(1, 420, commands.BucketType.user)
     async def serverinfo(self, ctx):
+        """Shows you information about the server"""
         fetch_guild = await self.ctx.fetch_guild(int(ctx.guild.id), with_counts=True)
         registered = Utils.iso8601_to_epoch(ctx.guild.created_at.isoformat())
         e = discord.Embed(title=ctx.guild.name, description=f"2FA Needed for moderation: {'✅' if ctx.guild.mfa_level == 1 else '❎'}", color=discord.Colour.blue())
@@ -117,6 +118,19 @@ class InfoCommands(commands.Cog, name="Informational"):
             except:
                 pass
         await ctx.respond(embed=e)
+
+    @bridge.bridge_command(name="infochannel")
+    @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.has_permissions(administrator=True)
+    async def infochannel(self, ctx, channel: discord.TextChannel):
+        """Makes the channel you add a channel with server information"""
+        try:
+            msg = await channel.send("_ _")
+            await msg.pin()
+            self.ctx.settings[str(ctx.guild.id)]['infochannel'][str(channel.id)] = str(msg.id)
+            Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+        except:
+            await Utils.send_error(ctx, "Something went wrong, please check if I have permissions to chat and pin messages in that channel.")
 
     @bridge.bridge_command(name="pfp")
     @commands.cooldown(1, 10, commands.BucketType.user)

@@ -21,12 +21,16 @@ class Events(commands.Cog, name="Events"):
 
     def __init__(self, ctx):
         self.ctx = ctx
-        self.purger.start()
 
     @commands.Cog.listener("on_ready")
     async def logged_in(self):
+        self.ctx.events_info = {}
+        for guild in self.ctx.guilds:
+            self.ctx.events_info[str(guild.id)] = {"on_ready": Utils.current_time()}
         print(f"Logged in as {self.ctx.user} (ID: {self.ctx.user.id})")
         print("------")
+        self.purger.start()
+        self.info_channel.start()
 
     @commands.Cog.listener("on_application_command_error")
     async def slash_command_error(self, ctx, error):
@@ -252,6 +256,123 @@ class Events(commands.Cog, name="Events"):
             for guild, channel in to_pop.items():
                 self.ctx.settings[str(guild)]["purges"].pop(str(channel))
         Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+
+    @tasks.loop(seconds=10)
+    async def info_channel(self):
+        to_pop = {}
+        for guild in self.ctx.guilds:
+            data = {
+                "Bot Restart": "on_ready",
+                "Invite Create": "on_invite_create",
+                "Member Leave": "on_member_remove",
+                "Member Join": "on_member_join",
+                "Member Ban": "on_member_ban",
+                "Member Unban": "on_member_unban",
+                "Role Created": "on_guild_role_create",
+                "Role Deleted": "on_guild_role_delete",
+                "Emojis Updated": "on_guild_emojis_update",
+                "Stickers Updated": "on_guild_stickers_update",
+                "Message Sent": "on_message"
+            }
+            string = ""
+            for event_name, event_id in data.items():
+                try:
+                    event = self.ctx.events_info[str(guild.id)][str(event_id)]
+                    string += f"\n{event_name}: <t:{event}:R>"
+                except:
+                    pass
+            try:
+                infochannel = self.ctx.settings[str(guild.id)]['infochannel']
+            except KeyError:
+                self.ctx.settings[str(guild.id)]['infochannel'] = {}
+                infochannel = self.ctx.settings[str(guild.id)]['infochannel']
+            if len(infochannel) > 0:
+                for channel_id, message_id in infochannel.items():
+                    channel = self.ctx.get_channel(int(channel_id))
+                    if channel is not None:
+                        message = self.ctx.get_message(int(message_id))
+                        if message is not None:
+                            await message.edit(string)
+                        else:
+                            msg = await channel.send(string)
+                            await msg.pin()
+                            self.ctx.settings[str(guild.id)]['infochannel'][str(channel_id)] = str(msg.id)
+                    else:
+                        to_pop[str(guild.id)] = str(channel)
+        if len(to_pop) > 0:
+            for guild, channel in to_pop.items():
+                self.ctx.settings[str(guild)]["purges"].pop(str(channel))
+        Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+
+    @commands.Cog.listener("on_invite_create")
+    async def invited(self, invite):
+        try:
+            self.ctx.events_info[str(invite.guild.id)]["on_invite_create"] = Utils.current_time()
+        except:
+            pass
+
+    @commands.Cog.listener("on_member_remove")
+    async def left(self, member):
+        try:
+            self.ctx.events_info[str(member.guild.id)]["on_member_remove"] = Utils.current_time()
+        except:
+            pass
+
+    @commands.Cog.listener("on_member_join")
+    async def joined(self, member):
+        try:
+            self.ctx.events_info[str(member.guild.id)]["on_member_join"] = Utils.current_time()
+        except:
+            pass
+
+    @commands.Cog.listener("on_member_ban")
+    async def banned(self, member):
+        try:
+            self.ctx.events_info[str(member.guild.id)]["on_member_ban"] = Utils.current_time()
+        except:
+            pass
+
+    @commands.Cog.listener("on_member_unban")
+    async def unbanned(self, member):
+        try:
+            self.ctx.events_info[str(member.guild.id)]["on_member_unban"] = Utils.current_time()
+        except:
+            pass
+
+    @commands.Cog.listener("on_guild_role_create")
+    async def rolecreated(self, role):
+        try:
+            self.ctx.events_info[str(role.guild.id)]["on_guild_role_create"] = Utils.current_time()
+        except:
+            pass
+
+    @commands.Cog.listener("on_guild_role_delete")
+    async def roledeleted(self, role):
+        try:
+            self.ctx.events_info[str(role.guild.id)]["on_guild_role_delete"] = Utils.current_time()
+        except:
+            pass
+
+    @commands.Cog.listener("on_guild_emojis_update")
+    async def emojisupdate(self, role):
+        try:
+            self.ctx.events_info[str(role.guild.id)]["on_guild_emojis_update"] = Utils.current_time()
+        except:
+            pass
+
+    @commands.Cog.listener("on_guild_stickers_update")
+    async def stickersupdate(self, role):
+        try:
+            self.ctx.events_info[str(role.guild.id)]["on_guild_stickers_update"] = Utils.current_time()
+        except:
+            pass
+
+    @commands.Cog.listener("on_message")
+    async def messaged(self, message):
+        try:
+            self.ctx.events_info[str(message.guild.id)]["on_message"] = Utils.current_time()
+        except:
+            pass
 
     @purger.before_loop
     async def purger_before_loop(self):
