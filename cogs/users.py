@@ -2,7 +2,7 @@ import json
 import re
 import discord
 from discord.ext import commands, bridge
-from cogs import configs
+from cogs.configs import Configs
 from cogs.block import BlockCommands
 from cogs.utils import Utils
 
@@ -185,7 +185,7 @@ class UserCommands(commands.Cog, name="User Commands"):
         rep[str(user.id)] = {}
         for value in self.ctx.rep_type_list:
             rep[str(user.id)][value] = []
-        configs.save(self.ctx.reputation_path, "w", rep)
+        Configs.save(self.ctx.reputation_path, "w", rep)
         return True
 
     async def get_rep(self, ctx, user):
@@ -202,7 +202,7 @@ class UserCommands(commands.Cog, name="User Commands"):
             await Utils.send_error(ctx, f"You already gave this person {change} rep\nIf you want to remove it take a look at {self.ctx.settings[str(ctx.guild.id)]['prefix']}help rep")
         else:
             rep[str(user.id)][change].append(str(ctx.author.id))
-        configs.save(self.ctx.reputation_path, "w", rep)
+        Configs.save(self.ctx.reputation_path, "w", rep)
 
     async def rem_rep(self, ctx, change, user):
         rep = await UserCommands.open_rep(self, ctx, user)
@@ -210,7 +210,7 @@ class UserCommands(commands.Cog, name="User Commands"):
             rep[str(user.id)][change].remove(str(ctx.author.id))
         except:
             await Utils.send_error(ctx, f"You don't have {change} rep on this person")
-        configs.save(self.ctx.reputation_path, "w", rep)
+        Configs.save(self.ctx.reputation_path, "w", rep)
 
     async def open_rep(self, ctx, user):
         await UserCommands.open_member_rep(self, ctx, user)

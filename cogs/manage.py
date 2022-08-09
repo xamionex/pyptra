@@ -2,7 +2,7 @@ import discord
 import os
 import sys
 from discord.ext import commands
-from cogs import configs
+from cogs.configs import Configs
 from cogs.utils import Utils
 
 
@@ -87,7 +87,7 @@ class ManageCommands(commands.Cog, name="Manage"):
         """Shows or changes prefix"""
         if prefix is not None:
             self.ctx.settings[str(ctx.guild.id)]["prefix"] = prefix
-            configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+            Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
             await ctx.respond(embed=discord.Embed(description=f"Prefix changed to: {prefix}"))
         else:
             await ctx.respond(embed=discord.Embed(description=f"My prefix is `{self.ctx.settings[str(ctx.guild.id)]['prefix']}` or {self.ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!"))
@@ -171,7 +171,7 @@ class ManageCommands(commands.Cog, name="Manage"):
                     "triggers": {}
                 }
             }
-        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+        Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
         return settings["triggers"]
 
     async def toggletriggers(self, ctx, type: str):
@@ -182,7 +182,7 @@ class ManageCommands(commands.Cog, name="Manage"):
         else:
             settings[str(type)]["toggle"] = True
             await ctx.respond(embed=discord.Embed(description=f"✅ Enabled {type} triggers", color=0x66FF99))
-        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+        Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     async def listtriggers(self, ctx, type: str):
         settings = await ManageCommands.define_triggers(self, ctx)
@@ -213,7 +213,7 @@ class ManageCommands(commands.Cog, name="Manage"):
             e.add_field(
                 name=f"Trigger: {', '.join(trigger.split('|'))}", value=f"**Reply:** `{reply}`")
         await ctx.respond(embed=e)
-        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+        Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     async def removetrigger(self, ctx, trigger: str, type: str):
         settings = await ManageCommands.define_triggers(self, ctx)
@@ -225,4 +225,4 @@ class ManageCommands(commands.Cog, name="Manage"):
         except:
             e = discord.Embed(title=f"❌ Couldn't find", description=f"`{trigger}`", color=0xFF6969)
         await ctx.respond(embed=e)
-        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+        Configs.save(self.ctx.settings_path, "w", self.ctx.settings)

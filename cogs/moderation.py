@@ -1,7 +1,7 @@
 from typing import Optional
 import discord
 from discord.ext import commands
-from cogs import configs
+from cogs.configs import Configs
 from cogs.utils import Utils
 
 
@@ -56,7 +56,7 @@ class ModerationCommands(commands.Cog, name="Moderation"):
             settings = {}
             settings[str(channel.id)] = [interval, 0]
         await ctx.respond(embed=discord.Embed(description=f"Added `#{channel.name}` to timed purges which occurs every {Utils.display_time_s(interval)}"))
-        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+        Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     @timed_purge.command(name="rem")
     @commands.guild_only()
@@ -71,7 +71,7 @@ class ModerationCommands(commands.Cog, name="Moderation"):
             await ctx.respond(embed=discord.Embed(description=f"Removed repeating purge of {Utils.display_time_s(interval)} from `#{channel.name}`"))
         else:
             await Utils.send_error(ctx, "That channel doesn't have a timed purge")
-        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+        Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     @timed_purge.command(name="reset")
     @commands.guild_only()
@@ -86,7 +86,7 @@ class ModerationCommands(commands.Cog, name="Moderation"):
             await ctx.respond(embed=discord.Embed(description=f"Reset `#{channel.name}` timed purge\nnext occurance is at <t:{next}:d>`@`<t:{next}:T> (`in {every}`)"))
         else:
             await Utils.send_error(ctx, "That channel doesn't have a timed purge")
-        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+        Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     @timed_purge.command(name="set")
     @commands.guild_only()
@@ -104,7 +104,7 @@ class ModerationCommands(commands.Cog, name="Moderation"):
             await ctx.respond(embed=discord.Embed(description=f"Set `#{channel.name}` timed purge to every {every}\nnext occurance is at <t:{next}:d>`@`<t:{next}:T> (`in {every}`)"))
         else:
             await Utils.send_error(ctx, "That channel doesn't have a timed purge")
-        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+        Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     @timed_purge.command(name="list")
     @commands.guild_only()

@@ -1,11 +1,10 @@
 import asyncio
-import main
 import discord
 from discord.ext import commands, tasks
 # data
 import random
 # cogs
-from cogs import configs
+from cogs.configs import Configs
 from cogs.utils import Utils
 from cogs.block import BlockCommands
 from cogs.users import UserCommands
@@ -86,7 +85,7 @@ class Events(commands.Cog, name="Events"):
     async def member_data(self, member):
         afk = self.ctx.afk
         await UserCommands.open_user(self, afk, member)
-        configs.save(self.ctx.afk_path, "w", afk)
+        Configs.save(self.ctx.afk_path, "w", afk)
 
     @commands.Cog.listener("on_guild_join")
     async def guild_add_data(self, guild):
@@ -107,11 +106,11 @@ class Events(commands.Cog, name="Events"):
             "unlockedperms": [],
             "invertperms": False
         }
-        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+        Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     @commands.Cog.listener("on_guild_remove")
     async def guild_remove_data(self, guild):
-        configs.save(self.ctx.settings_path, "w", self.ctx.settings.pop(str(guild.id)))
+        Configs.save(self.ctx.settings_path, "w", self.ctx.settings.pop(str(guild.id)))
 
     @commands.Cog.listener("on_message")
     async def afk_check(self, message):
@@ -135,7 +134,7 @@ class Events(commands.Cog, name="Events"):
                 self.ctx.afk[f'{member.id}']['mentions'] = int(self.ctx.afk[f'{member.id}']['mentions']) + 1
 
                 # save json
-                configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
+                Configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
 
         afk_alert = discord.Embed(title=f"Members in your message are afk:").set_footer(text=f"Toggle: {prefix}alerts\nDMs Toggle: {prefix}dmalerts")
         await UserCommands.open_user(self, self.ctx.afk, message.author)
@@ -175,7 +174,7 @@ class Events(commands.Cog, name="Events"):
             self.ctx.afk[f'{message.author.id}']['reason'] = 'None'
             self.ctx.afk[f'{message.author.id}']['time'] = '0'
             self.ctx.afk[f'{message.author.id}']['mentions'] = 0
-            configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
+            Configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
 
             # try to reset nickname
             try:
@@ -188,7 +187,7 @@ class Events(commands.Cog, name="Events"):
                     await message.author.send(embed=welcome_back)
                 else:
                     await message.reply(embed=welcome_back, delete_after=30, mention_author=False)
-        configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
+        Configs.save(self.ctx.afk_path, 'w', self.ctx.afk)
 
     @commands.Cog.listener("on_message")
     async def help_check(self, message):
@@ -252,7 +251,7 @@ class Events(commands.Cog, name="Events"):
         if len(to_pop) > 0:
             for guild, channel in to_pop.items():
                 self.ctx.settings[str(guild)]["purges"].pop(str(channel))
-        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+        Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     @purger.before_loop
     async def purger_before_loop(self):

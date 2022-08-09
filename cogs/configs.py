@@ -155,7 +155,6 @@ class Configs(commands.Cog, name="Configs"):
             "MONETIZATION_ENABLED": "Allows the server to set a team in dev portal to cash out ticketed stage payouts"
         }
 
-
-def save(path, type, data):
-    with open(path, type) as f:
-        json.dump(data, f, indent=4, sort_keys=True)
+    def save(path, type, data):
+        with open(path, type) as f:
+            json.dump(data, f, indent=4, sort_keys=True)

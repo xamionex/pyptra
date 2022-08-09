@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands, bridge
-from cogs import configs
+from cogs.configs import Configs
 from cogs.utils import Utils
 
 
@@ -100,7 +100,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
             e.description = "Perms now act as Blockades"
             e.color = 0xFF6969
         await ctx.respond(embed=e)
-        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+        Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     @commands.command(hidden=True, name="toggleperm", aliases=["permtoggle"])
     @commands.has_permissions(administrator=True)
@@ -120,7 +120,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
             settings["unlockedperms"].append(perm)
             e.description, e.color = f"{perm} is no longer restricted to permissions.", 0xFF6969
         await ctx.respond(embed=e)
-        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+        Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     @commands.command(hidden=True, name="reset")
     @commands.has_permissions(administrator=True)
@@ -135,7 +135,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
             for value in self.ctx.perms_list:
                 perms[str(user.id)][value] = False
             perms[str(user.id)]["ping"] = ping
-            configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+            Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
             await ctx.respond(embed=discord.Embed(description=f"Successfully reset {user.mention}", color=0x66FF99))
         except:
             await Utils.send_error(ctx, f"Couldn't reset {user.mention}")
@@ -171,7 +171,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
         perms[str(user.id)] = {}
         for value in self.ctx.perms_list:
             perms[str(user.id)][value] = False
-        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+        Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
         return True
 
     async def get_perm(self, ctx, perm, user):
@@ -181,12 +181,12 @@ class BlockCommands(commands.Cog, name="Permissions"):
     async def add_perm(self, ctx, perm, user):
         perms = await BlockCommands.open_perms(self, ctx, user)
         perms[str(user.id)][str(perm)] = True
-        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+        Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     async def remove_perm(self, ctx, perm, user):
         perms = await BlockCommands.open_perms(self, ctx, user)
         perms[str(user.id)][str(perm)] = False
-        configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+        Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
 
     async def check_perm_arg(self, ctx):
         perms_list = self.ctx.perms_list
@@ -222,7 +222,7 @@ class BlockCommands(commands.Cog, name="Permissions"):
             perms[str(user.id)][value] = True
         for value in self.ctx.global_perms_list_false:
             perms[str(user.id)][value] = False
-        configs.save(self.ctx.global_perms_path, "w", self.ctx.global_perms)
+        Configs.save(self.ctx.global_perms_path, "w", self.ctx.global_perms)
         return True
 
     async def get_global_perm(self, ctx, perm, user):
@@ -232,12 +232,12 @@ class BlockCommands(commands.Cog, name="Permissions"):
     async def add_global_perm(self, ctx, perm, user):
         perms = await BlockCommands.open_global_perm(self, ctx, user)
         perms[str(user.id)][str(perm)] = True
-        configs.save(self.ctx.global_perms_path, "w", self.ctx.global_perms)
+        Configs.save(self.ctx.global_perms_path, "w", self.ctx.global_perms)
 
     async def remove_global_perm(self, ctx, perm, user):
         perms = await BlockCommands.open_global_perm(self, ctx, user)
         perms[str(user.id)][str(perm)] = False
-        configs.save(self.ctx.global_perms_path, "w", self.ctx.global_perms)
+        Configs.save(self.ctx.global_perms_path, "w", self.ctx.global_perms)
 
     async def open_global_perm(self, ctx, user):
         await BlockCommands.open_global_member_perms(self, ctx, user)
