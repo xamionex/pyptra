@@ -276,7 +276,9 @@ class Events(commands.Cog, name="Events"):
                 "Role Deleted": "on_guild_role_delete",
                 "Emojis Updated": "on_guild_emojis_update",
                 "Stickers Updated": "on_guild_stickers_update",
-                "Message Sent": "on_message"
+                "Message Sent": "on_message",
+                "Message Deleted": "on_message_delete",
+                "Message Edited": "on_message_edit"
             }
             string = ""
             for event_name, event_id in data.items():
@@ -347,6 +349,14 @@ class Events(commands.Cog, name="Events"):
     @commands.Cog.listener("on_guild_stickers_update")
     async def stickersupdate(self, role):
         self.add_event(role, "on_guild_stickers_update")
+
+    @commands.Cog.listener("on_message_edit")
+    async def message_edited(self, message, edit):
+        self.add_event(message, "on_message_edit")
+
+    @commands.Cog.listener("on_message_delete")
+    async def message_deleted(self, message):
+        self.add_event(message, "on_message_delete")
 
     @commands.Cog.listener("on_message")
     async def messaged(self, message):
