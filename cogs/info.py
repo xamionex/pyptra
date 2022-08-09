@@ -33,28 +33,26 @@ class InfoCommands(commands.Cog, name="Informational"):
     @commands.cooldown(1, 420, commands.BucketType.user)
     async def serverinfo(self, ctx):
         fetch_guild = await self.ctx.fetch_guild(int(ctx.guild.id), with_counts=True)
-        e = discord.Embed(title=ctx.guild.name, description="2FA Needed for moderation: " + "✅" if ctx.guild.mfa_level == 1 else "❎", color=discord.Colour.blue())
-        e.set_thumbnail(url=ctx.guild.icon.url)
-        e.set_footer(text=f"Server ID: {ctx.guild.id} ¤ Owned by {ctx.guild.owner} ¤ Language {ctx.guild.preferred_locale if ctx.guild.preferred_locale is not None else 'Not Specified'}")
         registered = Utils.iso8601_to_epoch(ctx.guild.created_at.isoformat())
+        e = discord.Embed(title=ctx.guild.name, description=f"2FA Needed for moderation: {'✅' if ctx.guild.mfa_level == 1 else '❎'}", color=discord.Colour.blue())
+        e.set_author(name=f"Owned by {ctx.guild.owner.name}", url=ctx.guild.owner.jump_url, icon_url=ctx.guild.owner.display_avatar if ctx.guild.owner.display_avatar is not None else "https://cdn.discordapp.com/emojis/969684646906437643.webp?size=96&quality=lossless")
+        e.set_thumbnail(url=ctx.guild.icon.url) if ctx.guild.icon.url is not None else None
         e.add_field(name="Created", value=f"<t:{registered}:d>\n<t:{registered}:T>\n<t:{registered}:R>")
-        e.add_field(name="Customs", value=f"{len(ctx.guild.roles)} - Roles\n{len(ctx.guild.emojis)} - Emojis\n{len(ctx.guild.stickers)} - Stickers")
-        e.add_field(name="Members", value=f"All: {fetch_guild.approximate_member_count}\nOnline: {fetch_guild.approximate_presence_count}\nMaximum: {ctx.guild.max_members}")
-        channels_string = ""
-        channels = {
-            "Text Channels": ctx.guild.text_channels,
-            "Voice Chats": ctx.guild.voice_channels,
-            "Forums": ctx.guild.forum_channels,
-            "Stages": ctx.guild.stage_channels,
-            "Categories": ctx.guild.categories,
-            "Threads": ctx.guild.threads
+        customs = {"Stickers": ctx.guild.stickers, "Emojis": ctx.guild.emojis, "Roles": ctx.guild.roles}
+        members = {"All": fetch_guild.approximate_member_count, "Online": fetch_guild.approximate_presence_count}
+        channels = {"Text Channels": ctx.guild.text_channels, "Voice Chats": ctx.guild.voice_channels, "Forums": ctx.guild.forum_channels, "Stages": ctx.guild.stage_channels, "Categories": ctx.guild.categories, "Threads": ctx.guild.threads}
+        image_limits = {"Max Emojis": ctx.guild.emoji_limit, "Max Stickers": ctx.guild.sticker_limit}
+        bandwidth = {"Max Bitrate": ctx.guild.bitrate_limit, "Max Filesize": ctx.guild.filesize_limit}
+        # data, method, strip if 0 or none
+        to_add = {
+            "Customs": [customs, len, False],
+            "Members": [members, int, False],
+            "Channels": [channels, len, True],
+            "Image Limits": [image_limits, int, False],
+            "Bandwidth": [bandwidth, Utils.convert_size, False],
         }
-        for type, amount in sorted(channels.items()):
-            if len(amount) > 0:
-                channels_string += f"{len(amount)} - {type}\n"
-        e.add_field(name="Channels", value=channels_string)
-        e.add_field(name="Image limits", value=f"{ctx.guild.emoji_limit} Max Emojis\n{ctx.guild.sticker_limit} Max Stickers")
-        e.add_field(name="Bandwidth", value=f"{Utils.convert_size(ctx.guild.bitrate_limit)} Max Bitrate\n{Utils.convert_size(ctx.guild.filesize_limit)} Max Filesize")
+        for name, data in to_add.items():
+            self.add_count_field(e, name, data)
         features = {}
         for feature in ctx.guild.features:
             if feature in self.ctx.discord_experiments:
@@ -73,7 +71,16 @@ class InfoCommands(commands.Cog, name="Informational"):
         else:
             e.url = str(urls[0])
             e.description = "**Click the server name to view all features**\n" + e.description
+        e.set_footer(text=f"Server ID: {ctx.guild.id} ¤ Language {ctx.guild.preferred_locale if ctx.guild.preferred_locale is not None else 'Not Specified'}")
         await ctx.respond(embed=e)
+
+    def add_count_field(self, e, name, data):
+        string = ""
+        for type, amount in sorted(data[0].items()):
+            amount = data[1](amount)
+            if amount != 0 and amount is not None or not data[2]:
+                string += f"{amount} {type}\n"
+        e.add_field(name=name, value=string)
 
     @bridge.bridge_command(name="userinfo", aliases=["ui", "uid", "whois", "who"])
     @commands.cooldown(1, 10, commands.BucketType.user)
