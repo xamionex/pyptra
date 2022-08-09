@@ -125,12 +125,19 @@ class InfoCommands(commands.Cog, name="Informational"):
     async def infochannel(self, ctx, channel: discord.TextChannel):
         """Makes the channel you add a channel with server information"""
         try:
-            msg = await channel.send("_ _")
-            await msg.pin()
-            self.ctx.settings[str(ctx.guild.id)]['infochannel'][str(channel.id)] = str(msg.id)
+            if str(channel.id) in self.ctx.settings[str(ctx.guild.id)]['infochannel']:
+                msg = await channel.fetch_message(int(self.ctx.settings[str(ctx.guild.id)]['infochannel'][str(channel.id)]))
+                await msg.delete()
+                self.ctx.settings[str(ctx.guild.id)]['infochannel'].pop(str(channel.id))
+                await ctx.respond(f"Removed {channel.mention} from informational channels list")
+            else:
+                msg = await channel.send("_ _")
+                await msg.pin()
+                self.ctx.settings[str(ctx.guild.id)]['infochannel'][str(channel.id)] = str(msg.id)
+                await ctx.respond(f"Added {channel.mention} to informational channels list")
             Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
         except:
-            await Utils.send_error(ctx, "Something went wrong, please check if I have permissions to chat and pin messages in that channel.")
+            await Utils.send_error(ctx, "Something went wrong, please check if I have permissions to chat, delete and pin messages in that channel.")
 
     @bridge.bridge_command(name="pfp")
     @commands.cooldown(1, 10, commands.BucketType.user)
