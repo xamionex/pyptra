@@ -280,7 +280,7 @@ class Events(commands.Cog, name="Events"):
                 "Message Deleted": "on_message_delete",
                 "Message Edited": "on_message_edit"
             }
-            e = discord.Embed(description=f"Counters for {guild.name}")
+            e = discord.Embed(title=f"Counters for {guild.name}")
             for event_name, event_id in data.items():
                 try:
                     event = self.ctx.settings[str(guild.id)]["events"][str(event_id)]
