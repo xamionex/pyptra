@@ -280,11 +280,11 @@ class Events(commands.Cog, name="Events"):
                 "Message Deleted": "on_message_delete",
                 "Message Edited": "on_message_edit"
             }
-            string = ""
+            e = discord.Embed(description=f"Counters for {guild.name}")
             for event_name, event_id in data.items():
                 try:
                     event = self.ctx.settings[str(guild.id)]["events"][str(event_id)]
-                    string += f"\n{event_name}: <t:{event}:R>"
+                    e.add_field(name=event_name, value=f"<t:{event}:R>")
                 except:
                     pass
             try:
@@ -298,9 +298,9 @@ class Events(commands.Cog, name="Events"):
                     if channel is not None:
                         try:
                             message = await channel.fetch_message(int(message_id))
-                            await message.edit(string)
+                            await message.edit(embed=e)
                         except discord.errors.NotFound:
-                            msg = await channel.send(string)
+                            msg = await channel.send(embed=e)
                             await msg.pin()
                             self.ctx.settings[str(guild.id)]["infochannel"][str(channel_id)] = str(msg.id)
                         try:
