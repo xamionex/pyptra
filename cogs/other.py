@@ -64,9 +64,8 @@ class OtherCommands(commands.Cog, name="Other Commands"):
         for reaction in reactions:
             await msg.add_reaction(reaction)
 
-    @commands.command(hidden=True, name="free")
+    @bridge.bridge_command(hidden=True, name="free")
     @commands.is_owner()
-    @commands.guild_only()
     async def free(self, ctx, title, description, price, unix, rating, platform, game_link, imagelink):
         """Sends a freestuff bot-like embed (can be used by petar only)."""
         await Utils.delete_command_message(ctx)
