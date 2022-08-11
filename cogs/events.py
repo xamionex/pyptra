@@ -327,7 +327,7 @@ class Events(commands.Cog, name="Events"):
         self.add_event(member, "on_member_join")
 
     @commands.Cog.listener("on_member_ban")
-    async def banned(self, member):
+    async def banned(self, member, reason):
         self.add_event(member, "on_member_ban")
 
     @commands.Cog.listener("on_member_unban")
