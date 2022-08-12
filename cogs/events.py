@@ -125,7 +125,7 @@ class Events(commands.Cog, name="Events"):
         # check if user is afk or members in message
         if message.author.bot:
             return
-        prefix = self.ctx.settings[str(message.guild.id)]["prefix"]
+        prefix = self.ctx.settings[str(message.guild.id)]["prefix"] if message.guild is not None else "-"
         send = {}
         for member in message.mentions:
             if member.bot or member.id == message.author.id:
