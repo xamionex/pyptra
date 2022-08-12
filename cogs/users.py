@@ -24,7 +24,7 @@ class UserCommands(commands.Cog, name="User Commands"):
         await Utils.send_error(ctx, f"No command specified, do {self.ctx.settings[str(ctx.guild.id)]['prefix']}help rep for more info")
 
     @rep.command(name="give")
-    @commands.cooldown(1, 120, commands.BucketType.user)
+    @commands.cooldown(1, 30, commands.BucketType.user)
     async def give(self, ctx, user: discord.Member = None, type=None):
         """Give reputation to a user."""
         if user is None:
