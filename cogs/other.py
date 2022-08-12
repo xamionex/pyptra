@@ -1,5 +1,6 @@
 import datetime
 import re
+import random
 import discord
 from discord.ext import commands, bridge
 from cogs.utils import Utils
@@ -15,6 +16,11 @@ class OtherCommands(commands.Cog, name="Other Commands"):
 
     def __init__(self, ctx):
         self.ctx = ctx
+
+    @bridge.bridge_command(name="random")
+    async def random(self, ctx, *, message):
+        """Splits your message with every space and makes a random choice."""
+        await ctx.respond(random.choice(message.split(" ")))
 
     @bridge.bridge_command(hidden=True, name="echo")
     @commands.has_permissions(administrator=True)
