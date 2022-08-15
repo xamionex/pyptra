@@ -1,12 +1,8 @@
-import discord
-from discord.ext import bridge, commands
+from discord.ext import commands
 
 
 def setup(bot):
     bot.add_cog(Private(bot))
-
-
-MISSING: object() = discord.utils.MISSING
 
 
 class Private(commands.Cog):
@@ -18,7 +14,7 @@ class Private(commands.Cog):
 
     @commands.command(name="pyramid", hidden=True)
     @commands.check(priv)
-    async def calc(self, ctx, num: int):
+    async def pyramid(self, ctx, num: int):
         num2 = 0
         while num > 0:
             num -= 1
