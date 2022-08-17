@@ -161,9 +161,9 @@ class Events(commands.Cog, name="Events"):
                     try:
                         await message.author.send(message, embed=afk_alert)
                     except:
-                        await message.reply(embed=afk_alert, delete_after=30, mention_author=False)
+                        await message.reply(embed=afk_alert, delete_after=15, mention_author=False)
                 else:
-                    await message.reply(embed=afk_alert, delete_after=30, mention_author=False)
+                    await message.reply(embed=afk_alert, delete_after=15, mention_author=False)
         # if message"s author is afk continue
         if not message.content.startswith(f"{prefix}afk") and not message.content.startswith(f"{prefix}gn") and self.ctx.afk[f"{message.author.id}"]["AFK"]:
             # counter = unix now - unix since afk
@@ -194,7 +194,7 @@ class Events(commands.Cog, name="Events"):
                 if await BlockCommands.get_global_perm(self, message, "wb_alert_dm", message.author):
                     await message.author.send(embed=welcome_back)
                 else:
-                    await message.reply(embed=welcome_back, delete_after=30, mention_author=False)
+                    await message.reply(embed=welcome_back, delete_after=15, mention_author=False)
         Configs.save(self.ctx.afk_path, "w", self.ctx.afk)
 
     @commands.Cog.listener("on_message")
