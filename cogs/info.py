@@ -60,18 +60,19 @@ class InfoCommands(commands.Cog, name="Informational"):
                 features[feature] = self.ctx.discord_experiments[feature]
             else:
                 features[feature] = "Couldn't get meaning"
-        features_string = ""
-        for id, name in sorted(features.items()):
-            features_string += f"\nID: {id}\nMEANING: {name}\n"
-        urls = await Utils.post(features_string)
-        c = 0
-        if len(urls) > 1:
-            for url in urls:
-                c += 1
-                e.add_field(name=f"Features Part {c}", value=f"[Click here to view]({str(url)})")
-        else:
-            e.url = str(urls[0])
-            e.description = "**Click the server name to view all features**\n" + e.description
+        if len(features) > 0:
+            features_string = ""
+            for id, name in sorted(features.items()):
+                features_string += f"\nID: {id}\nMEANING: {name}\n"
+            urls = await Utils.post(features_string)
+            c = 0
+            if len(urls) > 1:
+                for url in urls:
+                    c += 1
+                    e.add_field(name=f"Features Part {c}", value=f"[Click here to view]({str(url)})")
+            else:
+                e.url = str(urls[0])
+                e.description = "**Click the server name to view all features**\n" + e.description
         e.set_footer(text=f"Server ID: {ctx.guild.id} ¤ Language {ctx.guild.preferred_locale if ctx.guild.preferred_locale is not None else 'Not Specified'}")
         await ctx.respond(embed=e)
 
