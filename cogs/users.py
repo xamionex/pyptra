@@ -5,6 +5,8 @@ from discord.ext import commands, bridge
 from cogs.configs import Configs
 from cogs.block import BlockCommands
 from cogs.utils import Utils
+from emoji import EMOJI_UNICODE
+from typing import Final
 
 
 def setup(bot):
@@ -220,19 +222,27 @@ class UserCommands(commands.Cog, name="User Commands"):
         afk = self.ctx.afk
         if not reason:
             reason = 'AFK'
-        elif reason and len(reason) > 169:
+        UNICODE_EMOJI_REGEX = '|'.join(map(re.escape, sorted(EMOJI_UNICODE['en'].values(), key=len, reverse=True)))
+        DISCORD_EMOJI_REGEX = '<a?:[a-zA-Z0-9_]{2,32}:[0-9]{17,22}>'
+        EMOJI_REGEX: Final[re.Pattern[str]] = re.compile(f'({UNICODE_EMOJI_REGEX}|{DISCORD_EMOJI_REGEX})')
+        reason_chars = 0
+        for i, chunk in enumerate(EMOJI_REGEX.split(reason)):
+            if not chunk or not i % 2:
+                reason_chars += len([x for x in chunk])
+            else:
+                reason_chars += 2
+        if reason and reason_chars > 169:
             await Utils.send_error(ctx, "You went over the 169 character limit")
         await self.open_user(afk, ctx.author)
         afk[f'{ctx.author.id}']['reason'] = f'{reason}'
         if afk[f'{ctx.author.id}']['AFK']:
-            rply = discord.Embed(
-                description=f"Goodbye {ctx.author.mention}, Updated alert to \"{reason}\"")
+            rply = discord.Embed(description=f"Goodbye {ctx.author.mention}, Updated alert to \"{reason}\"")
+            afk[f'{ctx.author.id}']['time'] = Utils.current_milli_time()
         else:
             afk[f'{ctx.author.id}']['AFK'] = True
             afk[f'{ctx.author.id}']['time'] = Utils.current_milli_time()
             afk[f'{ctx.author.id}']['mentions'] = 0
-            rply = discord.Embed(
-                description=f"Goodbye {ctx.author.mention}, Set alert to \"{reason}\"")
+            rply = discord.Embed(description=f"Goodbye {ctx.author.mention}, Set alert to \"{reason}\"")
             try:
                 await ctx.author.edit(nick=f'[AFK] {ctx.author.display_name}')
             except:
