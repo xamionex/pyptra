@@ -20,6 +20,7 @@ class OtherCommands(commands.Cog, name="Other Commands"):
     @bridge.bridge_command(name="random")
     async def random(self, ctx, *, choices: str):
         """Splits your message with every space and makes a random choice."""
+        await Utils.delete_command_message(ctx, 5)
         await ctx.respond(random.choice(choices.split(" ")), ephemeral=True, delete_after=5)
 
     @bridge.bridge_command(hidden=True, name="echo")
