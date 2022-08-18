@@ -30,7 +30,8 @@ class ManageCommands(commands.Cog, name="Manage"):
                 e.add_field(name=f"{cog}", value="`✅` Success")
             else:
                 e.add_field(name=f"{cog}", value="`❌` Not found")
-        await ctx.respond(embed=e)
+        await ctx.respond(embed=e, delay=5)
+        await Utils.delete_command_message(ctx, 5)
 
     @commands.command(hidden=True, name="unload")
     @commands.is_owner()
@@ -45,7 +46,8 @@ class ManageCommands(commands.Cog, name="Manage"):
                 e.add_field(name=f"{cog}", value="`✅` Success")
             else:
                 e.add_field(name=f"{cog}", value="`❌` Not found")
-        await ctx.respond(embed=e)
+        await ctx.respond(embed=e, delay=5)
+        await Utils.delete_command_message(ctx, 5)
 
     @commands.command(hidden=True, name="reload")
     @commands.is_owner()
@@ -64,7 +66,8 @@ class ManageCommands(commands.Cog, name="Manage"):
                     e.add_field(name=f"{cog}", value="`✅` Success")
             else:
                 e.add_field(name=f"{cog}", value="`❌` Not found")
-        await ctx.respond(embed=e)
+        await ctx.respond(embed=e, delay=5)
+        await Utils.delete_command_message(ctx, 5)
 
     @commands.command(hidden=True, name="restart")
     @commands.is_owner()
