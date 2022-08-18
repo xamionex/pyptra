@@ -17,10 +17,10 @@ class OtherCommands(commands.Cog, name="Other Commands"):
     def __init__(self, ctx):
         self.ctx = ctx
 
-    @commands.slash_command(name="random")
+    @bridge.bridge_command(name="random")
     async def random(self, ctx, *, choices: str):
         """Splits your message with every space and makes a random choice."""
-        await ctx.respond(random.choice(choices.split(" ")), ephemeral=True)
+        await ctx.respond(random.choice(choices.split(" ")), ephemeral=True, delete_after=5)
 
     @bridge.bridge_command(hidden=True, name="echo")
     @commands.has_permissions(administrator=True)
