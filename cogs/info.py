@@ -1,3 +1,4 @@
+import time
 from typing import Optional
 import discord
 from discord.ext import commands, pages, bridge
@@ -153,7 +154,16 @@ class InfoCommands(commands.Cog, name="Informational"):
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def ping(self, ctx):
         """Tells you the bot's ping."""
-        await ctx.respond(f"Pong! `{round(self.ctx.latency * 1000)}ms`")
+        inb4 = Utils.current_milli_time()
+        message = await ctx.respond("Pong!")
+        inb4 = (Utils.current_milli_time() - inb4)
+        await Utils.edit_message(ctx, message, f"Pong!\nCommand: `{inb4}ms`\nLatency: `{round(self.ctx.latency * 1000)}ms`")
+
+    @bridge.bridge_command(name="botversion", aliases=["botver", "bv"])
+    @commands.cooldown(1, 10, commands.BucketType.user)
+    async def botversion(self, ctx):
+        """Tells you the bot's version."""
+        await ctx.respond(f"Pycord: {discord.__version__}\nRaw data\n```\nMajor: {discord.version_info.major}, Minor: {discord.version_info.minor}, Micro: {discord.version_info.micro}\nRelease: {discord.version_info.releaselevel}\nSerial: {discord.version_info.serial}```")
 
     @bridge.bridge_command(name="installation")
     @commands.cooldown(1, 10, commands.BucketType.user)
