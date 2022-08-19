@@ -34,10 +34,8 @@ class FunCommands(commands.Cog, name="Fun"):
         """Make a caption on a gif"""
         start_time = Utils.current_milli_time()
         self.msg = await ctx.respond("Trying to create...")
-        dm = False
-        if self.msg.channel.type == discord.ChannelType.private:
-            dm = True
-        await BlockCommands.check_perm(self, ctx, "gif")
+        dm = True if self.msg.channel.type == discord.ChannelType.private else False
+        await BlockCommands.check_perm(self, ctx, "gif") if not dm else None
         what, frames, duration = await FunCommands.get_image(self, ctx, member, emoji, caption, dm)
         # file-like container to hold the image in memory
         img = BytesIO()  # sets image as "img"
@@ -101,11 +99,8 @@ class FunCommands(commands.Cog, name="Fun"):
         """Pet someone :D"""
         start_time = Utils.current_milli_time()
         self.msg = await ctx.respond("Trying to create...")
-        dm = False
-        if self.msg.channel.type == discord.ChannelType.private:
-            dm = True
-        elif not dm:
-            await BlockCommands.check_perm(self, ctx, "pet", self.msg)
+        dm = True if self.msg.channel.type == discord.ChannelType.private else False
+        await BlockCommands.check_perm(self, ctx, "pet", self.msg) if not dm else None
         what, frames, duration = await FunCommands.get_image(self, ctx, member, emoji, caption, dm)
         source, dest = BytesIO(), BytesIO()  # sets image as "source" and container to store the petpet gif in memory
         frames[0].save(source, "gif", save_all=True, append_images=frames[1:], duration=duration, loop=0)  # Save the frames into source
@@ -240,7 +235,7 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def hug(self, ctx, *, member: Optional[discord.Member]):
         """Hug someone :O"""
-        await BlockCommands.check_perm(self, ctx, "pet")
+        await BlockCommands.check_perm(self, ctx, "weird")
         if member == None:
             e = discord.Embed(description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(self.ctx.hug_words_bot))} me!", color=0x0690FF)
         else:
@@ -254,7 +249,7 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def kiss(self, ctx, *, member: Optional[discord.Member]):
         """Kiss someone :O"""
-        await BlockCommands.check_perm(self, ctx, "pet")
+        await BlockCommands.check_perm(self, ctx, "weird")
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(self.ctx.kiss_words_bot))} me!", color=0x0690FF)
@@ -270,7 +265,7 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def fall(self, ctx, *, member: Optional[discord.Member]):
         """Make someone fall >:)"""
-        await BlockCommands.check_perm(self, ctx, "pet")
+        await BlockCommands.check_perm(self, ctx, "joke")
         if member == None:
             e = discord.Embed(
                 description=f"{ctx.author.mention} you fell", color=0xFF6969)
@@ -286,7 +281,7 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.has_permissions(administrator=True)
     async def promote(self, ctx, member: discord.Member, *, message=None):
         """Promote someone :D"""
-        await BlockCommands.check_perm(self, ctx, "pet")
+        await BlockCommands.check_perm(self, ctx, "joke")
         if member == ctx.author:
             e = discord.Embed(
                 description=f"{ctx.author.mention} promoted themselves to {message}", color=0xFF6969)
