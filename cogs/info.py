@@ -143,7 +143,7 @@ class InfoCommands(commands.Cog, name="Informational"):
     @bridge.bridge_command(name="pfp")
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def pfp(self, ctx, user: Optional[discord.Member]):
-        """Shows you an users profile picture"""
+        """Shows you the profile picture of a user"""
         user = user or ctx.author
         e = discord.Embed(color=0xdfa3ff, description=f'{user.mention} - [Link to profile picture]({user.avatar.url})')
         e.set_image(url=user.avatar.url)
