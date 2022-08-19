@@ -193,7 +193,10 @@ class Utils(commands.Cog, name="Utils"):
     async def post(text, domain="rentry"):
         split_strings = [text[i:i+200000] for i in range(0, len(text), 200000)]
         urls = []
-        if len(split_strings) > 2 or domain == "hastebin":
+        domain = "rentry" if domain == "rentry" and urllib.request.urlopen("https://rentry.co/api/new").getcode() == 200 or len(split_strings) < 2 else "hastebin" if urllib.request.urlopen("https://hastebin.com/documents").getcode() == 200 else False
+        if not domain:
+            return False
+        if domain == "hastebin":
             for string in split_strings:
                 async with aiohttp.ClientSession() as session:
                     async with session.post("https://hastebin.com/documents", data=string.encode('utf-8')) as post:

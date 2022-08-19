@@ -124,13 +124,16 @@ class Utils:
         for appid, title in games.items():
             content = content + f"LINK/ID: [LINK](steam://store/{appid}) - {appid}\nTITLE: `{title}`\n\n"
         urls = await utils.post(content)
-        c = 0
-        if len(urls) > 1:
-            for url in urls:
-                c += 1
-                e.add_field(name=f"Part {c}", value=f"[Search Results]({str(url)})")
+        if urls:
+            c = 0
+            if len(urls) > 1:
+                for url in urls:
+                    c += 1
+                    e.add_field(name=f"Part {c}", value=f"[Search Results]({str(url)})")
+            else:
+                e.url = str(urls[0])
         else:
-            e.url = str(urls[0])
+            e.description = "**Something went wrong while uploading to [rentry](https://rentry.co/)/[hastebin](https://hastebin.com/)**\n" + e.description
         return e
 
     def setgame(item):
