@@ -117,7 +117,7 @@ class FunCommands(commands.Cog, name="Fun"):
 
     async def get_image(self, ctx, member, emoji, caption, dm):
         caption, text, textposition, textcolor, url, attachment = await FunCommands.caption_args(self, ctx, caption)
-        image = attachment or member or emoji or url or ctx.author
+        image = attachment or member or emoji or url or None
         image, what = await FunCommands.get_url(self, ctx, image, dm)
         if text:
             frames, duration = await FunCommands.set_frames(self, ctx, image, caption, textposition, textcolor)
@@ -174,6 +174,16 @@ class FunCommands(commands.Cog, name="Fun"):
     async def get_url(self, ctx, image, dm=False):
         # retrieve the image url
         what = "an image"
+        if image is None:
+            ref = ctx.message.reference
+            if ref is not None:
+                ref = ref.cached_message
+                try:
+                    image = ref.attachments[0]
+                except:
+                    image = ref.author
+            else:
+                image = ctx.author.avatar.url
         if type(image) == discord.PartialEmoji:
             what = "an emoji"
             image = image.url
@@ -183,7 +193,7 @@ class FunCommands(commands.Cog, name="Fun"):
         elif type(image) == discord.member.Member or type(image) == discord.user.User:
             if not dm:
                 await BlockCommands.check_ping(self, ctx, image, self.msg)
-            what = image.mention
+            what = image.mention if image.id != ctx.author.id else "themselves"
             try:
                 image = image.avatar.url
             except:
