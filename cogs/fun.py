@@ -246,6 +246,7 @@ class FunCommands(commands.Cog, name="Fun"):
     async def hug(self, ctx, *, member: Optional[discord.Member]):
         """Hug someone :O"""
         await BlockCommands.check_perm(self, ctx, "weird")
+        member = self.find_member(ctx) if member is None else member
         if member == None:
             e = discord.Embed(description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(self.ctx.hug_words_bot))} me!", color=0x0690FF)
         else:
@@ -260,13 +261,12 @@ class FunCommands(commands.Cog, name="Fun"):
     async def kiss(self, ctx, *, member: Optional[discord.Member]):
         """Kiss someone :O"""
         await BlockCommands.check_perm(self, ctx, "weird")
+        member = self.find_member(ctx) if member is None else member
         if member == None:
-            e = discord.Embed(
-                description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(self.ctx.kiss_words_bot))} me!", color=0x0690FF)
+            e = discord.Embed(description=f"{ctx.author.mention} you didnt mention anyone but you can still {(random.choice(self.ctx.kiss_words_bot))} me!", color=0x0690FF)
         else:
             await BlockCommands.check_ping(self, ctx, member)
-            e = discord.Embed(
-                description=f"{ctx.author.mention} {(random.choice(self.ctx.kiss_words))} {member.mention}", color=0x0690FF)
+            e = discord.Embed(description=f"{ctx.author.mention} {(random.choice(self.ctx.kiss_words))} {member.mention}", color=0x0690FF)
         e.set_image(url=(random.choice(self.ctx.kiss_gifs)))
         await ctx.respond(embed=e, mention_author=False)
 
@@ -276,12 +276,11 @@ class FunCommands(commands.Cog, name="Fun"):
     async def fall(self, ctx, *, member: Optional[discord.Member]):
         """Make someone fall >:)"""
         await BlockCommands.check_perm(self, ctx, "joke")
+        member = self.find_member(ctx) if member is None else member
         if member == None:
-            e = discord.Embed(
-                description=f"{ctx.author.mention} you fell", color=0xFF6969)
+            e = discord.Embed(description=f"{ctx.author.mention} you fell", color=0xFF6969)
         else:
-            e = discord.Embed(
-                description=f"{ctx.author.mention} made {member.mention} fall!", color=0xFF6969)
+            e = discord.Embed(description=f"{ctx.author.mention} made {member.mention} fall!", color=0xFF6969)
         e.set_thumbnail(url=(
             "https://media.discordapp.net/attachments/854984817862508565/883437876493307924/image0-2.gif"))
         await ctx.respond(embed=e, mention_author=False)
@@ -293,11 +292,9 @@ class FunCommands(commands.Cog, name="Fun"):
         """Promote someone :D"""
         await BlockCommands.check_perm(self, ctx, "joke")
         if member == ctx.author:
-            e = discord.Embed(
-                description=f"{ctx.author.mention} promoted themselves to {message}", color=0xFF6969)
+            e = discord.Embed(description=f"{ctx.author.mention} promoted themselves to {message}", color=0xFF6969)
         else:
-            e = discord.Embed(
-                description=f"{ctx.author.mention} promoted {member.mention} to {message}", color=0xFF6969)
+            e = discord.Embed(description=f"{ctx.author.mention} promoted {member.mention} to {message}", color=0xFF6969)
         await ctx.respond(embed=e, mention_author=False)
 
     @commands.command(hidden=True, name="noclip")
@@ -305,8 +302,7 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.has_permissions(administrator=True)
     async def noclip(self, ctx):
         """Go rogue.."""
-        e = discord.Embed(
-            description=f"{ctx.author.mention} is going rogue..", color=0xff0000)
+        e = discord.Embed(description=f"{ctx.author.mention} is going rogue..", color=0xff0000)
         e.set_image(
             url=("https://c.tenor.com/xnQ97QtwQGkAAAAC/mm2roblox-fly-and-use-noclip.gif"))
         await ctx.respond(embed=e, mention_author=False)
@@ -316,15 +312,22 @@ class FunCommands(commands.Cog, name="Fun"):
     @commands.has_permissions(administrator=True)
     async def abuse(self, ctx, *, member: Optional[discord.Member]):
         """Adbmind abuse!!"""
+        member = self.find_member(ctx) if member is None else member
         if member == None:
-            e = discord.Embed(
-                description=f"{ctx.author.mention} is going to abuse 😈", color=0xff0000)
+            e = discord.Embed(description=f"{ctx.author.mention} is going to abuse 😈", color=0xff0000)
         else:
-            e = discord.Embed(
-                description=f"{ctx.author.mention} is going to abuse {member.mention} 😈", color=0xff0000)
+            e = discord.Embed(description=f"{ctx.author.mention} is going to abuse {member.mention} 😈", color=0xff0000)
         e.set_image(
             url=("https://i.pinimg.com/originals/e3/15/55/e31555da640e9f8afe59239ee1c2fc37.gif"))
         await ctx.respond(embed=e, mention_author=False)
+
+    def find_member(self, ctx):
+        ref = ctx.message.reference
+        if ref is not None:
+            member = ref.cached_message.author if ref.cached_message.author.id != ctx.author.id else None
+        else:
+            member = None
+        return member
 
 
 class Editor:
