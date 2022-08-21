@@ -43,7 +43,7 @@ class Utils(commands.Cog, name="Utils"):
         except:
             return
 
-    async def edit_message(ctx, message, text: str, embed=MISSING, file=MISSING):
+    async def edit_message(ctx, message, text: str = MISSING, embed=MISSING, file=MISSING):
         if await Utils.CheckInstance(ctx):
             await message.edit(text, embed=embed, file=file)
         else:

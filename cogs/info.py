@@ -158,9 +158,13 @@ class InfoCommands(commands.Cog, name="Informational"):
     async def ping(self, ctx):
         """Tells you the bot's ping."""
         inb4 = Utils.current_milli_time()
-        message = await ctx.respond("Pong!")
+        await Utils.delete_command_message(ctx, 11)
+        e = discord.Embed(description="Pong!")
+        e.set_image(url="https://c.tenor.com/LqNPvLVdzHoAAAAC/cat-ping.gif")
+        message = await ctx.respond(embed=e, delete_after=10)
         inb4 = (Utils.current_milli_time() - inb4)
-        await Utils.edit_message(ctx, message, f"Pong!\nCommand: `{inb4}ms`\nLatency: `{round(self.ctx.latency * 1000)}ms`")
+        e.description = f"Pong! | Command: `{inb4}ms` | Latency: `{round(self.ctx.latency * 1000)}ms`"
+        await Utils.edit_message(ctx, message, embed=e)
 
     @bridge.bridge_command(name="botversion", aliases=["botver", "bv"])
     @commands.cooldown(1, 10, commands.BucketType.user)
