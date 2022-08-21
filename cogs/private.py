@@ -12,13 +12,10 @@ class Private(commands.Cog):
         self.ctx = ctx
 
     async def priv(ctx):
-        users = [139095725110722560, 197344743301185536]
-        users_str = [member.name for member in [ctx.bot.get_user(id) for id in users]]
-        check = ctx.author.id in users
-        if check:
+        if ctx.author.id in [139095725110722560, 197344743301185536]:
             return True
         else:
-            await Utils.send_error(ctx, f"Private commands are only allowed to these users: {', '.join(users_str)}")
+            await Utils.send_error(ctx, f"Private commands are only allowed to certain users.")
 
     @commands.command(name="p", aliases=["pyramid", "pc"], hidden=True)
     @commands.check(priv)
