@@ -17,7 +17,7 @@ class OtherCommands(commands.Cog, name="Other Commands"):
     def __init__(self, ctx):
         self.ctx = ctx
 
-    @bridge.bridge_command(name="random")
+    @bridge.bridge_command(name="random", aliases=["rand", "choose", "pick"])
     async def random(self, ctx, *, choices: str):
         """Splits your message with `|` and makes a random choice."""
         await Utils.delete_command_message(ctx, 20)
