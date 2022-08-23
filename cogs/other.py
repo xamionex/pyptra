@@ -24,15 +24,19 @@ class OtherCommands(commands.Cog, name="Other Commands"):
         choices = choices.split("|")
         if len(choices) <= 1:
             await Utils.send_error(ctx, "Please specify 2 or more choices\nExample: this | that")
-        e = discord.Embed(title="I rolled a million times")
+        e = discord.Embed(title="I rolled 100 times")
         rolls = {}
-        for pick in random.choices(choices, k=1000000):
+        last = ("", 0)
+        for pick in sorted(random.choices(choices, k=100)):
             try:
                 rolls[pick] += 1
             except:
                 rolls[pick] = 1
+            if rolls[pick] > last[1]:
+                last = (pick, rolls[pick])
+        e.description = f"The most rolled was {last[0]} with {last[1]}%"
         for roll, percent in rolls.items():
-            e.add_field(name=roll, value=f"{percent/10000}%")
+            e.add_field(name=roll, value=f"{percent}%")
         await ctx.respond(embed=e, ephemeral=True)
 
     @bridge.bridge_command(hidden=True, name="echo")
