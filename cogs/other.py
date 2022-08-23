@@ -76,14 +76,16 @@ class OtherCommands(commands.Cog, name="Other Commands"):
 
     @bridge.bridge_command(hidden=True, name="free")
     @commands.is_owner()
-    async def free(self, ctx, title, description, price, unix, rating, platform, game_link, imagelink):
+    async def free(self, ctx, title: str, description: str, price: str, how_long: str, rating: str, platform: str, game_link: str, image_link: str):
         """Sends a freestuff bot-like embed (can be used by petar only)."""
+        unix = Utils.time_from_string_in_seconds(how_long)[0] + Utils.current_time()
         await Utils.delete_command_message(ctx)
         platforms = {
             "gog": "https://cdn.discordapp.com/attachments/764940369367662622/989443585533440020/unknown.png",
             "epic": "https://cdn.discordapp.com/attachments/764940369367662622/989443614130192474/unknown.png",
             "steam": "https://cdn.discordapp.com/attachments/764940369367662622/989443638989828136/unknown.png",
             "itchio": "https://cdn.discordapp.com/attachments/764940369367662622/989443462673883156/unknown.png",
+            "battle.net": "https://cdn.discordapp.com/attachments/764940369367662622/1011466963937140756/unknown.png"
         }
         for name, link in platforms.items():
             if str(platform) == str(name):
@@ -96,10 +98,17 @@ class OtherCommands(commands.Cog, name="Other Commands"):
             **[Get it for free]({game_link})**
             """)
         e.set_thumbnail(url=platform)
-        e.set_image(url=imagelink)
+        e.set_image(url=image_link)
         e.set_footer(text=f"Sent from {ctx.author}")
         # channel = self.ctx.get_channel(935685344010047519)
         await ctx.send(embed=e)
+
+    @bridge.bridge_command(name="unix")
+    async def unix(self, ctx, time):
+        """Takes any time you put in (1d 2h 3m 4s...) and makes it into unix"""
+        unix = Utils.time_from_string_in_seconds(time)[0] + Utils.current_time()
+        await Utils.delete_command_message(ctx, 20)
+        await ctx.respond(embed=discord.Embed(title="That comes up to", description=unix), ephemeral=True, delete_after=20)
 
     @commands.command(hidden=True, name="echoembed")
     @commands.has_permissions(administrator=True)
