@@ -24,7 +24,11 @@ class OtherCommands(commands.Cog, name="Other Commands"):
         choices = choices.split("|")
         if len(choices) <= 1:
             await Utils.send_error(ctx, "Please specify 2 or more choices")
-        await ctx.respond(embed=discord.Embed(title="I picked", description=random.choice(choices)), ephemeral=True, delete_after=20)
+        e = discord.Embed(title="I picked")
+        e.add_field(name="First choice", value=random.choice(choices))
+        e.add_field(name="Second choice", value=random.choice(choices))
+        e.add_field(name="Third choice", value=random.choice(choices))
+        await ctx.respond(embed=e, ephemeral=True, delete_after=20)
 
     @bridge.bridge_command(hidden=True, name="echo")
     @commands.has_permissions(administrator=True)
