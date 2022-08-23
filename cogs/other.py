@@ -17,28 +17,36 @@ class OtherCommands(commands.Cog, name="Other Commands"):
     def __init__(self, ctx):
         self.ctx = ctx
 
-    @bridge.bridge_command(name="random", aliases=["rand", "choose", "pick", "roll"])
+    @bridge.bridge_command(name="random", aliases=["rand", "choose", "pick"])
     @commands.cooldown(60, 1, commands.BucketType.user)
     async def random(self, ctx, *, choices: str):
-        """Splits your message with `|` and makes a random choice."""
-        choices = choices.split("|")
+        """Splits your message with `|` and makes a random choice. 24 Max choices"""
+        choices = choices.split("|")[:24]
         if len(choices) <= 1:
             await Utils.send_error(ctx, "Please specify 2 or more choices\nExample: this | that")
-        e = discord.Embed(title="I rolled 100 times")
+        e = discord.Embed(title="I rolled 30 times")
         rolls = {}
         last = ("", 0)
-        for pick in sorted(random.choices(choices, k=100)):
+        for pick in sorted(random.choices(choices, k=30)):
             try:
                 rolls[pick] += 1
             except:
                 rolls[pick] = 1
             if rolls[pick] > last[1]:
                 last = (pick, rolls[pick])
-        e.description = f"The most rolled was {last[0]} with {last[1]}%"
-        for roll, percent in rolls.items():
-            e.add_field(name=roll, value=f"{percent}%")
+        e.description = f"The most rolled was {last[0]} at {last[1]} times ({str((last[1]/30)*100)[:5]}%)"
+        for roll, times in rolls.items():
+            e.add_field(name=roll, value=f"{times} times ({str((times/30)*100)[:5]}%)")
         await Utils.delete_command_message(ctx, 20)
         await ctx.respond(embed=e, ephemeral=True, delete_after=20)
+
+    @bridge.bridge_command(name="dice", aliases=["roll", "die"])
+    @commands.cooldown(60, 1, commands.BucketType.user)
+    async def dice(self, ctx, *, sides):
+        """Rolls a dice depending on how many sides you give it"""
+        sides = int(re.findall('\d+', str(sides))[0])
+        await Utils.delete_command_message(ctx, 20)
+        await ctx.respond(embed=discord.Embed(title=f"I rolled {random.choice(range(1, sides+1))}"), ephemeral=True, delete_after=20)
 
     @bridge.bridge_command(hidden=True, name="echo")
     @commands.has_permissions(administrator=True)
