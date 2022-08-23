@@ -35,7 +35,7 @@ class FunCommands(commands.Cog, name="Fun"):
         start_time = Utils.current_milli_time()
         self.msg = await ctx.respond("Trying to create...")
         dm = True if self.msg.channel.type == discord.ChannelType.private else False
-        await BlockCommands.check_perm(self, ctx, "gif") if not dm else None
+        await BlockCommands.check_perm(self, ctx, "gif", True) if not dm else None
         what, frames, duration = await FunCommands.get_image(self, ctx, member, emoji, caption, dm)
         # file-like container to hold the image in memory
         img = BytesIO()  # sets image as "img"
@@ -100,7 +100,7 @@ class FunCommands(commands.Cog, name="Fun"):
         start_time = Utils.current_milli_time()
         self.msg = await ctx.respond("Trying to create...")
         dm = True if self.msg.channel.type == discord.ChannelType.private else False
-        await BlockCommands.check_perm(self, ctx, "pet", self.msg) if not dm else None
+        await BlockCommands.check_perm(self, ctx, "pet", self.msg, True) if not dm else None
         what, frames, duration = await FunCommands.get_image(self, ctx, member, emoji, caption, dm)
         source, dest = BytesIO(), BytesIO()  # sets image as "source" and container to store the petpet gif in memory
         frames[0].save(source, "gif", save_all=True, append_images=frames[1:], duration=duration, loop=0)  # Save the frames into source
