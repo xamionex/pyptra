@@ -18,22 +18,22 @@ class OtherCommands(commands.Cog, name="Other Commands"):
         self.ctx = ctx
 
     @bridge.bridge_command(name="random", aliases=["rand", "choose", "pick", "roll"])
+    @commands.cooldown(60, 1, commands.BucketType.user)
     async def random(self, ctx, *, choices: str):
         """Splits your message with `|` and makes a random choice."""
-        await Utils.delete_command_message(ctx, 20)
         choices = choices.split("|")
         if len(choices) <= 1:
             await Utils.send_error(ctx, "Please specify 2 or more choices\nExample: this | that")
-        e = discord.Embed(title="I rolled a 100 times")
+        e = discord.Embed(title="I rolled a million times")
         rolls = {}
-        for pick in random.choices(choices, k=100):
+        for pick in random.choices(choices, k=1000000):
             try:
                 rolls[pick] += 1
             except:
                 rolls[pick] = 1
         for roll, percent in rolls.items():
-            e.add_field(name=roll, value=f"{percent}%")
-        await ctx.respond(embed=e, ephemeral=True, delete_after=20)
+            e.add_field(name=roll, value=f"{percent/10000}%")
+        await ctx.respond(embed=e, ephemeral=True)
 
     @bridge.bridge_command(hidden=True, name="echo")
     @commands.has_permissions(administrator=True)
