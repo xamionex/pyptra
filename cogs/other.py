@@ -37,7 +37,8 @@ class OtherCommands(commands.Cog, name="Other Commands"):
         e.description = f"The most rolled was {last[0]} with {last[1]}%"
         for roll, percent in rolls.items():
             e.add_field(name=roll, value=f"{percent}%")
-        await ctx.respond(embed=e, ephemeral=True)
+        await Utils.delete_command_message(ctx, 20)
+        await ctx.respond(embed=e, ephemeral=True, delete_after=20)
 
     @bridge.bridge_command(hidden=True, name="echo")
     @commands.has_permissions(administrator=True)
