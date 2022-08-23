@@ -17,14 +17,14 @@ class OtherCommands(commands.Cog, name="Other Commands"):
     def __init__(self, ctx):
         self.ctx = ctx
 
-    @bridge.bridge_command(name="random", aliases=["rand", "choose", "pick"])
+    @bridge.bridge_command(name="random", aliases=["rand", "choose", "pick", "roll"])
     async def random(self, ctx, *, choices: str):
         """Splits your message with `|` and makes a random choice."""
         await Utils.delete_command_message(ctx, 20)
         choices = choices.split("|")
         if len(choices) <= 1:
-            await Utils.send_error(ctx, "Please specify 2 or more choices")
-        e = discord.Embed(title="I picked")
+            await Utils.send_error(ctx, "Please specify 2 or more choices\nExample: this | that")
+        e = discord.Embed()
         e.add_field(name="First choice", value=random.choice(choices))
         e.add_field(name="Second choice", value=random.choice(choices))
         e.add_field(name="Third choice", value=random.choice(choices))
