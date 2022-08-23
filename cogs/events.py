@@ -69,7 +69,7 @@ class Events(commands.Cog, name="Events"):
         e = discord.Embed(description=f"`❌` {err}", color=0xFF6969)
         await Events.log_error(self, ctx, e.description, ctx.message.content)
         if send:
-            await ctx.send(ctx.author.mention, embed=e)
+            await ctx.send(ctx.author.mention, embed=e, delete_after=20)
         raise error
 
     async def log_error(self, ctx, error, text):
