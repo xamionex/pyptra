@@ -38,7 +38,7 @@ class Configs(commands.Cog, name="Configs"):
                           "hex": "Grants users to add colors to their name with a command",
                           "joke": "Allows using -fall -promote"}
         ctx.perm_ignore_invert = ["blacklist", "hex", "ping"]
-        ctx.perms_list_deny_change = ["ping", "blacklist"]
+        ctx.perms_list_deny_change = ["ping"]
         ctx.global_perms_list_false = {"wb_alert_dm": "Disables/Enables welcome back embed sending in DM instead",
                                        "afk_alert_dm": "Disables/Enables AFK alerts sending in DM instead"}
         ctx.global_perms_list_true = {"wb_alert": "Disables/Enables welcome back embed, overrides DM",

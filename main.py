@@ -48,15 +48,10 @@ async def on_command(ctx):
     try:
         if ctx.author.guild_permissions.administrator:
             ctx.command.reset_cooldown(ctx)
-    except:
+        if bot.settings[str(ctx.guild.id)]["perms"][str(ctx.author.id)]['blacklist'] and not ctx.author.guild_permissions.administrator:
+            await Utils.send_error(ctx, f"You were **blocked** from using this bot, direct message a moderator if you feel this is unfair")
+    except KeyError:
         pass
-    try:
-        if await block.BlockCommands.get_perm(ctx, ctx, "blacklist", ctx.author) and ctx.author.guild_permissions.administrator == False:
-            raise commands.CommandError(
-                f"{ctx.author.mention}, You were **blocked** from using this bot, direct message <@139095725110722560> if you feel this is unfair")
-    except AttributeError:
-        pass
-
 
 """@tasks.loop(minutes=random.randrange(0, 10, 1), count=3)
 async def spam_terror():
