@@ -123,7 +123,24 @@ class OtherCommands(commands.Cog, name="Other Commands"):
         e.set_image(url=image_link)
         e.set_footer(text=f"Sent from {ctx.author}")
         # channel = self.ctx.get_channel(935685344010047519)
-        await ctx.send(embed=e)
+        await ctx.respond(embed=e, view=self.Free(ctx, e), ephemeral=True)
+
+    class Free(discord.ui.View):
+
+        def __init__(self, ctx, embed):
+            super().__init__(timeout=15)
+            self.ctx = ctx
+            self.embed = embed
+
+        async def on_timeout(self):
+            for child in self.children:
+                child.disabled = True
+            self.stop()
+
+        @discord.ui.button(label="Send", style=discord.ButtonStyle.success)
+        async def button_callback(self, button, interaction):
+            await interaction.response.edit_message(content="Sent!", embed=None, view=None)
+            await self.ctx.send(embed=self.embed)
 
     @bridge.bridge_command(name="unix")
     async def unix(self, ctx, time):
