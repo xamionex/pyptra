@@ -31,6 +31,7 @@ class InfoCommands(commands.Cog, name="Informational"):
         self.ctx = ctx
 
     @bridge.bridge_command(name="serverinfo", aliases=["si", "sid"])
+    @commands.guild_only()
     @commands.cooldown(1, 420, commands.BucketType.user)
     async def serverinfo(self, ctx):
         """Shows you information about the server"""
