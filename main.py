@@ -45,8 +45,7 @@ bot = bridge.Bot(
 
 @bot.before_invoke
 async def on_command(ctx):
-    dm = True if ctx.message.channel.type == discord.ChannelType.private else False
-    if not dm:
+    if not ctx.message.channel.type == discord.ChannelType.private:
         try:
             if ctx.author.guild_permissions.administrator:
                 ctx.command.reset_cooldown(ctx)
@@ -77,6 +76,8 @@ async def spam_terror_after_loop():
 
 @bot.event
 async def on_message(message):
+    if message.channel.type == discord.ChannelType.private and not message.content.startswith('-'):
+        message.content = f"-{message.content}"
     # remove markdown
     message.content = Utils.escape_markdown(message.content)
     for x, v in {"french": "fr\*nch", "france": "fr\*nce"}.items():
