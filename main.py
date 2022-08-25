@@ -45,7 +45,7 @@ bot = bridge.Bot(
 
 @bot.before_invoke
 async def on_command(ctx):
-    if not ctx.message.channel.type == discord.ChannelType.private:
+    if not ctx.channel.type == discord.ChannelType.private:
         try:
             if ctx.author.guild_permissions.administrator:
                 ctx.command.reset_cooldown(ctx)
