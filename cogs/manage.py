@@ -85,6 +85,7 @@ class ManageCommands(commands.Cog, name="Manage"):
         await ctx.respond(embed=e)
 
     @commands.command(hidden=True, name="prefix")
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def prefix(self, ctx, prefix=None):
         """Shows or changes prefix"""
