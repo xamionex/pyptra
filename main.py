@@ -45,13 +45,17 @@ bot = bridge.Bot(
 
 @bot.before_invoke
 async def on_command(ctx):
-    try:
-        if ctx.author.guild_permissions.administrator:
-            ctx.command.reset_cooldown(ctx)
-        if bot.settings[str(ctx.guild.id)]["perms"][str(ctx.author.id)]['blacklist'] and not ctx.author.guild_permissions.administrator:
-            await Utils.send_error(ctx, f"You were **blocked** from using this bot, direct message a moderator if you feel this is unfair")
-    except KeyError:
-        pass
+    dm = True if ctx.message.channel.type == discord.ChannelType.private else False
+    if not dm:
+        try:
+            if ctx.author.guild_permissions.administrator:
+                ctx.command.reset_cooldown(ctx)
+            if bot.settings[str(ctx.guild.id)]["perms"][str(ctx.author.id)]['blacklist'] and not ctx.author.guild_permissions.administrator:
+                await Utils.send_error(ctx, f"You were **blocked** from using this bot, direct message a moderator if you feel this is unfair")
+        except KeyError:
+            pass
+    else:
+        ctx.command.reset_cooldown(ctx)
 
 """@tasks.loop(minutes=random.randrange(0, 10, 1), count=3)
 async def spam_terror():
