@@ -175,13 +175,12 @@ class FunCommands(commands.Cog, name="Fun"):
         # retrieve the image url
         what = "an image"
         if image is None:
-            ref = ctx.message.reference
+            ref = ctx.channel.fetch_message(int(ctx.message.reference.resolved.id))
             if ref is not None:
-                ref = ref.cached_message
                 try:
-                    image = ref.attachments[0]
+                    image = ref.attachments[0] or ref.author
                 except:
-                    image = ref.author
+                    image = ctx.author.avatar.url
             else:
                 image = ctx.author.avatar.url
         if type(image) == discord.PartialEmoji:
