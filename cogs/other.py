@@ -98,7 +98,7 @@ class OtherCommands(commands.Cog, name="Other Commands"):
 
     @bridge.bridge_command(hidden=True, name="free")
     @commands.is_owner()
-    async def free(self, ctx, title: str, description: str, price: str, how_long: str, rating: str, platform: str, game_link: str, image_link: str):
+    async def free(self, ctx, title: str, description: str, price: str, how_long: str, rating: str, platform: str, game_link: str, image_link: str, channel: discord.TextChannel = None):
         """Sends a freestuff bot-like embed (can be used by petar only)."""
         unix = Utils.time_from_string_in_seconds(how_long)[0] + Utils.current_time()
         await Utils.delete_command_message(ctx)
@@ -122,15 +122,15 @@ class OtherCommands(commands.Cog, name="Other Commands"):
         e.set_thumbnail(url=platform)
         e.set_image(url=image_link)
         e.set_footer(text=f"Sent from {ctx.author}")
-        # channel = self.ctx.get_channel(935685344010047519)
-        await ctx.respond(embed=e, view=self.Free(ctx, e), ephemeral=True)
+        await ctx.respond(embed=e, view=self.Free(ctx, e, channel), ephemeral=True)
 
     class Free(discord.ui.View):
 
-        def __init__(self, ctx, embed):
+        def __init__(self, ctx, embed, channel):
             super().__init__(timeout=15)
             self.ctx = ctx
             self.embed = embed
+            self.channel = channel
 
         async def on_timeout(self):
             for child in self.children:
@@ -140,7 +140,7 @@ class OtherCommands(commands.Cog, name="Other Commands"):
         @discord.ui.button(label="Send", style=discord.ButtonStyle.success)
         async def button_callback(self, button, interaction):
             await interaction.response.edit_message(content="Sent!", embed=None, view=None)
-            await self.ctx.send(embed=self.embed)
+            await self.ctx.send(embed=self.embed) if self.channel is None else await self.channel.send(embed=self.embed)
 
     @bridge.bridge_command(name="unix")
     async def unix(self, ctx, time):
