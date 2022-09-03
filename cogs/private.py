@@ -20,29 +20,26 @@ class Private(commands.Cog):
     @commands.command(name="p", aliases=["pyramid", "pc"], hidden=True)
     @commands.check(priv)
     async def pyramid(self, ctx, num: int):
-        num2 = 0
-        while num > 0:
-            num -= 1
-            num2 += num + 1
-        await ctx.respond(num2)
+        r = 0
+        for i in range(num):
+            r += i + 1
+        await ctx.respond(r)
 
     @commands.command(name="pl", aliases=["pyramidlist", "plist"], hidden=True)
     @commands.check(priv)
     async def pyramidlist(self, ctx, num: int):
         results = []
+        r = 0
         for i in range(num):
             i += 1
-            i1, i2 = i, 0
-            while i > 0:
-                i2 += i
-                i -= 1
-            results.append((i1, i2))
+            r += i
+            results.append((i, r))
         e = discord.Embed(title="Result", description="")
         while len(results) > 21:
             results = results[1:]
         for r1, r2 in results:
             e.description += f"\n{r1} = {r2}"
-        await ctx.send(embed=e)
+        await ctx.respond(embed=e)
 
     @commands.command(name="calc", hidden=True)
     @commands.check(priv)
