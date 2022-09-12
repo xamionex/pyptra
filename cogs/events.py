@@ -327,12 +327,12 @@ class Events(commands.Cog, name="Events"):
         self.add_event(member, "on_member_join")
 
     @commands.Cog.listener("on_member_ban")
-    async def banned(self, member, reason):
-        self.add_event(member, "on_member_ban")
+    async def banned(self, guild, user):
+        self.add_event(user, "on_member_ban")
 
     @commands.Cog.listener("on_member_unban")
-    async def unbanned(self, member):
-        self.add_event(member, "on_member_unban")
+    async def unbanned(self, guild, user):
+        self.add_event(user, "on_member_unban")
 
     @commands.Cog.listener("on_guild_role_create")
     async def rolecreated(self, role):
@@ -343,12 +343,12 @@ class Events(commands.Cog, name="Events"):
         self.add_event(role, "on_guild_role_delete")
 
     @commands.Cog.listener("on_guild_emojis_update")
-    async def emojisupdate(self, role):
-        self.add_event(role, "on_guild_emojis_update")
+    async def emojisupdate(self, guild, before, after):
+        self.add_event(after, "on_guild_emojis_update")
 
     @commands.Cog.listener("on_guild_stickers_update")
-    async def stickersupdate(self, role):
-        self.add_event(role, "on_guild_stickers_update")
+    async def stickersupdate(self, guild, before, after):
+        self.add_event(after, "on_guild_stickers_update")
 
     @commands.Cog.listener("on_message_edit")
     async def message_edited(self, message, edit):
