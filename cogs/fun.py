@@ -175,9 +175,9 @@ class FunCommands(commands.Cog, name="Fun"):
         # retrieve the image url
         what = "an image"
         if image is None:
-            ref = await ctx.channel.fetch_message(int(ctx.message.reference.resolved.id))
-            if ref is not None:
-                image = ref.attachments[0] if len(ref.attachments) > 0 else ref.author
+            reply = await ctx.channel.fetch_message(int(ctx.message.reference.resolved.id)) if ctx.message.reference is not None else None
+            if reply is not None:
+                image = reply.attachments[0] if len(reply.attachments) > 0 else reply.author
             else:
                 image = ctx.author.avatar.url
         if type(image) == discord.PartialEmoji:
