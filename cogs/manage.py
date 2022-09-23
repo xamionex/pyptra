@@ -17,8 +17,22 @@ class ManageCommands(commands.Cog, name="Manage"):
     def __init__(self, ctx):
         self.ctx = ctx
 
-    @commands.command(hidden=True, name="load")
+    @commands.command()
     @commands.is_owner()
+    async def leave(self, ctx, *, guild_name):
+        guild = discord.utils.get(self.ctx.guilds, name=guild_name)
+        if guild is None:
+            await ctx.send("I don't recognize that guild.")
+            return
+        await guild.leave()
+        await ctx.send(f"Left guild: {guild.name} ({guild.id})")
+
+    @commands.command()
+    async def guilds(self, ctx):
+        await ctx.send(embed=discord.Embed(title="I'm in these guilds:", description="\n".join([f"{guild.name} ({guild.id})" for guild in self.ctx.guilds])))
+
+    @ commands.command(hidden=True, name="load")
+    @ commands.is_owner()
     async def load(self, ctx, *, module: str):
         """Loads a module"""
         e = discord.Embed(
@@ -33,8 +47,8 @@ class ManageCommands(commands.Cog, name="Manage"):
         await Utils.delete_command_message(ctx, 5)
         await ctx.respond(embed=e, delete_after=5)
 
-    @commands.command(hidden=True, name="unload")
-    @commands.is_owner()
+    @ commands.command(hidden=True, name="unload")
+    @ commands.is_owner()
     async def unload(self, ctx, *, module: str):
         """Unloads a module"""
         e = discord.Embed(
@@ -49,8 +63,8 @@ class ManageCommands(commands.Cog, name="Manage"):
         await Utils.delete_command_message(ctx, 5)
         await ctx.respond(embed=e, delete_after=5)
 
-    @commands.command(hidden=True, name="reload")
-    @commands.is_owner()
+    @ commands.command(hidden=True, name="reload")
+    @ commands.is_owner()
     async def reload(self, ctx, *, module: str):
         """Reloads a module"""
         e = discord.Embed(
@@ -69,24 +83,24 @@ class ManageCommands(commands.Cog, name="Manage"):
         await Utils.delete_command_message(ctx, 5)
         await ctx.respond(embed=e, delete_after=5)
 
-    @commands.command(hidden=True, name="restart")
-    @commands.is_owner()
+    @ commands.command(hidden=True, name="restart")
+    @ commands.is_owner()
     async def restart(self, ctx):
         """Restarts the bot"""
         await Utils.delete_command_message(ctx)
         os.execv(sys.executable, ['python'] + sys.argv)
 
-    @commands.command(hidden=True, name="modules")
-    @commands.is_owner()
+    @ commands.command(hidden=True, name="modules")
+    @ commands.is_owner()
     async def modules(self, ctx):
         """Lists modules"""
         modules = ", ".join(self.ctx.extensions_list)
         e = discord.Embed(title=f'Modules found:', description=modules, color=0x69FF69)
         await ctx.respond(embed=e)
 
-    @commands.command(hidden=True, name="prefix")
-    @commands.guild_only()
-    @commands.has_permissions(administrator=True)
+    @ commands.command(hidden=True, name="prefix")
+    @ commands.guild_only()
+    @ commands.has_permissions(administrator=True)
     async def prefix(self, ctx, prefix=None):
         """Shows or changes prefix"""
         if prefix is not None:
@@ -96,68 +110,68 @@ class ManageCommands(commands.Cog, name="Manage"):
         else:
             await ctx.respond(embed=discord.Embed(description=f"My prefix is `{self.ctx.settings[str(ctx.guild.id)]['prefix']}` or {self.ctx.user.mention}, you can also use slash commands\nFor more info use the /help command!"))
 
-    @commands.group(hidden=True, name="triggers", invoke_without_command=True)
-    @commands.has_permissions(administrator=True)
+    @ commands.group(hidden=True, name="triggers", invoke_without_command=True)
+    @ commands.has_permissions(administrator=True)
     async def triggers(self, ctx):
         """Triggers that reply whenever someone mentions a trigger"""
         await Utils.send_error(ctx, f"No command specified, do {self.ctx.settings[str(ctx.guild.id)]['prefix']}help triggers for more info")
 
-    @triggers.group(hidden=True, name="match", invoke_without_command=True)
-    @commands.has_permissions(administrator=True)
+    @ triggers.group(hidden=True, name="match", invoke_without_command=True)
+    @ commands.has_permissions(administrator=True)
     async def match(self, ctx):
         """Text triggers that have a match in one of the user's words"""
         await Utils.send_error(ctx, f"No command specified, do {self.ctx.settings[str(ctx.guild.id)]['prefix']}help triggers match for more info")
 
-    @match.command(hidden=True, name="toggle")
-    @commands.has_permissions(administrator=True)
+    @ match.command(hidden=True, name="toggle")
+    @ commands.has_permissions(administrator=True)
     async def matchtoggletriggers(self, ctx):
         """Toggles match message triggers"""
         await self.toggletriggers(ctx, "match")
 
-    @match.command(hidden=True, name="list")
-    @commands.has_permissions(administrator=True)
+    @ match.command(hidden=True, name="list")
+    @ commands.has_permissions(administrator=True)
     async def matchlisttriggers(self, ctx):
         """Lists match message triggers"""
         await self.listtriggers(ctx, "match")
 
-    @match.command(hidden=True, name="add")
-    @commands.has_permissions(administrator=True)
+    @ match.command(hidden=True, name="add")
+    @ commands.has_permissions(administrator=True)
     async def matchaddtrigger(self, ctx, trigger: str, *, reply: str):
         f"""Adds a match message trigger (ex. {self.ctx.settings[str(ctx.guild.id)]['prefix']}triggers match add trigger|anothertrigger this is the reply)"""
         await self.addtrigger(ctx, trigger, reply, "match")
 
-    @match.command(hidden=True, name="rem")
-    @commands.has_permissions(administrator=True)
+    @ match.command(hidden=True, name="rem")
+    @ commands.has_permissions(administrator=True)
     async def matchremovetrigger(self, ctx, *, trigger: str):
         f"""Removes a match message trigger (ex. {self.ctx.settings[str(ctx.guild.id)]['prefix']}triggers match del this|trigger other|trigger)"""
         await self.removetrigger(ctx, trigger, "match")
 
-    @triggers.group(hidden=True, name="regex", invoke_without_command=True)
-    @commands.has_permissions(administrator=True)
+    @ triggers.group(hidden=True, name="regex", invoke_without_command=True)
+    @ commands.has_permissions(administrator=True)
     async def regex(self, ctx):
         """Text triggers that have a regex match in one of the user's words"""
         await Utils.send_error(ctx, f"No command specified, do {self.ctx.settings[str(ctx.guild.id)]['prefix']}help triggers regex for more info")
 
-    @regex.command(hidden=True, name="toggle")
-    @commands.has_permissions(administrator=True)
+    @ regex.command(hidden=True, name="toggle")
+    @ commands.has_permissions(administrator=True)
     async def regextoggletriggers(self, ctx):
         """Toggles regex message triggers"""
         await self.toggletriggers(ctx, "regex")
 
-    @regex.command(hidden=True, name="list")
-    @commands.has_permissions(administrator=True)
+    @ regex.command(hidden=True, name="list")
+    @ commands.has_permissions(administrator=True)
     async def regexlisttriggers(self, ctx):
         """Lists regex message triggers"""
         await self.listtriggers(ctx, "regex")
 
-    @regex.command(hidden=True, name="add")
-    @commands.has_permissions(administrator=True)
+    @ regex.command(hidden=True, name="add")
+    @ commands.has_permissions(administrator=True)
     async def regexaddtrigger(self, ctx, trigger: str, *, reply: str):
         f"""Adds a regex message trigger, underscores are replaced with a space (ex. {self.ctx.settings[str(ctx.guild.id)]['prefix']}triggers regex add this_trigger|another_trigger this is the reply)"""
         await self.addtrigger(ctx, trigger, reply, "regex")
 
-    @regex.command(hidden=True, name="rem")
-    @commands.has_permissions(administrator=True)
+    @ regex.command(hidden=True, name="rem")
+    @ commands.has_permissions(administrator=True)
     async def regexremovetrigger(self, ctx, *, trigger: str):
         f"""Removes a regex message trigger, underscores are replaced with a space (ex. {self.ctx.settings[str(ctx.guild.id)]['prefix']}triggers regex del this|trigger another_trigger)"""
         await self.removetrigger(ctx, trigger, "regex")
