@@ -23,8 +23,7 @@ def setup(bot):
 
 class HelpDropdown(discord.ui.Select):
     def __init__(self, help_command: "MyHelpCommand", options: list[discord.SelectOption]):
-        super().__init__(placeholder="Choose a category...",
-                         min_values=1, max_values=1, options=options)
+        super().__init__(placeholder="Choose a category...", min_values=1, max_values=1, options=options)
         self._help_command = help_command
 
     async def callback(self, interaction: discord.Interaction):
