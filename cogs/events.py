@@ -28,7 +28,30 @@ class Events(commands.Cog, name="Events"):
             try:
                 self.ctx.settings[str(guild.id)]["events"]["on_ready"] = Utils.current_time()
             except:
-                self.ctx.settings[str(guild.id)]["events"] = {"on_ready": Utils.current_time()}
+                try:
+                    self.ctx.settings[str(guild.id)]["events"] = {"on_ready": Utils.current_time()}
+                except:
+                    self.ctx.settings[str(guild.id)] = {
+                        "infochannel": {},
+                        "events": {},
+                        "perms": {},
+                        "prefix": "-",
+                        "triggers": {
+                            "match": {
+                                "toggle": False,
+                                "triggers": {}
+                            },
+                            "regex": {
+                                "toggle": False,
+                                "triggers": {}
+                            }
+                        },
+                        "purges": {},
+                        "unlockedperms": [],
+                        "invertperms": False
+                    }
+                    Configs.save(self.ctx.settings_path, "w", self.ctx.settings)
+                    self.ctx.settings[str(guild.id)]["events"] = {"on_ready": Utils.current_time()}
         print(f"Logged in as {self.ctx.user} (ID: {self.ctx.user.id})")
         print("------")
         self.purger.start()
