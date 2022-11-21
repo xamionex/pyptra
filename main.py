@@ -89,7 +89,7 @@ async def on_message(message):
 
 def extensions():
     extensions = []
-    skip = ["suggestions"]
+    skip = []
     for module in next(os.walk("cogs"), (None, None, []))[2]:  # [] if no file
         module = module.replace('.py', '')
         if module not in skip:
